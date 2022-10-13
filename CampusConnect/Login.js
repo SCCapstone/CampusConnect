@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 
-import styles from './styles';
+import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 

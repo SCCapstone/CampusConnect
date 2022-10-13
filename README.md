@@ -4,3 +4,6 @@
 3. Run "npm install @react-navigation/native"
 4. Run "npm install react-native-screens react-native-safe-area-context"
 5. Run  "npm install --save @react-native-firebase/app"
+6. Run "npx react-native run-android"
+
+All the source files for the project are in the "CampusConnect" folder
