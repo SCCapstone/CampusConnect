@@ -1,12 +1,12 @@
-# Installation
+# Compilation
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
-3. Run <pre><code>npm install @react-navigation/native</code></pre>
-4. Run <pre><code>npm install react-native-screens react-native-safe-area-context</code></pre>
-5. Run <pre><code>npm install --save @react-native-firebase/app</code></pre>
-6. Run <pre><code>npm install --save @react-native-firebase/auth</code></pre>
-7. Run <pre><code>npm install @react-navigation/drawer</code></pre>
-8. Run <pre><code>npx react-native run-android</code></pre>
+3. Install Dependencies<pre><code>npm install @react-navigation/native
+npm install react-native-screens react-native-safe-area-context
+npm install --save @react-native-firebase/app
+npm install --save @react-native-firebase/auth
+npm install @react-navigation/drawer</code></pre>
+4. Run the code<pre><code>npx react-native run-android</code></pre>
 
 All the source files for the project are in the "CampusConnect" folder
 
