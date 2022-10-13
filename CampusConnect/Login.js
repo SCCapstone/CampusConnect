@@ -1,5 +1,5 @@
 import { Modal, StatusBar } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,11 +13,36 @@ import {
   ScrollView,
 } from "react-native";
 
+import * as Firebase from './Firebase'
+import auth from '@react-native-firebase/auth';
+
 import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
 export function WelcomeScreen({navigation}) {
+
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  if (user) {
+    navigation.navigate('HomeScreen')
+  }
+  
  
   return (
     <View style={styles.container}>
@@ -104,6 +129,10 @@ export function RegisterScreen({ navigation}){
   const [password2, setPassword2] = React.useState("");
   const [modalVisible, setModalVisible] = React.useState(false);
 
+  function register () {
+    Firebase.registerAccount(email,password)
+  }
+
  
   return (
     <View style={styles.container}>
@@ -151,7 +180,7 @@ export function RegisterScreen({ navigation}){
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity onPress={register} style={styles.loginBtn}>
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
