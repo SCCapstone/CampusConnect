@@ -26,15 +26,12 @@ export function WelcomeScreen({navigation}) {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
-  auth().signOut();
-
   // Handle user state changes
   function onAuthStateChanged(user) {
   console.log(user)
-  console.log('somethin happened')
     setUser(user);
     if (initializing) setInitializing(false);
-    if (user) navigation.navigate('HomeScreen');
+    if (user) navigation.navigate('RegistrationScreen');
   }
 
   useEffect(() => {
@@ -78,7 +75,7 @@ export function LoginScreen({ navigation}) {
     console.log('somethin happened')
       setUser(user);
       if (initializing) setInitializing(false);
-      if (user) navigation.navigate('HomeScreen');
+      if (user) navigation.navigate('RegistrationScreen');
     }
 
     useEffect(() => {
@@ -169,7 +166,7 @@ export function RegisterScreen({ navigation}){
     console.log(user)
     setUser(user);
     if (initializing) setInitializing(false);
-    if (user) navigation.navigate('HomeScreen');
+    if (user) navigation.navigate('RegistrationScreen');
     }
 
     useEffect(() => {

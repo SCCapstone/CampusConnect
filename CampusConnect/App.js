@@ -15,7 +15,8 @@ import {
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {LoginScreen, RegisterScreen, WelcomeScreen} from './Login.js';
+import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js';
+import { RegistrationScreen } from './RegistrationScreen.js';
 import { HomeScreen } from './HomeScreen.js';
 
 import * as Firebase from './Firebase'
@@ -39,6 +40,11 @@ export default function App() {
         <Stack.Screen
           name="RegisterScreen"
           component={RegisterScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="RegistrationScreen"
+          component={RegistrationScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
