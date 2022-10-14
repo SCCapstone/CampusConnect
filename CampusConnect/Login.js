@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 
-import * as Firebase from './Firebase'
+import { AuthContext } from './Firebase'
 import auth from '@react-native-firebase/auth';
 
 import styles from './loginStyles';
@@ -25,23 +25,6 @@ export function WelcomeScreen({navigation}) {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
-  if (user) {
-    navigation.navigate('HomeScreen')
-  }
   
  
   return (
@@ -180,7 +163,7 @@ export function RegisterScreen({ navigation}){
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={register} style={styles.loginBtn}>
+      <TouchableOpacity onPress={register(email,password)} style={styles.loginBtn}>
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
