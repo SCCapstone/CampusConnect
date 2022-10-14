@@ -87,20 +87,24 @@ export function LoginScreen({ navigation}) {
 
 
   const login = () => {
-    console.log('teset');
-    auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log('User account signed in!');
-      LoginAlert({email})
-    })
-    .catch(error => {
-      if (error.code === 'auth/wrong-password') {
-        console.log('wrong password');
-      }
-  
-      console.log(error);
-    });
+    if (email && password){
+      auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account signed in!');
+        LoginAlert({email})
+      })
+      .catch(error => {
+        if (error.code === 'auth/wrong-password') {
+          console.log('wrong password');
+        }
+    
+        console.log(error);
+      });
+    }
+    else {
+      LoginError();
+    }
   }
 
   return (
@@ -178,22 +182,27 @@ export function RegisterScreen({ navigation}){
 
   const register = () => {
     console.log('teset');
-    auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log('User account created & signed in!');
-    })
-    .catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
-      }
-  
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-  
-      console.log(error);
-    });
+    if (email && password && (password === password2)){
+      auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+    
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+    
+        console.log(error);
+      });
+    }
+    else {
+      RegisterError();
+    }
   }
 
  
@@ -235,7 +244,7 @@ export function RegisterScreen({ navigation}){
           autoComplete = {"password-new"}
           placeholderTextColor="#000000"
           secureTextEntry={true}
-          onChangeText={(password2) => setPassword2(password)}
+          onChangeText={(password2) => setPassword2(password2)}
         />
       </View>
  
@@ -271,5 +280,16 @@ const RegisterAlert = ({email}) => {
   Alert.alert('Registered!', "Successfully registered " + email, [
     { text: "OK"}
   ] );
+}
 
+const RegisterError = () => {
+  Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
+    { text: "OK"}
+  ] );
+}
+
+const LoginError = () => {
+  Alert.alert('Invalid format', "Make sure email and password field are not empty.", [
+    { text: "OK"}
+  ] );
 }
