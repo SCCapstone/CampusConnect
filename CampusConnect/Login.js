@@ -1,5 +1,5 @@
 import { Modal, StatusBar } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,19 +13,34 @@ import {
   ScrollView,
 } from "react-native";
 
-import { AuthContext } from './Firebase'
 import auth from '@react-native-firebase/auth';
 
 import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
+
 export function WelcomeScreen({navigation}) {
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-  
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+  console.log(user)
+  console.log('somethin happened')
+    setUser(user);
+    if (initializing) setInitializing(false);
+    navigation.navigate('HomeScreen')
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
  
   return (
     <View style={styles.container}>
@@ -51,12 +66,44 @@ export function LoginScreen({ navigation}) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const [isModalVisible, setModalVisible] = React.useState(false);
-  const handleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+    // Set an initializing state whilst Firebase connects
+    const [initializing, setInitializing] = useState(true);
+    const [user, setUser] = useState();
+  
+    // Handle user state changes
+    function onAuthStateChanged(user) {
+    console.log(user)
+    console.log('somethin happened')
+      setUser(user);
+      if (initializing) setInitializing(false);
+      navigation.navigate('HomeScreen')
+    }
 
- 
+    useEffect(() => {
+      const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+      return subscriber; // unsubscribe on unmount
+    }, []);
+  
+    if (initializing) return null;
+
+
+  const login = () => {
+    console.log('teset');
+    auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('User account signed in!');
+      LoginAlert({email})
+    })
+    .catch(error => {
+      if (error.code === 'auth/wrong-password') {
+        console.log('wrong password');
+      }
+  
+      console.log(error);
+    });
+  }
+
   return (
     <View style={styles.container}>
       <BackButton/>
@@ -96,7 +143,7 @@ export function LoginScreen({ navigation}) {
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress= {() => LoginAlert({email})} style={styles.loginBtn}>
+      <TouchableOpacity onPress= {() => login(email,password)} style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
@@ -110,10 +157,45 @@ export function RegisterScreen({ navigation}){
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
-  const [modalVisible, setModalVisible] = React.useState(false);
 
-  function register () {
-    Firebase.registerAccount(email,password)
+    // Set an initializing state whilst Firebase connects
+    const [initializing, setInitializing] = useState(true);
+    const [user, setUser] = useState();
+  
+    // Handle user state changes
+    function onAuthStateChanged(user) {
+    console.log(user)
+    console.log('somethin happened')
+      setUser(user);
+      if (initializing) setInitializing(false);
+      navigation.navigate('HomeScreen')
+    }
+
+    useEffect(() => {
+      const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+      return subscriber; // unsubscribe on unmount
+    }, []);
+  
+    if (initializing) return null;
+
+  const register = () => {
+    console.log('teset');
+    auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('User account created & signed in!');
+    })
+    .catch(error => {
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
+  
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
+  
+      console.log(error);
+    });
   }
 
  
@@ -162,8 +244,7 @@ export function RegisterScreen({ navigation}){
       <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={register(email,password)} style={styles.loginBtn}>
+      <TouchableOpacity onPress={() => register(email,password)} style={styles.loginBtn}>
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
@@ -186,5 +267,11 @@ const LoginAlert = ({email}) => {
     Alert.alert('Logged in!', "Successfully logged in " + email, [
       { text: "OK"}
     ] );
+
+}
+const RegisterAlert = ({email}) => {
+  Alert.alert('Registered!', "Successfully registered " + email, [
+    { text: "OK"}
+  ] );
 
 }
