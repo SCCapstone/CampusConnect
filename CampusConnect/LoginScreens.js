@@ -28,7 +28,6 @@ export function WelcomeScreen({navigation}) {
 
   // Handle user state changes
   function onAuthStateChanged(user) {
-  console.log(user)
     setUser(user);
     if (initializing) setInitializing(false);
     if (user) navigation.navigate('RegistrationScreen');
@@ -71,8 +70,6 @@ export function LoginScreen({ navigation}) {
   
     // Handle user state changes
     function onAuthStateChanged(user) {
-    console.log(user)
-    console.log('somethin happened')
       setUser(user);
       if (initializing) setInitializing(false);
       if (user) navigation.navigate('RegistrationScreen');
@@ -95,11 +92,7 @@ export function LoginScreen({ navigation}) {
         LoginAlert({email})
       })
       .catch(error => {
-        if (error.code === 'auth/wrong-password') {
-          console.log('wrong password');
-        }
-    
-        console.log(error);
+        FirebaseError(error.code);
       });
     }
     else {
@@ -167,7 +160,6 @@ export function RegisterScreen({ navigation}){
   
     // Handle user state changes
     function onAuthStateChanged(user) {
-    console.log(user)
     setUser(user);
     if (initializing) setInitializing(false);
     if (user) navigation.navigate('RegistrationScreen');
@@ -181,7 +173,6 @@ export function RegisterScreen({ navigation}){
     if (initializing) return null;
 
   const register = () => {
-    console.log('teset');
     if (email && password && (password === password2)){
       auth()
       .createUserWithEmailAndPassword(email, password)
@@ -189,15 +180,7 @@ export function RegisterScreen({ navigation}){
         console.log('User account created & signed in!');
       })
       .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
-    
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-    
-        console.log(error);
+        FirebaseError(error.code);
       });
     }
     else {
@@ -284,6 +267,12 @@ const RegisterAlert = ({email}) => {
 
 const RegisterError = () => {
   Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
+    { text: "OK"}
+  ] );
+}
+
+const FirebaseError = (error) => {
+  Alert.alert('Error', error, [
     { text: "OK"}
   ] );
 }
