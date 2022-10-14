@@ -23,9 +23,6 @@ import * as Firebase from './Firebase'
 const Stack = createNativeStackNavigator();
  
 export default function App() {
-
-  Firebase.init()
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
