@@ -1,4 +1,4 @@
-# Compilation
+# Instructions 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
 3. Install Dependencies<pre><code>npm install @react-navigation/native
