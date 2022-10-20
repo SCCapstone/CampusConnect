@@ -5,6 +5,7 @@ This should explain everything :)
 
 Please install these:  
 
+* [Chocolatey](https://chocolatey.org/)
 * [Android Studio](https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds)
 * [JDK](https://www.oracle.com/java/technologies/downloads/)
 * [Node.js](https://nodejs.org/en/)
