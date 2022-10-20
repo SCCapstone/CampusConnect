@@ -5,7 +5,7 @@ This should explain everything :)
 # External Requirements
 Please install these
 
-* [AndriodStudio] - https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds
+* [AndroidStudio] - https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds
 * [JDK] - https://www.oracle.com/java/technologies/downloads/
 * [Node.js] - https://nodejs.org/en/
 
@@ -39,9 +39,9 @@ We also need to figure out how to handle firebase all throughout the app. Whethe
 ## Testing Technology
 ## Running Tests
 
-# Authors  
-Erik - erikc@email.sc.edu  
-Coby - cobya@email.sc.edu  
-Neekon - nsarmadi@email.sc.edu  
-Timothy - tkranz@email.sc.edu  
-Chase - chasema@email.sc.edu  
+# Authors
+Erik - erikc@email.sc.edu
+Coby - cobya@email.sc.edu
+Neekon - nsarmadi@email.sc.edu
+Timothy - tkranz@email.sc.edu
+Chase - chasema@email.sc.edu

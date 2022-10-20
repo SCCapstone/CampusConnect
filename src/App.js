@@ -15,7 +15,7 @@ import {
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js';
+import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js'
 import { RegistrationScreen } from './RegistrationScreen.js';
 import { HomeScreen } from './HomeScreen.js';
 
