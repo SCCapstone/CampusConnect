@@ -2,8 +2,14 @@
 Please see  
 https://github.com/SCCapstone/DemBoyz/wiki/Project-Description
 This should explain everything :)
+# External Requirements
+Please install these
 
-# Instructions 
+* [AndriodStudio] - https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds
+* [JDK] - https://www.oracle.com/java/technologies/downloads/
+* [Node.js] - https://nodejs.org/en/
+
+# Setup and Running 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
 3. Install Dependencies<pre><code>npm install @react-navigation/native
@@ -26,3 +32,16 @@ We also need to figure out how to handle firebase all throughout the app. Whethe
 
 # Pictures
 <img width="308" alt="Screenshot 2022-10-13 030609" src="https://user-images.githubusercontent.com/13265359/195525883-f8516174-19ba-4d06-b23e-0d691c276bfb.png">
+
+# Deployment
+# Testing
+
+## Testing Technology
+## Running Tests
+
+# Authors
+Erik - erikc@email.sc.edu
+Coby - cobya@email.sc.edu
+Neekon - nsarmadi@email.sc.edu
+Timothy - tkranz@email.sc.edu
+Chase - chasema@email.sc.edu
