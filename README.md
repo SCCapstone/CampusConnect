@@ -19,7 +19,7 @@ npm install --save @react-native-firebase/auth
 npm install @react-navigation/drawer</code></pre>
 4. Run the code<pre><code>npx react-native run-android</code></pre>
 
-All the source files for the project are in the "CampusConnect" folder
+All the source files for the project are in the "src" folder
 
 # Coding
 Create separate ".js" files for each bundle of screens (related screens). Create separate styles for each screen as well. They can be imported manually at the top. When you're done with your screen, you can add it to the "App.js" stack navigator and it will be registered within the app. Look at "Login.js" for an example of how to navigate through the different screens.  
