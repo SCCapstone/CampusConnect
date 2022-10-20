@@ -19,7 +19,6 @@ import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js'
 import { RegistrationScreen } from './RegistrationScreen.js';
 import { HomeScreen } from './HomeScreen.js';
 
-import * as Firebase from './Firebase'
 
 const Stack = createNativeStackNavigator();
  
