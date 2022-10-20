@@ -1,3 +1,8 @@
+# What is Campus Connect?
+Please see  
+https://github.com/SCCapstone/DemBoyz/wiki/Project-Description
+This should explain everything :)
+
 # Instructions 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
