@@ -2,12 +2,13 @@
 Please see  
 https://github.com/SCCapstone/DemBoyz/wiki/Project-Description
 This should explain everything :)
-# External Requirements
-Please install these
+# External Requirements  
 
-* [AndroidStudio] - https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds
-* [JDK] - https://www.oracle.com/java/technologies/downloads/
-* [Node.js] - https://nodejs.org/en/
+Please install these:  
+
+* [Android Studio](https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds)
+* [JDK](https://www.oracle.com/java/technologies/downloads/)
+* [Node.js] - (https://nodejs.org/en/)
 
 # Setup and Running 
 1. Clone Repo
