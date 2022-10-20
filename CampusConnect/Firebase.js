@@ -11,7 +11,7 @@ export const register = (email,password) => {
 
 export const createUser = async (email, password) => {
   try {
-    let response = await auth().createUserWithEmailAndPassword(email, password)
+    let response = await auth().createUserWithEmailAndPassword(email, password);
     if (response) {
       console.log(tag, "?", response)
     }
