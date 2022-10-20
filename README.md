@@ -1,6 +1,5 @@
 # What is Campus Connect?
-Please see  
-https://github.com/SCCapstone/DemBoyz/wiki/Project-Description
+Please see [Project Description](https://github.com/SCCapstone/DemBoyz/wiki/Project-Description).
 This should explain everything :)
 # External Requirements  
 
