@@ -39,9 +39,9 @@ We also need to figure out how to handle firebase all throughout the app. Whethe
 ## Testing Technology
 ## Running Tests
 
-# Authors
-Erik - erikc@email.sc.edu
-Coby - cobya@email.sc.edu
-Neekon - nsarmadi@email.sc.edu
-Timothy - tkranz@email.sc.edu
-Chase - chasema@email.sc.edu
+# Authors  
+Erik - erikc@email.sc.edu  
+Coby - cobya@email.sc.edu  
+Neekon - nsarmadi@email.sc.edu  
+Timothy - tkranz@email.sc.edu  
+Chase - chasema@email.sc.edu  
