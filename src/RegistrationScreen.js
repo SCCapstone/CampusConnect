@@ -25,7 +25,7 @@ export function RegistrationScreen({navigation}) {
 
 
     return(
-        <View>
+        <View style={styles.container}>
             <Image style={styles.imageLarge} source={require("./assets/gamecock.png")} />
             <Text>This will be a registration screen soon. But for now, there's just a sign out button</Text>
     
