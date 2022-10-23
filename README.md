@@ -35,7 +35,7 @@ We also need to figure out how to handle firebase all throughout the app. Whethe
 <img width="308" alt="Screenshot 2022-10-13 030609" src="https://user-images.githubusercontent.com/13265359/195525883-f8516174-19ba-4d06-b23e-0d691c276bfb.png">
 
 # Deployment
-We will make an APK for android
+We will publish an apk onto github.
 # Testing
 
 ## Testing Technology
