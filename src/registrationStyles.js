@@ -36,7 +36,7 @@ export default StyleSheet.create({
     inputStyle: {
         backgroundColor: 'white',
         flex: 1,
-        color: 'white',
+        color: 'black',
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
