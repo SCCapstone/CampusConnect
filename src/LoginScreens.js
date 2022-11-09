@@ -14,6 +14,8 @@ import {
 } from "react-native";
 
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 
 import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
@@ -63,6 +65,7 @@ export function WelcomeScreen({navigation}) {
 export function LoginScreen({ navigation}) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  firstLogin = true;
 
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
@@ -71,8 +74,15 @@ export function LoginScreen({ navigation}) {
     // Handle user state changes
     function onAuthStateChanged(user) {
       setUser(user);
+      if(auth().currentUser) {
+        console.log(firstLogin)
+        //var data = firestore().collection('Users').doc(auth().currentUser.uid).get()
+        //firstLogin = data["firstLogin"];
+        console.log(data)
+      }
       if (initializing) setInitializing(false);
-      if (user) navigation.navigate('RegistrationScreen');
+      if (user && firstLogin) navigation.navigate('RegistrationScreen');
+      if (user && !firstLogin) navigation.navigate('HomeScreen');
     }
 
     useEffect(() => {
@@ -160,9 +170,9 @@ export function RegisterScreen({ navigation}){
   
     // Handle user state changes
     function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-    if (user) navigation.navigate('RegistrationScreen');
+      setUser(user);
+      if (initializing) setInitializing(false);
+      if (user) navigation.navigate('RegistrationScreen');
     }
 
     useEffect(() => {
@@ -178,6 +188,7 @@ export function RegisterScreen({ navigation}){
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
+        createUserData();
       })
       .catch(error => {
         FirebaseError(error.code);
@@ -187,6 +198,38 @@ export function RegisterScreen({ navigation}){
       RegisterError();
     }
   }
+
+  const createUserData = () => {
+    firestore()
+      .collection('Users')
+      .doc(auth().currentUser.uid)
+      .set({
+        email: email,
+        firstLogin: true,
+        name: 'No Name',
+        major: 'None',
+        gradYear: 0
+      })
+      .then(() => {
+      console.log('User added!');
+      })
+      .catch(error => {
+        FirebaseError(error.code);
+      });
+  }
+
+  /*const createUserData = () => {
+    database()
+      .ref('/users/' + auth().currentUser.uid)
+      .set({
+        email: email,
+        firstLogin: true,
+        name: 'No Name',
+        major: 'None',
+        gradYear: 0
+  })
+  .then(() => console.log('Data set.'));
+  }*/
 
  
   return (
@@ -243,6 +286,8 @@ export function RegisterScreen({ navigation}){
     </View>
   );
 }
+
+
 
 const BackButton = () => {
   const navigation = useNavigation();

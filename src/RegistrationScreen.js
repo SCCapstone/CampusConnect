@@ -47,20 +47,7 @@ export function RegistrationScreen({navigation}) {
     }
     
     const completeReg = () => {
-            /*if (email && password && (password === password2)){
-              auth()
-              .createUserWithEmailAndPassword(email, password)
-              .then(() => {
-                console.log('User account created & signed in!');
-                setRegistraionSuccess(true);
-              })
-              .catch(error => {
-                FirebaseError(error.code);
-              });
-            }
-            else {
-              RegisterError();
-            }*/
+            auth().signOut();
             setRegistraionSuccess(true);
       }
     
