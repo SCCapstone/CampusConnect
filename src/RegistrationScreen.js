@@ -134,35 +134,6 @@ export function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
-        <View style={regstyles.SectionStyle}>
-            <TextInput
-              style={regstyles.inputStyle}
-              onChangeText={(Email) => setEmail(Email)}
-              placeholder="Enter your USC email"
-              placeholderTextColor="gray"
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={regstyles.SectionStyle}>
-            <TextInput
-              style={regstyles.inputStyle}
-              onChangeText={(Password) => setPassword(Password)}
-              placeholder="Enter Password"
-              placeholderTextColor="gray"
-              secureTextEntry={true}
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={regstyles.SectionStyle}>
-            <TextInput
-              style={regstyles.inputStyle}
-              onChangeText={(Password2) => setPassword2(Password2)}
-              placeholder="Confirm Password"
-              placeholderTextColor="gray"
-              secureTextEntry={true}
-              blurOnSubmit={false}
-            />
-          </View>
           <View style={regstyles.SectionStyle}>
             <TextInput
               style={regstyles.inputStyle}
