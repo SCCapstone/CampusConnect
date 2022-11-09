@@ -33,6 +33,7 @@ We also need to figure out how to handle firebase all throughout the app. Whethe
 
 # Pictures
 <img width="308" alt="Screenshot 2022-10-13 030609" src="https://user-images.githubusercontent.com/13265359/195525883-f8516174-19ba-4d06-b23e-0d691c276bfb.png">
+<img width="362" alt="Screenshot 2022-11-09 at 11 08 38 AM" src="https://user-images.githubusercontent.com/13265359/200881125-c7e7194e-fd10-45a7-9ffe-ccee49550b47.png">
 
 # Deployment
 We will publish an apk onto github.
