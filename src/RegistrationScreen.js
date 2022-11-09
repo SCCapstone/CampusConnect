@@ -59,7 +59,7 @@ export function RegistrationScreen({navigation}) {
         major: major,
         bio: bio,
         firstLogin: false,
-        gradDate: gradDate,
+        gradYear: gradDate,
       })
 
     }
