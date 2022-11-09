@@ -5,6 +5,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
 import {
     StyleSheet,
     ImageBackground,
@@ -56,8 +58,10 @@ export function RegistrationScreen({navigation}) {
         name: firstName +" "+ lastName,
         major: major,
         bio: bio,
+        firstLogin: false,
+        gradDate: gradDate,
       })
-      firstLogin = false; 
+
     }
     
     const completeReg = () => {
@@ -66,6 +70,7 @@ export function RegistrationScreen({navigation}) {
      //  boolean validReg = true;
      //  if (validReg == true) {
           writeUserData();
+          auth().signOut();
           setRegistraionSuccess(true);
       // }
     }
