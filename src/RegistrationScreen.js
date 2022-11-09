@@ -19,6 +19,7 @@ import styles from './loginStyles';
 import regstyles from './registrationStyles';
 
 export function RegistrationScreen({navigation}) {
+    const [major, setMajor] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
     const [middleName, setMiddleName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
@@ -45,11 +46,23 @@ export function RegistrationScreen({navigation}) {
     if(auth().currentUser == null) {
         navigation.navigate('WelcomeScreen');
     }
+
+    const writeUserData = () =>{
+      firestore()
+      .collection('Users')
+      .doc(auth().currentUser.uid)
+      .update({
+        name: firstName +" "+ lastName
+        //gradYear
+      })
+    }
     
     const completeReg = () => {
-            auth().signOut();
-            setRegistraionSuccess(true);
-      }
+          //TODO
+          //Add input validation here:
+          writeUserData();
+          setRegistraionSuccess(true);
+    }
     
     if (registraionSuccess) {
         return (
@@ -125,9 +138,18 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(GradDate) => setGradDate(GradDate)}
-              placeholder="Enter Graduation Date (__/____)"
+              placeholder="Enter Graduation Year (yyyy)"
               placeholderTextColor="gray"
               keyboardType="numeric"
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={regstyles.SectionStyle}>
+            <TextInput
+              style={regstyles.inputStyle}
+              onChangeText={(major) => setMajor(major)}
+              placeholder="Select Major"
+              placeholderTextColor="gray"
               blurOnSubmit={false}
             />
           </View>
@@ -147,6 +169,7 @@ export function RegistrationScreen({navigation}) {
     </View>
   );
 };
+
 const RegisterError = () => {
     Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
       { text: "OK"}
