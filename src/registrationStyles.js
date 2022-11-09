@@ -67,6 +67,22 @@ export default StyleSheet.create({
         fontFamily: "notoserif",
         fontWeight: 'bold',
         fontSize: 12
+    },
+    bioStyle: {
+        backgroundColor: 'white',
+        flex: 1,
+        color: 'black',
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '#a9a9a9',
+    },
+    bioSectionStyle: {
+        flexDirection: 'row',
+        height: 85,
+        marginTop: 40,
+        margin: 0,
     }
     
 

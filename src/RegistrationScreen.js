@@ -5,6 +5,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
 import {
     StyleSheet,
     ImageBackground,
@@ -19,6 +21,8 @@ import styles from './loginStyles';
 import regstyles from './registrationStyles';
 
 export function RegistrationScreen({navigation}) {
+    const [bio, setBio] = React.useState("");
+    const [major, setMajor] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
     const [middleName, setMiddleName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
@@ -45,11 +49,32 @@ export function RegistrationScreen({navigation}) {
     if(auth().currentUser == null) {
         navigation.navigate('WelcomeScreen');
     }
+
+    const writeUserData = () =>{
+      firestore()
+      .collection('Users')
+      .doc(auth().currentUser.uid)
+      .update({
+        name: firstName +" "+ lastName,
+        major: major,
+        bio: bio,
+        firstLogin: false,
+        gradYear: gradDate,
+      })
+
+    }
     
     const completeReg = () => {
-            auth().signOut();
-            setRegistraionSuccess(true);
-      }
+          //TODO
+          //Add input validation here:
+     //  boolean validReg = true;
+     //  if (validReg == true) {
+          writeUserData();
+          auth().signOut();
+          setRegistraionSuccess(true);
+      // }
+    }
+
     
     if (registraionSuccess) {
         return (
@@ -121,42 +146,31 @@ export function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
-        <View style={regstyles.SectionStyle}>
-            <TextInput
-              style={regstyles.inputStyle}
-              onChangeText={(Email) => setEmail(Email)}
-              placeholder="Enter your USC email"
-              placeholderTextColor="gray"
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={regstyles.SectionStyle}>
-            <TextInput
-              style={regstyles.inputStyle}
-              onChangeText={(Password) => setPassword(Password)}
-              placeholder="Enter Password"
-              placeholderTextColor="gray"
-              secureTextEntry={true}
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={regstyles.SectionStyle}>
-            <TextInput
-              style={regstyles.inputStyle}
-              onChangeText={(Password2) => setPassword2(Password2)}
-              placeholder="Confirm Password"
-              placeholderTextColor="gray"
-              secureTextEntry={true}
-              blurOnSubmit={false}
-            />
-          </View>
           <View style={regstyles.SectionStyle}>
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(GradDate) => setGradDate(GradDate)}
-              placeholder="Enter Graduation Date (__/____)"
+              placeholder="Enter Graduation Year (yyyy)"
               placeholderTextColor="gray"
               keyboardType="numeric"
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={regstyles.SectionStyle}>
+            <TextInput
+              style={regstyles.inputStyle}
+              onChangeText={(major) => setMajor(major)}
+              placeholder="Select Major"
+              placeholderTextColor="gray"
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={regstyles.bioSectionStyle}>
+            <TextInput
+              style={regstyles.bioStyle}
+              onChangeText={(bio) => setBio(bio)}
+              placeholder="Enter a short Bio"
+              placeholderTextColor="gray"
               blurOnSubmit={false}
             />
           </View>
