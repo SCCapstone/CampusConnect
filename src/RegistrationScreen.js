@@ -168,7 +168,7 @@ export function RegistrationScreen({navigation}) {
           <View style={regstyles.bioSectionStyle}>
             <TextInput
               style={regstyles.bioStyle}
-              onChangeText={(bio) => setBio(Bio)}
+              onChangeText={(bio) => setBio(bio)}
               placeholder="Enter a short Bio"
               placeholderTextColor="gray"
               blurOnSubmit={false}
