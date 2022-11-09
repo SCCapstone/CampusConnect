@@ -1617,7 +1617,7 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-plugin/-/eslint-plugin-1.2.0.tgz"
   "version" "1.2.0"
 
-"@react-native-firebase/app@^15.7.0", "@react-native-firebase/app@15.7.0":
+"@react-native-firebase/app@^15.7.0", "@react-native-firebase/app@15.7.0", "@react-native-firebase/app@16.4.3":
   "integrity" "sha512-ZyrvewIkQC0UHDuHxXyc25/V8xYOa4xlukIHIbtJeBzVCCyVgZxF4Svyqs+CosqbHOuwWnmg+AW0rMvjrRcdmw=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-15.7.0.tgz"
   "version" "15.7.0"
@@ -1630,6 +1630,11 @@
   "integrity" "sha512-0HJfCc0SUcSFbz5SyZWZOJkhtn+kOU8ytuPHM+vOJBeg5owJzmLnFx1ZI20gHU5cxhN3UQy/GKMPvlIcDeW7Bg=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-15.7.0.tgz"
   "version" "15.7.0"
+
+"@react-native-firebase/database@^16.4.3":
+  "integrity" "sha512-rTfGIzk04It9MB8Y2+CCpioeV4QHPCi9k11H+lhCGjVy7+nTzZyjfG17sXjdbxfYeGLipuFt2r7Kozqv920HXw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/database/-/database-16.4.3.tgz"
+  "version" "16.4.3"
 
 "@react-native-firebase/firestore@^15.7.0":
   "integrity" "sha512-lcMApKFIo4k9GqOUuK03WBDs3JP0pa94jTmy+hZQLAqyeA78GYC57CzGGKCkR0qtwCzMtE8HXqICY9FKv4rxpg=="
@@ -1917,9 +1922,9 @@
     "eslint-visitor-keys" "^1.1.0"
 
 "@xmldom/xmldom@~0.7.0":
-  "integrity" "sha512-V3BIhmY36fXZ1OtVcI9W+FxQqxVLsPKcNjWigIaa81dLC9IolJl5Mt4Cvhmr0flUnjSpTdrbMTSbXqYqV5dT6A=="
-  "resolved" "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.7.5.tgz"
-  "version" "0.7.5"
+  "integrity" "sha512-yceMpm/xd4W2a85iqZyO09gTnHvXF6pyiWjD2jcOJs7hRoZtNNOO1eJlhHj1ixA+xip2hOyGn+LgcvLCMo5zXA=="
+  "resolved" "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.7.9.tgz"
+  "version" "0.7.9"
 
 "abab@^2.0.3", "abab@^2.0.5":
   "integrity" "sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA=="
