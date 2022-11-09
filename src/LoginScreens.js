@@ -78,7 +78,7 @@ export function LoginScreen({ navigation}) {
         console.log(firstLogin)
         //var data = firestore().collection('Users').doc(auth().currentUser.uid).get()
         //firstLogin = data["firstLogin"];
-        console.log(data)
+        //console.log(data)
       }
       if (initializing) setInitializing(false);
       if (user && firstLogin) navigation.navigate('RegistrationScreen');
