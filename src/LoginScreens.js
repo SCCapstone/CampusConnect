@@ -207,7 +207,8 @@ export function RegisterScreen({ navigation}){
         firstLogin: true,
         name: 'No Name',
         major: 'None',
-        gradYear: 0
+        gradYear: 0,
+        bio: '',
       })
       .then(() => {
       console.log('User added!');

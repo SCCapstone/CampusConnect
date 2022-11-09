@@ -19,6 +19,7 @@ import styles from './loginStyles';
 import regstyles from './registrationStyles';
 
 export function RegistrationScreen({navigation}) {
+    const [bio, setBio] = React.useState("");
     const [major, setMajor] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
     const [middleName, setMiddleName] = React.useState("");
@@ -52,17 +53,23 @@ export function RegistrationScreen({navigation}) {
       .collection('Users')
       .doc(auth().currentUser.uid)
       .update({
-        name: firstName +" "+ lastName
-        //gradYear
+        name: firstName +" "+ lastName,
+        major: major,
+        bio: bio,
       })
+      firstLogin = false; 
     }
     
     const completeReg = () => {
           //TODO
           //Add input validation here:
+     //  boolean validReg = true;
+     //  if (validReg == true) {
           writeUserData();
           setRegistraionSuccess(true);
+      // }
     }
+
     
     if (registraionSuccess) {
         return (
@@ -153,6 +160,15 @@ export function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
+          <View style={regstyles.bioSectionStyle}>
+            <TextInput
+              style={regstyles.bioStyle}
+              onChangeText={(bio) => setBio(Bio)}
+              placeholder="Enter a short Bio"
+              placeholderTextColor="gray"
+              blurOnSubmit={false}
+            />
+          </View>
           {errortext != '' ? ( <Text 
           style ={regstyles.errorStyle}> {errortext}
           </Text> ) : null}
@@ -169,7 +185,6 @@ export function RegistrationScreen({navigation}) {
     </View>
   );
 };
-
 const RegisterError = () => {
     Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
       { text: "OK"}

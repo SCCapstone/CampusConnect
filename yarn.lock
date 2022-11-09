@@ -1480,10 +1480,10 @@
     "hermes-profile-transformer" "^0.0.6"
     "ip" "^1.1.5"
 
-"@react-native-community/cli-platform-android@^9.1.0", "@react-native-community/cli-platform-android@^9.2.1":
-  "integrity" "sha512-VamCZ8nido3Q3Orhj6pBIx48itORNPLJ7iTfy3nucD1qISEDih3DOzCaQCtmqdEBgUkNkNl0O+cKgq5A3th3Zg=="
-  "resolved" "https://registry.npmjs.org/@react-native-community/cli-platform-android/-/cli-platform-android-9.2.1.tgz"
-  "version" "9.2.1"
+"@react-native-community/cli-platform-android@^9.1.0", "@react-native-community/cli-platform-android@^9.3.1":
+  "integrity" "sha512-m0bQ6Twewl7OEZoVf79I2GZmsDqh+Gh0bxfxWgwxobsKDxLx8/RNItAo1lVtTCgzuCR75cX4EEO8idIF9jYhew=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/cli-platform-android/-/cli-platform-android-9.3.1.tgz"
+  "version" "9.3.1"
   dependencies:
     "@react-native-community/cli-tools" "^9.2.1"
     "chalk" "^4.1.2"
