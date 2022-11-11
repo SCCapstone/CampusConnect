@@ -28,10 +28,16 @@ export function WelcomeScreen({navigation}) {
   const [user, setUser] = useState();
 
   // Handle user state changes
-  function onAuthStateChanged(user) {
+  async function onAuthStateChanged(user) {
+    firstLogin = false;
     setUser(user);
     if (initializing) setInitializing(false);
-    if (user) navigation.navigate('RegistrationScreen');
+    if (user) {
+      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get();
+      firstLogin = userData.get("firstLogin");
+    }
+    if (user && firstLogin) navigation.navigate('RegistrationScreen');
+    else if (user && !firstLogin) {navigation.navigate('HomeScreen')}
   }
 
   useEffect(() => {
@@ -71,19 +77,15 @@ export function LoginScreen({ navigation}) {
   
     // Handle user state changes
     async function onAuthStateChanged(user) {
+      firstLogin = false;
       setUser(user);
-      if(auth().currentUser) {
-        console.log(firstLogin)
-        //var data = firestore().collection('Users').doc(auth().currentUser.uid).get()
-        //firstLogin = data["firstLogin"];
-        //console.log(data)
-      }
       if (initializing) setInitializing(false);
       if (user) {
-        const user = await firestore().collection('Users').doc(auth().currentUser.uid).get();
-        console.log(user);
+        const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get();
+        firstLogin = userData.get("firstLogin");
       }
-      if (user) navigation.navigate('RegistrationScreen');
+      if (user && firstLogin) navigation.navigate('RegistrationScreen');
+      else if (user && !firstLogin) {navigation.navigate('HomeScreen')}
     }
 
     useEffect(() => {
