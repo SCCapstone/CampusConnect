@@ -61,17 +61,21 @@ export function WelcomeScreen({navigation}) {
 
  
 export function LoginScreen({ navigation}) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
 
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
   
     // Handle user state changes
-    function onAuthStateChanged(user) {
+    async function onAuthStateChanged(user) {
       setUser(user);
       if (initializing) setInitializing(false);
+      if (user) {
+        const user = await firestore().collection('Users').doc(auth().currentUser.uid).get();
+        console.log(user);
+      }
       if (user) navigation.navigate('RegistrationScreen');
     }
 
