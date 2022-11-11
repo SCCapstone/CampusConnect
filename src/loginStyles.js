@@ -32,6 +32,7 @@ export default StyleSheet.create({
       height: "50%",
       resizeMode: 'contain'
     },
+    
     imageSmall: {
         marginBottom: 30,
         marginTop: 0,
@@ -41,7 +42,6 @@ export default StyleSheet.create({
         resizeMode: 'contain'
       },
      
-   
     inputView: {
       backgroundColor: "white",
       borderRadius: 0,
@@ -63,6 +63,7 @@ export default StyleSheet.create({
       color: "black",
       fontWeight: "bold",
     },
+    
     title: {
       fontSize:48,
       paddingBottom: 25,
@@ -71,6 +72,7 @@ export default StyleSheet.create({
       fontFamily: "notoserif",
       color: "black"
     },
+    
     button: {
       backgroundColor: "white",
       height: 40,
@@ -91,17 +93,21 @@ export default StyleSheet.create({
       placeholderTextColor: "000000",
       color: "white"
     },
+    
     loginSuccess: {
       margin:0
     },
+    
     bottomContainer: {
         flex: 1,
         justifyContent: 'flex-end',
     },
+    
     copyWrightText: {
         color: "black",
         fontFamily: "notoserif",
         fontWeight: 'bold',
         fontSize: 12
     }
+    
   });
