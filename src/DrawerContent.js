@@ -22,8 +22,11 @@ export function DrawerContent(props) {
             <DrawerContentScrollView {...props}
             contentContainerStyle={{backgroundColor: '#73000a'}}>
             <ImageBackground source={require('./assets/gamecock.png')} style={{padding: 30}}>
+
+            
                 <Image source={require('./assets/blank2.jpeg')} //change to pfp
                     style={{height: 80, width: 80, borderRadius:40}}/>
+                
             </ImageBackground>
             <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>  
                 <DrawerItemList {...props}/>
