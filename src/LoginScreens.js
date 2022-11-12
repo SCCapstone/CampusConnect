@@ -37,7 +37,11 @@ export function WelcomeScreen({navigation}) {
       firstLogin = userData.get("firstLogin");
     }
     if (user && firstLogin) navigation.navigate('RegistrationScreen');
-    else if (user && !firstLogin) {navigation.navigate('HomeScreen')}
+    else if (user && !firstLogin) {
+      navigation.navigate('HomeScreen');
+
+    }
+    console.log('hello');
   }
 
   useEffect(() => {
@@ -70,30 +74,6 @@ export function WelcomeScreen({navigation}) {
 export function LoginScreen({ navigation}) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-
-    // Set an initializing state whilst Firebase connects
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
-  
-    // Handle user state changes
-    async function onAuthStateChanged(user) {
-      firstLogin = false;
-      setUser(user);
-      if (initializing) setInitializing(false);
-      if (user) {
-        const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get();
-        firstLogin = userData.get("firstLogin");
-      }
-      if (user && firstLogin) navigation.navigate('RegistrationScreen');
-      else if (user && !firstLogin) {navigation.navigate('HomeScreen')}
-    }
-
-    useEffect(() => {
-      const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-      return subscriber; // unsubscribe on unmount
-    }, []);
-  
-    if (initializing) return null;
 
 
   const login = () => {
@@ -166,24 +146,6 @@ export function RegisterScreen({ navigation}){
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
-
-    // Set an initializing state whilst Firebase connects
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
-  
-    // Handle user state changes
-    function onAuthStateChanged(user) {
-      setUser(user);
-      if (initializing) setInitializing(false);
-      if (user) navigation.navigate('RegistrationScreen');
-    }
-
-    useEffect(() => {
-      const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-      return subscriber; // unsubscribe on unmount
-    }, []);
-  
-    if (initializing) return null;
 
   const register = () => {
     if (email && password && (password === password2)){
