@@ -14,6 +14,7 @@ Please install these:
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
 3. Install Dependencies<pre><code>npm install @react-navigation/native
+npm install react-navigation
 npm install react-native-screens react-native-safe-area-context
 npm install --save @react-native-firebase/app
 npm install --save @react-native-firebase/auth

@@ -37,7 +37,11 @@ export function WelcomeScreen({navigation}) {
       firstLogin = userData.get("firstLogin");
     }
     if (user && firstLogin) navigation.navigate('RegistrationScreen');
-    else if (user && !firstLogin) {navigation.navigate('HomeScreen')}
+    else if (user && !firstLogin) {
+      navigation.navigate('HomeScreen');
+
+    }
+    console.log('hello');
   }
 
   useEffect(() => {
