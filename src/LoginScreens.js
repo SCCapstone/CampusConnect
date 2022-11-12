@@ -83,6 +83,7 @@ export function LoginScreen({ navigation}) {
       .then(() => {
         console.log('User account signed in!');
         LoginAlert({email})
+        navigation.navigate('HomeScreen')
       })
       .catch(error => {
         FirebaseError(error.code);
