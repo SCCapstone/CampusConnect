@@ -13,6 +13,8 @@ import {
     DrawerItemList
 } from '@react-navigation/drawer';
 
+import auth from '@react-native-firebase/auth';
+
 export function DrawerContent(props) {
 
     return(
@@ -27,7 +29,7 @@ export function DrawerContent(props) {
                 <DrawerItemList {...props}/>
             </View>
             </DrawerContentScrollView>
-            <TouchableOpacity onPress={() => {}} //sign out
+            <TouchableOpacity onPress={() => auth().signOut().then(() => props.navigation.navigate('WelcomeScreen'))} //sign out
                 style={{paddingVertical: 15}}>
                 <View>
                     <Text
