@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 import * as React from "react";
 import { useState } from 'react';
@@ -18,14 +19,31 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js'
 import { RegistrationScreen } from './RegistrationScreen.js';
 import { HomeScreen } from './HomeScreen.js';
-
+import { EventScreen } from './EventScreen.js';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Stack = createNativeStackNavigator();
- 
+const Drawer = createDrawerNavigator();
+
+
+function Root() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Event" component={EventScreen} />
+    </Drawer.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen
+          name="Root"
+          component={Root}
+          options={{headerShown: false}}
+        />
       <Stack.Screen
           name="WelcomeScreen"
           component={WelcomeScreen}
@@ -49,6 +67,11 @@ export default function App() {
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EventScreen"
+          component={EventScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
