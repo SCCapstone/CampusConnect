@@ -11,7 +11,7 @@ export default StyleSheet.create({
     SectionStyle: {
         flexDirection: 'row',
         height: 40,
-        marginTop: 20,
+        marginTop: 10,
         margin: 0,
     },
 
@@ -40,7 +40,7 @@ export default StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 0,
         borderColor: '#a9a9a9',
     },
     
@@ -54,7 +54,7 @@ export default StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontSize: 24,
-        padding: 10,
+        padding: 5,
     },
 
     bottomContainer: {
@@ -75,13 +75,13 @@ export default StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: 0,
         borderColor: '#a9a9a9',
     },
     bioSectionStyle: {
         flexDirection: 'row',
         height: 85,
-        marginTop: 40,
+        marginTop: 10,
         margin: 0,
     }
     

@@ -118,9 +118,9 @@ export function RegistrationScreen({navigation}) {
             source={require('./assets/gamecock.png')}
             style={{
               width: '50%',
-              height: 100,
+              height: 75,
               resizeMode: 'contain',
-              margin: 30,
+              margin: 10,
             }}
           />
         </View>

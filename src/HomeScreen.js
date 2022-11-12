@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 
 import { PostsScreen } from './PostsScreen.js';
+import { RegistrationScreen } from './RegistrationScreen.js';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -23,6 +24,7 @@ export function HomeScreen({navigation}) {
       drawerActiveTintColor: 'white'
     }}>
         <Drawer.Screen name="Home" component={PostsScreen} />
+        <Drawer.Screen name="Edit Profile" component={RegistrationScreen} />
       </Drawer.Navigator>
   );
 }
