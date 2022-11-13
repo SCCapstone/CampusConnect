@@ -204,7 +204,7 @@ export function RegistrationScreen({navigation}) {
       //Add input validation here:
  //  boolean validReg = true;
  //  if (validReg == true) {
-      navigation.navigate('Home')
+      navigation.navigate('HomeScreen')
       setRegistraionSuccess(false);
   // }
 }
