@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
+//Cited from https://github.com/itzpradip/react-native-firebase-social-app
+
 import Onboarding from 'react-native-onboarding-swiper';
 
 const Dots = ({selected}) => {
