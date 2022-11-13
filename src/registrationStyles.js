@@ -11,7 +11,7 @@ export default StyleSheet.create({
     SectionStyle: {
         flexDirection: 'row',
         height: 46,
-        margin: 15,
+        margin: 10,
     },
 
     buttonStyle: {
@@ -23,7 +23,7 @@ export default StyleSheet.create({
         borderRadius: 0,
         marginLeft: 15,
         marginRight: 15,
-        marginTop: 40,
+        marginTop: 30,
     },
 
     buttonTextStyle: {
