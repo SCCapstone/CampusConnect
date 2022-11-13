@@ -32,8 +32,10 @@ export function WelcomeScreen({navigation}) {
     firstLogin = false;
     setUser(user);
     if (initializing) setInitializing(false);
-    if (user) {
-      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get();
+    if (auth().currentUser) {
+      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
+        FirebaseError(error.code);
+      });
       firstLogin = userData.get("firstLogin");
     }
     if (user && firstLogin) navigation.navigate('RegistrationScreen');

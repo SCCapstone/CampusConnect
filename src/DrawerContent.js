@@ -39,6 +39,7 @@ export function DrawerContent(props) {
                     style={{
                         fontSize: 15,
                         marginLeft: 20,
+                        color: 'black'
                     }}>
                     Sign Out
                     </Text>

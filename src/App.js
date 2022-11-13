@@ -52,7 +52,6 @@ export default function App() {
           component={HomeScreen}
           options={{headerShown: false}}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   )

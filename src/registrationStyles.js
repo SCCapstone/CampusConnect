@@ -10,21 +10,20 @@ export default StyleSheet.create({
 
     SectionStyle: {
         flexDirection: 'row',
-        height: 40,
-        marginTop: 10,
-        margin: 0,
+        height: 46,
+        margin: 15,
     },
 
     buttonStyle: {
         backgroundColor: 'black',
         color: '#FFFFFF',
         borderColor: 'black',
-        height: 40,
+        height: 50,
         alignItems: 'center',
-        borderRadius: 30,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 70,
+        borderRadius: 0,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 40,
     },
 
     buttonTextStyle: {
@@ -37,8 +36,9 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         color: 'black',
-        paddingLeft: 15,
-        paddingRight: 15,
+        paddingBottom: 10,
+        paddingLeft: 25,
+        paddingRight: 25,
         borderWidth: 1,
         borderRadius: 0,
         borderColor: '#a9a9a9',
@@ -81,8 +81,10 @@ export default StyleSheet.create({
     bioSectionStyle: {
         flexDirection: 'row',
         height: 85,
-        marginTop: 10,
+        marginTop: 15,
         margin: 0,
+        marginLeft:14,
+        marginRight:14
     }
     
 
