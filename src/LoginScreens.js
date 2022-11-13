@@ -38,7 +38,7 @@ export function WelcomeScreen({navigation}) {
       });
       firstLogin = userData.get("firstLogin");
     }
-    if (user && firstLogin) navigation.navigate('RegistrationScreen');
+    if (user && firstLogin) navigation.navigate('OnboardingScreen');
     else if (user && !firstLogin) {
       navigation.navigate('HomeScreen');
 
