@@ -28,7 +28,7 @@ const Skip = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16, color: 'black'}}>Skip</Text>
+        <Text style={{fontSize:16, color: 'white'}}>Skip</Text>
     </TouchableOpacity>
 );
 
@@ -37,7 +37,7 @@ const Next = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16, color: 'black'}}>Next</Text>
+        <Text style={{fontSize:16, color: 'white'}}>Next</Text>
     </TouchableOpacity>
 );
 
@@ -46,7 +46,7 @@ const Done = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16, color: 'black'}}>Done</Text>
+        <Text style={{fontSize:16, color: 'white'}}>Done</Text>
     </TouchableOpacity>
 );
 
@@ -61,19 +61,19 @@ export function OnboardingScreen({navigation}) {
         onDone={() => navigation.navigate("RegistrationScreen")}
         pages={[
           {
-            backgroundColor: 'white',
+            backgroundColor: '#73000a',
             image: <Image source={require('./assets/onboarding-img1.png')} />,
             title: 'Campus Connect',
             subtitle: 'A New Way To Connect With The World',
           },
           {
-            backgroundColor: 'white',
+            backgroundColor: '#73000a',
             image: <Image source={require('./assets/onboarding-img2.png')} />,
             title: 'Share Your Thoughts',
             subtitle: 'Share Your Thoughts With Fellow Students',
           },
           {
-            backgroundColor: 'white',
+            backgroundColor: '#73000a',
             image: <Image source={require('./assets/onboarding-img3.png')} />,
             title: 'Become A Star',
             subtitle: "Be Who You Want To Be",
