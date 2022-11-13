@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 //Cited from https://github.com/itzpradip/react-native-firebase-social-app
 
 import Onboarding from 'react-native-onboarding-swiper';
+import { color } from 'react-native-reanimated';
 
 const Dots = ({selected}) => {
     let backgroundColor;
@@ -27,7 +28,7 @@ const Skip = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Skip</Text>
+        <Text style={{fontSize:16, color: 'black'}}>Skip</Text>
     </TouchableOpacity>
 );
 
@@ -36,7 +37,7 @@ const Next = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Next</Text>
+        <Text style={{fontSize:16, color: 'black'}}>Next</Text>
     </TouchableOpacity>
 );
 
@@ -45,7 +46,7 @@ const Done = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Done</Text>
+        <Text style={{fontSize:16, color: 'black'}}>Done</Text>
     </TouchableOpacity>
 );
 
@@ -60,22 +61,22 @@ export function OnboardingScreen({navigation}) {
         onDone={() => navigation.navigate("RegistrationScreen")}
         pages={[
           {
-            backgroundColor: '#73000a',
+            backgroundColor: 'white',
             image: <Image source={require('./assets/onboarding-img1.png')} />,
             title: 'Campus Connect',
             subtitle: 'A New Way To Connect With The World',
           },
           {
-            backgroundColor: '#fdeb93',
+            backgroundColor: 'white',
             image: <Image source={require('./assets/onboarding-img2.png')} />,
             title: 'Share Your Thoughts',
             subtitle: 'Share Your Thoughts With Fellow Students',
           },
           {
-            backgroundColor: '#e9bcbe',
+            backgroundColor: 'white',
             image: <Image source={require('./assets/onboarding-img3.png')} />,
-            title: 'Become The Star',
-            subtitle: "Let The Spot Light Capture You",
+            title: 'Become A Star',
+            subtitle: "Be Who You Want To Be",
           },
         ]}
       />
