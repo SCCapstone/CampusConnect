@@ -12,8 +12,8 @@ export default StyleSheet.create({
     backButtonContainer: {
       alignSelf: "flex-start",
       backgroundColor: "white",
-      marginLeft: "2%",
-      marginTop: "2%",
+      marginLeft: "4%",
+      marginTop: "8%",
       height: "6%",
       width: "10%",
     },
