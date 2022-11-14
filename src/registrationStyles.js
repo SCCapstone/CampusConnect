@@ -64,7 +64,6 @@ export default StyleSheet.create({
 
     copyWrightText: {
         color: "black",
-        fontFamily: "notoserif",
         fontWeight: 'bold',
         fontSize: 12
     },
@@ -79,7 +78,6 @@ export default StyleSheet.create({
         borderColor: '#a9a9a9',
     },
     bioSectionStyle: {
-        flexDirection: 'row',
         height: 85,
         marginTop: 15,
         margin: 0,

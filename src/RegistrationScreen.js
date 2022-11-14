@@ -295,6 +295,7 @@ export function RegistrationScreen({navigation}) {
               onOpen={onMajorOpen}
               value={major}
               items={majors}
+              dropDownDirection="TOP"
               setOpen={setOpen}
               setValue={setMajor}
               setItems={setMajors}

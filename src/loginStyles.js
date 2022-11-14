@@ -69,7 +69,6 @@ export default StyleSheet.create({
       paddingBottom: 25,
       placeholderTextColor: "red",
       fontWeight: 'bold',
-      fontFamily: "notoserif",
       color: "black"
     },
     
@@ -105,7 +104,6 @@ export default StyleSheet.create({
     
     copyWrightText: {
         color: "black",
-        fontFamily: "notoserif",
         fontWeight: 'bold',
         fontSize: 12
     }

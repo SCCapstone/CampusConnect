@@ -12,10 +12,10 @@
   "dependencies": {
     "@react-native-community/cli-platform-android": "^9.3.1",
     "@react-native-community/cli-platform-ios": "^9.3.0",
-    "@react-native-firebase/app": "^15.7.0",
-    "@react-native-firebase/auth": "^15.7.0",
+    "@react-native-firebase/app": "^16.4.3",
+    "@react-native-firebase/auth": "^16.4.3",
     "@react-native-firebase/database": "^16.4.3",
-    "@react-native-firebase/firestore": "^15.7.0",
+    "@react-native-firebase/firestore": "^16.4.3",
     "@react-navigation/drawer": "^6.5.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.0",
