@@ -62,19 +62,19 @@ export function OnboardingScreen({navigation}) {
         pages={[
           {
             backgroundColor: '#73000a',
-            image: <Image source={require('./assets/onboarding-img1.png')} />,
+            image: <Image source={require('./assets/Cockyspringgame.jpg')} />,
             title: 'Campus Connect',
             subtitle: 'A New Way To Connect With The World',
           },
           {
             backgroundColor: '#73000a',
-            image: <Image source={require('./assets/onboarding-img2.png')} />,
+            image: <Image source={require('./assets/Cockyspringgame.jpg')} />,
             title: 'Share Your Thoughts',
             subtitle: 'Share Your Thoughts With Fellow Students',
           },
           {
             backgroundColor: '#73000a',
-            image: <Image source={require('./assets/onboarding-img3.png')} />,
+            image: <Image source={require('./assets/Cockyspringgame.jpg')} />,
             title: 'Become A Star',
             subtitle: "Be Who You Want To Be",
           },
