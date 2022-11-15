@@ -77,6 +77,19 @@ export function LoginScreen({ navigation}) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
+  const redirect = async () => {
+    firstLogin = false;
+    if (auth().currentUser) {
+      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
+        FirebaseError(error.code);
+      });
+      firstLogin = userData.get("firstLogin");
+    }
+    if (user && firstLogin) navigation.navigate('OnboardingScreen');
+    else if (user && !firstLogin) {
+      navigation.navigate('HomeScreen');
+    }
+  }
 
   const login = () => {
     if (email && password){
@@ -85,7 +98,7 @@ export function LoginScreen({ navigation}) {
       .then(() => {
         console.log('User account signed in!');
         LoginAlert({email})
-        navigation.navigate('HomeScreen')
+        redirect();
       })
       .catch(error => {
         FirebaseError(error.code);
@@ -181,6 +194,7 @@ export function RegisterScreen({ navigation}){
       })
       .then(() => {
       console.log('User added!');
+      navigation.navigate('OnboardingScreen')
       })
       .catch(error => {
         FirebaseError(error.code);
