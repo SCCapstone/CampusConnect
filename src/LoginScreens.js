@@ -38,8 +38,8 @@ export function WelcomeScreen({navigation}) {
       });
       firstLogin = userData.get("firstLogin");
     }
-    if (user && firstLogin) navigation.navigate('OnboardingScreen');
-    else if (user && !firstLogin) {
+    if (auth().currentUser && firstLogin) navigation.navigate('OnboardingScreen');
+    else if (auth().currentUser && !firstLogin) {
       navigation.navigate('HomeScreen');
 
     }
@@ -85,8 +85,8 @@ export function LoginScreen({ navigation}) {
       });
       firstLogin = userData.get("firstLogin");
     }
-    if (user && firstLogin) navigation.navigate('OnboardingScreen');
-    else if (user && !firstLogin) {
+    if (auth().currentUser && firstLogin) navigation.navigate('OnboardingScreen');
+    else if (auth().currentUser && !firstLogin) {
       navigation.navigate('HomeScreen');
     }
   }

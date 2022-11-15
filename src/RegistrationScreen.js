@@ -25,14 +25,6 @@ import {
 
 import regstyles from './registrationStyles';
 
-let majors = [{
-  value: 'Banana',
-}, {
-  value: 'Mango',
-}, {
-  value: 'Pear',
-}];
-
 export function RegistrationScreen({navigation}) {  
     const [bio, setBio] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
@@ -180,7 +172,7 @@ export function RegistrationScreen({navigation}) {
         cropping: true
       }).then(image => {
         console.log(image);
-        setImage(image.path);
+        setImage(image);
       });
     }
   
