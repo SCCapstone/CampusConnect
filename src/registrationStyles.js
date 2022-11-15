@@ -21,8 +21,8 @@ export default StyleSheet.create({
         height: 50,
         alignItems: 'center',
         borderRadius: 0,
-        marginLeft: 15,
-        marginRight: 15,
+        marginLeft: 55,
+        marginRight: 55,
         marginTop: 30,
     },
 
@@ -30,6 +30,7 @@ export default StyleSheet.create({
         color: '#FFFFFF',
         paddingVertical: 10,
         fontSize: 16,
+
     },
 
     inputStyle: {
@@ -76,14 +77,56 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderRadius: 0,
         borderColor: '#a9a9a9',
+        marginBottom: 10
     },
     bioSectionStyle: {
         height: 85,
         marginTop: 15,
         margin: 0,
         marginLeft:10,
-        marginRight:10
-    }
+        marginRight:10,
+    },
+    scrollView: {
+        backgroundColor: 'red',
+      },
     
-
+      body: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        borderColor: 'black',
+        borderWidth: 1,
+      },
+      ImageSections: {
+        display: 'flex',
+        flexDirection: 'row',
+        paddingHorizontal: 8,
+        paddingVertical: 8,
+        justifyContent: 'center'
+      },
+      images: {
+        width: 150,
+        height: 150,
+        borderColor: 'black',
+        borderWidth: 1,
+        marginHorizontal: 3
+      },
+      btnParentSection: {
+        alignItems: 'center',
+        marginTop:10
+      },
+      btnSection: {
+        width: 225,
+        height: 50,
+        backgroundColor: '#DCDCDC',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+        marginBottom:10
+      },
+      btnText: {
+        textAlign: 'center',
+        color: 'gray',
+        fontSize: 14,
+        fontWeight:'bold'
+      }
 });

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useContext, Component } from 'react';
+import { useState, useEffect, useContext, Component, Fragment } from 'react';
 import { Button, View, Image, Text, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,10 +7,13 @@ import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+import storage from "@react-native-firebase/storage";
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import * as Progress from 'react-native-progress';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import {
+    SafeAreaView,
     StyleSheet,
     ImageBackground,
     TextInput,
@@ -20,7 +23,6 @@ import {
     Keyboard,
 } from "react-native";
 
-import styles from './loginStyles';
 import regstyles from './registrationStyles';
 
 let majors = [{
@@ -31,20 +33,21 @@ let majors = [{
   value: 'Pear',
 }];
 
-export function RegistrationScreen({navigation}) {
+export function RegistrationScreen({navigation}) {  
     const [bio, setBio] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
     const [gradDate, setGradDate] = React.useState('');
     const [errortext, setErrortext] = React.useState("");
-    const [
-        registraionSuccess,
-        setRegistraionSuccess
-    ] = useState(false);
+    const [transferred, setTransferred] = useState(0);
+    const [registraionSuccess,setRegistraionSuccess ] = useState(false);
+    
+    // Set an initializing state whilst Firebase connects
+    const [initializing, setInitializing] = useState(true);
+    const [user, setUser] = useState();
 
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
-
 
     const onMajorOpen = React.useCallback(() => {
       setOpen2(false);
@@ -66,6 +69,7 @@ export function RegistrationScreen({navigation}) {
       {label: '2030', value: '2030'},
       {label: '2031', value: '2031'},
     ]);
+
     const [major, setMajor] = useState(null);
     const [majors, setMajors] = useState([
       {label: 'Accounting', value: 'Accounting'},
@@ -167,10 +171,19 @@ export function RegistrationScreen({navigation}) {
 
     ]);
 
-    // Set an initializing state whilst Firebase connects
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
+    const [image, setImage] = React.useState('');
 
+    const choosePhotoFromLibrary = () => {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true
+      }).then(image => {
+        console.log(image);
+        setImage(image.path);
+      });
+    }
+  
     if(auth().currentUser == null) {
         navigation.navigate('WelcomeScreen');
     }
@@ -185,10 +198,10 @@ export function RegistrationScreen({navigation}) {
         bio: bio,
         firstLogin: false,
         gradYear: gradDate,
+        pfp: image
       })
-
     }
-    
+
     const completeReg = () => {
           //TODO
           //Add input validation here:
@@ -207,9 +220,8 @@ export function RegistrationScreen({navigation}) {
       navigation.navigate('HomeScreen')
       setRegistraionSuccess(false);
   // }
-}
+    }
 
-    
     if (registraionSuccess) {
         return (
           <View
@@ -310,6 +322,14 @@ export function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
+          
+          <View style={regstyles.btnParentSection}>
+            <TouchableOpacity onPress={choosePhotoFromLibrary} style={regstyles.btnSection}  >
+              <Text style={regstyles.btnText}>Choose Photo From Library</Text>
+            </TouchableOpacity>
+          </View>
+
+
           {errortext != '' ? ( <Text 
           style ={regstyles.errorStyle}> {errortext}
           </Text> ) : null}
