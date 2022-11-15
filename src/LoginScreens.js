@@ -38,10 +38,17 @@ export function WelcomeScreen({navigation}) {
       });
       firstLogin = userData.get("firstLogin");
     }
-    if (auth().currentUser && firstLogin) navigation.navigate('OnboardingScreen');
+    if (auth().currentUser && firstLogin) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'OnboardingScreen' }]
+   });
+    }
     else if (auth().currentUser && !firstLogin) {
-      navigation.navigate('HomeScreen');
-
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeScreen' }]
+   });
     }
     console.log('hello');
   }
@@ -85,9 +92,17 @@ export function LoginScreen({ navigation}) {
       });
       firstLogin = userData.get("firstLogin");
     }
-    if (auth().currentUser && firstLogin) navigation.navigate('OnboardingScreen');
+    if (auth().currentUser && firstLogin) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'OnboardingScreen' }]
+   });
+    }
     else if (auth().currentUser && !firstLogin) {
-      navigation.navigate('HomeScreen');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeScreen' }]
+   });
     }
   }
 
