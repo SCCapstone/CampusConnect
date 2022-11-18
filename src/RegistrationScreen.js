@@ -31,6 +31,7 @@ export function RegistrationScreen({navigation}) {
     const [lastName, setLastName] = React.useState("");
     const [gradDate, setGradDate] = React.useState('');
     const [errortext, setErrortext] = React.useState("");
+    const [url, setURL] = React.useState("");
     const [transferred, setTransferred] = useState(0);
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
     
@@ -40,6 +41,9 @@ export function RegistrationScreen({navigation}) {
 
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+
+    const [image, setImage] = React.useState('');
+
 
     const onMajorOpen = React.useCallback(() => {
       setOpen2(false);
@@ -163,16 +167,16 @@ export function RegistrationScreen({navigation}) {
 
     ]);
 
-    const [image, setImage] = React.useState('');
+
 
     const choosePhotoFromLibrary = () => {
       ImagePicker.openPicker({
         width: 300,
         height: 300,
         cropping: true
-      }).then(image => {
+      }).then(async image => {
         console.log(image);
-        setImage(image);
+        setImage(image.path)
       });
     }
   
@@ -190,28 +194,24 @@ export function RegistrationScreen({navigation}) {
         bio: bio,
         firstLogin: false,
         gradYear: gradDate,
-        pfp: image
+        pfp: url
       })
     }
 
-    const completeReg = () => {
-          //TODO
-          //Add input validation here:
-     //  boolean validReg = true;
-     //  if (validReg == true) {
-          writeUserData();
-          setRegistraionSuccess(true);
-      // }
+    const completeReg = async () => {
+      const reference = storage().ref(auth().currentUser.uid);
+      await reference.putFile(image).catch(error => {
+        FirebaseError(error.code);
+      });
+      const tempUrl = await reference.getDownloadURL();
+      setURL(tempUrl);
+      writeUserData();
+      setRegistraionSuccess(true);
     }
 
     const reset = () => {
-      //TODO
-      //Add input validation here:
- //  boolean validReg = true;
- //  if (validReg == true) {
       navigation.navigate('HomeScreen')
       setRegistraionSuccess(false);
-  // }
     }
 
     if (registraionSuccess) {
@@ -337,6 +337,12 @@ export function RegistrationScreen({navigation}) {
     </View>
   );
 };
+
+const FirebaseError = (error) => {
+  Alert.alert('Error', error, [
+    { text: "OK"}
+  ] );
+}
 const RegisterError = () => {
     Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
       { text: "OK"}
