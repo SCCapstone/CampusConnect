@@ -202,7 +202,7 @@ export function RegistrationScreen({navigation}) {
               style={regstyles.buttonStyle}
               onPress={() => reset()
               }>
-              <Text style={regstyles.buttonTextStyle}>Go to Home Screen</Text>
+              <Text style={regstyles.buttonTextStyle}>Finish</Text>
             </TouchableOpacity>
           </View>
         );
