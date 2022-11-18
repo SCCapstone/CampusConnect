@@ -203,7 +203,7 @@ export function RegistrationScreen({navigation}) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
       });
-      const tempUrl = await reference.getDownloadURL();
+      const tempUrl = reference.toString()
       setURL(tempUrl);
       writeUserData();
       setRegistraionSuccess(true);
