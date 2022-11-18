@@ -50,7 +50,6 @@ export function WelcomeScreen({navigation}) {
         routes: [{ name: 'HomeScreen' }]
    });
     }
-    console.log('hello');
   }
 
   useEffect(() => {

@@ -21,7 +21,7 @@ export function HomeScreen({navigation}) {
       headerStyle: {backgroundColor: '#73000a'},
       headerColor: '#73000a',  
       drawerActiveBackgroundColor: '#73000a',
-      drawerActiveTintColor: 'white'
+      drawerActiveTintColor: 'white',
     }}>
         <Drawer.Screen name="Home" component={PostsScreen} />
         <Drawer.Screen name="Edit Profile" component={RegistrationScreen} />
