@@ -31,7 +31,7 @@ export function RegistrationScreen({navigation}) {
     const [lastName, setLastName] = React.useState("");
     const [gradDate, setGradDate] = React.useState('');
     const [errortext, setErrortext] = React.useState("");
-    const [url, setURL] = React.useState("");
+    var url = "";
     const [transferred, setTransferred] = useState(0);
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
     
@@ -130,40 +130,6 @@ export function RegistrationScreen({navigation}) {
       {label: 'Geography', value: 'Geography'},
       {label: 'Geological Sciences', value: 'Geological Sciences'},
       {label: 'German', value: 'German'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
-      {label: 'Accounting', value: 'Accounting'},
 
     ]);
 
@@ -174,7 +140,7 @@ export function RegistrationScreen({navigation}) {
         width: 300,
         height: 300,
         cropping: true
-      }).then(async image => {
+      }).then(image => {
         console.log(image);
         setImage(image.path)
       });
@@ -203,8 +169,7 @@ export function RegistrationScreen({navigation}) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
       });
-      const tempUrl = reference.toString()
-      setURL(tempUrl);
+      url = await reference.getDownloadURL();
       writeUserData();
       setRegistraionSuccess(true);
     }
