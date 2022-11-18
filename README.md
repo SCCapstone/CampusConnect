@@ -13,14 +13,7 @@ Please install these:
 # Setup and Running 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
-3. Install Dependencies<pre><code>npm install @react-navigation/native
-npm i react-native-onboarding-swiper
-npm install react-native-dropdown-picker
-npm install react-navigation
-npm install react-native-screens react-native-safe-area-context
-npm install --save @react-native-firebase/app
-npm install --save @react-native-firebase/auth
-npm install @react-navigation/drawer</code></pre>
+3. Install Dependencies<pre><code>npm update</code></pre>
 4. Run the code<pre><code>npx react-native run-android</code></pre>
 
 All the source files for the project are in the "src" folder
