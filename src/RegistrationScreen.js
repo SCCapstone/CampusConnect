@@ -175,10 +175,12 @@ export function RegistrationScreen({navigation}) {
     
     const completeReg = async () => {
       const reference = storage().ref(auth().currentUser.uid);
-      await reference.putFile(image).catch(error => {
+      if (image) {
+        await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
       });
       url = await reference.getDownloadURL();
+      }
       writeUserData();
       setRegistraionSuccess(true);
     }
@@ -295,7 +297,7 @@ export function RegistrationScreen({navigation}) {
           
           <View style={regstyles.btnParentSection}>
             <TouchableOpacity onPress={choosePhotoFromLibrary} style={regstyles.btnSection}  >
-              <Text style={regstyles.btnText}>Choose Photo From Library</Text>
+              <Text style={regstyles.btnText}>Choose Photo From Library (optional)</Text>
             </TouchableOpacity>
           </View>
 
