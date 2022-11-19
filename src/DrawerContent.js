@@ -4,7 +4,9 @@ import {
     Text,
     ImageBackground,
     Image,
+    Caption,
     TouchableOpacity,
+    Title,
 } from 'react-native';
 
 import {
@@ -39,16 +41,21 @@ export function DrawerContent(props) {
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}
             contentContainerStyle={{backgroundColor: '#73000a'}}>
-            <ImageBackground source={require('./assets/gamecock.png')} style={{padding: 30}}>
-
-
-            <Image key={Date.now()} source={picLoaded ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
-                    style={{height: 80, width: 80, borderRadius:40}}/>
-                
-            </ImageBackground>
-            <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>  
-                <DrawerItemList {...props}/>
-            </View>
+                <ImageBackground source={require('./assets/gamecock.png')} style={{padding: 30}}>
+                    <View style={{flexDirection: 'row', marginLeft:15}}>
+                        <Image key={Date.now()} source={picLoaded ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
+                                style={{height: 80, width: 80, borderRadius:40}}/>
+                        <View style={{marginTop: 15, marginLeft:15, flexDirection:'column'}}>
+                            <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: 'white', color: 'black'}}>Welcome!
+                            <Text style={{fontSize: 20, backgroundColor: 'white', color: 'black', marginRight: 20}}>USERNAME   
+                            </Text>
+                            </Text>
+                        </View>
+                    </View>            
+                </ImageBackground>
+                    <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>  
+                        <DrawerItemList {...props}/>
+                    </View> 
             </DrawerContentScrollView>
             <TouchableOpacity onPress={() => auth().signOut().then(() => props.navigation.navigate('WelcomeScreen'))} //sign out
                 style={{paddingVertical: 15}}>
