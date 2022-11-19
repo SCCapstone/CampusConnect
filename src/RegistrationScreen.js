@@ -139,7 +139,7 @@ export function RegistrationScreen({navigation}) {
       ImagePicker.openPicker({
         width: 300,
         height: 300,
-        cropping: true
+        /*cropping: true*/
       }).then(image => {
         console.log(image);
         setImage(image.path)
@@ -164,6 +164,15 @@ export function RegistrationScreen({navigation}) {
       })
     }
 
+    /*const BackButton = () => {
+      const navigation = useNavigation();
+      return (
+          <TouchableOpacity style={regstyles.backButtonContainer} onPress={ () => navigation.navigate("LoginScreen")}>
+            <ImageBackground style={regstyles.backButtonImage} source={require("./assets/back_arrow.png")} />
+          </TouchableOpacity>
+      )
+    }*/
+    
     const completeReg = async () => {
       const reference = storage().ref(auth().currentUser.uid);
       await reference.putFile(image).catch(error => {
@@ -210,7 +219,7 @@ export function RegistrationScreen({navigation}) {
 
     return(
     <View style={regstyles.container}>
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', }}>
           <Image
             source={require('./assets/gamecock.png')}
             style={{
