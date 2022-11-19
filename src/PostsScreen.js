@@ -53,10 +53,11 @@ export function PostsScreen({navigation}) {
     const Post = ({ poster, imageUrl, body, date, upvoteCount}) => (
         <View style={styles.post}>
           <View style={{flexDirection:'row'}}>
-          <Image source={{uri: imageUrl}}
+            <Image source={{uri: imageUrl}}
                                 style={{height: 40, width: 40, borderRadius:40}}/>
             <Text style={styles.name}>{poster}</Text>
           </View>
+          <Text style={styles.body}>{body}</Text>
         </View>
       );
 
@@ -85,6 +86,10 @@ const styles = StyleSheet.create({
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
+    },
+    body: {
+      fontSize: 24,
+      marginLeft:10
     },
     name: {
       fontSize: 24,
