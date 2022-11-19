@@ -218,6 +218,8 @@ export function RegistrationScreen({navigation}) {
       }
 
     return(
+    <SafeAreaView style={regstyles.container}>
+    <ScrollView nestedScrollEnabled={true}>
     <View style={regstyles.container}>
         <View style={{alignItems: 'center', }}>
           <Image
@@ -263,6 +265,7 @@ export function RegistrationScreen({navigation}) {
               setOpen={setOpen2}
               setValue={setGradDate}
               setItems={setYears}
+              listMode="SCROLLVIEW"
             />
           </View>
           <View style={regstyles.SectionStyle}>
@@ -277,6 +280,7 @@ export function RegistrationScreen({navigation}) {
               setOpen={setOpen}
               setValue={setMajor}
               setItems={setMajors}
+              listMode="SCROLLVIEW"
             />
           </View>
           <View style={regstyles.bioSectionStyle}>
@@ -309,6 +313,8 @@ export function RegistrationScreen({navigation}) {
             <Text style={regstyles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
       </View>
     </View>
+    </ScrollView>
+    </SafeAreaView>
   );
 };
 
