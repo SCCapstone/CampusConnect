@@ -175,7 +175,6 @@ console.log(image);
     const writeUserData = async () =>{
       const bioLengthValid = bio.length <= 150;
       if (firstName && lastName && major && gradDate && bio && bioLengthValid && image) {
-
         await uploadPic();
         firestore()
         .collection('Users')

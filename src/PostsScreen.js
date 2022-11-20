@@ -44,7 +44,7 @@ export function PostsScreen({navigation}) {
         body: 'dude wtf',
         upvoteCount: 2,
         replyCount: 0,
-        imageUrl: ''
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg.webp?alt=media&token=2a01ae4f-01b7-477e-9a45-193e9da4943e'
       },
       {
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bb',
