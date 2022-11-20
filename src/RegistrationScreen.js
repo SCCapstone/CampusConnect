@@ -30,9 +30,7 @@ export function RegistrationScreen({navigation}) {
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
     const [gradDate, setGradDate] = React.useState('');
-    const [errortext, setErrortext] = React.useState("");
     var url = "";
-    const [transferred, setTransferred] = useState(0);
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
     
     // Set an initializing state whilst Firebase connects
@@ -145,10 +143,10 @@ export function RegistrationScreen({navigation}) {
 
     ]);
 
+console.log(image);
 
-
-    const choosePhotoFromLibrary = () => {
-      ImagePicker.openPicker({
+    const choosePhotoFromLibrary = async () => {
+      await ImagePicker.openPicker({
         width: 300,
         height: 300,
         /*cropping: true*/
@@ -163,27 +161,55 @@ export function RegistrationScreen({navigation}) {
     }
 
     const writeUserData = () =>{
-      firestore()
-      .collection('Users')
-      .doc(auth().currentUser.uid)
-      .update({
-        name: firstName +" "+ lastName,
-        major: major,
-        bio: bio,
-        firstLogin: false,
-        gradYear: gradDate,
-        pfp: url
-      })
+      if(firstName && lastName && major && gradDate) {
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName +" "+ lastName,
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+        }).then(() => {
+          setRegistraionSuccess(true);
+          reset();
+        })
+      }
+      else if (firstName && lastName && major && gradDate && bio) {
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName +" "+ lastName,
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+          bio: bio
+        }).then(() => {
+          setRegistraionSuccess(true);
+          reset();
+        })
+      }
+      else if (firstName && lastName && major && gradDate && bio && url) {
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName +" "+ lastName,
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+          bio: bio,
+          pfp: url
+        }).then(() => {
+          setRegistraionSuccess(true);
+          reset();
+        })
+      }
+      else {
+        RegisterError();
+      }
     }
-
-    /*const BackButton = () => {
-      const navigation = useNavigation();
-      return (
-          <TouchableOpacity style={regstyles.backButtonContainer} onPress={ () => navigation.navigate("LoginScreen")}>
-            <ImageBackground style={regstyles.backButtonImage} source={require("./assets/back_arrow.png")} />
-          </TouchableOpacity>
-      )
-    }*/
     
     const completeReg = async () => {
       const reference = storage().ref(auth().currentUser.uid);
@@ -194,12 +220,16 @@ export function RegistrationScreen({navigation}) {
       url = await reference.getDownloadURL();
       }
       writeUserData();
-      setRegistraionSuccess(true);
     }
 
     const reset = () => {
-      navigation.navigate('HomeScreen')
-      setRegistraionSuccess(false);
+      url = "";
+      setFirstName("")
+      setLastName("")
+      setGradDate("")
+      setMajor("")
+      setBio("")
+      setImage('')
     }
 
     if (registraionSuccess) {
@@ -223,7 +253,7 @@ export function RegistrationScreen({navigation}) {
             </Text>
             <TouchableOpacity
               style={regstyles.buttonStyle}
-              onPress={() => reset()
+              onPress={() => setRegistraionSuccess(false)
               }>
               <Text style={regstyles.buttonTextStyle}>Finish</Text>
             </TouchableOpacity>
@@ -309,14 +339,9 @@ export function RegistrationScreen({navigation}) {
           
           <View style={regstyles.btnParentSection}>
             <TouchableOpacity onPress={choosePhotoFromLibrary} style={regstyles.btnSection}  >
-              <Text style={regstyles.btnText}>Choose Photo From Library (optional)</Text>
+              <Text style={regstyles.btnText}>{image ? 'Pic Loaded ✅' : 'Choose Photo From Library (optional)'}</Text>
             </TouchableOpacity>
           </View>
-
-
-          {errortext != '' ? ( <Text 
-          style ={regstyles.errorStyle}> {errortext}
-          </Text> ) : null}
           <TouchableOpacity
             style={regstyles.buttonStyle}
             onPress={completeReg}>
@@ -338,12 +363,7 @@ const FirebaseError = (error) => {
   ] );
 }
 const RegisterError = () => {
-    Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
+    Alert.alert('Error', "Make sure entered a value for all fields except bio and profile pic, which are optional", [
       { text: "OK"}
     ] );
 }
-const RegisterAlert = ({email}) => {
-    Alert.alert('Registered!', "Successfully registered " + email, [
-      { text: "OK"}
-    ] );
-  }
