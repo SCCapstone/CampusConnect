@@ -160,18 +160,23 @@ console.log(image);
         navigation.navigate('WelcomeScreen');
     }
 
+
+    const uploadPic = async () =>{
+      const reference = storage().ref(auth().currentUser.uid);
+      if (image) {
+        await reference.putFile(image).catch(error => {
+        FirebaseError(error.code);
+      });
+      url = await reference.getDownloadURL();
+      }
+
+    }
+
     const writeUserData = async () =>{
       const bioLengthValid = bio.length <= 150;
       if (firstName && lastName && major && gradDate && bio && bioLengthValid && image) {
 
-        const reference = storage().ref(auth().currentUser.uid);
-        if (image) {
-          await reference.putFile(image).catch(error => {
-          FirebaseError(error.code);
-        });
-        url = await reference.getDownloadURL();
-        }
-
+        await uploadPic();
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -187,15 +192,9 @@ console.log(image);
           reset();
         })
       }
-      else if (firstName && lastName && major && gradDate &&  bioLengthValid && image) {
+      else if (firstName && lastName && major && gradDate && bioLengthValid && image) {
 
-        const reference = storage().ref(auth().currentUser.uid);
-        if (image) {
-          await reference.putFile(image).catch(error => {
-          FirebaseError(error.code);
-        });
-        url = await reference.getDownloadURL();
-        }
+        await uploadPic();
 
         firestore()
         .collection('Users')
@@ -205,7 +204,6 @@ console.log(image);
           major: major,
           firstLogin: false,
           gradYear: gradDate,
-          bio: bio,
           pfp: url
         }).then(() => {
           setRegistraionSuccess(true);
