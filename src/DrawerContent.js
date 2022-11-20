@@ -78,15 +78,15 @@ export function DrawerContent(props) {
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}
             contentContainerStyle={{backgroundColor: '#73000a'}}>
-                <ImageBackground source={require('./assets/gamecock.png')} style={{padding: 30}}>
+                <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={{padding: 30}}>
                     <View style={{flexDirection: 'row', marginLeft:15}}>
-                        <TouchableOpacity onLongPress={imageSrc? () => DeleteAlert() : null}>
+                        <TouchableOpacity activeOpacity={.9} onLongPress={imageSrc? () => DeleteAlert() : null}>
                             <Image source={imageSrc ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
                                     style={{height: 80, width: 80, borderRadius:40}}/>
                         </TouchableOpacity>
                             <View style={{marginTop: 15, marginLeft:15, flexDirection:'column'}}>
-                                <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: 'white', color: 'black'}}>Welcome!
-                                <Text style={{fontSize: 20, backgroundColor: 'white', color: 'black', marginRight: 20}}>{nameText}   
+                                <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: '#f2f2f2', color: 'black'}}>Welcome!
+                                <Text style={{fontSize: 20, backgroundColor: '#f2f2f2', color: 'black', marginRight: 20, textAlign: 'center'}}>{nameText}   
                                 </Text>
                                 </Text>
                             </View>
