@@ -160,9 +160,43 @@ console.log(image);
         navigation.navigate('WelcomeScreen');
     }
 
-    const writeUserData = () =>{
+    const writeUserData = async () =>{
       const bioLengthValid = bio.length <= 150;
-      if (firstName && lastName && major && gradDate && bio && bioLengthValid && url) {
+      if (firstName && lastName && major && gradDate && bio && bioLengthValid && image) {
+
+        const reference = storage().ref(auth().currentUser.uid);
+        if (image) {
+          await reference.putFile(image).catch(error => {
+          FirebaseError(error.code);
+        });
+        url = await reference.getDownloadURL();
+        }
+
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName +" "+ lastName,
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+          bio: bio,
+          pfp: url
+        }).then(() => {
+          setRegistraionSuccess(true);
+          reset();
+        })
+      }
+      else if (firstName && lastName && major && gradDate &&  bioLengthValid && image) {
+
+        const reference = storage().ref(auth().currentUser.uid);
+        if (image) {
+          await reference.putFile(image).catch(error => {
+          FirebaseError(error.code);
+        });
+        url = await reference.getDownloadURL();
+        }
+
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -211,17 +245,7 @@ console.log(image);
         RegisterError();
       }
     }
-    
-    const completeReg = async () => {
-      const reference = storage().ref(auth().currentUser.uid);
-      if (image) {
-        await reference.putFile(image).catch(error => {
-        FirebaseError(error.code);
-      });
-      url = await reference.getDownloadURL();
-      }
-      writeUserData();
-    }
+
 
     const reset = () => {
       url = "";
@@ -345,7 +369,7 @@ console.log(image);
           </View>
           <TouchableOpacity
             style={regstyles.buttonStyle}
-            onPress={completeReg}>
+            onPress={writeUserData}>
             <Text style = {regstyles.buttonTextStyle}>REGISTER</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
