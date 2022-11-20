@@ -24,8 +24,8 @@ export function HomeScreen({navigation}) {
       drawerActiveTintColor: 'white',
     }}>
         <Drawer.Screen name="Home" component={PostsScreen} />
+        <Drawer.Screen name="Events" component={EventsScreen} />
         <Drawer.Screen name="Edit Profile" component={RegistrationScreen} />
-        <Drawer.Screen name="Event Screen" component={EventsScreen} />
       </Drawer.Navigator>
   );
 }
