@@ -84,7 +84,7 @@ export function DrawerContent(props) {
             contentContainerStyle={{backgroundColor: '#73000a'}}>
                 <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={{padding: 30}}>
                     <View style={{flexDirection: 'row',alignSelf:'center'}}>
-                        <TouchableOpacity activeOpacity={.9} onLongPress={imageSrc? () => DeleteAlert() : null}>
+                        <TouchableOpacity activeOpacity={.9} style={{height:80,width:80,borderRadius:40,overflow: 'hidden'}} onLongPress={imageSrc? () => DeleteAlert() : null}>
                             <Image source={imageSrc ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
                                     style={{height: 80, width: 80, borderRadius:40}}/>
                         </TouchableOpacity>

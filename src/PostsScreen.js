@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     },
     upvoteBox: {
       height: 40,
-      width:34,
+      width:35,
       marginRight:5,
       backgroundColor: '#f2f2f2',
       alignContent: 'center',
