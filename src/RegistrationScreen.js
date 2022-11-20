@@ -139,7 +139,7 @@ export function RegistrationScreen({navigation}) {
       ImagePicker.openPicker({
         width: 300,
         height: 300,
-        cropping: true
+        /*cropping: true*/
       }).then(image => {
         console.log(image);
         setImage(image.path)
@@ -164,12 +164,23 @@ export function RegistrationScreen({navigation}) {
       })
     }
 
+    /*const BackButton = () => {
+      const navigation = useNavigation();
+      return (
+          <TouchableOpacity style={regstyles.backButtonContainer} onPress={ () => navigation.navigate("LoginScreen")}>
+            <ImageBackground style={regstyles.backButtonImage} source={require("./assets/back_arrow.png")} />
+          </TouchableOpacity>
+      )
+    }*/
+    
     const completeReg = async () => {
       const reference = storage().ref(auth().currentUser.uid);
-      await reference.putFile(image).catch(error => {
+      if (image) {
+        await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
       });
       url = await reference.getDownloadURL();
+      }
       writeUserData();
       setRegistraionSuccess(true);
     }
@@ -209,8 +220,10 @@ export function RegistrationScreen({navigation}) {
       }
 
     return(
+    <SafeAreaView style={regstyles.container}>
+    <ScrollView nestedScrollEnabled={true}>
     <View style={regstyles.container}>
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', }}>
           <Image
             source={require('./assets/gamecock.png')}
             style={{
@@ -254,6 +267,7 @@ export function RegistrationScreen({navigation}) {
               setOpen={setOpen2}
               setValue={setGradDate}
               setItems={setYears}
+              listMode="SCROLLVIEW"
             />
           </View>
           <View style={regstyles.SectionStyle}>
@@ -268,6 +282,7 @@ export function RegistrationScreen({navigation}) {
               setOpen={setOpen}
               setValue={setMajor}
               setItems={setMajors}
+              listMode="SCROLLVIEW"
             />
           </View>
           <View style={regstyles.bioSectionStyle}>
@@ -282,7 +297,7 @@ export function RegistrationScreen({navigation}) {
           
           <View style={regstyles.btnParentSection}>
             <TouchableOpacity onPress={choosePhotoFromLibrary} style={regstyles.btnSection}  >
-              <Text style={regstyles.btnText}>Choose Photo From Library</Text>
+              <Text style={regstyles.btnText}>Choose Photo From Library (optional)</Text>
             </TouchableOpacity>
           </View>
 
@@ -300,6 +315,8 @@ export function RegistrationScreen({navigation}) {
             <Text style={regstyles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
       </View>
     </View>
+    </ScrollView>
+    </SafeAreaView>
   );
 };
 
