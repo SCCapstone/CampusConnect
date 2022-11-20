@@ -74,7 +74,7 @@ export function PostsScreen({navigation}) {
       ];
 
     const Post = ({ poster, imageUrl, body, date, upvoteCount, replyCount}) => (
-        <View style={{flexDirection:'row', flex:1}}>
+        <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
           <View style={styles.upvoteBox}>
             <Text style={styles.upvote}>{upvoteCount}</Text>
           </View>
@@ -87,7 +87,7 @@ export function PostsScreen({navigation}) {
               <Text style={styles.body}>{body}</Text>
               <View style={{flexDirection:'row'}}>
                 <Text style={styles.date}>{date}</Text>
-                <View style={{flexDirection:'row', marginLeft:150}}>
+                <View style={{flexDirection:'row', marginLeft:100}}>
                   <Text style={styles.date}>Replies: </Text>
                   <Text style={styles.date}>{replyCount}</Text>
                 </View>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
       marginVertical: 8,
       marginHorizontal: 5,
       alignSelf: 'flex-end',
-      flex:1
+      flex: 1
     },
     body: {
       fontSize: 18,
@@ -132,15 +132,15 @@ const styles = StyleSheet.create({
     },
     upvoteBox: {
       height: 40,
-      width:40,
-      marginHorizontal:2,
+      width:50,
+      marginHorizontal:0,
       backgroundColor: '#f2f2f2',
       alignContent: 'center',
       justifyContent: 'center',
       alignSelf:'center'
     },
     upvote: {
-      fontSize: 10,
+      fontSize: 20,
       alignSelf:'center',
       textAlignVertical:'center',
       color: 'black',
