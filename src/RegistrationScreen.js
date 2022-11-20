@@ -139,6 +139,7 @@ export function RegistrationScreen({navigation}) {
       {label: 'French', value: 'French'},
       {label: 'Geography', value: 'Geography'},
       {label: 'Geological Sciences', value: 'Geological Sciences'},
+      {label: 'German', value: 'German'},
       {label: 'Global Studies', value: 'Global Studies'},
       {label: 'Health Communication', value: 'Health Communication'},
       {label: 'Health Promotion, Education, and Behavior', value: 'Health Promotion, Education, and Behavior'},
