@@ -29,12 +29,16 @@ export function DrawerContent(props) {
 
     const [imageSrc, setImageSrc] = useState();
     const [nameText, setName] = useState("Welcome");
+    const [majorText, setMajor] = useState("No major");
+    const [yearText, setYear] = useState(1000);
 
-    const getName = async () => {
+    const getUserData = async () => {
         const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
             console.log(error);
           });
         setName("\n" + userData.get("name").split(" ")[0]);
+        setMajor(userData.get("major"));
+        setYear(userData.get("gradYear"));
     }
     const DeleteAlert = () => {
         Alert.alert('Delete Photo', "Do you want to delete your photo?", [
@@ -70,7 +74,7 @@ export function DrawerContent(props) {
 
 
     useEffect(() => {
-        getName();
+        getUserData();
         getPhoto();
     }, []);
 
@@ -79,18 +83,29 @@ export function DrawerContent(props) {
             <DrawerContentScrollView {...props}
             contentContainerStyle={{backgroundColor: '#73000a'}}>
                 <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={{padding: 30}}>
-                    <View style={{flexDirection: 'row', marginLeft:15}}>
+                    <View style={{flexDirection: 'row',alignSelf:'center'}}>
                         <TouchableOpacity activeOpacity={.9} onLongPress={imageSrc? () => DeleteAlert() : null}>
                             <Image source={imageSrc ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
                                     style={{height: 80, width: 80, borderRadius:40}}/>
                         </TouchableOpacity>
-                            <View style={{marginTop: 15, marginLeft:15, flexDirection:'column'}}>
-                                <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: '#f2f2f2', color: 'black'}}>Welcome!
-                                <Text style={{fontSize: 20, backgroundColor: '#f2f2f2', color: 'black', marginRight: 20, textAlign: 'center'}}>{nameText}   
+                            <View backgroundColor='#ebebeb' style={{marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center'}}>
+                                <Text style={{fontSize: 22, fontWeight: 'bold', color: 'black',textAlign:'center'}}>Welcome!
+                                <Text style={{fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'}}>{nameText}   
                                 </Text>
                                 </Text>
                             </View>
-                    </View>            
+                    </View>
+                    <View backgroundColor='#ebebeb' style={{marginTop:15,alignSelf:'center'}}>
+                        <View style={{flexDirection: 'row',alignSelf:'center'}}>
+                                <Text style={{fontSize: 15, color: 'black'}}>Major: </Text>
+                                <Text style={{fontSize: 15, color: 'black', textAlign: 'center'}}>{majorText}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row', marginTop:2,alignSelf:'center'}}>
+                                <Text style={{fontSize: 15, color: 'black'}}>Class of </Text>
+                                <Text style={{fontSize: 15, color: 'black', textAlign: 'center'}}>{yearText}</Text>
+                        </View>
+                    </View>
+                    
                 </ImageBackground>
                     <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>  
                         <DrawerItemList {...props}/>

@@ -121,10 +121,10 @@ const styles = StyleSheet.create({
       marginTop: StatusBar.currentHeight || 0,
     },
     post: {
-      backgroundColor: '#cecece',
+      backgroundColor: '#ebebeb',
       padding: 20,
       marginVertical: 8,
-      marginHorizontal: 5,
+      marginRight: 20,
       alignSelf: 'flex-end',
       flex: 1
     },
@@ -136,15 +136,15 @@ const styles = StyleSheet.create({
     },
     upvoteBox: {
       height: 40,
-      width:50,
-      marginHorizontal:0,
+      width:34,
+      marginRight:5,
       backgroundColor: '#f2f2f2',
       alignContent: 'center',
       justifyContent: 'center',
       alignSelf:'center'
     },
     upvote: {
-      fontSize: 20,
+      fontSize: 15,
       alignSelf:'center',
       textAlignVertical:'center',
       color: 'black',
