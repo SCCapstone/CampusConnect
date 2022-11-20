@@ -22,6 +22,7 @@ export function HomeScreen({navigation}) {
       headerColor: '#73000a',  
       drawerActiveBackgroundColor: '#73000a',
       drawerActiveTintColor: 'white',
+      swipeEdgeWidth: 150
     }}>
         <Drawer.Screen name="Home" component={PostsScreen} />
         <Drawer.Screen name="Events" component={EventsScreen} />

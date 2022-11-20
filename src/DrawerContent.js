@@ -62,7 +62,7 @@ export function DrawerContent(props) {
             contentContainerStyle={{backgroundColor: '#73000a'}}>
                 <ImageBackground source={require('./assets/gamecock.png')} style={{padding: 30}}>
                     <View style={{flexDirection: 'row', marginLeft:15}}>
-                        <Image key={Date.now()} source={picLoaded ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
+                        <Image source={picLoaded ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
                                 style={{height: 80, width: 80, borderRadius:40}}/>
                         <View style={{marginTop: 15, marginLeft:15, flexDirection:'column'}}>
                             <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: 'white', color: 'black'}}>Welcome!

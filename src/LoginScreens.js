@@ -83,28 +83,6 @@ export function LoginScreen({ navigation}) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-  const redirect = async () => {
-    firstLogin = false;
-    if (auth().currentUser) {
-      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
-        FirebaseError(error.code);
-      });
-      firstLogin = userData.get("firstLogin");
-    }
-    if (auth().currentUser && firstLogin) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'OnboardingScreen' }]
-   });
-    }
-    else if (auth().currentUser && !firstLogin) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'HomeScreen' }]
-   });
-    }
-  }
-
   const login = () => {
     if (email && password){
       auth()
@@ -112,7 +90,6 @@ export function LoginScreen({ navigation}) {
       .then(() => {
         console.log('User account signed in!');
         LoginAlert({email})
-        redirect();
       })
       .catch(error => {
         FirebaseError(error.code);
