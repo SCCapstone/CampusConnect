@@ -161,7 +161,8 @@ console.log(image);
     }
 
     const writeUserData = () =>{
-      if(firstName && lastName && major && gradDate) {
+      const bioLengthValid = bio.length <= 150;
+      if (firstName && lastName && major && gradDate && bio && bioLengthValid && url) {
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -170,12 +171,14 @@ console.log(image);
           major: major,
           firstLogin: false,
           gradYear: gradDate,
+          bio: bio,
+          pfp: url
         }).then(() => {
           setRegistraionSuccess(true);
           reset();
         })
       }
-      else if (firstName && lastName && major && gradDate && bio) {
+      else if (firstName && lastName && major && gradDate && bio && bioLengthValid) {
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -190,7 +193,7 @@ console.log(image);
           reset();
         })
       }
-      else if (firstName && lastName && major && gradDate && bio && url) {
+      else if(firstName && lastName && major && gradDate && bioLengthValid) {
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -199,8 +202,6 @@ console.log(image);
           major: major,
           firstLogin: false,
           gradYear: gradDate,
-          bio: bio,
-          pfp: url
         }).then(() => {
           setRegistraionSuccess(true);
           reset();
@@ -283,7 +284,7 @@ console.log(image);
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(FirstName) => setFirstName(FirstName)}
-              placeholder="Enter First Name"
+              placeholder="Enter First Name (Required)"
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -292,7 +293,7 @@ console.log(image);
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(LastName) => setLastName(LastName)}
-              placeholder="Enter Last Name"
+              placeholder="Enter Last Name (Required)"
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -300,7 +301,7 @@ console.log(image);
           <View style={regstyles.SectionStyle}>
           <DropDownPicker
               style={regstyles.inputStyle}
-              placeholder="Select Grad Year"
+              placeholder="Select Grad Year (Required)"
               open={open2}
               onOpen={onYearOpen}
               value={gradDate}
@@ -315,7 +316,7 @@ console.log(image);
           <View style={regstyles.SectionStyle}>
           <DropDownPicker
               style={regstyles.inputStyle}
-              placeholder="Select Major"
+              placeholder="Select Major (Required)"
               open={open}
               onOpen={onMajorOpen}
               value={major}
@@ -331,7 +332,7 @@ console.log(image);
             <TextInput
               style={regstyles.bioStyle}
               onChangeText={(bio) => setBio(bio)}
-              placeholder="Enter a short Bio"
+              placeholder="Enter a short Bio (optional) (150 characters max)"
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -363,7 +364,7 @@ const FirebaseError = (error) => {
   ] );
 }
 const RegisterError = () => {
-    Alert.alert('Error', "Make sure entered a value for all fields except bio and profile pic, which are optional", [
+    Alert.alert('Error', "Make sure all required fields are filled out and that the bio is less than 151 characters", [
       { text: "OK"}
     ] );
 }
