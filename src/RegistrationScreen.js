@@ -139,11 +139,72 @@ export function RegistrationScreen({navigation}) {
       {label: 'French', value: 'French'},
       {label: 'Geography', value: 'Geography'},
       {label: 'Geological Sciences', value: 'Geological Sciences'},
-      {label: 'German', value: 'German'},
-
+      {label: 'Global Studies', value: 'Global Studies'},
+      {label: 'Health Communication', value: 'Health Communication'},
+      {label: 'Health Promotion, Education, and Behavior', value: 'Health Promotion, Education, and Behavior'},
+      {label: 'Health Services Policy and Management', value: 'Health Services Policy and Management'},
+      {label: 'History', value: 'History'},
+      {label: 'Hospitality Management', value: 'Hospitality Management'},
+      {label: 'Human Resources', value: 'Human Resources'},
+      {label: 'Information Science', value: 'Information Science'},
+      {label: 'Integrated Information Technology (Computing) ', value: 'Integrated Information Technology (Computing) '},
+      {label: 'Interdisciplinary Studies', value: 'Interdisciplinary Studies'},
+      {label: 'International Business', value: 'International Business'},
+      {label: 'International Studies', value: 'International Studies'},
+      {label: 'Journalism', value: 'Journalism'},
+      {label: 'Languages, Literatures and Cultures', value: 'Languages, Literatures and Cultures'},
+      {label: 'Law', value: 'Law'},
+      {label: 'Liberal Studies', value: 'Liberal Studies'},
+      {label: 'Library and Information Science', value: 'Library and Information Science'},
+      {label: 'Linguistics', value: 'Linguistics'},
+      {label: 'Management', value: 'Management'},
+      {label: 'Marine Science', value: 'Marine Science'},
+      {label: 'Marketing', value: 'Marketing'},
+      {label: 'Mass Communications', value: 'Mass Communications'},
+      {label: 'Mathematics', value: 'Mathematics'},
+      {label: 'Media Arts', value: 'Media Arts'},
+      {label: 'Medicine', value: 'Medicine'},
+      {label: 'Music', value: 'Music'},
+      {label: 'Music: Conducting', value: 'Music: Conducting'},
+      {label: 'Music: Jazz Studies', value: 'Music: Jazz Studies'},
+      {label: 'Music: Music Composition', value: 'Music: Music Composition'},
+      {label: 'Music: Music Education', value: 'Music: Music Education'},
+      {label: 'Music: Music History', value: 'Music: Music History'},
+      {label: 'Music: Music Industry Studies', value: 'Music: Music Industry Studies'},
+      {label: 'Music: Music Pedagogy (Piano / Violin)', value: 'Music: Music Pedagogy (Piano / Violin)'},
+      {label: 'Music: Music Performance', value: 'Music: Music Performance'},
+      {label: 'Music: Music Theory', value: 'Music: Music Theory'},
+      {label: 'Music: Musical Theatre', value: 'Music: Musical Theatre'},
+      {label: 'Music: Opera Theatre', value: 'Music: Opera Theatre'},
+      {label: 'Neuroscience', value: 'Neuroscience'},
+      {label: 'Nursing', value: 'Nursing'},
+      {label: 'Operations and Supply Chain', value: 'Operations and Supply Chain'},
+      {label: 'Organizational Leadership', value: 'Organizational Leadership'},
+      {label: 'Pharmacy', value: 'Pharmacy'},
+      {label: 'Philosophy', value: 'Philosophy'},
+      {label: 'Physical Therapy', value: 'Physical Therapy'},
+      {label: 'Physics', value: 'Physics'},
+      {label: 'Political Science', value: 'Political Science'},
+      {label: 'Psychology', value: 'Psychology'},
+      {label: 'Public Administration', value: 'Public Administration'},
+      {label: 'Public Health', value: 'Public Health'},
+      {label: 'Public Relations', value: 'Public Relations'},
+      {label: 'Real Estate', value: 'Real Estate'},
+      {label: 'Religious Studies', value: 'Religious Studies'},
+      {label: 'Risk Management and Insurance', value: 'Risk Management and Insurance'},
+      {label: 'Russian', value: 'Russian'},
+      {label: 'Social Work', value: 'Social Work'},
+      {label: 'Sociology', value: 'Sociology'},
+      {label: 'Spanish', value: 'Spanish'},
+      {label: 'Speech / Language Pathology', value: 'Speech / Language Pathology'},
+      {label: 'Sport and Entertainment Management', value: 'Sport and Entertainment Management'},
+      {label: 'Statistics', value: 'Statistics'},
+      {label: 'Theatre', value: 'Theatre'},
+      {label: 'Tourism Management', value: 'Tourism Management'},
+      {label: 'Visual Communications', value: 'Visual Communications'},
+      {label: 'Women\'s and Gender Studies', value: 'Women\'s and Gender Studies'},
     ]);
 
-console.log(image);
 
     const choosePhotoFromLibrary = async () => {
       await ImagePicker.openPicker({
@@ -251,7 +312,7 @@ console.log(image);
       setGradDate("")
       setMajor("")
       setBio("")
-      setImage('')
+      setImage("")
     }
 
     if (registraionSuccess) {

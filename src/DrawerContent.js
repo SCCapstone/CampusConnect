@@ -96,13 +96,13 @@ export function DrawerContent(props) {
                             </View>
                     </View>
                     <View backgroundColor='#ebebeb' style={{marginTop:15,alignSelf:'center'}}>
-                        <View style={{flexDirection: 'row',alignSelf:'center'}}>
-                                <Text style={{fontSize: 15, color: 'black'}}>Major: </Text>
-                                <Text style={{fontSize: 15, color: 'black', textAlign: 'center'}}>{majorText}</Text>
+                        <View style={{flexDirection: 'column',alignSelf:'center'}}>
+                                <Text style={{fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1}}>Major: </Text>
+                                <Text style={{fontSize: 13, color: 'black',textAlign:'center'}}>{majorText}</Text>
                         </View>
-                        <View style={{flexDirection: 'row', marginTop:2,alignSelf:'center'}}>
-                                <Text style={{fontSize: 15, color: 'black'}}>Class of </Text>
-                                <Text style={{fontSize: 15, color: 'black', textAlign: 'center'}}>{yearText}</Text>
+                        <View style={{flexDirection: 'row', marginTop:1,alignSelf:'center'}}>
+                                <Text style={{fontSize: 15,fontWeight:'bold', color: 'black'}}>Class of </Text>
+                                <Text style={{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'}}>{yearText}</Text>
                         </View>
                     </View>
                     
