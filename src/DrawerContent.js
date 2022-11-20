@@ -7,6 +7,8 @@ import {
     Caption,
     TouchableOpacity,
     Title,
+    Pressable,
+    Alert
 } from 'react-native';
 
 import {
@@ -26,7 +28,6 @@ import { useEffect, useState, setState } from 'react';
 export function DrawerContent(props) {
 
     const [imageSrc, setImageSrc] = useState();
-    const [picLoaded, setLoaded] = useState(false);
     const [nameText, setName] = useState("Welcome");
 
     const getName = async () => {
@@ -35,25 +36,42 @@ export function DrawerContent(props) {
           });
         setName("\n" + userData.get("name").split(" ")[0]);
     }
-    /*const NameButton = () => {
-        return (
-            <View style={styles.backButtonContainer}>
-                <Text style={{ fontSize: 20, marginLeft: 80, color: 'black', fontWeight: 'bold', textAlign: 'left',textAlignVertical: 'center'}}> {nameText}</Text>
-            </View>
-        )
-    }*/
-
-    useEffect(() => {
-
-        getName();
+    const DeleteAlert = () => {
+        Alert.alert('Delete Photo', "Do you want to delete your photo?", [
+          { text: "Yes",
+          onPress: () => deletePhoto()},
+          { text: "No"}
+        ] );
+    }
+    const getPhoto = () => {
         storage()
         .ref(auth().currentUser.uid) //name in storage in firebase console
         .getDownloadURL()
         .then((url) => {
             setImageSrc(url);
-            setLoaded(true);
         })
-        .catch((e) => console.log('Errors while downloading => ', e));
+        .catch((e) => reset());
+    }
+    const reset = () => {
+        setImageSrc('');
+    }
+    
+    const deletePhoto = async () => {
+        await storage().ref(auth().currentUser.uid).delete();
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          pfp: ''
+        })
+        getPhoto();
+    }
+    
+
+
+    useEffect(() => {
+        getName();
+        getPhoto();
     }, []);
 
     return(
@@ -62,14 +80,16 @@ export function DrawerContent(props) {
             contentContainerStyle={{backgroundColor: '#73000a'}}>
                 <ImageBackground source={require('./assets/gamecock.png')} style={{padding: 30}}>
                     <View style={{flexDirection: 'row', marginLeft:15}}>
-                        <Image source={picLoaded ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
-                                style={{height: 80, width: 80, borderRadius:40}}/>
-                        <View style={{marginTop: 15, marginLeft:15, flexDirection:'column'}}>
-                            <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: 'white', color: 'black'}}>Welcome!
-                            <Text style={{fontSize: 20, backgroundColor: 'white', color: 'black', marginRight: 20}}>{nameText}   
-                            </Text>
-                            </Text>
-                        </View>
+                        <TouchableOpacity onLongPress={() => DeleteAlert()}>
+                            <Image source={imageSrc ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
+                                    style={{height: 80, width: 80, borderRadius:40}}/>
+                        </TouchableOpacity>
+                            <View style={{marginTop: 15, marginLeft:15, flexDirection:'column'}}>
+                                <Text style={{fontSize: 24, fontWeight: 'bold', backgroundColor: 'white', color: 'black'}}>Welcome!
+                                <Text style={{fontSize: 20, backgroundColor: 'white', color: 'black', marginRight: 20}}>{nameText}   
+                                </Text>
+                                </Text>
+                            </View>
                     </View>            
                 </ImageBackground>
                     <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>  
