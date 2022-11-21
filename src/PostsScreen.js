@@ -1,9 +1,11 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Pressable, TouchableOpacity } from 'react-native';
 
 import {
   Image,
 } from 'react-native';
+
+
 
 export function PostsScreen({navigation}) {
   
@@ -42,7 +44,7 @@ export function PostsScreen({navigation}) {
         body: 'dude wtf',
         upvoteCount: 2,
         replyCount: 0,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/ZDgQC6VvlhfyRyo9FNagHlEqXim1?alt=media&token=b0c3b860-cd5f-4b55-9d1f-ef55eca0dde1'
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg.webp?alt=media&token=2a01ae4f-01b7-477e-9a45-193e9da4943e'
       },
       {
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bb',
@@ -51,7 +53,7 @@ export function PostsScreen({navigation}) {
         body: 'it\'s 7 am and that dude at mcbryde is still making noises in the morning',
         upvoteCount: 2,
         replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/blank2.jpeg?alt=media&token=c0f57795-39fb-4306-a851-271a678c4bf2'
+        imageUrl: ''
       },
       {
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bd',
@@ -69,18 +71,19 @@ export function PostsScreen({navigation}) {
         body: 'i am a potato',
         upvoteCount: -25,
         replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/blank2.jpeg?alt=media&token=c0f57795-39fb-4306-a851-271a678c4bf2'
+        imageUrl: ''
       },
       ];
 
     const Post = ({ poster, imageUrl, body, date, upvoteCount, replyCount}) => (
+
         <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
           <View style={styles.upvoteBox}>
             <Text style={styles.upvote}>{upvoteCount}</Text>
           </View>
-          <View style={styles.post}>
+          <TouchableOpacity style={styles.post}>
               <View style={{flexDirection:'row'}}>
-                <Image source={{uri: imageUrl}}
+                <Image source={imageUrl ? {uri: imageUrl} : require('./assets/blank2.jpeg')}
                                     style={{height: 50, width: 50, borderRadius:40}}/>
                 <Text style={styles.name}>{poster}</Text>
               </View>
@@ -92,8 +95,9 @@ export function PostsScreen({navigation}) {
                   <Text style={styles.date}>{replyCount}</Text>
                 </View>
               </View>
-          </View>
+          </TouchableOpacity>
         </View>
+
       );
 
       const renderPost = ({ item }) => (
@@ -102,11 +106,11 @@ export function PostsScreen({navigation}) {
 
       return (
         <SafeAreaView style={styles.container}>
-          <FlatList
-            data={POSTS.sort()}
-            renderItem={renderPost}
-            keyExtractor={item => item.id}
-          />
+            <FlatList
+              data={POSTS.sort()}
+              renderItem={renderPost}
+              keyExtractor={item => item.id}
+            />
         </SafeAreaView>
       );
 }
@@ -117,10 +121,10 @@ const styles = StyleSheet.create({
       marginTop: StatusBar.currentHeight || 0,
     },
     post: {
-      backgroundColor: '#cecece',
+      backgroundColor: '#c8c4c7',
       padding: 20,
       marginVertical: 8,
-      marginHorizontal: 5,
+      marginRight: 20,
       alignSelf: 'flex-end',
       flex: 1
     },
@@ -132,15 +136,15 @@ const styles = StyleSheet.create({
     },
     upvoteBox: {
       height: 40,
-      width:50,
-      marginHorizontal:0,
+      width:35,
+      marginRight:5,
       backgroundColor: '#f2f2f2',
       alignContent: 'center',
       justifyContent: 'center',
       alignSelf:'center'
     },
     upvote: {
-      fontSize: 20,
+      fontSize: 15,
       alignSelf:'center',
       textAlignVertical:'center',
       color: 'black',

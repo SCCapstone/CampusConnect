@@ -24,9 +24,9 @@ export function HomeScreen({navigation}) {
       drawerActiveTintColor: 'white',
       swipeEdgeWidth: 150
     }}>
-        <Drawer.Screen name="Home" component={PostsScreen} />
-        <Drawer.Screen name="Events" component={EventsScreen} />
-        <Drawer.Screen name="Edit Profile" component={RegistrationScreen} />
+        <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
+        <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>
+        <Drawer.Screen name="Edit Profile" component={RegistrationScreen} options={{headerTitle:'Campus Connect: Edit Profile'}}/>
       </Drawer.Navigator>
   );
 }
