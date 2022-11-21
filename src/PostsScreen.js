@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     },
     post: {
       backgroundColor: '#c8c4c7',
+      borderRadius:10,
       padding: 20,
       marginVertical: 8,
       marginRight: 30,
