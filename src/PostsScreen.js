@@ -98,6 +98,7 @@ export function PostsScreen({navigation}) {
       return (
         <SafeAreaView style={styles.container}>
             <FlatList
+              style={{marginTop: '5%'}}
               data={posts}
               renderItem={renderPost}
               keyExtractor={item => item.id}
@@ -105,9 +106,8 @@ export function PostsScreen({navigation}) {
               refreshing={refreshing}
             />
             <FloatingAction
-              actions={actions}
-              onPressItem={name => {
-                console.log(`selected button: ${name}`);
+              onPressMain= { () => {
+                console.log('create a post?');
               }}
             />
         </SafeAreaView>
