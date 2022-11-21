@@ -1,81 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Pressable, TouchableOpacity } from 'react-native';
-
+import { ActivityIndicator } from 'react-native';
 import {
   Image,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 
 
 export function PostsScreen({navigation}) {
-  
-    const POSTS = [
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-4ad53abb28bc',
-        poster: 'Jay Neumann',
-        date: '11/19/2022 11:21:46 PM',
-        body: 'ayoooooo TENNESSEE SUCKS LETS GOOOO!!!! 🐔🐔🐔🐔',
-        upvoteCount: 1523,
-        replyCount: 100,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/1dd5c-1fk-jljctxmq9lfbzs8g8bq-1.jpeg?alt=media&token=400b36b1-8430-49ce-aca0-077c0f50bef5'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bc',
-        poster: 'Shelby Foster',
-        date: '11/12/2022 4:19:25 PM',
-        body: 'total weirdo on greene street last night was staring at me 🤢',
-        upvoteCount: 25,
-        replyCount: 2,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/dM4DrsLJ8GbyJMG4g3p18LFmolj1?alt=media&token=2e847802-258d-4ed6-8135-813ecacf8c2e'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb18ba',
-        poster: 'Terrence McDowell',
-        date: '11/17/2022 10:01:26 AM',
-        body: 'why am i so bad at calculus bro',
-        upvoteCount: 5,
-        replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        poster: 'John Boughner',
-        date: '11/19/2022 3:22:10 PM',
-        body: 'dude wtf',
-        upvoteCount: 2,
-        replyCount: 0,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg.webp?alt=media&token=2a01ae4f-01b7-477e-9a45-193e9da4943e'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bb',
-        poster: 'Anonymous',
-        date: '11/19/2022 7:00:16 AM',
-        body: 'it\'s 7 am and that dude at mcbryde is still making noises in the morning',
-        upvoteCount: 2,
-        replyCount: 1,
-        imageUrl: ''
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bd',
-        poster: 'Andrew Anderson',
-        date: '11/15/2022 9:01:12 AM',
-        body: 'does anyone know how to get intot the close hipp building',
-        upvoteCount: -1,
-        replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/stHvR8AtYiUPHGk8YhQ13EuNfP52?alt=media&token=9b225c37-cc72-447b-9650-d86dc37732f5'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53fbb28bd',
-        poster: 'Anonymous',
-        date: '11/20/2022 10:04:52 PM',
-        body: 'i am a potato',
-        upvoteCount: -25,
-        replyCount: 1,
-        imageUrl: ''
-      },
-      ];
 
-    const Post = ({ poster, imageUrl, body, date, upvoteCount, replyCount}) => (
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [posts, setPosts] = useState([]); // Initial empty array of users
+
+  useEffect(() => {
+    console.log('hello')
+    const subscriber = firestore()
+      .collection('Posts') //get the posts and order them by their upvote count
+      .onSnapshot(querySnapshot => {
+        const posts = [];
+  
+        querySnapshot.forEach(documentSnapshot => {
+          posts.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+        console.log('hello')
+        setPosts(posts);
+        setLoading(false);
+      });
+  
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+  
+
+    const Post = ({ author, pfp, body, date, upvoteCount, replyCount}) => (
 
         <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
           <View style={styles.upvoteBox}>
@@ -83,9 +52,9 @@ export function PostsScreen({navigation}) {
           </View>
           <TouchableOpacity style={styles.post}>
               <View style={{flexDirection:'row'}}>
-                <Image source={imageUrl ? {uri: imageUrl} : require('./assets/blank2.jpeg')}
+                <Image source={pfp ? {uri: pfp} : require('./assets/blank2.jpeg')}
                                     style={{height: 50, width: 50, borderRadius:40}}/>
-                <Text style={styles.name}>{poster}</Text>
+                <Text style={styles.name}>{author}</Text>
               </View>
               <Text style={styles.body}>{body}</Text>
               <View style={{flexDirection:'row'}}>
@@ -101,13 +70,13 @@ export function PostsScreen({navigation}) {
       );
 
       const renderPost = ({ item }) => (
-        <Post poster={item.poster} imageUrl={item.imageUrl} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount}/>
+        <Post author={item.author} imageUrl={item.pfp} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount}/>
       );
 
       return (
         <SafeAreaView style={styles.container}>
             <FlatList
-              data={POSTS.sort()}
+              data={posts}
               renderItem={renderPost}
               keyExtractor={item => item.id}
             />
@@ -119,6 +88,11 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       marginTop: StatusBar.currentHeight || 0,
+    },
+    horizontal: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      padding: 10
     },
     post: {
       backgroundColor: '#c8c4c7',
