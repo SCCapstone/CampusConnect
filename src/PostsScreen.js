@@ -1,38 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Pressable, TouchableOpacity } from 'react-native';
-import { ActivityIndicator } from 'react-native';
+import React from 'react';
+import {useState, useEffect} from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native';
+
 import {
   Image,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import storage from "@react-native-firebase/storage";
+import { FloatingAction } from "react-native-floating-action";
 
 
 
 export function PostsScreen({navigation}) {
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const [posts, setPosts] = useState([]); // Initial empty array of users
+  const [posts, setPosts] = useState([]); // Initial empty array of posts
+  const [refreshing, setRefresh] = useState(false);
 
-  useEffect(() => {
-    console.log('hello')
+  const actions = [
+    {
+      text: "Add a Post",
+      name: "bt_add_a_post",
+      position: 1
+    }
+  ];
+
+
+  const getPosts = () => {
     const subscriber = firestore()
-      .collection('Posts') //get the posts and order them by their upvote count
-      .onSnapshot(querySnapshot => {
-        const posts = [];
-  
-        querySnapshot.forEach(documentSnapshot => {
-          posts.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
+    .collection('Posts').orderBy('upvoteCount', 'desc') //get the posts and order them by their upvote count
+    .onSnapshot(querySnapshot => {
+      const posts = [];
+
+      querySnapshot.forEach(documentSnapshot => {
+        posts.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
         });
-        console.log('hello')
-        setPosts(posts);
-        setLoading(false);
       });
-  
+      setPosts(posts);
+      setLoading(false);
+    });     
+    
     // Unsubscribe from events when no longer in use
     return () => subscriber();
+  }
+
+  useEffect(() => {
+    getPosts();
   }, []);
 
   if (loading) {
@@ -44,34 +59,41 @@ export function PostsScreen({navigation}) {
   }
   
 
-    const Post = ({ author, pfp, body, date, upvoteCount, replyCount}) => (
+  const Post = ({ author, pfp, body, date, upvoteCount, replyCount}) => (
 
-        <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
-          <View style={styles.upvoteBox}>
-            <Text style={styles.upvote}>{upvoteCount}</Text>
-          </View>
-          <TouchableOpacity style={styles.post}>
-              <View style={{flexDirection:'row'}}>
-                <Image source={pfp ? {uri: pfp} : require('./assets/blank2.jpeg')}
-                                    style={{height: 50, width: 50, borderRadius:40}}/>
-                <Text style={styles.name}>{author}</Text>
-              </View>
-              <Text style={styles.body}>{body}</Text>
-              <View style={{flexDirection:'row'}}>
-                <Text style={styles.date}>{date}</Text>
-                <View style={{flexDirection:'row', marginLeft:100}}>
-                  <Text style={styles.date}>Replies: </Text>
-                  <Text style={styles.date}>{replyCount}</Text>
-                </View>
-              </View>
-          </TouchableOpacity>
+      <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
+        <View style={styles.upvoteBox}>
+          <Text style={styles.upvote}>{upvoteCount}</Text>
         </View>
+        <TouchableOpacity style={styles.post}>
+            <View style={{flexDirection:'row'}}>
+              <Image source={pfp ? {uri: pfp} : require('./assets/blank2.jpeg')}
+                                  style={{height: 50, width: 50, borderRadius:40}}/>
+              <Text style={styles.name}>{author}</Text>
+            </View>
+            <Text style={styles.body}>{body}</Text>
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.date}>{date}</Text>
+              <View style={{flexDirection:'row', marginLeft:100}}>
+                <Text style={styles.date}>Replies: </Text>
+                <Text style={styles.date}>{replyCount}</Text>
+              </View>
+            </View>
+        </TouchableOpacity>
+      </View>
 
-      );
+    );
+
+    const onRefresh = () => {
+      setRefresh(true);
+      getPosts();
+      setRefresh(false);
+    }
+
 
       const renderPost = ({ item }) => (
-        <Post author={item.author} imageUrl={item.pfp} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount}/>
-      );
+        <Post author={item.author} pfp={item.pfp} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount}/>
+      )
 
       return (
         <SafeAreaView style={styles.container}>
@@ -79,6 +101,14 @@ export function PostsScreen({navigation}) {
               data={posts}
               renderItem={renderPost}
               keyExtractor={item => item.id}
+              onRefresh={() => onRefresh()}
+              refreshing={refreshing}
+            />
+            <FloatingAction
+              actions={actions}
+              onPressItem={name => {
+                console.log(`selected button: ${name}`);
+              }}
             />
         </SafeAreaView>
       );
