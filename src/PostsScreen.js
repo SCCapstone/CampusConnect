@@ -2,13 +2,11 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native';
 
-import {
-  Image,
-} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
 import { DrawerItemList } from '@react-navigation/drawer';
+import FastImage from 'react-native-fast-image'
 
 
 
@@ -79,7 +77,7 @@ export function PostsScreen({navigation}) {
         </View>
         <TouchableOpacity style={styles.post}>
             <View style={{flexDirection:'row'}}>
-              <Image source={pfp ? {uri: pfp} : require('./assets/blank2.jpeg')}
+              <FastImage source= {pfp ? {uri: pfp} : require('./assets/blank2.jpeg')}
                                   style={{height: 60, width: 60, borderRadius:40}}/>
                 <View style={{flexDirection:'column'}}>
                   <Text style={styles.name}>{author}</Text>
@@ -121,7 +119,7 @@ export function PostsScreen({navigation}) {
               style={{marginTop: '5%'}}
               data={posts}
               renderItem={renderPost}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.key}
               onRefresh={() => onRefresh()}
               refreshing={refreshing}
             />
@@ -137,7 +135,6 @@ export function PostsScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      marginTop: StatusBar.currentHeight || 0,
     },
     horizontal: {
       flexDirection: "row",

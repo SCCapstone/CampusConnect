@@ -132,20 +132,18 @@ def reactNativeArchitectures() {
 
 android {
     ndkVersion rootProject.ext.ndkVersion
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "com.campusconnect"
+        vectorDrawables.useSupportLibrary = true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
-        vectorDrawables.useSupportLibrary = true
-        targetSdkVersion 27
-        
+
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.
             externalNativeBuild {
@@ -255,20 +253,12 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-      // For animated GIF support
-    implementation 'com.facebook.fresco:animated-gif:2.5.0'
-
-  // For WebP support, including animated WebP
-  implementation 'com.facebook.fresco:animated-webp:2.5.0'
-  implementation 'com.facebook.fresco:webpsupport:2.5.0'
-
-  // For WebP support, without animations
-  implementation 'com.facebook.fresco:webpsupport:2.5.0'
-
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation platform('com.google.firebase:firebase-bom:31.0.0')
     implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'com.facebook.fresco:fresco:2.6.0'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
