@@ -28,6 +28,21 @@ export function PostsScreen({navigation}) {
 
 
   const getPosts = () => {
+    firestore()
+    .collection('Posts').orderBy('upvoteCount', 'desc').get().then(snapShot => {
+      const posts = [];
+      snapShot.forEach(documentSnapshot => {
+        posts.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
+        });
+      });
+      setPosts(posts);
+      setLoading(false);
+    });
+  }
+
+  useEffect(() => {
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc') //get the posts and order them by their upvote count
     .onSnapshot(querySnapshot => {
@@ -45,10 +60,6 @@ export function PostsScreen({navigation}) {
     
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }
-
-  useEffect(() => {
-    getPosts();
   }, []);
 
   if (loading) {
