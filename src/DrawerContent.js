@@ -111,7 +111,13 @@ export function DrawerContent(props) {
                         <DrawerItemList {...props}/>
                     </View> 
             </DrawerContentScrollView>
-            <TouchableOpacity onPress={() => auth().signOut().then(() => props.navigation.navigate('WelcomeScreen'))} //sign out
+            <TouchableOpacity onPress={() => auth().signOut().then(() => {
+                      props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'WelcomeScreen' }]
+                   });
+    })}
+
                 style={{paddingVertical: 15}}>
                 <View>
                     <Text
