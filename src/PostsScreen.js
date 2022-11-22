@@ -112,13 +112,7 @@ export function PostsScreen({navigation}) {
     return () => subscriber();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={[styles.container, styles.horizontal]}>
-        <ActivityIndicator size="large" />
-      </View>
-    )
-  }
+
   
 
   const Post = ({item}) => (
@@ -164,11 +158,16 @@ export function PostsScreen({navigation}) {
       this.floatingAction.animateButton();
     }
 
-
+    if (loading) {
+      return (
+        <View style={[styles.container, styles.horizontal]}>
+          <ActivityIndicator size="large" />
+        </View>
+      )
+    }
     const renderPost = ({ item }) => (
       <Post item={item}/>
     )
-
       return (
         <SafeAreaView style={styles.container}>
             <Modal style={{flex:1}}

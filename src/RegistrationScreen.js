@@ -21,6 +21,7 @@ import {
     Alert,
     ScrollView,
     Keyboard,
+    ActivityIndicator
 } from "react-native";
 
 import AppContext from './AppContext';
@@ -36,6 +37,7 @@ export function RegistrationScreen({navigation}) {
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
 
     const userData = useContext(AppContext);
+    const [loading, setLoading] = useState(false); // Set loading to true on component mount
     
 
     const [open, setOpen] = useState(false);
@@ -245,6 +247,7 @@ export function RegistrationScreen({navigation}) {
     }
 
     const writeUserData = async () =>{
+      setLoading(true)
       const bioLengthValid = bio.length <= 150;
       if (firstName && lastName && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
@@ -314,6 +317,7 @@ export function RegistrationScreen({navigation}) {
       else {
         RegisterError();
       }
+      setLoading(false);
     }
 
 
@@ -354,6 +358,14 @@ export function RegistrationScreen({navigation}) {
             </TouchableOpacity>
           </View>
         );
+      }
+
+      if (loading) {
+        return (
+          <View style={[regstyles.activityContainer, regstyles.horizontal]}>
+            <ActivityIndicator size="large" />
+          </View>
+        )
       }
 
     return(
