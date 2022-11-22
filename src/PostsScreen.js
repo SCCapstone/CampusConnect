@@ -34,6 +34,16 @@ export function PostsScreen({navigation}) {
       { text: "No"}
     ] );
   }
+  const DeletePostAlert = ({item}) => {
+    if ('/Users/'+auth().currentUser.uid === item.user) {
+      Alert.alert('Delete Post?', "Are you sure you want to delete?", [
+        { text: "Yes",
+        onPress: () => DeletePost({item})},
+        { text: "No"}
+      ] );
+    }
+
+  }
 
   const CreatePost = () => {
 
@@ -78,6 +88,10 @@ export function PostsScreen({navigation}) {
     });
   }
 
+  const DeletePost = ({item}) => {
+    firestore().collection('Posts').doc(item.key).delete();
+  }
+
   useEffect(() => {
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc') //get the posts and order them by their upvote count
@@ -107,32 +121,32 @@ export function PostsScreen({navigation}) {
   }
   
 
-  const Post = ({ author, pfp, body, date, upvoteCount, replyCount,major, gradYear}) => (
+  const Post = ({item}) => (
 
       <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
         <View style={styles.upvoteBox}>
-          <Text style={styles.upvote}>{upvoteCount}</Text>
+          <Text style={styles.upvote}>{item.upvoteCount}</Text>
         </View>
-        <TouchableOpacity style={styles.post}>
+        <TouchableOpacity style={styles.post} onLongPress={() => DeletePostAlert({item})}>
             <View style={{flexDirection:'row'}}>
-              <FastImage source= {pfp ? {uri: pfp} : require('./assets/blank2.jpeg')}
+              <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                   style={{height: 60, width: 60, borderRadius:40}}/>
                 <View style={{flexDirection:'column'}}>
-                  <Text style={styles.name}>{author}</Text>
+                  <Text style={styles.name}>{item.author}</Text>
                   <View style={{flexDirection:'row',flexWrap:'wrap'}}>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'}}>{major}</Text>
+                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'}}>{item.authorMajor}</Text>
                     <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>|</Text>
                     <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>Class of</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>{gradYear}</Text>
+                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>{item.authorGradYear}</Text>
                   </View>
                 </View>
             </View>
-            <Text style={styles.body}>{body}</Text>
+            <Text style={styles.body}>{item.body}</Text>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.date}>{date}</Text>
+              <Text style={styles.date}>{item.date}</Text>
               <View style={{flexDirection:'row', marginLeft:'30%'}}>
                 <Text style={styles.date}>Replies: </Text>
-                <Text style={styles.date}>{replyCount}</Text>
+                <Text style={styles.date}>{item.replyCount}</Text>
               </View>
             </View>
         </TouchableOpacity>
@@ -152,7 +166,7 @@ export function PostsScreen({navigation}) {
 
 
     const renderPost = ({ item }) => (
-      <Post author={item.author} pfp={item.pfp} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount} major={item.authorMajor} gradYear={item.authorGradYear}/>
+      <Post item={item}/>
     )
 
       return (
