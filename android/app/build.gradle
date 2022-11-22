@@ -213,15 +213,6 @@ android {
         }
     }
     signingConfigs {
-          release {
-            storeFile file('campus_connect.keystore')
-            println("\nKeystore password:")
-            storePassword System.in.newReader().readLine()
-            println("\nAlias: ")
-            keyAlias System.in.newReader().readLine()
-            println("password")
-            keyPassword System.in.newReader().readLine()
-        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
