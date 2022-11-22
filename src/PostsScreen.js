@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
@@ -15,6 +15,8 @@ export function PostsScreen({navigation}) {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
   const [refreshing, setRefresh] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [postText, setPostText] = useState('');
 
   const actions = [
     {
@@ -24,6 +26,33 @@ export function PostsScreen({navigation}) {
     }
   ];
 
+  const PostAlert = () => {
+    Alert.alert('Post?', "Are you sure you want to post?", [
+      { text: "Yes",
+      onPress: () => CreatePost()},
+      { text: "No"}
+    ] );
+  }
+
+  const CreatePost = () => {
+    firestore()
+    .collection('Posts')
+    .doc()
+    .set({
+      email: email,
+      firstLogin: true,
+      name: 'No Name',
+      major: 'None',
+      gradYear: 0,
+      bio: '',
+    })
+    .then(() => {
+    console.log('User added!');
+    })
+    .catch(error => {
+      console.log(error.code)
+    });
+  }
 
   const getPosts = () => {
     firestore()
@@ -108,31 +137,107 @@ export function PostsScreen({navigation}) {
       setRefresh(false);
     }
 
+    const closeModal = () => {
+      setModalVisible(false);
+      this.floatingAction.animateButton();
+    }
 
-      const renderPost = ({ item }) => (
-        <Post author={item.author} pfp={item.pfp} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount} major={item.authorMajor} gradYear={item.authorGradYear}/>
-      )
+
+    const renderPost = ({ item }) => (
+      <Post author={item.author} pfp={item.pfp} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount} major={item.authorMajor} gradYear={item.authorGradYear}/>
+    )
 
       return (
         <SafeAreaView style={styles.container}>
-            <FlatList
-              style={{marginTop: '5%'}}
-              data={posts}
-              renderItem={renderPost}
-              keyExtractor={item => item.key}
-              onRefresh={() => onRefresh()}
-              refreshing={refreshing}
-            />
-            <FloatingAction
-              onPressMain= { () => {
-                console.log('create a post?');
-              }}
-            />
-        </SafeAreaView>
+            <Modal style={{flex:1}}
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  closeModal()
+                }}
+              >
+              <KeyboardAvoidingView>
+                <View style={styles.postView}>
+                  <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity onPress={ () => closeModal()} style={styles.cancelButton}>
+                      <Text style={{fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"}}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={ () => PostAlert()} style={styles.postButton}>
+                      <Text style={{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'}}>Post?</Text>
+                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.postTextView}>
+                      <TextInput
+                        style={styles.postInput}
+                        multiline={true}
+                        onChangeText={(postText) => setPostText(postText)}
+                        placeholder="Enter ur post"
+                        textAlignVertical='top'
+                        placeholderTextColor="black"
+                        blurOnSubmit={false}
+                      />
+                    </View>
+                    
+                </View>
+                </KeyboardAvoidingView>
+              </Modal>
+
+
+              <FlatList
+                style={{marginTop: '5%'}}
+                data={posts}
+                renderItem={renderPost}
+                keyExtractor={item => item.key}
+                onRefresh={() => onRefresh()}
+                refreshing={refreshing}
+              />
+              <FloatingAction
+                ref={(ref) => { this.floatingAction = ref; }}
+                onPressMain= { () => {
+                  setModalVisible(!modalVisible);
+                }}
+              />
+          </SafeAreaView>
       );
 }
 
 const styles = StyleSheet.create({
+    postView: {
+      height:'45%',
+      width:'90%',
+      backgroundColor: 'white',
+      alignSelf:'center',
+      marginTop:'60%',
+      borderRadius:20,
+      justifyContent:'center'
+
+    },
+    postTextView: {
+      flex:.82,
+      borderRadius:20,
+      justifyContent:'center',
+      marginTop:'5%',
+      marginHorizontal:'10%',
+      backgroundColor: '#f2f2f2',
+    },
+    postInput: {
+      backgroundColor: '#f2f2f2',
+      flex: 1,
+      color: 'black',
+      marginHorizontal:'2%',
+      marginVertical:'2%',
+      borderRadius: 20,
+    },
+    postButton: {
+      marginLeft:'57%',
+      marginBottom:'1%',
+    },
+    cancelButton: {
+      alignSelf:'flex-start',
+      marginLeft:'10%',
+      marginBottom:'1%'
+    },
     container: {
       flex: 1,
     },

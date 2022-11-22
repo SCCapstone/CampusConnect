@@ -23,6 +23,8 @@ import {
     Keyboard,
 } from "react-native";
 
+import AppContext from './AppContext';
+
 import regstyles from './registrationStyles';
 
 export function RegistrationScreen({navigation}) {  
@@ -32,10 +34,9 @@ export function RegistrationScreen({navigation}) {
     const [gradDate, setGradDate] = React.useState('');
     var url = "";
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
+
+    const userData = useContext(AppContext);
     
-    // Set an initializing state whilst Firebase connects
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
 
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
@@ -235,6 +236,14 @@ export function RegistrationScreen({navigation}) {
 
     }
 
+    updateLocalVariables = () =>{ 
+      userData.setBio(bio);
+      userData.setMajor(major);
+      userData.setGradYear(gradDate);
+      userData.setProfilePic(url);
+      userData.setName(firstName + " " + lastName);
+    }
+
     const writeUserData = async () =>{
       const bioLengthValid = bio.length <= 150;
       if (firstName && lastName && major && gradDate && bio && bioLengthValid && image) {
@@ -249,8 +258,9 @@ export function RegistrationScreen({navigation}) {
           gradYear: gradDate,
           bio: bio,
           pfp: url
-        }).then(() => {
+        }).then(async () => {
           setRegistraionSuccess(true);
+          await updateLocalVariables();
           reset();
         })
       }

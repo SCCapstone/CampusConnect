@@ -22,23 +22,24 @@ import { StyleSheet } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
-import { useEffect, useState, setState } from 'react';
+import { useEffect, useState, setState, useContext } from 'react';
+
+import AppContext from './AppContext';
 
 
 export function DrawerContent(props) {
 
-    const [imageSrc, setImageSrc] = useState();
-    const [nameText, setName] = useState("Welcome");
-    const [majorText, setMajor] = useState("No major");
-    const [yearText, setYear] = useState(1000);
+    const userData = useContext(AppContext);
 
     const getUserData = async () => {
-        const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
+        const data = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
             console.log(error);
           });
-        setName("\n" + userData.get("name").split(" ")[0]);
-        setMajor(userData.get("major"));
-        setYear(userData.get("gradYear"));
+        userData.setName("\n" + data.get("name"));
+        userData.setEmail(data.get('email'));
+        userData.setBio(data.get('bio'));
+        userData.setMajor(data.get("major"));
+        userData.setGradYear(data.get("gradYear"));
     }
     const DeleteAlert = () => {
         Alert.alert('Delete Photo', "Do you want to delete your photo?", [
@@ -52,12 +53,12 @@ export function DrawerContent(props) {
         .ref(auth().currentUser.uid) //name in storage in firebase console
         .getDownloadURL()
         .then((url) => {
-            setImageSrc(url);
+            userData.setProfilePic(url);
         })
         .catch((e) => reset());
     }
     const reset = () => {
-        setImageSrc('');
+        userData.setProfilePic('');
     }
     
     const deletePhoto = async () => {
@@ -84,13 +85,13 @@ export function DrawerContent(props) {
             contentContainerStyle={{backgroundColor: '#73000a'}}>
                 <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={{padding: 30}}>
                     <View style={{flexDirection: 'row',alignSelf:'center'}}>
-                        <TouchableOpacity activeOpacity={.9} style={{height:80,width:80,borderRadius:40,overflow: 'hidden'}} onLongPress={imageSrc? () => DeleteAlert() : null}>
-                            <Image source={imageSrc ? {uri: imageSrc} : require('./assets/blank2.jpeg')}
+                        <TouchableOpacity activeOpacity={.9} style={{height:80,width:80,borderRadius:40,overflow: 'hidden'}} onLongPress={userData.pfp? () => DeleteAlert() : null}>
+                            <Image source={userData.pfp ? {uri: userData.pfp} : require('./assets/blank2.jpeg')}
                                     style={{height: 80, width: 80, borderRadius:40}}/>
                         </TouchableOpacity>
                             <View backgroundColor='#ebebeb' style={{marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center'}}>
                                 <Text style={{fontSize: 22, fontWeight: 'bold', color: 'black',textAlign:'center'}}>Welcome!
-                                <Text style={{fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'}}>{nameText}   
+                                <Text style={{fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'}}>{userData.name.split(" ")[0]}   
                                 </Text>
                                 </Text>
                             </View>
@@ -98,11 +99,11 @@ export function DrawerContent(props) {
                     <View backgroundColor='#ebebeb' style={{marginTop:15,alignSelf:'center'}}>
                         <View style={{flexDirection: 'column',alignSelf:'center'}}>
                                 <Text style={{fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1}}>Major: </Text>
-                                <Text style={{fontSize: 13, color: 'black',textAlign:'center'}}>{majorText}</Text>
+                                <Text style={{fontSize: 13, color: 'black',textAlign:'center'}}>{userData.major}</Text>
                         </View>
                         <View style={{flexDirection: 'row', marginTop:1,alignSelf:'center'}}>
                                 <Text style={{fontSize: 15,fontWeight:'bold', color: 'black'}}>Class of </Text>
-                                <Text style={{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'}}>{yearText}</Text>
+                                <Text style={{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'}}>{userData.gradYear}</Text>
                         </View>
                     </View>
                     
