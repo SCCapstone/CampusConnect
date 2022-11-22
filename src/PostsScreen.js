@@ -1,16 +1,24 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
 import { DrawerItemList } from '@react-navigation/drawer';
 import FastImage from 'react-native-fast-image'
 
+import moment from 'moment';
+
+import AppContext from './AppContext';
+
 
 
 export function PostsScreen({navigation}) {
+
+  //Global userdata var
+  const userData = useContext(AppContext);
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
@@ -18,13 +26,6 @@ export function PostsScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
 
-  const actions = [
-    {
-      text: "Add a Post",
-      name: "bt_add_a_post",
-      position: 1
-    }
-  ];
 
   const PostAlert = () => {
     Alert.alert('Post?', "Are you sure you want to post?", [
@@ -35,23 +36,31 @@ export function PostsScreen({navigation}) {
   }
 
   const CreatePost = () => {
-    firestore()
-    .collection('Posts')
-    .doc()
-    .set({
-      email: email,
-      firstLogin: true,
-      name: 'No Name',
-      major: 'None',
-      gradYear: 0,
-      bio: '',
-    })
-    .then(() => {
-    console.log('User added!');
-    })
-    .catch(error => {
-      console.log(error.code)
-    });
+
+    if (postText && postText.length < 1000) {
+      firestore()
+      .collection('Posts')
+      .doc()
+      .set({
+        author: userData.name,
+        authorGradYear: userData.gradYear,
+        authorMajor: userData.major,
+        body: postText,
+        replyCount:0,
+        upvoteCount:1,
+        date: moment(firestore.Timestamp.now().toDate()).format('MMMM Do YYYY, h:mm:ss a'),
+        pfp: userData.pfp,
+        replies: [],
+        user: '/Users/'+auth().currentUser.uid
+      })
+      .then(() => closeModal())
+      .catch(error => {
+        console.log(error.code)
+      });
+    }
+    else {
+      PostError();
+    }
   }
 
   const getPosts = () => {
@@ -121,7 +130,7 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{body}</Text>
             <View style={{flexDirection:'row'}}>
               <Text style={styles.date}>{date}</Text>
-              <View style={{flexDirection:'row', marginLeft:100}}>
+              <View style={{flexDirection:'row', marginLeft:'30%'}}>
                 <Text style={styles.date}>Replies: </Text>
                 <Text style={styles.date}>{replyCount}</Text>
               </View>
@@ -138,7 +147,6 @@ export function PostsScreen({navigation}) {
     }
 
     const closeModal = () => {
-      setModalVisible(false);
       this.floatingAction.animateButton();
     }
 
@@ -202,6 +210,12 @@ export function PostsScreen({navigation}) {
       );
 }
 
+const PostError = () => {
+  Alert.alert('Post is too long', "Shorten your post to less than 1000 characters", [
+    { text: "Okay.",}
+  ] );
+}
+
 const styles = StyleSheet.create({
     postView: {
       height:'45%',
@@ -251,7 +265,7 @@ const styles = StyleSheet.create({
       borderRadius:10,
       padding: 20,
       marginVertical: 8,
-      marginRight: 30,
+      marginRight: '5%',
       alignSelf: 'flex-end',
       flex: 1
     },

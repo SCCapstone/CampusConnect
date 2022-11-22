@@ -35,7 +35,7 @@ export function DrawerContent(props) {
         const data = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
             console.log(error);
           });
-        userData.setName("\n" + data.get("name"));
+        userData.setName(data.get("name"));
         userData.setEmail(data.get('email'));
         userData.setBio(data.get('bio'));
         userData.setMajor(data.get("major"));
@@ -91,7 +91,7 @@ export function DrawerContent(props) {
                         </TouchableOpacity>
                             <View backgroundColor='#ebebeb' style={{marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center'}}>
                                 <Text style={{fontSize: 22, fontWeight: 'bold', color: 'black',textAlign:'center'}}>Welcome!
-                                <Text style={{fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'}}>{userData.name.split(" ")[0]}   
+                                <Text style={{fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'}}>{'\n'+userData.name.split(" ")[0]}   
                                 </Text>
                                 </Text>
                             </View>
