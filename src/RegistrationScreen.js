@@ -329,6 +329,11 @@ export function RegistrationScreen({navigation}) {
       setMajor("")
       setBio("")
       setImage("")
+      setRegistraionSuccess(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeScreen' }]
+   });
     }
 
     if (registraionSuccess) {
@@ -352,7 +357,7 @@ export function RegistrationScreen({navigation}) {
             </Text>
             <TouchableOpacity
               style={regstyles.buttonStyle}
-              onPress={() => setRegistraionSuccess(false)
+              onPress={() => reset()
               }>
               <Text style={regstyles.buttonTextStyle}>Finish</Text>
             </TouchableOpacity>
