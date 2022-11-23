@@ -10,10 +10,17 @@ import { EventsScreen } from './EventsScreen.js'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { DrawerContent } from './DrawerContent.js';
+import auth from '@react-native-firebase/auth';
 
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
+  if (!auth().currentUser) {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'WelcomeScreen' }]
+ });
+  }
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}
     screenOptions={{

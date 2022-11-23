@@ -19,7 +19,9 @@ import firestore from '@react-native-firebase/firestore';
 import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+
 import AppContext from './AppContext';
+
 
 export function WelcomeScreen({navigation}) {
 
@@ -32,7 +34,6 @@ export function WelcomeScreen({navigation}) {
   userData.setProfilePic("");
   userData.setBio('');
 
-
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -43,16 +44,12 @@ export function WelcomeScreen({navigation}) {
     setUser(user);
     if (initializing) setInitializing(false);
     if (auth().currentUser) {
-        await firestore().collection('Users').doc(auth().currentUser.uid).get().then((userData) => {
-        firstLogin = userData.get("firstLogin");
-        console.log(firstLogin);
-      }).catch(error => {
-        console.log(error.code);
+      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
         FirebaseError(error.code);
       });
+      firstLogin = userData.get("firstLogin");
     }
     if (auth().currentUser && firstLogin) {
-      console.log('helo')
       navigation.reset({
         index: 0,
         routes: [{ name: 'OnboardingScreen' }]
@@ -168,16 +165,16 @@ export function RegisterScreen({ navigation}){
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
 
-  const register = async () => {
+  const register = () => {
     if (email && password && (password === password2)){
-      await auth()
+      auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
         createUserData();
       })
       .catch(error => {
-        FirebaseError(error);
+        FirebaseError(error.code);
       });
     }
     else {
@@ -185,8 +182,8 @@ export function RegisterScreen({ navigation}){
     }
   }
 
-  const createUserData = async () => {
-    await firestore()
+  const createUserData = () => {
+    firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
       .set({
@@ -199,12 +196,25 @@ export function RegisterScreen({ navigation}){
       })
       .then(() => {
       console.log('User added!');
+      navigation.navigate('OnboardingScreen')
       })
       .catch(error => {
         FirebaseError(error.code);
       });
   }
 
+  /*const createUserData = () => {
+    database()
+      .ref('/users/' + auth().currentUser.uid)
+      .set({
+        email: email,
+        firstLogin: true,
+        name: 'No Name',
+        major: 'None',
+        gradYear: 0
+  })
+  .then(() => console.log('Data set.'));
+  }*/
 
  
   return (
