@@ -215,6 +215,7 @@ export function RegistrationScreen({navigation}) {
       await ImagePicker.openPicker({
         width: 300,
         height: 300,
+        mediaType:'photo'
         /*cropping: true*/
       }).then(image => {
         console.log(image);
