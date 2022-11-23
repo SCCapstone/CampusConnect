@@ -8,6 +8,7 @@ import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
 import { DrawerItemList } from '@react-navigation/drawer';
 import FastImage from 'react-native-fast-image'
+import ImageView from "react-native-image-viewing";
 
 import moment from 'moment';
 
@@ -19,9 +20,12 @@ export function PostsScreen({navigation}) {
 
   //Global userdata var
   const userData = useContext(AppContext);
+  var imageIndex = 0;
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
+  const [images, setImages] = useState([]); // Initial empty array of posts
+  const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
@@ -61,7 +65,8 @@ export function PostsScreen({navigation}) {
         date: moment(firestore.Timestamp.now().toDate()).format('MMMM Do YYYY, h:mm:ss a'),
         pfp: userData.pfp,
         replies: [],
-        user: '/Users/'+auth().currentUser.uid
+        user: '/Users/'+auth().currentUser.uid,
+        extraContent: ''
       })
       .then(() => closeModal())
       .catch(error => {
@@ -77,13 +82,18 @@ export function PostsScreen({navigation}) {
     firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').get().then(snapShot => {
       const posts = [];
+      const images = [];
       snapShot.forEach(documentSnapshot => {
         posts.push({
           ...documentSnapshot.data(),
           key: documentSnapshot.id,
         });
+        images.push({
+          uri: documentSnapshot.get('extraData')
+        })
       });
       setPosts(posts);
+      setImages(images);
       setLoading(false);
     });
   }
@@ -91,20 +101,29 @@ export function PostsScreen({navigation}) {
   const DeletePost = ({item}) => {
     firestore().collection('Posts').doc(item.key).delete();
   }
+  const OpenImage = ({index}) => {
+    imageIndex = index;
+    setIsVisible(true);
+  }
 
   useEffect(() => {
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc') //get the posts and order them by their upvote count
     .onSnapshot(querySnapshot => {
       const posts = [];
+      const images = [];
 
       querySnapshot.forEach(documentSnapshot => {
         posts.push({
           ...documentSnapshot.data(),
           key: documentSnapshot.id,
         });
+        images.push({
+          uri: documentSnapshot.get('extraData')
+        })
       });
       setPosts(posts);
+      setImages(images);
       setLoading(false);
     });     
     
@@ -115,7 +134,7 @@ export function PostsScreen({navigation}) {
 
   
 
-  const Post = ({item}) => (
+  const Post = ({item, index}) => (
 
       <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
         <View style={styles.upvoteBox}>
@@ -125,17 +144,25 @@ export function PostsScreen({navigation}) {
             <View style={{flexDirection:'row'}}>
               <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                   style={{height: 60, width: 60, borderRadius:40}}/>
+                {item.author !== 'Anonymous' ?
                 <View style={{flexDirection:'column'}}>
+
                   <Text style={styles.name}>{item.author}</Text>
-                  <View style={{flexDirection:'row',flexWrap:'wrap'}}>
+                   <View style={{flexDirection:'row',flexWrap:'wrap'}}>
                     <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'}}>{item.authorMajor}</Text>
                     <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>|</Text>
                     <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>Class of</Text>
                     <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>{item.authorGradYear}</Text>
                   </View>
-                </View>
+                </View>: <Text style={{textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',}}>{item.author}</Text>}
             </View>
-            <Text style={styles.body}>{item.body}</Text>
+            <View style={{flexDirection:'column',flex:1}}>
+              <Text style={styles.body}>{item.body}</Text>
+              {item.extraData ?
+                <TouchableOpacity onPress={() => OpenImage({index})}>
+                  <FastImage source={{uri: item.extraData}}
+                                    style={{marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290}}/></TouchableOpacity>: null}
+            </View>
             <View style={{flexDirection:'row'}}>
               <Text style={styles.date}>{item.date}</Text>
               <View style={{flexDirection:'row', marginLeft:'30%'}}>
@@ -165,8 +192,8 @@ export function PostsScreen({navigation}) {
         </View>
       )
     }
-    const renderPost = ({ item }) => (
-      <Post item={item}/>
+    const renderPost = ({ item, index }) => (
+      <Post item={item} index={index}/>
     )
       return (
         <SafeAreaView style={styles.container}>
@@ -218,6 +245,12 @@ export function PostsScreen({navigation}) {
                 onPressMain= { () => {
                   setModalVisible(!modalVisible);
                 }}
+              />
+              <ImageView
+                images={images}
+                imageIndex={imageIndex}
+                visible={isVisible}
+                onRequestClose={() => setIsVisible(false)}
               />
           </SafeAreaView>
       );
@@ -310,6 +343,7 @@ const styles = StyleSheet.create({
       fontStyle: 'italic'
     },
     name: {
+      justifyContent:'center',
       fontSize: 24,
       marginLeft:20,
       color: 'black',
