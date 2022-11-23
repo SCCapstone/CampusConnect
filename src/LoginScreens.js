@@ -19,9 +19,19 @@ import firestore from '@react-native-firebase/firestore';
 import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-
+import AppContext from './AppContext';
 
 export function WelcomeScreen({navigation}) {
+
+  const userData = useContext(AppContext);
+
+  userData.setName("");
+  userData.setEmail('')
+  userData.setMajor("");
+  userData.setGradYear("");
+  userData.setProfilePic("");
+  userData.setBio('');
+
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -33,12 +43,16 @@ export function WelcomeScreen({navigation}) {
     setUser(user);
     if (initializing) setInitializing(false);
     if (auth().currentUser) {
-      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
+        await firestore().collection('Users').doc(auth().currentUser.uid).get().then((userData) => {
+        firstLogin = userData.get("firstLogin");
+        console.log(firstLogin);
+      }).catch(error => {
+        console.log(error.code);
         FirebaseError(error.code);
       });
-      firstLogin = userData.get("firstLogin");
     }
     if (auth().currentUser && firstLogin) {
+      console.log('helo')
       navigation.reset({
         index: 0,
         routes: [{ name: 'OnboardingScreen' }]
@@ -154,16 +168,16 @@ export function RegisterScreen({ navigation}){
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
 
-  const register = () => {
+  const register = async () => {
     if (email && password && (password === password2)){
-      auth()
+      await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
         createUserData();
       })
       .catch(error => {
-        FirebaseError(error.code);
+        FirebaseError(error);
       });
     }
     else {
@@ -171,8 +185,8 @@ export function RegisterScreen({ navigation}){
     }
   }
 
-  const createUserData = () => {
-    firestore()
+  const createUserData = async () => {
+    await firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
       .set({
@@ -185,25 +199,12 @@ export function RegisterScreen({ navigation}){
       })
       .then(() => {
       console.log('User added!');
-      navigation.navigate('OnboardingScreen')
       })
       .catch(error => {
         FirebaseError(error.code);
       });
   }
 
-  /*const createUserData = () => {
-    database()
-      .ref('/users/' + auth().currentUser.uid)
-      .set({
-        email: email,
-        firstLogin: true,
-        name: 'No Name',
-        major: 'None',
-        gradYear: 0
-  })
-  .then(() => console.log('Data set.'));
-  }*/
 
  
   return (

@@ -238,7 +238,7 @@ export function RegistrationScreen({navigation}) {
       }
 
     }
-    
+
     const writeUserData = async () =>{
       setLoading(true)
       const bioLengthValid = bio.length <= 150;
@@ -383,7 +383,8 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(FirstName) => setFirstName(FirstName)}
-              placeholder="Enter First Name (Required)"
+              defaultValue={userData.name.split(' ')[0]}
+              placeholder='Enter first name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -392,7 +393,8 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(LastName) => setLastName(LastName)}
-              placeholder="Enter Last Name (Required)"
+              defaultValue={userData.name.split(' ')[1]}
+              placeholder='Enter last name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
