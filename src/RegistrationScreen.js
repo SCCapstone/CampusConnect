@@ -238,15 +238,7 @@ export function RegistrationScreen({navigation}) {
       }
 
     }
-
-    updateLocalVariables = () =>{ 
-      userData.setBio(bio);
-      userData.setMajor(major);
-      userData.setGradYear(gradDate);
-      userData.setProfilePic(url);
-      userData.setName(firstName + " " + lastName);
-    }
-
+    
     const writeUserData = async () =>{
       setLoading(true)
       const bioLengthValid = bio.length <= 150;
@@ -262,10 +254,8 @@ export function RegistrationScreen({navigation}) {
           gradYear: gradDate,
           bio: bio,
           pfp: url
-        }).then(async () => {
+        }).then(() => {
           setRegistraionSuccess(true);
-          await updateLocalVariables();
-          reset();
         })
       }
       else if (firstName && lastName && major && gradDate && bioLengthValid && image) {
@@ -283,7 +273,6 @@ export function RegistrationScreen({navigation}) {
           pfp: url
         }).then(() => {
           setRegistraionSuccess(true);
-          reset();
         })
       }
       else if (firstName && lastName && major && gradDate && bio && bioLengthValid) {
@@ -298,7 +287,6 @@ export function RegistrationScreen({navigation}) {
           bio: bio
         }).then(() => {
           setRegistraionSuccess(true);
-          reset();
         })
       }
       else if(firstName && lastName && major && gradDate && bioLengthValid) {
@@ -312,7 +300,6 @@ export function RegistrationScreen({navigation}) {
           gradYear: gradDate,
         }).then(() => {
           setRegistraionSuccess(true);
-          reset();
         })
       }
       else {
