@@ -32,23 +32,17 @@ export default function App() {
   //gloval user variable
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState('');
-  const [major, setMajor] = useState('');
-  const [gradYear, setGradYear] = useState('');
-  const [name, setName] = useState('');
+  const [username, setUserName] = useState('');
   const [pfp, setProfilePic] = useState('');
 
   const userData = {
     bio: bio,
     email:email,
-    major:major,
-    gradYear:gradYear,
-    name:name,
+    username:username,
     pfp:pfp,
     setBio,
     setEmail,
-    setMajor,
-    setGradYear,
-    setName,
+    setUserName,
     setProfilePic
   }
 

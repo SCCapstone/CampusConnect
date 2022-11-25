@@ -27,10 +27,8 @@ export function WelcomeScreen({navigation}) {
 
   const userData = useContext(AppContext);
 
-  userData.setName("");
+  userData.setUserName("");
   userData.setEmail('')
-  userData.setMajor("");
-  userData.setGradYear("");
   userData.setProfilePic("");
   userData.setBio('');
 
@@ -166,7 +164,8 @@ export function RegisterScreen({ navigation}){
   const [password2, setPassword2] = React.useState("");
 
   const register = () => {
-    if (email && password && (password === password2)){
+    const validEmail = email.includes('sc.edu');
+    if (validEmail && email && password && (password === password2)){
       auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -189,9 +188,7 @@ export function RegisterScreen({ navigation}){
       .set({
         email: email,
         firstLogin: true,
-        name: 'No Name',
-        major: 'None',
-        gradYear: 0,
+        username: 'No Name',
         bio: '',
       })
       .then(() => {
@@ -202,19 +199,6 @@ export function RegisterScreen({ navigation}){
         FirebaseError(error.code);
       });
   }
-
-  /*const createUserData = () => {
-    database()
-      .ref('/users/' + auth().currentUser.uid)
-      .set({
-        email: email,
-        firstLogin: true,
-        name: 'No Name',
-        major: 'None',
-        gradYear: 0
-  })
-  .then(() => console.log('Data set.'));
-  }*/
 
  
   return (
@@ -308,7 +292,7 @@ const FirebaseError = (error) => {
 }
 
 const LoginError = () => {
-  Alert.alert('Invalid format', "Make sure email and password field are not empty.", [
+  Alert.alert('Invalid format', "Make sure email and password field are not empty and that you are using a valid USC email.", [
     { text: "OK"}
   ] );
 }
