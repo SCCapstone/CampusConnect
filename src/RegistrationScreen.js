@@ -134,7 +134,6 @@ export function RegistrationScreen({navigation}) {
         .doc(auth().currentUser.uid)
         .update({
           username:username,
-          major: major,
           firstLogin: false,
         }).then(() => {
           setRegistraionSuccess(true);
