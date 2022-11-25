@@ -92,7 +92,7 @@ export function DrawerContent(props) {
                         </TouchableOpacity>
                             <View style={styles.userWelcomeBox}>
                                 <Text style={styles.welcomeText}>Welcome!
-                                <Text style={styles.userNameText}>{'\n'+userData.split(' ').length > 0 ? userData.name.split(" ")[0]: null}   
+                                <Text style={styles.userNameText}>{'\n'+userData.name.split(" ")[0]}
                                 </Text>
                                 </Text>
                             </View>
