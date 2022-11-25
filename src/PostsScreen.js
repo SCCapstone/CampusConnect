@@ -56,9 +56,7 @@ export function PostsScreen({navigation}) {
       .collection('Posts')
       .doc()
       .set({
-        author: userData.name,
-        authorGradYear: userData.gradYear,
-        authorMajor: userData.major,
+        author: userData.username,
         body: postText,
         replyCount:0,
         upvoteCount:1,
@@ -140,16 +138,11 @@ export function PostsScreen({navigation}) {
         <View style={styles.upvoteBox}>
           <Text style={styles.upvote}>{item.upvoteCount}</Text>
         </View>
-        <TouchableOpacity style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+        <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
             <View style={styles.postUserImageAndInfoBox}>
               <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                   style={styles.postPfp}/>
-                {item.author !== 'Anonymous' ?
-                <View style={styles.postUserInfo}>
-
-                  <Text style={styles.name}>{item.author}</Text>
-                    <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
-                </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
+              <Text style={styles.authorText}>{item.author}</Text>
             </View>
             <View style={styles.postImageView}>
               <Text style={styles.body}>{item.body}</Text>
@@ -165,7 +158,7 @@ export function PostsScreen({navigation}) {
                 <Text style={styles.date}>{item.replyCount}</Text>
               </View>
             </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
     );
@@ -258,12 +251,12 @@ const PostError = () => {
 }
 
 const styles = StyleSheet.create({
-  postUserImageAndInfoBox: {flexDirection:'row',flex:1},
+  postUserImageAndInfoBox: {flexDirection:'row',flex:1,alignItems:'center'},
   dateAndReplyBox: {flexDirection:'row'},
     replyCountBox: {flexDirection:'row', marginLeft:'30%'},
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
-    anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
+    authorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
     postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290},
     cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
     postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},

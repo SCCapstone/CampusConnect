@@ -19,7 +19,7 @@ export default StyleSheet.create({
     SectionStyle: {
         flexDirection: 'row',
         height: 46,
-        margin: 10,
+        marginHorizontal:0
     },
 
     buttonStyle: {
@@ -29,9 +29,7 @@ export default StyleSheet.create({
         height: 50,
         alignItems: 'center',
         borderRadius: 0,
-        marginLeft: 55,
-        marginRight: 55,
-        marginTop: 30,
+        marginTop: 20,
     },
 
     buttonTextStyle: {
@@ -45,11 +43,8 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         color: 'black',
-        paddingBottom: 10,
-        paddingLeft: 25,
-        paddingRight: 25,
-        borderWidth: 1,
-        borderRadius: 0,
+        paddingLeft: 12,
+        borderRadius: 10,
         borderColor: '#a9a9a9',
     },
     
@@ -74,7 +69,8 @@ export default StyleSheet.create({
     copyWrightText: {
         color: "black",
         fontWeight: 'bold',
-        fontSize: 12
+        fontSize: 12,
+
     },
     bioStyle: {
         backgroundColor: 'white',
@@ -83,19 +79,18 @@ export default StyleSheet.create({
         paddingLeft: 12,
         paddingRight: 12,
         borderWidth: 1,
-        borderRadius: 0,
+        borderRadius: 10,
         borderColor: '#a9a9a9',
         marginBottom: 10
     },
     bioSectionStyle: {
-        height: 85,
+        height: 100,
+        width:400,
+        marginHorizontal:0,
         marginTop: 15,
-        margin: 0,
-        marginLeft:10,
-        marginRight:10,
     },
     scrollView: {
-        backgroundColor: 'red',
+        backgroundColor: '#73000a',
       },
     
       body: {

@@ -27,10 +27,8 @@ export function WelcomeScreen({navigation}) {
 
   const userData = useContext(AppContext);
 
-  userData.setName("");
+  userData.setUserName("");
   userData.setEmail('')
-  userData.setMajor("");
-  userData.setGradYear("");
   userData.setProfilePic("");
   userData.setBio('');
 
@@ -189,9 +187,7 @@ export function RegisterScreen({ navigation}){
       .set({
         email: email,
         firstLogin: true,
-        name: 'No Name',
-        major: 'None',
-        gradYear: 0,
+        username: 'No Name',
         bio: '',
       })
       .then(() => {
@@ -202,19 +198,6 @@ export function RegisterScreen({ navigation}){
         FirebaseError(error.code);
       });
   }
-
-  /*const createUserData = () => {
-    database()
-      .ref('/users/' + auth().currentUser.uid)
-      .set({
-        email: email,
-        firstLogin: true,
-        name: 'No Name',
-        major: 'None',
-        gradYear: 0
-  })
-  .then(() => console.log('Data set.'));
-  }*/
 
  
   return (
