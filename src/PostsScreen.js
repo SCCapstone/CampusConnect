@@ -20,11 +20,11 @@ export function PostsScreen({navigation}) {
 
   //Global userdata var
   const userData = useContext(AppContext);
-  const [imageIndex,setImageIndex] = useState(0);
+  var imageIndex = 0;
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
-  const [images, setImages] = useState([]); // Initial empty array of images
+  const [images, setImages] = useState([]); // Initial empty array of posts
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -56,11 +56,13 @@ export function PostsScreen({navigation}) {
       .collection('Posts')
       .doc()
       .set({
-        author: userData.username,
+        author: userData.name,
+        authorGradYear: userData.gradYear,
+        authorMajor: userData.major,
         body: postText,
         replyCount:0,
         upvoteCount:1,
-        date: moment(firestore.Timestamp.now().toDate()).format('MMMM Do YYYY, h:mm:ss a'),
+        date: firestore.FieldValue.serverTimestamp(),
         pfp: userData.pfp,
         replies: [],
         user: '/Users/'+auth().currentUser.uid,
@@ -82,17 +84,17 @@ export function PostsScreen({navigation}) {
       const posts = [];
       const images = [];
       snapShot.forEach(documentSnapshot => {
-          posts.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-          images.push({
-            uri: documentSnapshot.get('extraData')
-          })
+        posts.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
         });
-        setPosts(posts);
-        setImages(images);
-        setLoading(false);
+        images.push({
+          uri: documentSnapshot.get('extraData')
+        })
+      });
+      setPosts(posts);
+      setImages(images);
+      setLoading(false);
     });
   }
 
@@ -100,30 +102,33 @@ export function PostsScreen({navigation}) {
     firestore().collection('Posts').doc(item.key).delete();
   }
   const OpenImage = ({index}) => {
-    setImageIndex(index);
+    imageIndex = index;
     setIsVisible(true);
   }
 
   useEffect(() => {
     const subscriber = firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').onSnapshot(querySnapshot => {
-        const posts = [];
-        const images = [];
-        querySnapshot.forEach(documentSnapshot => {
-          posts.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-          images.push({
-            uri: documentSnapshot.get('extraData'),
-          })
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
+    .onSnapshot(querySnapshot => {
+      const posts = [];
+      const images = [];
+
+      querySnapshot.forEach(documentSnapshot => {
+        posts.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
         });
+        images.push({
+          uri: documentSnapshot.get('extraData')
+        })
+        
+      });
+      if (!querySnapshot.metadata.hasPendingWrites) {  // <======
         setPosts(posts);
         setImages(images);
-        setLoading(false);
-      
-    })//get the posts and order them by their upvote count
-
+      }
+      setLoading(false);
+    });     
     
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -142,17 +147,22 @@ export function PostsScreen({navigation}) {
             <View style={styles.postUserImageAndInfoBox}>
               <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                   style={styles.postPfp}/>
-              <Text style={styles.authorText}>{item.author}</Text>
+                {item.author !== 'Anonymous' ?
+                <View style={styles.postUserInfo}>
+
+                  <Text style={styles.name}>{item.author}</Text>
+                    <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
+                </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
             </View>
             <View style={styles.postImageView}>
               <Text style={styles.body}>{item.body}</Text>
               {item.extraData ?
                 <TouchableOpacity onPress={() => OpenImage({index})}>
                   <FastImage source={{uri: item.extraData}}
-                                    style={styles.postImage}/></TouchableOpacity>: null}
+                                    style={postImage}/></TouchableOpacity>: null}
             </View>
             <View style={styles.dateAndReplyBox}>
-              <Text style={styles.date}>{item.date}</Text>
+              <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
               <View style={styles.replyCountBox}>
                 <Text style={styles.date}>Replies: </Text>
                 <Text style={styles.date}>{item.replyCount}</Text>
@@ -171,6 +181,7 @@ export function PostsScreen({navigation}) {
 
     const closeModal = () => {
       this.floatingAction.animateButton();
+      setPostText("");
     }
 
     if (loading) {
@@ -251,12 +262,12 @@ const PostError = () => {
 }
 
 const styles = StyleSheet.create({
-  postUserImageAndInfoBox: {flexDirection:'row',flex:1,alignItems:'center'},
+  postUserImageAndInfoBox: {flexDirection:'row',flex:1},
   dateAndReplyBox: {flexDirection:'row'},
     replyCountBox: {flexDirection:'row', marginLeft:'30%'},
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
-    authorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
+    anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
     postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290},
     cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
     postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
@@ -352,4 +363,3 @@ const styles = StyleSheet.create({
       color: 'black',
     },
   });
-

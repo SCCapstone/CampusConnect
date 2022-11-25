@@ -33,7 +33,7 @@ export function DrawerContent(props) {
 
     const getUserData = () => {
         firestore().collection('Users').doc(auth().currentUser.uid).get().then((data) => {
-            userData.setUserName(data.get("username"));
+            userData.setName(data.get("name"));
             userData.setEmail(data.get('email'));
             userData.setBio(data.get('bio'));
             userData.setMajor(data.get("major"));
@@ -81,20 +81,30 @@ export function DrawerContent(props) {
     }, []);
 
     return(
-        <View style={styles.container}>
+        <View style={{flex:1}}>
             <DrawerContentScrollView {...props}
             contentContainerStyle={styles.drawerScrollView}>
                 <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={styles.imageBackgroundView}>
-                    <View style={styles.imageAndUsernameView}>
-                        <View style={styles.pfpImageBox}>
-                            <TouchableOpacity activeOpacity={.9} style={styles.pressableImageView} onLongPress={userData.pfp? () => DeleteAlert() : null}>
-                                <Image source={userData.pfp ? {uri: userData.pfp} : require('./assets/blank2.jpeg')}
-                                        style={styles.pfpStyle}/>
-                            </TouchableOpacity>
+                    <View style={{flexDirection: 'row',alignSelf:'center'}}>
+                        <TouchableOpacity activeOpacity={.9} style={styles.pressableImageView} onLongPress={userData.pfp? () => DeleteAlert() : null}>
+                            <Image source={userData.pfp ? {uri: userData.pfp} : require('./assets/blank2.jpeg')}
+                                    style={styles.pfpStyle}/>
+                        </TouchableOpacity>
+                            <View style={styles.userWelcomeBox}>
+                                <Text style={styles.welcomeText}>Welcome!
+                                <Text style={styles.userNameText}>{'\n'+userData.name.split(" ")[0]}   
+                                </Text>
+                                </Text>
+                            </View>
+                    </View>
+                    <View style={styles.userInfoBox}>
+                        <View style={styles.majorTextBox}>
+                                <Text style={styles.majorText}>Major: </Text>
+                                <Text style={styles.userMajorText}>{userData.major}</Text>
                         </View>
-                        <View style={styles.userWelcomeBox}>
-                            <Text style={styles.welcomeText}>Welcome!</Text>
-                            <Text style={styles.userNameText}>{userData.username}</Text>
+                        <View style={styles.classBox}>
+                                <Text style={styles.classText}>Class of </Text>
+                                <Text style={styles.userClassText}>{userData.gradYear}</Text>
                         </View>
                     </View>
                     
@@ -124,23 +134,20 @@ export function DrawerContent(props) {
 
 
 const styles = StyleSheet.create({
-    pfpImageBox: {flex:1},
-    container:{flex:1},
-    imageAndUsernameView:{flexDirection: 'row',alignSelf:'center'},
     pfpStyle: {height: 80, width: 80, borderRadius:40},
     imageBackgroundView: {padding: 30},
     pressableImageView: {height:80,width:80,borderRadius:40,overflow: 'hidden'},
     drawerScrollView: {backgroundColor: '#73000a'},
-    userNameText: {fontSize: 14, color: 'black', marginRight: 0, textAlign: 'center',alignSelf:'center'},
-    welcomeText: {fontSize: 14, fontWeight: 'bold', color: 'black',textAlign:'center'},
-    userWelcomeBox: {maxWidth:140,maxHeight:70,justifyContent:'center',backgroundColor:'#ebebeb',borderRadius:10,width:130},
+    userNameText: {fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'},
+    welcomeText: {fontSize: 22, fontWeight: 'bold', color: 'black',textAlign:'center'},
+    userWelcomeBox: {marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center',backgroundColor:'#ebebeb'},
     userClassText:{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'},
     classText:{fontSize: 15,fontWeight:'bold', color: 'black'},
     userMajorText:{fontSize: 13, color: 'black',textAlign:'center'},
     majorText: {fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1},
     classBox:{flexDirection: 'row', marginTop:1,alignSelf:'center'},
     majorTextBox:{flexDirection: 'column',alignSelf:'center'},
-    userInfoBox: {marginTop:15,alignSelf:'center',backgroundColor:'#e2e2e2',borderRadius:10},
+    userInfoBox: {marginTop:15,alignSelf:'center',backgroundColor:'#e2e2e2'},
     drawerItemsList: {flex: 1, backgroundColor: '#fff', paddingTop: 10},
     touchableSignout:{paddingVertical: 15},
     signOutText: {

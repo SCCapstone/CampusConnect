@@ -27,10 +27,6 @@ export function WelcomeScreen({navigation}) {
 
   const userData = useContext(AppContext);
 
-  userData.setUserName("");
-  userData.setEmail('')
-  userData.setProfilePic("");
-  userData.setBio('');
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -62,6 +58,12 @@ export function WelcomeScreen({navigation}) {
   }
 
   useEffect(() => {
+    userData.setName("");
+    userData.setEmail('')
+    userData.setMajor("");
+    userData.setGradYear("");
+    userData.setProfilePic("");
+    userData.setBio('');
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
@@ -164,8 +166,7 @@ export function RegisterScreen({ navigation}){
   const [password2, setPassword2] = React.useState("");
 
   const register = () => {
-    const validEmail = email.includes('sc.edu');
-    if (validEmail && email && password && (password === password2)){
+    if (email && password && (password === password2) && email.includes('sc.edu')){
       auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -188,7 +189,9 @@ export function RegisterScreen({ navigation}){
       .set({
         email: email,
         firstLogin: true,
-        username: 'No Name',
+        name: 'No Name',
+        major: 'None',
+        gradYear: 0,
         bio: '',
       })
       .then(() => {
@@ -200,7 +203,7 @@ export function RegisterScreen({ navigation}){
       });
   }
 
- 
+
   return (
     <View style={styles.container}>
       <BackButton/>
@@ -280,7 +283,7 @@ const RegisterAlert = ({email}) => {
 }
 
 const RegisterError = () => {
-  Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
+  Alert.alert('Invalid format', "Make sure passwords are the same and a valid USC email was entered.", [
     { text: "OK"}
   ] );
 }
@@ -292,7 +295,7 @@ const FirebaseError = (error) => {
 }
 
 const LoginError = () => {
-  Alert.alert('Invalid format', "Make sure email and password field are not empty and that you are using a valid USC email.", [
+  Alert.alert('Invalid format', "Make sure email and password field are not empty.", [
     { text: "OK"}
   ] );
 }
