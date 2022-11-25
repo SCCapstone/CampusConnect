@@ -197,7 +197,7 @@ export function PostsScreen({navigation}) {
                         style={styles.postInput}
                         multiline={true}
                         onChangeText={(postText) => setPostText(postText)}
-                        placeholder="Enter youur post"
+                        placeholder="Enter your post"
                         textAlignVertical='top'
                         placeholderTextColor="black"
                         blurOnSubmit={false}
