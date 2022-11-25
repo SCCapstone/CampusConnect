@@ -384,7 +384,7 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(FirstName) => setFirstName(FirstName)}
-              defaultValue={userData.name.split(' ')[0]}
+              defaultValue={userData.name.split(' ') > 0 ? userData.name.split(' ')[0]: null}
               placeholder='Enter first name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
@@ -394,7 +394,7 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(LastName) => setLastName(LastName)}
-              defaultValue={userData.name.split(' ')[1]}
+              defaultValue={userData.name.split(' ') > 1 ? userData.name.split(' ')[1]: null}
               placeholder='Enter last name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
