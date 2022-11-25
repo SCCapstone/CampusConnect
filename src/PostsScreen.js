@@ -60,7 +60,6 @@ export function PostsScreen({navigation}) {
         replyCount:0,
         upvoteCount:1,
         date: moment(firestore.Timestamp.now().toDate()).format('MMMM Do YYYY, h:mm:ss a'),
-        timestamp: Date.now(),
         pfp: userData.pfp,
         replies: [],
         user: '/Users/'+auth().currentUser.uid,
@@ -108,7 +107,6 @@ export function PostsScreen({navigation}) {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
-          console.log(posts);
         });
         setPosts(posts);
         setLoading(false);
