@@ -93,10 +93,8 @@ export function DrawerContent(props) {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.userWelcomeBox}>
-                            <Text style={styles.welcomeText}>Welcome!
-                            <Text style={styles.userNameText}>{userData.username}   
-                            </Text>
-                            </Text>
+                            <Text style={styles.welcomeText}>Welcome!</Text>
+                            <Text style={styles.userNameText}>{userData.username}</Text>
                         </View>
                     </View>
                     
@@ -133,9 +131,9 @@ const styles = StyleSheet.create({
     imageBackgroundView: {padding: 30},
     pressableImageView: {height:80,width:80,borderRadius:40,overflow: 'hidden'},
     drawerScrollView: {backgroundColor: '#73000a'},
-    userNameText: {fontSize: 14, color: 'black', marginRight: 20, textAlign: 'center'},
+    userNameText: {fontSize: 14, color: 'black', marginRight: 0, textAlign: 'center',alignSelf:'center'},
     welcomeText: {fontSize: 14, fontWeight: 'bold', color: 'black',textAlign:'center'},
-    userWelcomeBox: {maxWidth:140,maxHeight:70,justifyContent:'center',backgroundColor:'#ebebeb',borderRadius:10,width:120},
+    userWelcomeBox: {maxWidth:140,maxHeight:70,justifyContent:'center',backgroundColor:'#ebebeb',borderRadius:10,width:130},
     userClassText:{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'},
     classText:{fontSize: 15,fontWeight:'bold', color: 'black'},
     userMajorText:{fontSize: 13, color: 'black',textAlign:'center'},

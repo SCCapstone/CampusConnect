@@ -20,7 +20,7 @@ export function PostsScreen({navigation}) {
 
   //Global userdata var
   const userData = useContext(AppContext);
-  var imageIndex = 0;
+  const [imageIndex,setImageIndex] = useState(0);
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
@@ -100,8 +100,7 @@ export function PostsScreen({navigation}) {
     firestore().collection('Posts').doc(item.key).delete();
   }
   const OpenImage = ({index}) => {
-    imageIndex = index;
-    console.log(index);
+    setImageIndex(index);
     setIsVisible(true);
   }
 
