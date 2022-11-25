@@ -164,7 +164,8 @@ export function RegisterScreen({ navigation}){
   const [password2, setPassword2] = React.useState("");
 
   const register = () => {
-    if (email && password && (password === password2)){
+    const validEmail = email.includes('sc.edu');
+    if (validEmail && email && password && (password === password2)){
       auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -291,7 +292,7 @@ const FirebaseError = (error) => {
 }
 
 const LoginError = () => {
-  Alert.alert('Invalid format', "Make sure email and password field are not empty.", [
+  Alert.alert('Invalid format', "Make sure email and password field are not empty and that you are using a valid USC email.", [
     { text: "OK"}
   ] );
 }

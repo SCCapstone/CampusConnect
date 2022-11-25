@@ -29,6 +29,8 @@ import AppContext from './AppContext';
 import regstyles from './registrationStyles';
 
 export function RegistrationScreen({navigation}) {  
+
+    //We now only require username, since we can already verify the user is a USC student
     const userData = useContext(AppContext);
     const [bio, setBio] = React.useState("");
     const [username, setUserName] = React.useState(userData.username);
