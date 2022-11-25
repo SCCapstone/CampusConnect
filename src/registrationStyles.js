@@ -31,6 +31,16 @@ export default StyleSheet.create({
         borderRadius: 0,
         marginTop: 20,
     },
+    successButtonStyle: {
+      backgroundColor: 'black',
+      color: '#FFFFFF',
+      borderColor: 'black',
+      height: 50,
+      marginHorizontal:'20%',
+      alignItems: 'center',
+      borderRadius: 0,
+      marginTop: 20,
+  },
 
     buttonTextStyle: {
         color: '#FFFFFF',

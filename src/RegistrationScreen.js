@@ -179,7 +179,7 @@ export function RegistrationScreen({navigation}) {
               Registration Successful
             </Text>
             <TouchableOpacity
-              style={regstyles.buttonStyle}
+              style={regstyles.successButtonStyle}
               onPress={() => reset()
               }>
               <Text style={regstyles.buttonTextStyle}>Finish</Text>

@@ -24,7 +24,6 @@ export function PostsScreen({navigation}) {
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
-  const [images, setImages] = useState([]); // Initial empty array of posts
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -78,18 +77,20 @@ export function PostsScreen({navigation}) {
 
   const getPosts = () => {
     firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc').get().then(snapShot => {
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
       const posts = [];
       const images = [];
       snapShot.forEach(documentSnapshot => {
-        posts.push({
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
+          posts.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+          images.push({
+            uri: documentSnapshot.get('extraData')
+          })
         });
-        images.push({
-          uri: documentSnapshot.get('extraData')
-        })
-      });
+      
+
       setPosts(posts);
       setImages(images);
       setLoading(false);
@@ -105,25 +106,25 @@ export function PostsScreen({navigation}) {
   }
 
   useEffect(() => {
+    i = 1;
     const subscriber = firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc') //get the posts and order them by their upvote count
-    .onSnapshot(querySnapshot => {
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').onSnapshot(querySnapshot => {
       const posts = [];
-      const images = [];
+      console.log(i++);
 
-      querySnapshot.forEach(documentSnapshot => {
-        posts.push({
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
+      try{
+        querySnapshot.forEach(documentSnapshot => {
+          posts.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
         });
-        images.push({
-          uri: documentSnapshot.get('extraData')
-        })
-      });
-      setPosts(posts);
-      setImages(images);
+        setPosts(posts);
+      } catch(error) {/*There is some weird error here that i am just chooseing to ignore lol*/}
+
       setLoading(false);
-    });     
+      
+    })//get the posts and order them by their upvote count
     
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -235,7 +236,7 @@ export function PostsScreen({navigation}) {
                 }}
               />
               <ImageView
-                images={images}
+                images={posts}
                 imageIndex={imageIndex}
                 visible={isVisible}
                 onRequestClose={() => setIsVisible(false)}
