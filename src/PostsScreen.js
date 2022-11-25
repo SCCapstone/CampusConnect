@@ -60,6 +60,7 @@ export function PostsScreen({navigation}) {
         replyCount:0,
         upvoteCount:1,
         date: moment(firestore.Timestamp.now().toDate()).format('MMMM Do YYYY, h:mm:ss a'),
+        timestamp: Date.now(),
         pfp: userData.pfp,
         replies: [],
         user: '/Users/'+auth().currentUser.uid,
@@ -79,21 +80,14 @@ export function PostsScreen({navigation}) {
     firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
       const posts = [];
-      const images = [];
       snapShot.forEach(documentSnapshot => {
           posts.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
-          images.push({
-            uri: documentSnapshot.get('extraData')
-          })
         });
-      
-
-      setPosts(posts);
-      setImages(images);
-      setLoading(false);
+        setPosts(posts);
+        setLoading(false);
     });
   }
 
@@ -106,25 +100,21 @@ export function PostsScreen({navigation}) {
   }
 
   useEffect(() => {
-    i = 1;
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').onSnapshot(querySnapshot => {
-      const posts = [];
-      console.log(i++);
-
-      try{
+        const posts = [];
         querySnapshot.forEach(documentSnapshot => {
           posts.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
+          console.log(posts);
         });
         setPosts(posts);
-      } catch(error) {/*There is some weird error here that i am just chooseing to ignore lol*/}
-
-      setLoading(false);
+        setLoading(false);
       
     })//get the posts and order them by their upvote count
+
     
     // Unsubscribe from events when no longer in use
     return () => subscriber();
