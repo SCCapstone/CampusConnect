@@ -24,6 +24,7 @@ export function PostsScreen({navigation}) {
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
+  const [images, setImages] = useState([]); // Initial empty array of images
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -63,7 +64,7 @@ export function PostsScreen({navigation}) {
         pfp: userData.pfp,
         replies: [],
         user: '/Users/'+auth().currentUser.uid,
-        extraContent: ''
+        extraData: ''
       })
       .then(() => closeModal())
       .catch(error => {
@@ -79,13 +80,18 @@ export function PostsScreen({navigation}) {
     firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
       const posts = [];
+      const images = [];
       snapShot.forEach(documentSnapshot => {
           posts.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
+          images.push({
+            uri: documentSnapshot.get('extraData')
+          })
         });
         setPosts(posts);
+        setImages(images);
         setLoading(false);
     });
   }
@@ -95,6 +101,7 @@ export function PostsScreen({navigation}) {
   }
   const OpenImage = ({index}) => {
     imageIndex = index;
+    console.log(index);
     setIsVisible(true);
   }
 
@@ -102,13 +109,18 @@ export function PostsScreen({navigation}) {
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').onSnapshot(querySnapshot => {
         const posts = [];
+        const images = [];
         querySnapshot.forEach(documentSnapshot => {
           posts.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
+          images.push({
+            uri: documentSnapshot.get('extraData'),
+          })
         });
         setPosts(posts);
+        setImages(images);
         setLoading(false);
       
     })//get the posts and order them by their upvote count
@@ -138,7 +150,7 @@ export function PostsScreen({navigation}) {
               {item.extraData ?
                 <TouchableOpacity onPress={() => OpenImage({index})}>
                   <FastImage source={{uri: item.extraData}}
-                                    style={postImage}/></TouchableOpacity>: null}
+                                    style={styles.postImage}/></TouchableOpacity>: null}
             </View>
             <View style={styles.dateAndReplyBox}>
               <Text style={styles.date}>{item.date}</Text>
@@ -224,7 +236,7 @@ export function PostsScreen({navigation}) {
                 }}
               />
               <ImageView
-                images={posts}
+                images={images}
                 imageIndex={imageIndex}
                 visible={isVisible}
                 onRequestClose={() => setIsVisible(false)}
