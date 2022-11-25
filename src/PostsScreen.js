@@ -136,36 +136,31 @@ export function PostsScreen({navigation}) {
 
   const Post = ({item, index}) => (
 
-      <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
+      <View style={styles.postContainer}>
         <View style={styles.upvoteBox}>
           <Text style={styles.upvote}>{item.upvoteCount}</Text>
         </View>
         <TouchableOpacity style={styles.post} onLongPress={() => DeletePostAlert({item})}>
-            <View style={{flexDirection:'row'}}>
+            <View style={styles.postUserImageAndInfoBox}>
               <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
-                                  style={{height: 60, width: 60, borderRadius:40}}/>
+                                  style={styles.postPfp}/>
                 {item.author !== 'Anonymous' ?
-                <View style={{flexDirection:'column'}}>
+                <View style={styles.postUserInfo}>
 
                   <Text style={styles.name}>{item.author}</Text>
-                   <View style={{flexDirection:'row',flexWrap:'wrap'}}>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'}}>{item.authorMajor}</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>|</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>Class of</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>{item.authorGradYear}</Text>
-                  </View>
-                </View>: <Text style={{textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',}}>{item.author}</Text>}
+                    <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
+                </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
             </View>
-            <View style={{flexDirection:'column',flex:1}}>
+            <View style={styles.postImageView}>
               <Text style={styles.body}>{item.body}</Text>
               {item.extraData ?
                 <TouchableOpacity onPress={() => OpenImage({index})}>
                   <FastImage source={{uri: item.extraData}}
-                                    style={{marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290}}/></TouchableOpacity>: null}
+                                    style={postImage}/></TouchableOpacity>: null}
             </View>
-            <View style={{flexDirection:'row'}}>
+            <View style={styles.dateAndReplyBox}>
               <Text style={styles.date}>{item.date}</Text>
-              <View style={{flexDirection:'row', marginLeft:'30%'}}>
+              <View style={styles.replyCountBox}>
                 <Text style={styles.date}>Replies: </Text>
                 <Text style={styles.date}>{item.replyCount}</Text>
               </View>
@@ -187,7 +182,7 @@ export function PostsScreen({navigation}) {
 
     if (loading) {
       return (
-        <View style={[styles.container, styles.horizontal]}>
+        <View style={styles.activityIndicator}>
           <ActivityIndicator size="large" />
         </View>
       )
@@ -209,10 +204,10 @@ export function PostsScreen({navigation}) {
                 <View style={styles.postView}>
                   <View style={{flexDirection:'row'}}>
                     <TouchableOpacity onPress={ () => closeModal()} style={styles.cancelButton}>
-                      <Text style={{fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"}}>Cancel</Text>
+                      <Text style={styles.cancelButtonText}>Cancel</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={ () => PostAlert()} style={styles.postButton}>
-                      <Text style={{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'}}>Post?</Text>
+                      <Text style={styles.postButtonText}>Post?</Text>
                     </TouchableOpacity>
                     </View>
                     <View style={styles.postTextView}>
@@ -263,6 +258,21 @@ const PostError = () => {
 }
 
 const styles = StyleSheet.create({
+  postUserImageAndInfoBox: {flexDirection:'row',flex:1},
+  dateAndReplyBox: {flexDirection:'row'},
+    replyCountBox: {flexDirection:'row', marginLeft:'30%'},
+    postUserInfo:{flexDirection:'column',flex:1},
+    postImageView: {flexDirection:'column',flex:1},
+    anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
+    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290},
+    cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
+    postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
+    majorText : {fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'},
+    postPfp: {height: 60, width: 60, borderRadius:40},
+
+    postContainer: {
+      flexDirection:'row', flex:1
+    },
     postView: {
       height:'45%',
       width:'90%',
