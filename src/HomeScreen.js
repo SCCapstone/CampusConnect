@@ -6,6 +6,7 @@ import { CommonActions } from '@react-navigation/native';
 import { PostsScreen } from './PostsScreen.js';
 import { RegistrationScreen } from './RegistrationScreen.js';
 import { EventsScreen } from './EventsScreen.js'
+import { Chat } from './Chat.js'
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -34,6 +35,7 @@ export function HomeScreen({navigation}) {
         <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
         <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>
         <Drawer.Screen name="Edit Profile" component={RegistrationScreen} options={{headerTitle:'Campus Connect: Edit Profile'}}/>
+        <Drawer.Screen name="Private Chats" component={Chat} options={{headerTitle:'Campus Connect: DMs'}}/>
       </Drawer.Navigator>
   );
 }

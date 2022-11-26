@@ -52,7 +52,6 @@ export default function App() {
     setProfilePic
   }
 
-
   return (
     <AppContext.Provider value={userData}>
       <NavigationContainer>

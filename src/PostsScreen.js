@@ -170,9 +170,10 @@ export function PostsScreen({navigation}) {
                 <Text style={styles.date}>{item.replyCount}</Text>
               </View>
             </View>
+            <View>
+      </View>
         </TouchableOpacity>
       </View>
-
     );
 
     const onRefresh = () => {
@@ -228,6 +229,7 @@ export function PostsScreen({navigation}) {
                     </View>
                     
                 </View>
+                
                 </KeyboardAvoidingView>
               </Modal>
 
@@ -253,6 +255,7 @@ export function PostsScreen({navigation}) {
                 onRequestClose={() => setIsVisible(false)}
               />
           </SafeAreaView>
+          
       );
 }
 
