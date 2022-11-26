@@ -6,6 +6,7 @@ import { CommonActions } from '@react-navigation/native';
 import { PostsScreen } from './PostsScreen.js';
 import { RegistrationScreen } from './RegistrationScreen.js';
 import { EventsScreen } from './EventsScreen.js'
+import { GroupsScreen } from './GroupsScreen.js'
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -31,9 +32,11 @@ export function HomeScreen({navigation}) {
       drawerActiveTintColor: 'white',
       swipeEdgeWidth: 150
     }}>
-        <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
-        <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>
-        <Drawer.Screen name="Edit Profile" component={RegistrationScreen} options={{headerTitle:'Campus Connect: Edit Profile'}}/>
+      <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
+      <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>
+      <Drawer.Screen name="Groups" component={GroupsScreen} options={{headerTitle:'Campus Connect: Groups'}}/>
+      <Drawer.Screen name="Edit Profile" component={RegistrationScreen} options={{headerTitle:'Campus Connect: Edit Profile'}}/>
+
       </Drawer.Navigator>
   );
 }
