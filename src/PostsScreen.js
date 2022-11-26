@@ -52,7 +52,7 @@ export function PostsScreen({navigation}) {
 
   const CreatePost = () => {
 
-    if (postText && postText.length < 1000) {
+    if (postText && postText.length < 1000 && postText.split(/\r\n|\r|\n/).length <= 25 /*this last one checks that there are not too many lines */) {
       firestore()
       .collection('Posts')
       .doc()
@@ -96,7 +96,8 @@ export function PostsScreen({navigation}) {
         posts.push(post);
         if (post.extraData){
           images.push({
-            uri: documentSnapshot.get('extraData')
+            uri: documentSnapshot.get('extraData'),
+            key: documentSnapshot.id
           })
           setImageMap(imageMap.set(postIndex,imageIndex))
           imageIndex++;
@@ -106,6 +107,7 @@ export function PostsScreen({navigation}) {
       setPosts(posts);
       setImages(images);
       setLoading(false);
+      console.log(posts.length)
     });
   }
 
@@ -140,7 +142,8 @@ export function PostsScreen({navigation}) {
         posts.push(post);
         if (post.extraData){
           images.push({
-            uri: documentSnapshot.get('extraData')
+            uri: documentSnapshot.get('extraData'),
+            key: documentSnapshot.id
           })
           setImageMap(imageMap.set(postIndex,imageIndex))
           imageIndex++;
@@ -274,7 +277,7 @@ export function PostsScreen({navigation}) {
                 images={images}
                 imageIndex={imageIndex}
                 visible={isVisible}
-                
+                keyExtractor={item => item.key}
                 onRequestClose={() => setIsVisible(false)}
               />
           </SafeAreaView>
@@ -282,7 +285,7 @@ export function PostsScreen({navigation}) {
 }
 
 const PostError = () => {
-  Alert.alert('Post is too long', "Shorten your post to less than 1000 characters", [
+  Alert.alert('Post is too long', "Shorten your post to less than 1000 characters and 25 or less lines", [
     { text: "Okay.",}
   ] );
 }
