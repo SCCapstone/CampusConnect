@@ -25,6 +25,7 @@ export function PostsScreen({navigation}) {
   const [posts, setPosts] = useState([]); // Initial empty array of posts
   const [images, setImages] = useState([]); // Initial empty array of posts
   const [imageIndex, setImageIndex] = useState(0); // Initial empty array of posts
+  const [imageMap,setImageMap] = useState(new Map()); //a creative way to supres image error
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,16 +84,24 @@ export function PostsScreen({navigation}) {
   const getPosts = () => {
     firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
+      postIndex = 0;
+      var imageIndex = 0;
       const posts = [];
       const images = [];
       snapShot.forEach(documentSnapshot => {
-        posts.push({
+        const post = {
           ...documentSnapshot.data(),
           key: documentSnapshot.id,
-        });
-        images.push({
-          uri: documentSnapshot.get('extraData')
-        })
+        }
+        posts.push(post);
+        if (post.extraData){
+          images.push({
+            uri: documentSnapshot.get('extraData')
+          })
+          setImageMap(imageMap.set(postIndex,imageIndex))
+          imageIndex++;
+        }
+        postIndex++;
       });
       setPosts(posts);
       setImages(images);
@@ -104,7 +113,7 @@ export function PostsScreen({navigation}) {
     firestore().collection('Posts').doc(item.key).delete();
   }
   const OpenImage = ({index}) => {
-    setImageIndex(index)
+    setImageIndex(imageMap.get(index))
     setIsVisible(true);
   }
 
@@ -119,17 +128,24 @@ export function PostsScreen({navigation}) {
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
     .onSnapshot(querySnapshot => {
+      postIndex = 0;
+      var imageIndex = 0;
       const posts = [];
       const images = [];
-
       querySnapshot.forEach(documentSnapshot => {
-        posts.push({
+        const post = {
           ...documentSnapshot.data(),
           key: documentSnapshot.id,
-        });
-        images.push({
-          uri: documentSnapshot.get('extraData')
-        })
+        }
+        posts.push(post);
+        if (post.extraData){
+          images.push({
+            uri: documentSnapshot.get('extraData')
+          })
+          setImageMap(imageMap.set(postIndex,imageIndex))
+          imageIndex++;
+        }
+        postIndex++;
         
       });
       if (!querySnapshot.metadata.hasPendingWrites) {  // <======
@@ -258,6 +274,7 @@ export function PostsScreen({navigation}) {
                 images={images}
                 imageIndex={imageIndex}
                 visible={isVisible}
+                
                 onRequestClose={() => setIsVisible(false)}
               />
           </SafeAreaView>
