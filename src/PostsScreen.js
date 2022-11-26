@@ -107,7 +107,6 @@ export function PostsScreen({navigation}) {
       setPosts(posts);
       setImages(images);
       setLoading(false);
-      console.log(posts.length)
     });
   }
 
@@ -163,43 +162,43 @@ export function PostsScreen({navigation}) {
   }, []);
 
 
-  
-
   const Post = ({item, index}) => (
 
-      <View style={styles.postContainer}>
-        <View style={styles.upvoteBox}>
-          <Text style={styles.upvote}>{item.upvoteCount}</Text>
-        </View>
-        <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
-            <View style={styles.postUserImageAndInfoBox}>
-              <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
-                                  style={styles.postPfp}/>
-                {item.author !== 'Anonymous' ?
-                <View style={styles.postUserInfo}>
-
-                  <Text style={styles.name}>{item.author}</Text>
-                    <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
-                </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
-            </View>
-            <View style={styles.postImageView}>
-              <Text style={styles.body}>{item.body}</Text>
-              {item.extraData ?
-                <TouchableOpacity onPress={() => OpenImage({index})}>
-                  <FastImage source={{uri: item.extraData}}
-                                    style={styles.postImage}/></TouchableOpacity>: null}
-            </View>
-            <View style={styles.dateAndReplyBox}>
-              <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-              <View style={styles.replyCountBox}>
-                <Text style={styles.date}>Replies: </Text>
-                <Text style={styles.date}>{item.replyCount}</Text>
-              </View>
-            </View>
-        </Pressable>
+    <View style={styles.postContainer}>
+      <View style={styles.upvoteBox}>
+        <Text style={styles.upvote}>{item.upvoteCount}</Text>
       </View>
+      <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+          <View style={styles.postUserImageAndInfoBox}>
+            <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+                                style={styles.postPfp}/>
+              {item.author !== 'Anonymous' ?
+              <View style={styles.postUserInfo}>
 
-    );
+                <Text style={styles.name}>{item.author}</Text>
+                  <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
+              </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
+          </View>
+          <View style={styles.postImageView}>
+            <Text style={styles.body}>{item.body}</Text>
+            {item.extraData ?
+              <TouchableOpacity onPress={() => OpenImage({index})}>
+                <FastImage source={{uri: item.extraData}}
+                                  style={styles.postImage}/></TouchableOpacity>: null}
+          </View>
+          <View style={styles.dateAndReplyBox}>
+            <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+            <View style={styles.replyCountBox}>
+              <Text style={styles.date}>Replies: </Text>
+              <Text style={styles.date}>{item.replyCount}</Text>
+            </View>
+          </View>
+      </Pressable>
+    </View>
+
+  );
+
+  React.memo(Post); //This makes the Post function a purecomponent which is more performant?
 
     const onRefresh = () => {
       setRefresh(true);
@@ -297,7 +296,7 @@ const styles = StyleSheet.create({
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
     anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
-    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290},
+    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:200,width:290},
     cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
     postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
     majorText : {fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'},
@@ -392,3 +391,5 @@ const styles = StyleSheet.create({
       color: 'black',
     },
   });
+
+
