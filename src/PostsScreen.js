@@ -166,7 +166,7 @@ export function PostsScreen({navigation}) {
   }, []);
 
 
-  const Post = ({item, index}) => (
+  const Post = React.memo(({item, index}) => (
 
     <View style={styles.postContainer}>
       <View style={styles.upvoteBox}>
@@ -200,9 +200,8 @@ export function PostsScreen({navigation}) {
       </Pressable>
     </View>
 
-  );
+  ))
 
-  React.memo(Post); //This makes the Post function a purecomponent which is more performant?
 
     const onRefresh = () => {
       setRefresh(true);
