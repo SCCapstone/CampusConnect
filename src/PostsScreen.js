@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import FastImage from 'react-native-fast-image'
+import Image from 'react-native-fast-image'
 import ImageView from "react-native-image-viewing";
 
 import moment from 'moment';
@@ -174,7 +174,7 @@ export function PostsScreen({navigation}) {
       </View>
       <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <Image source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
@@ -187,7 +187,7 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ?
               <TouchableOpacity onPress={() => OpenImage({index})}>
-                <FastImage source={{uri: item.extraData}}
+                <Image source={{uri: item.extraData}}
                                   style={styles.postImage}/></TouchableOpacity>: null}
           </View>
           <View style={styles.dateAndReplyBox}>
@@ -277,6 +277,7 @@ export function PostsScreen({navigation}) {
               />
               <ImageView
                 images={images}
+                
                 imageIndex={imageIndex}
                 visible={isVisible}
                 keyExtractor={item => item.key}
