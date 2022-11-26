@@ -84,29 +84,31 @@ export function PostsScreen({navigation}) {
   const getPosts = () => {
     firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
-      postIndex = 0;
-      var imageIndex = 0;
-      const posts = [];
-      const images = [];
-      snapShot.forEach(documentSnapshot => {
-        const post = {
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
-        }
-        posts.push(post);
-        if (post.extraData){
-          images.push({
-            uri: documentSnapshot.get('extraData'),
-            key: documentSnapshot.id
-          })
-          setImageMap(imageMap.set(postIndex,imageIndex))
-          imageIndex++;
-        }
-        postIndex++;
-      });
-      setPosts(posts);
-      setImages(images);
-      setLoading(false);
+      if(!snapShot.metadata.hasPendingWrites)
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+        });
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      
     });
   }
 
@@ -129,32 +131,33 @@ export function PostsScreen({navigation}) {
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
     .onSnapshot(querySnapshot => {
-      postIndex = 0;
-      var imageIndex = 0;
-      const posts = [];
-      const images = [];
-      querySnapshot.forEach(documentSnapshot => {
-        const post = {
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
-        }
-        posts.push(post);
-        if (post.extraData){
-          images.push({
-            uri: documentSnapshot.get('extraData'),
-            key: documentSnapshot.id
-          })
-          setImageMap(imageMap.set(postIndex,imageIndex))
-          imageIndex++;
-        }
-        postIndex++;
-        
-      });
-      if (!querySnapshot.metadata.hasPendingWrites) {  // <======
+      if (!querySnapshot.metadata.hasPendingWrites) {  //This will prevent unecessary reads, because the firebase server may be doing something
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+          
+        });
+
         setPosts(posts);
         setImages(images);
+        setLoading(false);
       }
-      setLoading(false);
     });     
     
     // Unsubscribe from events when no longer in use
