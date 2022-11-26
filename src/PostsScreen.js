@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
-import { DrawerItemList } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import FastImage from 'react-native-fast-image'
 import ImageView from "react-native-image-viewing";
 
@@ -20,11 +20,11 @@ export function PostsScreen({navigation}) {
 
   //Global userdata var
   const userData = useContext(AppContext);
-  var imageIndex = 0;
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
   const [images, setImages] = useState([]); // Initial empty array of posts
+  const [imageIndex, setImageIndex] = useState(0); // Initial empty array of posts
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -104,7 +104,7 @@ export function PostsScreen({navigation}) {
     firestore().collection('Posts').doc(item.key).delete();
   }
   const OpenImage = ({index}) => {
-    imageIndex = index;
+    setImageIndex(index)
     setIsVisible(true);
   }
 
@@ -115,7 +115,7 @@ export function PostsScreen({navigation}) {
 
   }
 
-  useEffect(() => {
+  useEffect(() => { //gets posts asynchronously in the background
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
     .onSnapshot(querySnapshot => {
@@ -168,7 +168,7 @@ export function PostsScreen({navigation}) {
               {item.extraData ?
                 <TouchableOpacity onPress={() => OpenImage({index})}>
                   <FastImage source={{uri: item.extraData}}
-                                    style={postImage}/></TouchableOpacity>: null}
+                                    style={styles.postImage}/></TouchableOpacity>: null}
             </View>
             <View style={styles.dateAndReplyBox}>
               <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
