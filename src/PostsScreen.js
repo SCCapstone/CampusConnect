@@ -1,13 +1,12 @@
 import React from 'react';
 import {useState, useEffect, useContext} from 'react';
-import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
+import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import Image from 'react-native-fast-image'
 import ImageView from "react-native-image-viewing";
 
 import moment from 'moment';
