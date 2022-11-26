@@ -11,10 +11,17 @@ import { GroupsScreen } from './GroupsScreen.js'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { DrawerContent } from './DrawerContent.js';
+import auth from '@react-native-firebase/auth';
 
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
+  if (!auth().currentUser) {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'WelcomeScreen' }]
+ });
+  }
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}
     screenOptions={{
@@ -25,10 +32,11 @@ export function HomeScreen({navigation}) {
       drawerActiveTintColor: 'white',
       swipeEdgeWidth: 150
     }}>
-        <Drawer.Screen name="Home" component={PostsScreen} />
-        <Drawer.Screen name="Events" component={EventsScreen} />
-        <Drawer.Screen name="Groups" component={GroupsScreen} />
-        <Drawer.Screen name="Edit Profile" component={RegistrationScreen} />
+      <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
+      <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>
+      <Drawer.Screen name="Groups" component={GroupsScreen} options={{headerTitle:'Campus Connect: Groups'}}/>
+      <Drawer.Screen name="Edit Profile" component={RegistrationScreen} options={{headerTitle:'Campus Connect: Edit Profile'}}/>
+
       </Drawer.Navigator>
   );
 }

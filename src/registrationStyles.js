@@ -7,6 +7,14 @@ export default StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    activityContainer: {
+      flex: 1,
+    },
+    horizontal: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      padding: 10
+    },
 
     SectionStyle: {
         flexDirection: 'row',

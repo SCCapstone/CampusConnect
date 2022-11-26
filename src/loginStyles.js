@@ -48,6 +48,7 @@ export default StyleSheet.create({
       width: "80%",
       height: 45,
       marginBottom: 20,
+      justifyContent:'center',
       alignItems: "center",
     },
    
@@ -105,7 +106,7 @@ export default StyleSheet.create({
     copyWrightText: {
         color: "black",
         fontWeight: 'bold',
-        fontSize: 12
+        fontSize: 10
     }
     
   });

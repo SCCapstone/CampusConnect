@@ -1,146 +1,382 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import {useState, useEffect, useContext} from 'react';
+import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 
-import {
-  Image,
-} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from "@react-native-firebase/storage";
+import { FloatingAction } from "react-native-floating-action";
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import FastImage from 'react-native-fast-image'
+import ImageView from "react-native-image-viewing";
+
+import moment from 'moment';
+
+import AppContext from './AppContext';
+
+
 
 export function PostsScreen({navigation}) {
-  
-    const POSTS = [
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-4ad53abb28bc',
-        poster: 'Jay Neumann',
-        date: '11/19/2022 11:21:46 PM',
-        body: 'ayoooooo TENNESSEE SUCKS LETS GOOOO!!!! 🐔🐔🐔🐔',
-        upvoteCount: 1523,
-        replyCount: 100,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/1dd5c-1fk-jljctxmq9lfbzs8g8bq-1.jpeg?alt=media&token=400b36b1-8430-49ce-aca0-077c0f50bef5'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bc',
-        poster: 'Shelby Foster',
-        date: '11/12/2022 4:19:25 PM',
-        body: 'total weirdo on greene street last night was staring at me 🤢',
-        upvoteCount: 25,
-        replyCount: 2,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/dM4DrsLJ8GbyJMG4g3p18LFmolj1?alt=media&token=2e847802-258d-4ed6-8135-813ecacf8c2e'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb18ba',
-        poster: 'Terrence McDowell',
-        date: '11/17/2022 10:01:26 AM',
-        body: 'why am i so bad at calculus bro',
-        upvoteCount: 5,
-        replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        poster: 'John Boughner',
-        date: '11/19/2022 3:22:10 PM',
-        body: 'dude wtf',
-        upvoteCount: 2,
-        replyCount: 0,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/ZDgQC6VvlhfyRyo9FNagHlEqXim1?alt=media&token=b0c3b860-cd5f-4b55-9d1f-ef55eca0dde1'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bb',
-        poster: 'Anonymous',
-        date: '11/19/2022 7:00:16 AM',
-        body: 'it\'s 7 am and that dude at mcbryde is still making noises in the morning',
-        upvoteCount: 2,
-        replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/blank2.jpeg?alt=media&token=c0f57795-39fb-4306-a851-271a678c4bf2'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bd',
-        poster: 'Andrew Anderson',
-        date: '11/15/2022 9:01:12 AM',
-        body: 'does anyone know how to get intot the close hipp building',
-        upvoteCount: -1,
-        replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/stHvR8AtYiUPHGk8YhQ13EuNfP52?alt=media&token=9b225c37-cc72-447b-9650-d86dc37732f5'
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53fbb28bd',
-        poster: 'Anonymous',
-        date: '11/20/2022 10:04:52 PM',
-        body: 'i am a potato',
-        upvoteCount: -25,
-        replyCount: 1,
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/blank2.jpeg?alt=media&token=c0f57795-39fb-4306-a851-271a678c4bf2'
-      },
-      ];
 
-    const Post = ({ poster, imageUrl, body, date, upvoteCount, replyCount}) => (
-        <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
-          <View style={styles.upvoteBox}>
-            <Text style={styles.upvote}>{upvoteCount}</Text>
+  //Global userdata var
+  const userData = useContext(AppContext);
+
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [posts, setPosts] = useState([]); // Initial empty array of posts
+  const [images, setImages] = useState([]); // Initial empty array of posts
+  const [imageIndex, setImageIndex] = useState(0); // Initial empty array of posts
+  const [imageMap,setImageMap] = useState(new Map()); //a creative way to supres image error
+  const [isVisible, setIsVisible] = useState(false);
+  const [refreshing, setRefresh] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [postText, setPostText] = useState('');
+
+
+  const PostAlert = () => {
+    Alert.alert('Post?', "Are you sure you want to post?", [
+      { text: "Yes",
+      onPress: () => CreatePost()},
+      { text: "No"}
+    ] );
+  }
+  const DeletePostAlert = ({item}) => {
+    if ('/Users/'+auth().currentUser.uid === item.user) {
+      Alert.alert('Delete Post?', "Are you sure you want to delete?", [
+        { text: "Yes",
+        onPress: () => DeletePost({item})},
+        { text: "No"}
+      ] );
+    }
+
+  }
+
+  const CreatePost = () => {
+
+    if (postText && postText.length < 1000 && postText.split(/\r\n|\r|\n/).length <= 25 /*this last one checks that there are not too many lines */) {
+      firestore()
+      .collection('Posts')
+      .doc()
+      .set({
+        author: userData.name,
+        authorGradYear: userData.gradYear,
+        authorMajor: userData.major,
+        body: postText,
+        replyCount:0,
+        upvoteCount:1,
+        date: firestore.FieldValue.serverTimestamp(),
+        pfp: userData.pfp,
+        replies: [],
+        user: '/Users/'+auth().currentUser.uid,
+        extraData: '',
+        upvoters: {[auth().currentUser.uid]:true},
+        downvoters: new Map(),
+      })
+      .then(() => closeModal())
+      .catch(error => {
+        console.log(error.code)
+      });
+    }
+    else {
+      PostError();
+    }
+  }
+
+  const getPosts = () => {
+    firestore()
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
+      if(!snapShot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+        });
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+      
+    });
+  }
+
+  const DeletePost = ({item}) => {
+    firestore().collection('Posts').doc(item.key).delete();
+  }
+  const OpenImage = ({index}) => {
+    setImageIndex(imageMap.get(index))
+    setIsVisible(true);
+  }
+
+  const UpvotePost = ({item}) => {
+
+  }
+  const DownvotePost = ({item}) => {
+
+  }
+
+  useEffect(() => { //gets posts asynchronously in the background
+    const subscriber = firestore()
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
+    .onSnapshot(querySnapshot => {
+      if (!querySnapshot.metadata.hasPendingWrites) {  //This will prevent unecessary reads, because the firebase server may be doing something
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+          
+        });
+
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+    });     
+    
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
+
+
+  const Post = React.memo(({item, index}) => (
+
+    <View style={styles.postContainer}>
+      <View style={styles.upvoteBox}>
+        <Text style={styles.upvote}>{item.upvoteCount}</Text>
+      </View>
+      <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+          <View style={styles.postUserImageAndInfoBox}>
+            <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+                                style={styles.postPfp}/>
+              {item.author !== 'Anonymous' ?
+              <View style={styles.postUserInfo}>
+
+                <Text style={styles.name}>{item.author}</Text>
+                  <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
+              </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
           </View>
-          <View style={styles.post}>
-              <View style={{flexDirection:'row'}}>
-                <Image source={{uri: imageUrl}}
-                                    style={{height: 50, width: 50, borderRadius:40}}/>
-                <Text style={styles.name}>{poster}</Text>
-              </View>
-              <Text style={styles.body}>{body}</Text>
-              <View style={{flexDirection:'row'}}>
-                <Text style={styles.date}>{date}</Text>
-                <View style={{flexDirection:'row', marginLeft:100}}>
-                  <Text style={styles.date}>Replies: </Text>
-                  <Text style={styles.date}>{replyCount}</Text>
-                </View>
-              </View>
+          <View style={styles.postImageView}>
+            <Text style={styles.body}>{item.body}</Text>
+            {item.extraData ?
+              <TouchableOpacity onPress={() => OpenImage({index})}>
+                <FastImage source={{uri: item.extraData}}
+                                  style={styles.postImage}/></TouchableOpacity>: null}
           </View>
+          <View style={styles.dateAndReplyBox}>
+            <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+            <View style={styles.replyCountBox}>
+              <Text style={styles.date}>Replies: </Text>
+              <Text style={styles.date}>{item.replyCount}</Text>
+            </View>
+          </View>
+      </Pressable>
+    </View>
+
+  ))
+
+
+    const onRefresh = () => {
+      setRefresh(true);
+      getPosts();
+      setRefresh(false);
+    }
+
+    const closeModal = () => {
+      this.floatingAction.animateButton();
+      setPostText("");
+    }
+
+    if (loading) {
+      return (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size="large" />
         </View>
-      );
-
-      const renderPost = ({ item }) => (
-        <Post poster={item.poster} imageUrl={item.imageUrl} body={item.body} date={item.date} upvoteCount={item.upvoteCount} replyCount={item.replyCount}/>
-      );
-
+      )
+    }
+    const renderPost = ({ item, index }) => (
+      <Post item={item} index={index}/>
+    )
       return (
         <SafeAreaView style={styles.container}>
-          <FlatList
-            data={POSTS.sort()}
-            renderItem={renderPost}
-            keyExtractor={item => item.id}
-          />
-        </SafeAreaView>
+            <Modal style={{flex:1}}
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  closeModal()
+                }}
+              >
+              <KeyboardAvoidingView>
+                <View style={styles.postView}>
+                  <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity onPress={ () => closeModal()} style={styles.cancelButton}>
+                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={ () => PostAlert()} style={styles.postButton}>
+                      <Text style={styles.postButtonText}>Post?</Text>
+                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.postTextView}>
+                      <TextInput
+                        style={styles.postInput}
+                        multiline={true}
+                        onChangeText={(postText) => setPostText(postText)}
+                        placeholder="Enter your post"
+                        textAlignVertical='top'
+                        placeholderTextColor="black"
+                        blurOnSubmit={false}
+                      />
+                    </View>
+                    
+                </View>
+                </KeyboardAvoidingView>
+              </Modal>
+
+
+              <FlatList
+                style={{marginTop: '5%'}}
+                data={posts}
+                renderItem={renderPost}
+                keyExtractor={item => item.key}
+                onRefresh={() => onRefresh()}
+                refreshing={refreshing}
+              />
+              <FloatingAction
+                ref={(ref) => { this.floatingAction = ref; }}
+                onPressMain= { () => {
+                  setModalVisible(!modalVisible);
+                }}
+              />
+              <ImageView
+                images={images}
+                imageIndex={imageIndex}
+                visible={isVisible}
+                keyExtractor={item => item.key}
+                onRequestClose={() => setIsVisible(false)}
+              />
+          </SafeAreaView>
       );
 }
 
+const PostError = () => {
+  Alert.alert('Post is too long', "Shorten your post to less than 1000 characters and 25 or less lines", [
+    { text: "Okay.",}
+  ] );
+}
+
 const styles = StyleSheet.create({
+  postUserImageAndInfoBox: {flexDirection:'row',flex:1},
+  dateAndReplyBox: {flexDirection:'row'},
+    replyCountBox: {flexDirection:'row', marginLeft:'30%'},
+    postUserInfo:{flexDirection:'column',flex:1},
+    postImageView: {flexDirection:'column',flex:1},
+    anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
+    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:200,width:290},
+    cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
+    postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
+    majorText : {fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'},
+    postPfp: {height: 60, width: 60, borderRadius:40},
+
+    postContainer: {
+      flexDirection:'row', flex:1
+    },
+    postView: {
+      height:'45%',
+      width:'90%',
+      backgroundColor: 'white',
+      alignSelf:'center',
+      marginTop:'60%',
+      borderRadius:20,
+      justifyContent:'center'
+
+    },
+    postTextView: {
+      flex:.82,
+      borderRadius:20,
+      justifyContent:'center',
+      marginTop:'5%',
+      marginHorizontal:'10%',
+      backgroundColor: '#f2f2f2',
+    },
+    postInput: {
+      backgroundColor: '#f2f2f2',
+      flex: 1,
+      color: 'black',
+      marginHorizontal:'2%',
+      marginVertical:'2%',
+      borderRadius: 20,
+    },
+    postButton: {
+      marginLeft:'57%',
+      marginBottom:'1%',
+    },
+    cancelButton: {
+      alignSelf:'flex-start',
+      marginLeft:'10%',
+      marginBottom:'1%'
+    },
     container: {
       flex: 1,
-      marginTop: StatusBar.currentHeight || 0,
+    },
+    horizontal: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      padding: 10
     },
     post: {
-      backgroundColor: '#cecece',
+      backgroundColor: '#a8a1a6',
+      borderRadius:10,
       padding: 20,
       marginVertical: 8,
-      marginHorizontal: 5,
+      marginRight: '5%',
       alignSelf: 'flex-end',
       flex: 1
     },
     body: {
       fontSize: 18,
       color: 'black',
-      marginTop: 10,
+      marginTop: '5%',
       justifyContent: 'center'
     },
     upvoteBox: {
       height: 40,
-      width:50,
-      marginHorizontal:0,
+      width:35,
+      marginRight:5,
       backgroundColor: '#f2f2f2',
       alignContent: 'center',
       justifyContent: 'center',
       alignSelf:'center'
     },
     upvote: {
-      fontSize: 20,
+      fontSize: 15,
       alignSelf:'center',
       textAlignVertical:'center',
       color: 'black',
@@ -152,9 +388,11 @@ const styles = StyleSheet.create({
       fontStyle: 'italic'
     },
     name: {
+      justifyContent:'center',
       fontSize: 24,
       marginLeft:20,
-      color: 'black'
+      color: 'black',
     },
   });
+
 

@@ -20,39 +20,53 @@ import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
+import AppContext from './AppContext';
+
 
 export function WelcomeScreen({navigation}) {
+
+  const userData = useContext(AppContext);
+
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
   // Handle user state changes
-  async function onAuthStateChanged(user) {
+  function onAuthStateChanged(user) {
     firstLogin = false;
     setUser(user);
     if (initializing) setInitializing(false);
     if (auth().currentUser) {
-      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
+      firestore().collection('Users').doc(auth().currentUser.uid).get().then(userData => {
+        firstLogin = userData.get("firstLogin")
+        if (auth().currentUser && firstLogin) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'RegistrationScreen' }]
+        });
+        }
+        else if (auth().currentUser && !firstLogin) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'HomeScreen' }]
+       });
+      }
+      
+      }).catch(error => {
         FirebaseError(error.code);
       });
-      firstLogin = userData.get("firstLogin");
-    }
-    if (auth().currentUser && firstLogin) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'OnboardingScreen' }]
-   });
-    }
-    else if (auth().currentUser && !firstLogin) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'HomeScreen' }]
-   });
+
     }
   }
 
   useEffect(() => {
+    userData.setName("");
+    userData.setEmail('')
+    userData.setMajor("");
+    userData.setGradYear("");
+    userData.setProfilePic("");
+    userData.setBio('');
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
@@ -72,7 +86,7 @@ export function WelcomeScreen({navigation}) {
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
-        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
     </View>
   );
@@ -143,7 +157,7 @@ export function LoginScreen({ navigation}) {
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
-        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
     </View>
   );
@@ -155,7 +169,7 @@ export function RegisterScreen({ navigation}){
   const [password2, setPassword2] = React.useState("");
 
   const register = () => {
-    if (email && password && (password === password2)){
+    if (email && password && (password === password2) && email.includes('sc.edu')){
       auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -185,27 +199,13 @@ export function RegisterScreen({ navigation}){
       })
       .then(() => {
       console.log('User added!');
-      navigation.navigate('OnboardingScreen')
       })
       .catch(error => {
         FirebaseError(error.code);
       });
   }
 
-  /*const createUserData = () => {
-    database()
-      .ref('/users/' + auth().currentUser.uid)
-      .set({
-        email: email,
-        firstLogin: true,
-        name: 'No Name',
-        major: 'None',
-        gradYear: 0
-  })
-  .then(() => console.log('Data set.'));
-  }*/
 
- 
   return (
     <View style={styles.container}>
       <BackButton/>
@@ -255,7 +255,7 @@ export function RegisterScreen({ navigation}){
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
-        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
     </View>
   );
@@ -285,7 +285,7 @@ const RegisterAlert = ({email}) => {
 }
 
 const RegisterError = () => {
-  Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
+  Alert.alert('Invalid format', "Make sure passwords are the same and a valid USC email was entered.", [
     { text: "OK"}
   ] );
 }

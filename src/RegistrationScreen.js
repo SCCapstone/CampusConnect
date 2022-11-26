@@ -21,23 +21,25 @@ import {
     Alert,
     ScrollView,
     Keyboard,
+    ActivityIndicator
 } from "react-native";
+
+import AppContext from './AppContext';
 
 import regstyles from './registrationStyles';
 
 export function RegistrationScreen({navigation}) {  
+    const userData = useContext(AppContext);
     const [bio, setBio] = React.useState("");
-    const [firstName, setFirstName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
+    const [firstName, setFirstName] = React.useState(userData.name.split(' ')[0]);
+    const [lastName, setLastName] = React.useState(userData.name.split(' ')[1]);
     const [gradDate, setGradDate] = React.useState('');
-    const [errortext, setErrortext] = React.useState("");
     var url = "";
-    const [transferred, setTransferred] = useState(0);
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
+
+
+    const [loading, setLoading] = useState(false); // Set loading to true on component mount
     
-    // Set an initializing state whilst Firebase connects
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
 
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
@@ -54,6 +56,18 @@ export function RegistrationScreen({navigation}) {
     }, []);
 
     const [years, setYears] = useState([
+      {label: '2010', value: '2010'},
+      {label: '2011', value: '2011'},
+      {label: '2012', value: '2012'},
+      {label: '2013', value: '2013'},
+      {label: '2014', value: '2014'},
+      {label: '2015', value: '2015'},
+      {label: '2016', value: '2016'},
+      {label: '2017', value: '2017'},
+      {label: '2018', value: '2018'},
+      {label: '2019', value: '2019'},
+      {label: '2020', value: '2020'},
+      {label: '2021', value: '2021'},
       {label: '2022', value: '2022'},
       {label: '2023', value: '2023'},
       {label: '2024', value: '2024'},
@@ -138,8 +152,10 @@ export function RegistrationScreen({navigation}) {
       {label: 'Hospitality Management', value: 'Hospitality Management'},
       {label: 'Human Resources', value: 'Human Resources'},
       {label: 'Information Science', value: 'Information Science'},
-      {label: 'Integrated Information Technology (Computing)', value: 'Integrated Information Technology (Computing)'},
+      {label: 'Integrated Information Technology (Computing) ', value: 'Integrated Information Technology (Computing) '},
       {label: 'Interdisciplinary Studies', value: 'Interdisciplinary Studies'},
+      {label: 'International Business', value: 'International Business'},
+      {label: 'International Studies', value: 'International Studies'},
       {label: 'Journalism', value: 'Journalism'},
       {label: 'Languages, Literatures and Cultures', value: 'Languages, Literatures and Cultures'},
       {label: 'Law', value: 'Law'},
@@ -157,12 +173,14 @@ export function RegistrationScreen({navigation}) {
       {label: 'Music: Conducting', value: 'Music: Conducting'},
       {label: 'Music: Jazz Studies', value: 'Music: Jazz Studies'},
       {label: 'Music: Music Composition', value: 'Music: Music Composition'},
-      {label: 'Music: Music Industries Studies', value: 'Music: Music Industries Studies'},
+      {label: 'Music: Music Education', value: 'Music: Music Education'},
+      {label: 'Music: Music History', value: 'Music: Music History'},
+      {label: 'Music: Music Industry Studies', value: 'Music: Music Industry Studies'},
       {label: 'Music: Music Pedagogy (Piano / Violin)', value: 'Music: Music Pedagogy (Piano / Violin)'},
       {label: 'Music: Music Performance', value: 'Music: Music Performance'},
       {label: 'Music: Music Theory', value: 'Music: Music Theory'},
-      {label: 'Music: Music Theatre', value: 'Music: Music Theatre'},
-      {label: 'MusicL Opera Theatre', value: 'Music: Opera Theatre'},
+      {label: 'Music: Musical Theatre', value: 'Music: Musical Theatre'},
+      {label: 'Music: Opera Theatre', value: 'Music: Opera Theatre'},
       {label: 'Neuroscience', value: 'Neuroscience'},
       {label: 'Nursing', value: 'Nursing'},
       {label: 'Operations and Supply Chain', value: 'Operations and Supply Chain'},
@@ -171,12 +189,13 @@ export function RegistrationScreen({navigation}) {
       {label: 'Philosophy', value: 'Philosophy'},
       {label: 'Physical Therapy', value: 'Physical Therapy'},
       {label: 'Physics', value: 'Physics'},
-      {label: 'Politcal Science', value: 'Political Science'},
+      {label: 'Political Science', value: 'Political Science'},
       {label: 'Psychology', value: 'Psychology'},
       {label: 'Public Administration', value: 'Public Administration'},
       {label: 'Public Health', value: 'Public Health'},
       {label: 'Public Relations', value: 'Public Relations'},
       {label: 'Real Estate', value: 'Real Estate'},
+      {label: 'Religious Studies', value: 'Religious Studies'},
       {label: 'Retailing', value: 'Retailing'},
       {label: 'Risk Management and Insurance', value: 'Risk Management and Insurance'},
       {label: 'Russian', value: 'Russian'},
@@ -193,46 +212,24 @@ export function RegistrationScreen({navigation}) {
     ]);
 
 
-
-    const choosePhotoFromLibrary = () => {
-      ImagePicker.openPicker({
+    const choosePhotoFromLibrary = async () => {
+      await ImagePicker.openPicker({
         width: 300,
         height: 300,
+        mediaType:'photo'
         /*cropping: true*/
       }).then(image => {
         console.log(image);
         setImage(image.path)
-      });
+      }).catch(error =>{});
     }
   
     if(auth().currentUser == null) {
         navigation.navigate('WelcomeScreen');
     }
 
-    const writeUserData = () =>{
-      firestore()
-      .collection('Users')
-      .doc(auth().currentUser.uid)
-      .update({
-        name: firstName +" "+ lastName,
-        major: major,
-        bio: bio,
-        firstLogin: false,
-        gradYear: gradDate,
-        pfp: url
-      })
-    }
 
-    /*const BackButton = () => {
-      const navigation = useNavigation();
-      return (
-          <TouchableOpacity style={regstyles.backButtonContainer} onPress={ () => navigation.navigate("LoginScreen")}>
-            <ImageBackground style={regstyles.backButtonImage} source={require("./assets/back_arrow.png")} />
-          </TouchableOpacity>
-      )
-    }*/
-    
-    const completeReg = async () => {
+    const uploadPic = async () =>{
       const reference = storage().ref(auth().currentUser.uid);
       if (image) {
         await reference.putFile(image).catch(error => {
@@ -240,13 +237,92 @@ export function RegistrationScreen({navigation}) {
       });
       url = await reference.getDownloadURL();
       }
-      writeUserData();
-      setRegistraionSuccess(true);
+
     }
 
+    const writeUserData = async () =>{
+      setLoading(true)
+      const bioLengthValid = bio.length <= 150;
+      if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
+        await uploadPic();
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName.trim() +" "+ lastName.trim(),
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+          bio: bio,
+          pfp: url
+        }).then(() => {
+          setRegistraionSuccess(true);
+        })
+      }
+      else if (firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid && image) {
+
+        await uploadPic();
+
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName.trim() +" "+ lastName.trim(),
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+          pfp: url
+        }).then(() => {
+          setRegistraionSuccess(true);
+        })
+      }
+      else if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid) {
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName.trim() +" "+ lastName.trim(),
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+          bio: bio
+        }).then(() => {
+          setRegistraionSuccess(true);
+        })
+      }
+      else if(firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid) {
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+          name: firstName.trim() +" "+ lastName.trim(),
+          major: major,
+          firstLogin: false,
+          gradYear: gradDate,
+        }).then(() => {
+          setRegistraionSuccess(true);
+        })
+      }
+      else {
+        RegisterError();
+      }
+      setLoading(false);
+    }
+
+
     const reset = () => {
-      navigation.navigate('HomeScreen')
+      url = "";
+      setFirstName("")
+      setLastName("")
+      setGradDate("")
+      setMajor("")
+      setBio("")
+      setImage("")
       setRegistraionSuccess(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeScreen' }]
+   });
     }
 
     if (registraionSuccess) {
@@ -278,6 +354,14 @@ export function RegistrationScreen({navigation}) {
         );
       }
 
+      if (loading) {
+        return (
+          <View style={[regstyles.activityContainer, regstyles.horizontal]}>
+            <ActivityIndicator size="large" />
+          </View>
+        )
+      }
+
     return(
     <SafeAreaView style={regstyles.container}>
     <ScrollView nestedScrollEnabled={true}>
@@ -300,7 +384,8 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(FirstName) => setFirstName(FirstName)}
-              placeholder="Enter First Name"
+              defaultValue={userData.name.split(' ').length > 0 ? userData.name.split(' ')[0]: null}
+              placeholder='Enter first name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -309,7 +394,8 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(LastName) => setLastName(LastName)}
-              placeholder="Enter Last Name"
+              defaultValue={userData.name.split(' ').length > 1 ? userData.name.split(' ')[1]: null}
+              placeholder='Enter last name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -317,7 +403,7 @@ export function RegistrationScreen({navigation}) {
           <View style={regstyles.SectionStyle}>
           <DropDownPicker
               style={regstyles.inputStyle}
-              placeholder="Select Grad Year"
+              placeholder="Select Grad Year (Required)"
               open={open2}
               onOpen={onYearOpen}
               value={gradDate}
@@ -332,7 +418,7 @@ export function RegistrationScreen({navigation}) {
           <View style={regstyles.SectionStyle}>
           <DropDownPicker
               style={regstyles.inputStyle}
-              placeholder="Select Major"
+              placeholder="Select Major (Required)"
               open={open}
               onOpen={onMajorOpen}
               value={major}
@@ -348,7 +434,8 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.bioStyle}
               onChangeText={(bio) => setBio(bio)}
-              placeholder="Enter a short Bio"
+              placeholder="Enter a short Bio (optional) (150 characters max)"
+              defaultValue={userData.bio}
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
@@ -356,17 +443,12 @@ export function RegistrationScreen({navigation}) {
           
           <View style={regstyles.btnParentSection}>
             <TouchableOpacity onPress={choosePhotoFromLibrary} style={regstyles.btnSection}  >
-              <Text style={regstyles.btnText}>Choose Photo From Library (optional)</Text>
+              <Text style={regstyles.btnText}>{image ? 'Pic Loaded ✅' : 'Choose Photo From Library (optional)'}</Text>
             </TouchableOpacity>
           </View>
-
-
-          {errortext != '' ? ( <Text 
-          style ={regstyles.errorStyle}> {errortext}
-          </Text> ) : null}
           <TouchableOpacity
             style={regstyles.buttonStyle}
-            onPress={completeReg}>
+            onPress={writeUserData}>
             <Text style = {regstyles.buttonTextStyle}>REGISTER</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
@@ -385,12 +467,7 @@ const FirebaseError = (error) => {
   ] );
 }
 const RegisterError = () => {
-    Alert.alert('Invalid format', "Make sure passwords are the same and a valid email was entered.", [
+    Alert.alert('Error', "Make sure all required fields are filled out and that the bio is less than 151 characters", [
       { text: "OK"}
     ] );
 }
-const RegisterAlert = ({email}) => {
-    Alert.alert('Registered!', "Successfully registered " + email, [
-      { text: "OK"}
-    ] );
-  }
