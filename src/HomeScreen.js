@@ -6,6 +6,7 @@ import { CommonActions } from '@react-navigation/native';
 import { PostsScreen } from './PostsScreen.js';
 import { RegistrationScreen } from './RegistrationScreen.js';
 import { EventsScreen } from './EventsScreen.js'
+import { GroupsScreen } from './GroupsScreen.js'
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -26,6 +27,7 @@ export function HomeScreen({navigation}) {
     }}>
         <Drawer.Screen name="Home" component={PostsScreen} />
         <Drawer.Screen name="Events" component={EventsScreen} />
+        <Drawer.Screen name="Groups" component={GroupsScreen} />
         <Drawer.Screen name="Edit Profile" component={RegistrationScreen} />
       </Drawer.Navigator>
   );
