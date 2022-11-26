@@ -83,33 +83,31 @@ export function DrawerContent(props) {
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}
-            contentContainerStyle={{backgroundColor: '#73000a'}}>
-                <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={{padding: 30}}>
+            contentContainerStyle={styles.drawerScrollView}>
+                <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={styles.imageBackgroundView}>
                     <View style={{flexDirection: 'row',alignSelf:'center'}}>
-                        <TouchableOpacity activeOpacity={.9} style={{height:80,width:80,borderRadius:40,overflow: 'hidden'}} onLongPress={userData.pfp? () => DeleteAlert() : null}>
+                        <TouchableOpacity activeOpacity={.9} style={styles.pressableImageView} onLongPress={userData.pfp? () => DeleteAlert() : null}>
                             <Image source={userData.pfp ? {uri: userData.pfp} : require('./assets/blank2.jpeg')}
-                                    style={{height: 80, width: 80, borderRadius:40}}/>
+                                    style={styles.pfpStyle}/>
                         </TouchableOpacity>
-                            <View backgroundColor='#ebebeb' style={{marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center'}}>
-                                <Text style={{fontSize: 22, fontWeight: 'bold', color: 'black',textAlign:'center'}}>Welcome!
-                                <Text style={{fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'}}>{'\n'+userData.name.split(" ")[0]}   
-                                </Text>
-                                </Text>
+                            <View style={styles.userWelcomeBox}>
+                                <Text style={styles.welcomeText}>Welcome!</Text>
+                                <Text style={styles.userNameText}>{userData.name.split(" ").length > 0 ? userData.name.split(" ")[0] : 'Error: 404'}</Text>
                             </View>
                     </View>
-                    <View backgroundColor='#ebebeb' style={{marginTop:15,alignSelf:'center'}}>
-                        <View style={{flexDirection: 'column',alignSelf:'center'}}>
-                                <Text style={{fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1}}>Major: </Text>
-                                <Text style={{fontSize: 13, color: 'black',textAlign:'center'}}>{userData.major}</Text>
+                    <View style={styles.userInfoBox}>
+                        <View style={styles.majorTextBox}>
+                                <Text style={styles.majorText}>Major: </Text>
+                                <Text style={styles.userMajorText}>{userData.major}</Text>
                         </View>
-                        <View style={{flexDirection: 'row', marginTop:1,alignSelf:'center'}}>
-                                <Text style={{fontSize: 15,fontWeight:'bold', color: 'black'}}>Class of </Text>
-                                <Text style={{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'}}>{userData.gradYear}</Text>
+                        <View style={styles.classBox}>
+                                <Text style={styles.classText}>Class of </Text>
+                                <Text style={styles.userClassText}>{userData.gradYear}</Text>
                         </View>
                     </View>
                     
                 </ImageBackground>
-                    <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>  
+                    <View style={styles.drawerItemsList}>  
                         <DrawerItemList {...props}/>
                     </View> 
             </DrawerContentScrollView>
@@ -120,14 +118,10 @@ export function DrawerContent(props) {
                    });
     })}
 
-                style={{paddingVertical: 15}}>
+                style={styles.touchableSignout}>
                 <View>
                     <Text
-                    style={{
-                        fontSize: 15,
-                        marginLeft: 20,
-                        color: 'black'
-                    }}>
+                    style={styles.signOutText}>
                     Sign Out
                     </Text>
                 </View>
@@ -138,7 +132,27 @@ export function DrawerContent(props) {
 
 
 const styles = StyleSheet.create({
-
+    pfpStyle: {height: 80, width: 80, borderRadius:40},
+    imageBackgroundView: {padding: 30},
+    pressableImageView: {height:80,width:80,borderRadius:40,overflow: 'hidden'},
+    drawerScrollView: {backgroundColor: '#73000a'},
+    userNameText: {fontSize: 20, color: 'black',fontWeight:'bold', textAlign: 'center'},
+    welcomeText: {fontSize: 20, fontWeight: 'bold', color: 'black',textAlign:'center'},
+    userWelcomeBox: {marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center',backgroundColor:'#ebebeb'},
+    userClassText:{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'},
+    classText:{fontSize: 15,fontWeight:'bold', color: 'black'},
+    userMajorText:{fontSize: 13, color: 'black', fontWeight:'bold',textAlign:'center'},
+    majorText: {fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1},
+    classBox:{flexDirection: 'row', marginTop:1,alignSelf:'center'},
+    majorTextBox:{flexDirection: 'column',alignSelf:'center'},
+    userInfoBox: {marginTop:15,alignSelf:'center',backgroundColor:'#e2e2e2'},
+    drawerItemsList: {flex: 1, backgroundColor: '#fff', paddingTop: 10},
+    touchableSignout:{paddingVertical: 15},
+    signOutText: {
+        fontSize: 15,
+        marginLeft: 20,
+        color: 'black'
+    },
     backButtonContainer: {
       backgroundColor: "white",
       marginLeft: 50,

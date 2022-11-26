@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
-import { DrawerItemList } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import FastImage from 'react-native-fast-image'
 import ImageView from "react-native-image-viewing";
 
@@ -20,11 +20,12 @@ export function PostsScreen({navigation}) {
 
   //Global userdata var
   const userData = useContext(AppContext);
-  var imageIndex = 0;
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
   const [images, setImages] = useState([]); // Initial empty array of posts
+  const [imageIndex, setImageIndex] = useState(0); // Initial empty array of posts
+  const [imageMap,setImageMap] = useState(new Map()); //a creative way to supres image error
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,7 +52,7 @@ export function PostsScreen({navigation}) {
 
   const CreatePost = () => {
 
-    if (postText && postText.length < 1000) {
+    if (postText && postText.length < 1000 && postText.split(/\r\n|\r|\n/).length <= 25 /*this last one checks that there are not too many lines */) {
       firestore()
       .collection('Posts')
       .doc()
@@ -62,11 +63,13 @@ export function PostsScreen({navigation}) {
         body: postText,
         replyCount:0,
         upvoteCount:1,
-        date: moment(firestore.Timestamp.now().toDate()).format('MMMM Do YYYY, h:mm:ss a'),
+        date: firestore.FieldValue.serverTimestamp(),
         pfp: userData.pfp,
         replies: [],
         user: '/Users/'+auth().currentUser.uid,
-        extraContent: ''
+        extraData: '',
+        upvoters: {[auth().currentUser.uid]:true},
+        downvoters: new Map(),
       })
       .then(() => closeModal())
       .catch(error => {
@@ -80,21 +83,33 @@ export function PostsScreen({navigation}) {
 
   const getPosts = () => {
     firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc').get().then(snapShot => {
-      const posts = [];
-      const images = [];
-      snapShot.forEach(documentSnapshot => {
-        posts.push({
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
+      if(!snapShot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
         });
-        images.push({
-          uri: documentSnapshot.get('extraData')
-        })
-      });
-      setPosts(posts);
-      setImages(images);
-      setLoading(false);
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+      
     });
   }
 
@@ -102,29 +117,48 @@ export function PostsScreen({navigation}) {
     firestore().collection('Posts').doc(item.key).delete();
   }
   const OpenImage = ({index}) => {
-    imageIndex = index;
+    setImageIndex(imageMap.get(index))
     setIsVisible(true);
   }
 
-  useEffect(() => {
-    const subscriber = firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc') //get the posts and order them by their upvote count
-    .onSnapshot(querySnapshot => {
-      const posts = [];
-      const images = [];
+  const UpvotePost = ({item}) => {
 
-      querySnapshot.forEach(documentSnapshot => {
-        posts.push({
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
+  }
+  const DownvotePost = ({item}) => {
+
+  }
+
+  useEffect(() => { //gets posts asynchronously in the background
+    const subscriber = firestore()
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
+    .onSnapshot(querySnapshot => {
+      if (!querySnapshot.metadata.hasPendingWrites) {  //This will prevent unecessary reads, because the firebase server may be doing something
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+          
         });
-        images.push({
-          uri: documentSnapshot.get('extraData')
-        })
-      });
-      setPosts(posts);
-      setImages(images);
-      setLoading(false);
+
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
     });     
     
     // Unsubscribe from events when no longer in use
@@ -132,49 +166,42 @@ export function PostsScreen({navigation}) {
   }, []);
 
 
-  
+  const Post = React.memo(({item, index}) => (
 
-  const Post = ({item, index}) => (
-
-      <View style={{flexDirection:'row', flex:1, marginHorizontal: 10}}>
-        <View style={styles.upvoteBox}>
-          <Text style={styles.upvote}>{item.upvoteCount}</Text>
-        </View>
-        <TouchableOpacity style={styles.post} onLongPress={() => DeletePostAlert({item})}>
-            <View style={{flexDirection:'row'}}>
-              <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
-                                  style={{height: 60, width: 60, borderRadius:40}}/>
-                {item.author !== 'Anonymous' ?
-                <View style={{flexDirection:'column'}}>
-
-                  <Text style={styles.name}>{item.author}</Text>
-                   <View style={{flexDirection:'row',flexWrap:'wrap'}}>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'}}>{item.authorMajor}</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>|</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>Class of</Text>
-                    <Text style={{fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'1%',color:'black'}}>{item.authorGradYear}</Text>
-                  </View>
-                </View>: <Text style={{textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',}}>{item.author}</Text>}
-            </View>
-            <View style={{flexDirection:'column',flex:1}}>
-              <Text style={styles.body}>{item.body}</Text>
-              {item.extraData ?
-                <TouchableOpacity onPress={() => OpenImage({index})}>
-                  <FastImage source={{uri: item.extraData}}
-                                    style={{marginTop:20,alignSelf:'center',borderRadius:10,height:180,width:290}}/></TouchableOpacity>: null}
-            </View>
-            <View style={{flexDirection:'row'}}>
-              <Text style={styles.date}>{item.date}</Text>
-              <View style={{flexDirection:'row', marginLeft:'30%'}}>
-                <Text style={styles.date}>Replies: </Text>
-                <Text style={styles.date}>{item.replyCount}</Text>
-              </View>
-            </View>
-            <View>
+    <View style={styles.postContainer}>
+      <View style={styles.upvoteBox}>
+        <Text style={styles.upvote}>{item.upvoteCount}</Text>
       </View>
-        </TouchableOpacity>
-      </View>
-    );
+      <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+          <View style={styles.postUserImageAndInfoBox}>
+            <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+                                style={styles.postPfp}/>
+              {item.author !== 'Anonymous' ?
+              <View style={styles.postUserInfo}>
+
+                <Text style={styles.name}>{item.author}</Text>
+                  <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
+              </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
+          </View>
+          <View style={styles.postImageView}>
+            <Text style={styles.body}>{item.body}</Text>
+            {item.extraData ?
+              <TouchableOpacity onPress={() => OpenImage({index})}>
+                <FastImage source={{uri: item.extraData}}
+                                  style={styles.postImage}/></TouchableOpacity>: null}
+          </View>
+          <View style={styles.dateAndReplyBox}>
+            <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+            <View style={styles.replyCountBox}>
+              <Text style={styles.date}>Replies: </Text>
+              <Text style={styles.date}>{item.replyCount}</Text>
+            </View>
+          </View>
+      </Pressable>
+    </View>
+
+  ))
+
 
     const onRefresh = () => {
       setRefresh(true);
@@ -184,11 +211,12 @@ export function PostsScreen({navigation}) {
 
     const closeModal = () => {
       this.floatingAction.animateButton();
+      setPostText("");
     }
 
     if (loading) {
       return (
-        <View style={[styles.container, styles.horizontal]}>
+        <View style={styles.activityIndicator}>
           <ActivityIndicator size="large" />
         </View>
       )
@@ -210,10 +238,10 @@ export function PostsScreen({navigation}) {
                 <View style={styles.postView}>
                   <View style={{flexDirection:'row'}}>
                     <TouchableOpacity onPress={ () => closeModal()} style={styles.cancelButton}>
-                      <Text style={{fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"}}>Cancel</Text>
+                      <Text style={styles.cancelButtonText}>Cancel</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={ () => PostAlert()} style={styles.postButton}>
-                      <Text style={{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'}}>Post?</Text>
+                      <Text style={styles.postButtonText}>Post?</Text>
                     </TouchableOpacity>
                     </View>
                     <View style={styles.postTextView}>
@@ -221,7 +249,7 @@ export function PostsScreen({navigation}) {
                         style={styles.postInput}
                         multiline={true}
                         onChangeText={(postText) => setPostText(postText)}
-                        placeholder="Enter ur post"
+                        placeholder="Enter your post"
                         textAlignVertical='top'
                         placeholderTextColor="black"
                         blurOnSubmit={false}
@@ -252,6 +280,7 @@ export function PostsScreen({navigation}) {
                 images={images}
                 imageIndex={imageIndex}
                 visible={isVisible}
+                keyExtractor={item => item.key}
                 onRequestClose={() => setIsVisible(false)}
               />
           </SafeAreaView>
@@ -260,12 +289,27 @@ export function PostsScreen({navigation}) {
 }
 
 const PostError = () => {
-  Alert.alert('Post is too long', "Shorten your post to less than 1000 characters", [
+  Alert.alert('Post is too long', "Shorten your post to less than 1000 characters and 25 or less lines", [
     { text: "Okay.",}
   ] );
 }
 
 const styles = StyleSheet.create({
+  postUserImageAndInfoBox: {flexDirection:'row',flex:1},
+  dateAndReplyBox: {flexDirection:'row'},
+    replyCountBox: {flexDirection:'row', marginLeft:'30%'},
+    postUserInfo:{flexDirection:'column',flex:1},
+    postImageView: {flexDirection:'column',flex:1},
+    anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
+    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:200,width:290},
+    cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
+    postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
+    majorText : {fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'},
+    postPfp: {height: 60, width: 60, borderRadius:40},
+
+    postContainer: {
+      flexDirection:'row', flex:1
+    },
     postView: {
       height:'45%',
       width:'90%',
@@ -310,7 +354,7 @@ const styles = StyleSheet.create({
       padding: 10
     },
     post: {
-      backgroundColor: '#c8c4c7',
+      backgroundColor: '#a8a1a6',
       borderRadius:10,
       padding: 20,
       marginVertical: 8,
@@ -352,4 +396,5 @@ const styles = StyleSheet.create({
       color: 'black',
     },
   });
+
 

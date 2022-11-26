@@ -221,7 +221,7 @@ export function RegistrationScreen({navigation}) {
       }).then(image => {
         console.log(image);
         setImage(image.path)
-      });
+      }).catch(error =>{});
     }
   
     if(auth().currentUser == null) {
@@ -243,13 +243,13 @@ export function RegistrationScreen({navigation}) {
     const writeUserData = async () =>{
       setLoading(true)
       const bioLengthValid = bio.length <= 150;
-      if (firstName && lastName && major && gradDate && bio && bioLengthValid && image) {
+      if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
         .update({
-          name: firstName +" "+ lastName,
+          name: firstName.trim() +" "+ lastName.trim(),
           major: major,
           firstLogin: false,
           gradYear: gradDate,
@@ -259,7 +259,7 @@ export function RegistrationScreen({navigation}) {
           setRegistraionSuccess(true);
         })
       }
-      else if (firstName && lastName && major && gradDate && bioLengthValid && image) {
+      else if (firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid && image) {
 
         await uploadPic();
 
@@ -267,7 +267,7 @@ export function RegistrationScreen({navigation}) {
         .collection('Users')
         .doc(auth().currentUser.uid)
         .update({
-          name: firstName +" "+ lastName,
+          name: firstName.trim() +" "+ lastName.trim(),
           major: major,
           firstLogin: false,
           gradYear: gradDate,
@@ -276,12 +276,12 @@ export function RegistrationScreen({navigation}) {
           setRegistraionSuccess(true);
         })
       }
-      else if (firstName && lastName && major && gradDate && bio && bioLengthValid) {
+      else if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid) {
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
         .update({
-          name: firstName +" "+ lastName,
+          name: firstName.trim() +" "+ lastName.trim(),
           major: major,
           firstLogin: false,
           gradYear: gradDate,
@@ -290,12 +290,12 @@ export function RegistrationScreen({navigation}) {
           setRegistraionSuccess(true);
         })
       }
-      else if(firstName && lastName && major && gradDate && bioLengthValid) {
+      else if(firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid) {
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
         .update({
-          name: firstName +" "+ lastName,
+          name: firstName.trim() +" "+ lastName.trim(),
           major: major,
           firstLogin: false,
           gradYear: gradDate,
@@ -384,7 +384,7 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(FirstName) => setFirstName(FirstName)}
-              defaultValue={userData.name.split(' ')[0]}
+              defaultValue={userData.name.split(' ').length > 0 ? userData.name.split(' ')[0]: null}
               placeholder='Enter first name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
@@ -394,7 +394,7 @@ export function RegistrationScreen({navigation}) {
             <TextInput
               style={regstyles.inputStyle}
               onChangeText={(LastName) => setLastName(LastName)}
-              defaultValue={userData.name.split(' ')[1]}
+              defaultValue={userData.name.split(' ').length > 1 ? userData.name.split(' ')[1]: null}
               placeholder='Enter last name (Required)'
               placeholderTextColor="gray"
               blurOnSubmit={false}
@@ -435,6 +435,7 @@ export function RegistrationScreen({navigation}) {
               style={regstyles.bioStyle}
               onChangeText={(bio) => setBio(bio)}
               placeholder="Enter a short Bio (optional) (150 characters max)"
+              defaultValue={userData.bio}
               placeholderTextColor="gray"
               blurOnSubmit={false}
             />
