@@ -33,27 +33,30 @@ export function WelcomeScreen({navigation}) {
   const [user, setUser] = useState();
 
   // Handle user state changes
-  async function onAuthStateChanged(user) {
+  function onAuthStateChanged(user) {
     firstLogin = false;
     setUser(user);
     if (initializing) setInitializing(false);
     if (auth().currentUser) {
-      const userData = await firestore().collection('Users').doc(auth().currentUser.uid).get().catch(error => {
+      firestore().collection('Users').doc(auth().currentUser.uid).get().then(userData => {
+        firstLogin = userData.get("firstLogin")
+        if (auth().currentUser && firstLogin) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'RegistrationScreen' }]
+        });
+        }
+        else if (auth().currentUser && !firstLogin) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'HomeScreen' }]
+       });
+      }
+      
+      }).catch(error => {
         FirebaseError(error.code);
       });
-      firstLogin = userData.get("firstLogin");
-    }
-    if (auth().currentUser && firstLogin) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'OnboardingScreen' }]
-   });
-    }
-    else if (auth().currentUser && !firstLogin) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'HomeScreen' }]
-   });
+
     }
   }
 
@@ -83,7 +86,7 @@ export function WelcomeScreen({navigation}) {
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
-        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
     </View>
   );
@@ -154,7 +157,7 @@ export function LoginScreen({ navigation}) {
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
-        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
     </View>
   );
@@ -196,7 +199,6 @@ export function RegisterScreen({ navigation}){
       })
       .then(() => {
       console.log('User added!');
-      navigation.navigate('OnboardingScreen')
       })
       .catch(error => {
         FirebaseError(error.code);
@@ -253,7 +255,7 @@ export function RegisterScreen({ navigation}){
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
-        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
     </View>
   );
