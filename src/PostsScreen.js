@@ -84,7 +84,7 @@ export function PostsScreen({navigation}) {
   const getPosts = () => {
     firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
-      if(!snapShot.metadata.hasPendingWrites)
+      if(!snapShot.metadata.hasPendingWrites) {
         postIndex = 0;
         var imageIndex = 0;
         const posts = [];
@@ -108,6 +108,7 @@ export function PostsScreen({navigation}) {
         setPosts(posts);
         setImages(images);
         setLoading(false);
+      }
       
     });
   }
