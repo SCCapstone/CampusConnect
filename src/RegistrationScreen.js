@@ -221,7 +221,7 @@ export function RegistrationScreen({navigation}) {
       }).then(image => {
         console.log(image);
         setImage(image.path)
-      });
+      }).catch(error =>{});
     }
   
     if(auth().currentUser == null) {

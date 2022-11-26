@@ -66,7 +66,9 @@ export function PostsScreen({navigation}) {
         pfp: userData.pfp,
         replies: [],
         user: '/Users/'+auth().currentUser.uid,
-        extraData: ''
+        extraData: '',
+        upvoters: {[auth().currentUser.uid]:true},
+        downvoters: new Map(),
       })
       .then(() => closeModal())
       .catch(error => {
@@ -104,6 +106,13 @@ export function PostsScreen({navigation}) {
   const OpenImage = ({index}) => {
     imageIndex = index;
     setIsVisible(true);
+  }
+
+  const UpvotePost = ({item}) => {
+
+  }
+  const DownvotePost = ({item}) => {
+
   }
 
   useEffect(() => {
@@ -321,7 +330,7 @@ const styles = StyleSheet.create({
       padding: 10
     },
     post: {
-      backgroundColor: '#c8c4c7',
+      backgroundColor: '#a8a1a6',
       borderRadius:10,
       padding: 20,
       marginVertical: 8,

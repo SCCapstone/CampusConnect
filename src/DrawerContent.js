@@ -91,10 +91,8 @@ export function DrawerContent(props) {
                                     style={styles.pfpStyle}/>
                         </TouchableOpacity>
                             <View style={styles.userWelcomeBox}>
-                                <Text style={styles.welcomeText}>Welcome!
-                                <Text style={styles.userNameText}>{'\n'+userData.name.split(" ")[0]}
-                                </Text>
-                                </Text>
+                                <Text style={styles.welcomeText}>Welcome!</Text>
+                                <Text style={styles.userNameText}>{userData.name.split(" ").length > 0 ? userData.name.split(" ")[0] : 'Error: 404'}</Text>
                             </View>
                     </View>
                     <View style={styles.userInfoBox}>
@@ -138,12 +136,12 @@ const styles = StyleSheet.create({
     imageBackgroundView: {padding: 30},
     pressableImageView: {height:80,width:80,borderRadius:40,overflow: 'hidden'},
     drawerScrollView: {backgroundColor: '#73000a'},
-    userNameText: {fontSize: 22, color: 'black', marginRight: 20, textAlign: 'center'},
-    welcomeText: {fontSize: 22, fontWeight: 'bold', color: 'black',textAlign:'center'},
+    userNameText: {fontSize: 20, color: 'black',fontWeight:'bold', textAlign: 'center'},
+    welcomeText: {fontSize: 20, fontWeight: 'bold', color: 'black',textAlign:'center'},
     userWelcomeBox: {marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center',backgroundColor:'#ebebeb'},
     userClassText:{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'},
     classText:{fontSize: 15,fontWeight:'bold', color: 'black'},
-    userMajorText:{fontSize: 13, color: 'black',textAlign:'center'},
+    userMajorText:{fontSize: 13, color: 'black', fontWeight:'bold',textAlign:'center'},
     majorText: {fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1},
     classBox:{flexDirection: 'row', marginTop:1,alignSelf:'center'},
     majorTextBox:{flexDirection: 'column',alignSelf:'center'},
