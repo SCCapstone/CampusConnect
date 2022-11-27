@@ -1,51 +1,40 @@
 import * as React from 'react';
 import { useState, useEffect, useContext, Component, Fragment } from 'react';
-import { Button, View, Image, Text, TouchableOpacity } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import storage from "@react-native-firebase/storage";
 import DropDownPicker from 'react-native-dropdown-picker';
-import * as Progress from 'react-native-progress';
 import ImagePicker from 'react-native-image-crop-picker';
-
 import {
     SafeAreaView,
-    StyleSheet,
-    ImageBackground,
     TextInput,
     KeyboardAvoidingView,
     Alert,
     ScrollView,
-    Keyboard,
-    ActivityIndicator
+    ActivityIndicator,
 } from "react-native";
 
+import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
-
 import regstyles from './registrationStyles';
+import {useCometChatAuth} from './CometChatAuthContext';
+import {COMETCHAT_CONSTANTS} from '../env';
 
 export function RegistrationScreen({navigation}) {  
     const userData = useContext(AppContext);
+
     const [bio, setBio] = React.useState("");
     const [firstName, setFirstName] = React.useState(userData.name.split(' ')[0]);
     const [lastName, setLastName] = React.useState(userData.name.split(' ')[1]);
     const [gradDate, setGradDate] = React.useState('');
     var url = "";
     const [registraionSuccess,setRegistraionSuccess ] = useState(false);
-
-
     const [loading, setLoading] = useState(false); // Set loading to true on component mount
     
-
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
-
     const [image, setImage] = React.useState('');
-
 
     const onMajorOpen = React.useCallback(() => {
       setOpen2(false);
@@ -245,6 +234,20 @@ export function RegistrationScreen({navigation}) {
       const bioLengthValid = bio.length <= 150;
       if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
+        
+        let cometChatUser = new CometChat.User(auth().currentUser.uid);
+        cometChatUser.setName(firstName.trim() +" "+ lastName.trim());
+        cometChatUser.avatar = url;
+        const cometChatRegisteredUser = await CometChat.createUser(
+          cometChatUser,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
+        const cometChatLoggedUser = await CometChat.login(
+          auth().currentUser.uid,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -262,6 +265,19 @@ export function RegistrationScreen({navigation}) {
       else if (firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid && image) {
 
         await uploadPic();
+        
+        let cometChatUser = new CometChat.User(auth().currentUser.uid);
+        cometChatUser.setName(firstName.trim() +" "+ lastName.trim());
+        cometChatUser.avatar = url;
+        const cometChatRegisteredUser = await CometChat.createUser(
+          cometChatUser,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
+        const cometChatLoggedUser = await CometChat.login(
+          auth().currentUser.uid,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
 
         firestore()
         .collection('Users')
@@ -277,6 +293,20 @@ export function RegistrationScreen({navigation}) {
         })
       }
       else if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid) {
+        
+        let cometChatUser = new CometChat.User(auth().currentUser.uid);
+        cometChatUser.setName(firstName.trim() +" "+ lastName.trim());
+        cometChatUser.avatar = 'https://upload.wikimedia.org/wikipedia/commons/9/94/South_Carolina_Gamecocks_logo.svg';
+        const cometChatRegisteredUser = await CometChat.createUser(
+          cometChatUser,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
+        const cometChatLoggedUser = await CometChat.login(
+          auth().currentUser.uid,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
@@ -291,6 +321,21 @@ export function RegistrationScreen({navigation}) {
         })
       }
       else if(firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid) {
+        
+        let cometChatUser = new CometChat.User(auth().currentUser.uid);
+        cometChatUser.setName(firstName.trim() +" "+ lastName.trim());
+        cometChatUser.avatar = 'https://upload.wikimedia.org/wikipedia/commons/9/94/South_Carolina_Gamecocks_logo.svg';
+        
+        const cometChatRegisteredUser = await CometChat.createUser(
+          cometChatUser,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
+        const cometChatLoggedUser = await CometChat.login(
+          auth().currentUser.uid,
+          COMETCHAT_CONSTANTS.AUTH_KEY,
+        );
+
         firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)

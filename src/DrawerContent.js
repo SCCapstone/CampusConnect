@@ -23,7 +23,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState, setState, useContext } from 'react';
-
+import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
 
 
@@ -112,6 +112,7 @@ export function DrawerContent(props) {
                     </View> 
             </DrawerContentScrollView>
             <TouchableOpacity onPress={() => auth().signOut().then(() => {
+                      CometChat.logout()
                       props.navigation.reset({
                         index: 0,
                         routes: [{ name: 'WelcomeScreen' }]

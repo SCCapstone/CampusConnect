@@ -11,24 +11,22 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  ActivityIndicator
 } from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-
 import AppContext from './AppContext';
-
+import { COMETCHAT_CONSTANTS } from '../env';
+import {CometChat} from '@cometchat-pro/react-native-chat';
+import {useCometChatAuth} from './CometChatAuthContext';
 
 export function WelcomeScreen({navigation}) {
-
   const userData = useContext(AppContext);
-
-
-  // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -38,8 +36,8 @@ export function WelcomeScreen({navigation}) {
     setUser(user);
     if (initializing) setInitializing(false);
     if (auth().currentUser) {
-      firestore().collection('Users').doc(auth().currentUser.uid).get().then(userData => {
-        firstLogin = userData.get("firstLogin")
+      firestore().collection('Users').doc(auth().currentUser.uid).get().then(async userData => {
+          firstLogin = userData.get("firstLogin")
         if (auth().currentUser && firstLogin) {
           navigation.reset({
             index: 0,
@@ -47,12 +45,12 @@ export function WelcomeScreen({navigation}) {
         });
         }
         else if (auth().currentUser && !firstLogin) {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomeScreen' }]
-       });
+          navigation.navigate('HomeScreen');
+          const cometChatLoggedUser = await CometChat.login(
+            auth().currentUser.uid,
+            COMETCHAT_CONSTANTS.AUTH_KEY,
+          );
       }
-      
       }).catch(error => {
         FirebaseError(error.code);
       });
@@ -97,7 +95,7 @@ export function LoginScreen({ navigation}) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-  const login = () => {
+  const login =  () => {
     if (email && password){
       auth()
       .signInWithEmailAndPassword(email, password)
@@ -167,7 +165,6 @@ export function RegisterScreen({ navigation}){
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
-
   const register = () => {
     if (email && password && (password === password2) && email.includes('sc.edu')){
       auth()
