@@ -172,7 +172,7 @@ export function PostsScreen({navigation}) {
       <View style={styles.upvoteBox}>
         <Text style={styles.upvote}>{item.upvoteCount}</Text>
       </View>
-      <Pressable android_ripple={{color:'#a8a1a6'}} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+      <Pressable android_ripple={styles.rippleConfig} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
             <Image progressiveRenderingEnabled={true} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
@@ -294,6 +294,7 @@ const PostError = () => {
 }
 
 const styles = StyleSheet.create({
+  rippleConfig: {color:'black'},
   postUserImageAndInfoBox: {flexDirection:'row',flex:1},
   dateAndReplyBox: {flexDirection:'row'},
     replyCountBox: {flexDirection:'row', marginLeft:'30%'},
