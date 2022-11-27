@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, ActivityIndicator, Alert, FlatList } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, ActivityIndicator, Alert, FlatList, Image } from 'react-native';
 import {useState, useEffect, useContext} from 'react';
 import AppContext from './AppContext';
 import 'react-native-get-random-values';
@@ -10,7 +10,6 @@ import {CometChat} from '@cometchat-pro/react-native-chat';
 import {useCometChatAuth} from './CometChatAuthContext';
 
 export function Chat({navigation}) {
-  const { cometChat, setSelectedConversation } = useContext(AppContext);
   const [keyword, setKeyword] = useState('');
   const [selectedType, setSelectedType] = useState(0);
   const [data, setData] = useState([]);
@@ -21,12 +20,12 @@ export function Chat({navigation}) {
     } else {
       searchGroups();
     }
-  }, [cometChat, selectedType, keyword]);
+  }, [CometChat, selectedType, keyword]);
 
   const searchUsers = () => {
-    if (cometChat) {
+    if (CometChat) {
       const limit = 30;
-      const usersRequestBuilder = new cometChat.UsersRequestBuilder().setLimit(limit);
+      const usersRequestBuilder = new CometChat.UsersRequestBuilder().setLimit(limit);
       const usersRequest = keyword ? usersRequestBuilder.setSearchKeyword(keyword).build() : usersRequestBuilder.build();
       usersRequest.fetchNext().then(
         userList => {
@@ -40,7 +39,7 @@ export function Chat({navigation}) {
 
   const searchGroups = () => {
     const limit = 30;
-    const groupRequestBuilder = new cometChat.GroupsRequestBuilder().setLimit(limit);
+    const groupRequestBuilder = new CometChat.GroupsRequestBuilder().setLimit(limit);
     const groupsRequest = keyword ? groupRequestBuilder.setSearchKeyword(keyword).build() : groupRequestBuilder.build();
     groupsRequest.fetchNext().then(
       groupList => {
@@ -63,8 +62,8 @@ export function Chat({navigation}) {
     if (item && item.guid && !item.hasJoined) {
       const GUID = item.guid;
       const password = "";
-      const groupType = cometChat.GROUP_TYPE.PUBLIC;
-      cometChat.joinGroup(GUID, groupType, password).then(
+      const groupType = CometChat.GROUP_TYPE.PUBLIC;
+      CometChat.joinGroup(GUID, groupType, password).then(
         group => {
         },
         error => {

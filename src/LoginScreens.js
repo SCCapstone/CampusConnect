@@ -21,11 +21,14 @@ import styles from './loginStyles';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import AppContext from './AppContext';
+
 import { COMETCHAT_CONSTANTS } from '../env';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import {useCometChatAuth} from './CometChatAuthContext';
 
 export function WelcomeScreen({navigation}) {
+ 
+ 
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -92,8 +95,8 @@ export function WelcomeScreen({navigation}) {
 
  
 export function LoginScreen({ navigation}) {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const login =  () => {
     if (email && password){
