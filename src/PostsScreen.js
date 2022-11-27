@@ -294,7 +294,7 @@ const PostError = () => {
 }
 
 const styles = StyleSheet.create({
-  rippleConfig: {color:'black'},
+  rippleConfig: {color:'#877d84'},
   postUserImageAndInfoBox: {flexDirection:'row',flex:1},
   dateAndReplyBox: {flexDirection:'row'},
     replyCountBox: {flexDirection:'row', marginLeft:'30%'},
