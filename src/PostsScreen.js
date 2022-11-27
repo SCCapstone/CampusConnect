@@ -12,6 +12,7 @@ import ImageView from "react-native-image-viewing";
 import moment from 'moment';
 
 import AppContext from './AppContext';
+import { color } from 'react-native-reanimated';
 
 
 
@@ -171,9 +172,9 @@ export function PostsScreen({navigation}) {
       <View style={styles.upvoteBox}>
         <Text style={styles.upvote}>{item.upvoteCount}</Text>
       </View>
-      <Pressable style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+      <Pressable android_ripple={true} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <Image source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <Image progressiveRenderingEnabled={true} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
@@ -186,7 +187,7 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ?
               <TouchableOpacity onPress={() => OpenImage({index})}>
-                <Image source={{uri: item.extraData}}
+                <Image progressiveRenderingEnabled={true} source={{uri: item.extraData}}
                                   style={styles.postImage}/></TouchableOpacity>: null}
           </View>
           <View style={styles.dateAndReplyBox}>
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
     anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
-    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:200,width:290},
+    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:200,width:290,overlayColor: '#a8a1a6'},
     cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
     postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
     majorText : {fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'},
