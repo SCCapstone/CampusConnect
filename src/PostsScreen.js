@@ -172,7 +172,7 @@ export function PostsScreen({navigation}) {
       <View style={styles.upvoteBox}>
         <Text style={styles.upvote}>{item.upvoteCount}</Text>
       </View>
-      <Pressable android_ripple={true} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+      <Pressable android_ripple={{color:'#a8a1a6'}} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
             <Image progressiveRenderingEnabled={true} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
