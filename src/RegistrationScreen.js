@@ -26,7 +26,18 @@ import {
 
 import AppContext from './AppContext';
 
-import regstyles from './registrationStyles';
+import iosstyles from './styles/ios/RegistrationScreenStyles';
+import androidstyles from './styles/android/RegistrationScreenStyles';
+
+var styles;
+
+if (Platform.OS === 'ios'){
+  styles = iosstyles;
+}
+else if (Platform.OS === 'android') {
+  styles = androidstyles
+}
+
 
 export function RegistrationScreen({navigation}) {  
     const userData = useContext(AppContext);
@@ -341,14 +352,14 @@ export function RegistrationScreen({navigation}) {
                 alignSelf: 'center'
               }}
             />
-            <Text style={regstyles.textStyle}>
+            <Text style={styles.textStyle}>
               Registration Successful
             </Text>
             <TouchableOpacity
-              style={regstyles.buttonStyle}
+              style={styles.buttonStyle}
               onPress={() => reset()
               }>
-              <Text style={regstyles.buttonTextStyle}>Finish</Text>
+              <Text style={styles.buttonTextStyle}>Finish</Text>
             </TouchableOpacity>
           </View>
         );
@@ -356,16 +367,16 @@ export function RegistrationScreen({navigation}) {
 
       if (loading) {
         return (
-          <View style={[regstyles.activityContainer, regstyles.horizontal]}>
+          <View style={[styles.activityContainer, styles.horizontal]}>
             <ActivityIndicator size="large" />
           </View>
         )
       }
 
     return(
-    <SafeAreaView style={regstyles.container}>
+    <SafeAreaView style={styles.container}>
     <ScrollView nestedScrollEnabled={true}>
-    <View style={regstyles.container}>
+    <View style={styles.container}>
         <View style={{alignItems: 'center', }}>
           <Image
             source={require('./assets/gamecock.png')}
@@ -376,13 +387,13 @@ export function RegistrationScreen({navigation}) {
             }}
           />
         </View>
-        <Text style={regstyles.textStyle}>
+        <Text style={styles.textStyle}>
             Now we just need some info
         </Text>
         <KeyboardAvoidingView enabled>
-        <View style={regstyles.SectionStyle}>
+        <View style={styles.SectionStyle}>
             <TextInput
-              style={regstyles.inputStyle}
+              style={styles.inputStyle}
               onChangeText={(FirstName) => setFirstName(FirstName)}
               defaultValue={userData.name.split(' ').length > 0 ? userData.name.split(' ')[0]: null}
               placeholder='Enter first name (Required)'
@@ -390,9 +401,9 @@ export function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
-          <View style={regstyles.SectionStyle}>
+          <View style={styles.SectionStyle}>
             <TextInput
-              style={regstyles.inputStyle}
+              style={styles.inputStyle}
               onChangeText={(LastName) => setLastName(LastName)}
               defaultValue={userData.name.split(' ').length > 1 ? userData.name.split(' ')[1]: null}
               placeholder='Enter last name (Required)'
@@ -400,9 +411,9 @@ export function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
-          <View style={regstyles.SectionStyle}>
+          <View style={styles.SectionStyle}>
           <DropDownPicker
-              style={regstyles.inputStyle}
+              style={styles.inputStyle}
               placeholder="Select Grad Year (Required)"
               open={open2}
               onOpen={onYearOpen}
@@ -415,9 +426,9 @@ export function RegistrationScreen({navigation}) {
               listMode="SCROLLVIEW"
             />
           </View>
-          <View style={regstyles.SectionStyle}>
+          <View style={styles.SectionStyle}>
           <DropDownPicker
-              style={regstyles.inputStyle}
+              style={styles.inputStyle}
               placeholder="Select Major (Required)"
               open={open}
               onOpen={onMajorOpen}
@@ -430,9 +441,9 @@ export function RegistrationScreen({navigation}) {
               listMode="SCROLLVIEW"
             />
           </View>
-          <View style={regstyles.bioSectionStyle}>
+          <View style={styles.bioSectionStyle}>
             <TextInput
-              style={regstyles.bioStyle}
+              style={styles.bioStyle}
               onChangeText={(bio) => setBio(bio)}
               placeholder="Enter a short Bio (optional) (150 characters max)"
               defaultValue={userData.bio}
@@ -441,19 +452,19 @@ export function RegistrationScreen({navigation}) {
             />
           </View>
           
-          <View style={regstyles.btnParentSection}>
-            <TouchableOpacity onPress={choosePhotoFromLibrary} style={regstyles.btnSection}  >
-              <Text style={regstyles.btnText}>{image ? 'Pic Loaded ✅' : 'Choose Photo From Library (optional)'}</Text>
+          <View style={styles.btnParentSection}>
+            <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.btnSection}  >
+              <Text style={styles.btnText}>{image ? 'Pic Loaded ✅' : 'Choose Photo From Library (optional)'}</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            style={regstyles.buttonStyle}
+            style={styles.buttonStyle}
             onPress={writeUserData}>
-            <Text style = {regstyles.buttonTextStyle}>REGISTER</Text>
+            <Text style = {styles.buttonTextStyle}>REGISTER</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
-      <View style={regstyles.bottomContainer}>
-            <Text style={regstyles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+      <View style={styles.bottomContainer}>
+            <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
       </View>
     </View>
     </ScrollView>

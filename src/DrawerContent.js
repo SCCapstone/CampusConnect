@@ -27,6 +27,19 @@ import { useEffect, useState, setState, useContext } from 'react';
 import AppContext from './AppContext';
 
 
+import iosstyles from './styles/ios/DrawerContentStyles';
+import androidstyles from './styles/android/DrawerContentStyles';
+
+var styles;
+
+if (Platform.OS === 'ios'){
+  styles = iosstyles;
+}
+else if (Platform.OS === 'android') {
+  styles = androidstyles
+}
+
+
 export function DrawerContent(props) {
 
     const userData = useContext(AppContext);
@@ -85,7 +98,7 @@ export function DrawerContent(props) {
             <DrawerContentScrollView {...props}
             contentContainerStyle={styles.drawerScrollView}>
                 <ImageBackground blurRadius={4} source={require('./assets/gamecock.png')} style={styles.imageBackgroundView}>
-                    <View style={{flexDirection: 'row',alignSelf:'center'}}>
+                    <View style={styles.drawerUserView}>
                         <TouchableOpacity activeOpacity={.9} style={styles.pressableImageView} onLongPress={userData.pfp? () => DeleteAlert() : null}>
                             <Image source={userData.pfp ? {uri: userData.pfp} : require('./assets/blank2.jpeg')}
                                     style={styles.pfpStyle}/>
@@ -131,33 +144,3 @@ export function DrawerContent(props) {
 }
 
 
-const styles = StyleSheet.create({
-    pfpStyle: {height: 80, width: 80, borderRadius:40},
-    imageBackgroundView: {padding: 30},
-    pressableImageView: {height:80,width:80,borderRadius:40,overflow: 'hidden'},
-    drawerScrollView: {backgroundColor: '#73000a'},
-    userNameText: {fontSize: 20, color: 'black',fontWeight:'bold', textAlign: 'center'},
-    welcomeText: {fontSize: 20, fontWeight: 'bold', color: 'black',textAlign:'center'},
-    userWelcomeBox: {marginHorizontal:20,justifyContent:'center',alignContent:'center',alignSelf:'center',backgroundColor:'#ebebeb'},
-    userClassText:{fontSize: 15, fontWeight:'bold',color: 'black', textAlign: 'center'},
-    classText:{fontSize: 15,fontWeight:'bold', color: 'black'},
-    userMajorText:{fontSize: 13, color: 'black', fontWeight:'bold',textAlign:'center'},
-    majorText: {fontSize: 15,fontWeight:'bold',color: 'black',textAlign:'center', marginVertical:1},
-    classBox:{flexDirection: 'row', marginTop:1,alignSelf:'center'},
-    majorTextBox:{flexDirection: 'column',alignSelf:'center'},
-    userInfoBox: {marginTop:15,alignSelf:'center',backgroundColor:'#e2e2e2'},
-    drawerItemsList: {flex: 1, backgroundColor: '#fff', paddingTop: 10},
-    touchableSignout:{paddingVertical: 15},
-    signOutText: {
-        fontSize: 15,
-        marginLeft: 20,
-        color: 'black'
-    },
-    backButtonContainer: {
-      backgroundColor: "white",
-      marginLeft: 50,
-      marginTop: 70,
-      height: 50,
-      width: 175,
-    }
-});

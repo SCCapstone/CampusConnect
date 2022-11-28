@@ -11,9 +11,10 @@ export default StyleSheet.create({
 
     backButtonContainer: {
       alignSelf: "flex-start",
+      justifyContent:'center',
       backgroundColor: "white",
-      marginLeft: "4%",
-      marginTop: "8%",
+      borderRadius:5,
+      marginLeft: "5%",
       height: "6%",
       width: "10%",
     },
@@ -22,7 +23,7 @@ export default StyleSheet.create({
       resizeMode: "stretch",
       marginTop: "15%",
       width: "100%",
-      height: "80%"
+      height: "86%"
     },
    
     imageLarge: {
@@ -44,7 +45,7 @@ export default StyleSheet.create({
      
     inputView: {
       backgroundColor: "white",
-      borderRadius: 0,
+      borderRadius: 5,
       width: "80%",
       height: 45,
       marginBottom: 20,
@@ -68,7 +69,6 @@ export default StyleSheet.create({
     title: {
       fontSize:48,
       paddingBottom: 25,
-      placeholderTextColor: "red",
       fontWeight: 'bold',
       color: "black"
     },
@@ -81,8 +81,7 @@ export default StyleSheet.create({
    
     loginBtn: {
       width: "80%",
-      borderRadius: 25,
-      borderRadius: 0,
+      borderRadius: 4,
       height: 40,
       alignItems: "center",
       justifyContent: "center",

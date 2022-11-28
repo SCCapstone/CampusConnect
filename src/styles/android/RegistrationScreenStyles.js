@@ -28,7 +28,7 @@ export default StyleSheet.create({
         borderColor: 'black',
         height: 50,
         alignItems: 'center',
-        borderRadius: 0,
+        borderRadius: 5,
         marginLeft: 55,
         marginRight: 55,
         marginTop: 30,
@@ -49,7 +49,7 @@ export default StyleSheet.create({
         paddingLeft: 25,
         paddingRight: 25,
         borderWidth: 1,
-        borderRadius: 0,
+        borderRadius: 5,
         borderColor: '#a9a9a9',
     },
     
@@ -83,7 +83,7 @@ export default StyleSheet.create({
         paddingLeft: 12,
         paddingRight: 12,
         borderWidth: 1,
-        borderRadius: 0,
+        borderRadius: 5,
         borderColor: '#a9a9a9',
         marginBottom: 10
     },

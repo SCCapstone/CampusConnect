@@ -8,10 +8,22 @@ import { RegistrationScreen } from './RegistrationScreen.js';
 import { EventsScreen } from './EventsScreen.js'
 import { GroupsScreen } from './GroupsScreen.js'
 
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 
 import { DrawerContent } from './DrawerContent.js';
 import auth from '@react-native-firebase/auth';
+
+import androidscreenOptions from './styles/android/HomeScreenStyles'
+import iosscreenOptions from './styles/ios/HomeScreenStyles'
+
+var screenOptions;
+
+if (Platform.OS === 'ios'){
+  screenOptions = iosscreenOptions;
+}
+else if (Platform.OS === 'android') {
+  screenOptions = androidscreenOptions
+}
 
 
 const Drawer = createDrawerNavigator();
@@ -24,15 +36,7 @@ export function HomeScreen({navigation}) {
   }
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}
-    screenOptions={{
-      headerTintColor: '#ffffff',
-      headerStyle: {backgroundColor: '#73000a'},
-      headerColor: '#73000a',  
-      drawerActiveBackgroundColor: '#73000a',
-      drawerActiveTintColor: 'white',
-      swipeEdgeWidth: 150,
-      drawerStyle:{width:251}
-    }}>
+    screenOptions={screenOptions}>
       <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
       <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>
       <Drawer.Screen name="Groups" component={GroupsScreen} options={{headerTitle:'Campus Connect: Groups'}}/>
