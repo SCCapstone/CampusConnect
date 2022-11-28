@@ -15,6 +15,8 @@ import AppContext from './AppContext';
 import { color } from 'react-native-reanimated';
 import { pure } from 'recompose';
 
+import FastImage from 'react-native-fast-image'
+import { FlashList } from "@shopify/flash-list";
 
 
 export function PostsScreen({navigation}) {
@@ -175,7 +177,7 @@ export function PostsScreen({navigation}) {
       </View>
       <Pressable android_ripple={styles.rippleConfig} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <Image source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
@@ -188,7 +190,7 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ?
               <TouchableOpacity onPress={() => OpenImage({index})}>
-                <Image source={{uri: item.extraData}}
+                <FastImage source={{uri: item.extraData}}
                                   style={styles.postImage}/></TouchableOpacity>: null}
           </View>
           <View style={styles.dateAndReplyBox}>
@@ -262,13 +264,14 @@ export function PostsScreen({navigation}) {
               </Modal>
 
 
-              <FlatList
+              <FlashList
                 style={{marginTop: '5%'}}
                 data={posts}
                 renderItem={renderPost}
                 keyExtractor={item => item.key}
                 onRefresh={() => onRefresh()}
                 refreshing={refreshing}
+                estimatedListSize={100}
               />
               <FloatingAction
                 ref={(ref) => { this.floatingAction = ref; }}
