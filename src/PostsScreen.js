@@ -177,7 +177,7 @@ export function PostsScreen({navigation}) {
       </View>
       <Pressable android_ripple={styles.rippleConfig} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <FastImage source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <FastImage defaultSource={require('./assets/blank2.jpeg')} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
