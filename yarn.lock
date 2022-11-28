@@ -6063,9 +6063,10 @@ react-native-dropdown-picker@^5.4.3:
   resolved "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.3.tgz"
   integrity sha512-cwZzFcpyx/Stw3lZH2bvXxcsgwkR8c3rRZtOnlvyuN5pAplzA/9AiAxYlnJuspP9VvyU1XMePKOpgcHce6iyhA==
 
-"react-native-fast-image@github:rezq2009/react-native-fast-image#patch-1":
-  version "8.6.1"
-  resolved "git+ssh://git@github.com/rezq2009/react-native-fast-image.git#bca31d6b7b9670a8eb0389749454e8d9269a1e92"
+react-native-fast-image@^8.6.3:
+  version "8.6.3"
+  resolved "https://registry.npmjs.org/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz"
+  integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
 
 react-native-floating-action@^1.22.0:
   version "1.22.0"
@@ -7277,12 +7278,7 @@ tslib@^1.8.1:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.1:
-  version "2.4.1"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz"
-  integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
-
-tslib@2.4.0:
+tslib@^2.0.1, tslib@2.4.0:
   version "2.4.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
