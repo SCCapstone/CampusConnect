@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Image } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Image, TouchableOpacity } from 'react-native';
 
 export function EventsScreen({navigation}) {
     const DATA = [
@@ -61,6 +61,7 @@ export function EventsScreen({navigation}) {
       ];
 
     const Event = ({ event, date, imageUrl }) => (
+      <TouchableOpacity>
          <View style={styles.box}>
           <View style={{flexDirection:'row', flex: 1}}>
           <Image source={{uri: imageUrl}}
@@ -69,6 +70,7 @@ export function EventsScreen({navigation}) {
           </View>
             <Text sytle={styles.date}>{date}</Text>
         </View>
+      </TouchableOpacity>
       );
 
       const renderEvent = ({ item }) => (
