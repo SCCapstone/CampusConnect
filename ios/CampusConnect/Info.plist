@@ -36,7 +36,7 @@
 		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app uses your photo library to enable profile picture uploads</string>
+	<string>This app uses your photo library upload your profile pic.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
