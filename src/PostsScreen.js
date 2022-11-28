@@ -197,7 +197,7 @@ export function PostsScreen({navigation}) {
             <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
             <View style={styles.replyCountBox}>
               <Text style={styles.replies}>Replies: </Text>
-              <Text style={styles.date}>sdfsdfsdfsdfsd</Text>
+              <Text style={styles.date}>{item.replyCount}</Text>
             </View>
           </View>
       </Pressable>
@@ -271,7 +271,7 @@ export function PostsScreen({navigation}) {
                 keyExtractor={item => item.key}
                 onRefresh={() => onRefresh()}
                 refreshing={refreshing}
-                estimatedItemSize={228}
+                estimatedItemSize={150}
               />
               <FloatingAction
                 ref={(ref) => { this.floatingAction = ref; }}
