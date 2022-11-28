@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
                BuildableName = "CampusConnect.app"
-               BlueprintName = "CampusConnect"
-               ReferencedContainer = "container:CampusConnect.xcodeproj">
+               BlueprintName = "Campus Connect"
+               ReferencedContainer = "container:Campus Connect.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "CampusConnectTests.xctest"
-               BlueprintName = "CampusConnectTests"
-               ReferencedContainer = "container:CampusConnect.xcodeproj">
+               BuildableName = "Campus ConnectTests.xctest"
+               BlueprintName = "Campus ConnectTests"
+               ReferencedContainer = "container:Campus Connect.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -56,8 +56,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "CampusConnect.app"
-            BlueprintName = "CampusConnect"
-            ReferencedContainer = "container:CampusConnect.xcodeproj">
+            BlueprintName = "Campus Connect"
+            ReferencedContainer = "container:Campus Connect.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -73,8 +73,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "CampusConnect.app"
-            BlueprintName = "CampusConnect"
-            ReferencedContainer = "container:CampusConnect.xcodeproj">
+            BlueprintName = "Campus Connect"
+            ReferencedContainer = "container:Campus Connect.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

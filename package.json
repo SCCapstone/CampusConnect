@@ -40,7 +40,8 @@
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
     "react-native-svg": "^13.5.0",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "recompose": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

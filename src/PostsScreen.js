@@ -13,6 +13,7 @@ import moment from 'moment';
 
 import AppContext from './AppContext';
 import { color } from 'react-native-reanimated';
+import { pure } from 'recompose';
 
 
 
@@ -166,7 +167,7 @@ export function PostsScreen({navigation}) {
   }, []);
 
 
-  const Post = React.memo(({item, index}) => (
+  const Post = pure(({item, index}) => (
 
     <View style={styles.postContainer}>
       <View style={styles.upvoteBox}>
@@ -174,7 +175,7 @@ export function PostsScreen({navigation}) {
       </View>
       <Pressable android_ripple={styles.rippleConfig} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <Image progressiveRenderingEnabled={true} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <Image source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
@@ -187,7 +188,7 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ?
               <TouchableOpacity onPress={() => OpenImage({index})}>
-                <Image progressiveRenderingEnabled={true} source={{uri: item.extraData}}
+                <Image source={{uri: item.extraData}}
                                   style={styles.postImage}/></TouchableOpacity>: null}
           </View>
           <View style={styles.dateAndReplyBox}>
