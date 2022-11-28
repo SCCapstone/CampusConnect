@@ -15,6 +15,8 @@ import AppContext from './AppContext';
 import { color } from 'react-native-reanimated';
 import { pure } from 'recompose';
 
+import FastImage from 'react-native-fast-image'
+import { FlashList } from "@shopify/flash-list";
 
 
 export function PostsScreen({navigation}) {
@@ -175,7 +177,7 @@ export function PostsScreen({navigation}) {
       </View>
       <Pressable android_ripple={styles.rippleConfig} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <Image source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <FastImage defaultSource={require('./assets/blank2.jpeg')} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
@@ -188,14 +190,14 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ?
               <TouchableOpacity onPress={() => OpenImage({index})}>
-                <Image source={{uri: item.extraData}}
+                <FastImage source={{uri: item.extraData}}
                                   style={styles.postImage}/></TouchableOpacity>: null}
           </View>
           <View style={styles.dateAndReplyBox}>
             <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
             <View style={styles.replyCountBox}>
-              <Text style={styles.date}>Replies: </Text>
-              <Text style={styles.date}>{item.replyCount}</Text>
+              <Text style={styles.replies}>Replies: </Text>
+              <Text style={styles.date}>sdfsdfsdfsdfsd</Text>
             </View>
           </View>
       </Pressable>
@@ -262,13 +264,14 @@ export function PostsScreen({navigation}) {
               </Modal>
 
 
-              <FlatList
+              <FlashList
                 style={{marginTop: '5%'}}
                 data={posts}
                 renderItem={renderPost}
                 keyExtractor={item => item.key}
                 onRefresh={() => onRefresh()}
                 refreshing={refreshing}
+                estimatedItemSize={228}
               />
               <FloatingAction
                 ref={(ref) => { this.floatingAction = ref; }}
@@ -297,8 +300,8 @@ const PostError = () => {
 const styles = StyleSheet.create({
   rippleConfig: {color:'#877d84'},
   postUserImageAndInfoBox: {flexDirection:'row',flex:1},
-  dateAndReplyBox: {flexDirection:'row'},
-    replyCountBox: {flexDirection:'row', marginLeft:'30%'},
+  dateAndReplyBox: {flexDirection:'row',},
+    replyCountBox: {flexDirection:'row'},
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
     anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
@@ -387,6 +390,13 @@ const styles = StyleSheet.create({
     date: {
       fontSize: 10,
       marginTop:20,
+      color: 'black',
+      fontStyle: 'italic'
+    },
+    replies: {
+      fontSize: 10,
+      marginTop:20,
+      marginLeft:'20%',
       color: 'black',
       fontStyle: 'italic'
     },
