@@ -300,8 +300,8 @@ const PostError = () => {
 const styles = StyleSheet.create({
   rippleConfig: {color:'#877d84'},
   postUserImageAndInfoBox: {flexDirection:'row',flex:1},
-  dateAndReplyBox: {flexDirection:'row',},
-    replyCountBox: {flexDirection:'row'},
+  dateAndReplyBox: {flexDirection:'row',flex:1,justifyContent:'flex-start'},
+    replyCountBox: {flexDirection:'row',flex:1,justifyContent:'flex-end'},
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
     anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
@@ -396,7 +396,6 @@ const styles = StyleSheet.create({
     replies: {
       fontSize: 10,
       marginTop:20,
-      marginLeft:'20%',
       color: 'black',
       fontStyle: 'italic'
     },
