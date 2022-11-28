@@ -30,7 +30,8 @@ export function HomeScreen({navigation}) {
       headerColor: '#73000a',  
       drawerActiveBackgroundColor: '#73000a',
       drawerActiveTintColor: 'white',
-      swipeEdgeWidth: 150
+      swipeEdgeWidth: 150,
+      drawerStyle:{width:251}
     }}>
       <Drawer.Screen name="Home" component={PostsScreen} options={{headerTitle:'Campus Connect: Posts'}}/>
       <Drawer.Screen name="Events" component={EventsScreen} options={{headerTitle:'Campus Connect: Events'}}/>

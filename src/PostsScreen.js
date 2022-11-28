@@ -271,7 +271,7 @@ export function PostsScreen({navigation}) {
                 keyExtractor={item => item.key}
                 onRefresh={() => onRefresh()}
                 refreshing={refreshing}
-                estimatedListSize={100}
+                estimatedItemSize={228}
               />
               <FloatingAction
                 ref={(ref) => { this.floatingAction = ref; }}
