@@ -196,8 +196,8 @@ export function PostsScreen({navigation}) {
           <View style={styles.dateAndReplyBox}>
             <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
             <View style={styles.replyCountBox}>
-              <Text style={styles.date}>Replies: </Text>
-              <Text style={styles.date}>{item.replyCount}</Text>
+              <Text style={styles.replies}>Replies: </Text>
+              <Text style={styles.date}>sdfsdfsdfsdfsd</Text>
             </View>
           </View>
       </Pressable>
@@ -300,8 +300,8 @@ const PostError = () => {
 const styles = StyleSheet.create({
   rippleConfig: {color:'#877d84'},
   postUserImageAndInfoBox: {flexDirection:'row',flex:1},
-  dateAndReplyBox: {flexDirection:'row'},
-    replyCountBox: {flexDirection:'row', marginLeft:'30%'},
+  dateAndReplyBox: {flexDirection:'row',},
+    replyCountBox: {flexDirection:'row'},
     postUserInfo:{flexDirection:'column',flex:1},
     postImageView: {flexDirection:'column',flex:1},
     anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
@@ -390,6 +390,13 @@ const styles = StyleSheet.create({
     date: {
       fontSize: 10,
       marginTop:20,
+      color: 'black',
+      fontStyle: 'italic'
+    },
+    replies: {
+      fontSize: 10,
+      marginTop:20,
+      marginLeft:'20%',
       color: 'black',
       fontStyle: 'italic'
     },
