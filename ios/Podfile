@@ -5,7 +5,7 @@ $RNFirebaseAsStaticFramework = true
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'CampusConnect' do
+target 'Campus Connect' do
   use_frameworks! :linkage => :static
   config = use_native_modules!
 
@@ -28,7 +28,7 @@ target 'CampusConnect' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'CampusConnectTests' do
+  target 'Campus ConnectTests' do
     inherit! :complete
     # Pods for testing
   end
