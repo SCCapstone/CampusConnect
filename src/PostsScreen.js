@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect, useContext} from 'react';
-import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image } from 'react-native';
+import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image, Platform } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -13,7 +13,22 @@ import moment from 'moment';
 
 import AppContext from './AppContext';
 import { color } from 'react-native-reanimated';
+import { pure } from 'recompose';
 
+import FastImage from 'react-native-fast-image'
+import { FlashList } from "@shopify/flash-list";
+
+import iosstyles from './styles/ios/PostScreenStyles';
+import androidstyles from './styles/android/PostScreenStyles';
+
+var styles;
+
+if (Platform.OS === 'ios'){
+  styles = iosstyles;
+}
+else if (Platform.OS === 'android') {
+  styles = androidstyles
+}
 
 
 export function PostsScreen({navigation}) {
@@ -62,7 +77,7 @@ export function PostsScreen({navigation}) {
         authorMajor: userData.major,
         body: postText,
         replyCount:0,
-        upvoteCount:1,
+        upvoteCount:1000,
         date: firestore.FieldValue.serverTimestamp(),
         pfp: userData.pfp,
         replies: [],
@@ -166,15 +181,21 @@ export function PostsScreen({navigation}) {
   }, []);
 
 
-  const Post = React.memo(({item, index}) => (
+  const Post = pure(({item, index}) => (
 
     <View style={styles.postContainer}>
       <View style={styles.upvoteBox}>
-        <Text style={styles.upvote}>{item.upvoteCount}</Text>
+        <TouchableOpacity>
+          <Image style={styles.voteButtons} source={require('./assets/upvote.png')}></Image>
+        </TouchableOpacity>
+        <Text style={styles.upvote}>1000</Text>
+        <TouchableOpacity>
+          <Image style={styles.voteButtons} source={require('./assets/downvote.png')}></Image>
+        </TouchableOpacity>
       </View>
-      <Pressable android_ripple={styles.rippleConfig} style={styles.post} onLongPress={() => DeletePostAlert({item})}>
+      <Pressable android_ripple={styles.rippleConfig} style={ Platform.OS === 'ios' ? ({ pressed }) => [styles.post || {}, {opacity:pressed ? 0.9 : 1}] : styles.post} onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <Image progressiveRenderingEnabled={true} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+            <FastImage defaultSource={require('./assets/blank2.jpeg')} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
                                 style={styles.postPfp}/>
               {item.author !== 'Anonymous' ?
               <View style={styles.postUserInfo}>
@@ -187,13 +208,13 @@ export function PostsScreen({navigation}) {
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ?
               <TouchableOpacity onPress={() => OpenImage({index})}>
-                <Image progressiveRenderingEnabled={true} source={{uri: item.extraData}}
+                <FastImage source={{uri: item.extraData}}
                                   style={styles.postImage}/></TouchableOpacity>: null}
           </View>
           <View style={styles.dateAndReplyBox}>
             <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
             <View style={styles.replyCountBox}>
-              <Text style={styles.date}>Replies: </Text>
+              <Text style={styles.replies}>Replies: </Text>
               <Text style={styles.date}>{item.replyCount}</Text>
             </View>
           </View>
@@ -226,7 +247,7 @@ export function PostsScreen({navigation}) {
     )
       return (
         <SafeAreaView style={styles.container}>
-            <Modal style={{flex:1}}
+            <Modal style={styles.modal}
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -234,7 +255,7 @@ export function PostsScreen({navigation}) {
                   closeModal()
                 }}
               >
-              <KeyboardAvoidingView>
+              <KeyboardAvoidingView behavior='padding'>
                 <View style={styles.postView}>
                   <View style={{flexDirection:'row'}}>
                     <TouchableOpacity onPress={ () => closeModal()} style={styles.cancelButton}>
@@ -261,15 +282,16 @@ export function PostsScreen({navigation}) {
               </Modal>
 
 
-              <FlatList
-                style={{marginTop: '5%'}}
+              <FlashList
                 data={posts}
                 renderItem={renderPost}
                 keyExtractor={item => item.key}
                 onRefresh={() => onRefresh()}
                 refreshing={refreshing}
+                estimatedItemSize={150}
               />
               <FloatingAction
+                color='#73000a'
                 ref={(ref) => { this.floatingAction = ref; }}
                 onPressMain= { () => {
                   setModalVisible(!modalVisible);
@@ -292,109 +314,3 @@ const PostError = () => {
     { text: "Okay.",}
   ] );
 }
-
-const styles = StyleSheet.create({
-  rippleConfig: {color:'#877d84'},
-  postUserImageAndInfoBox: {flexDirection:'row',flex:1},
-  dateAndReplyBox: {flexDirection:'row'},
-    replyCountBox: {flexDirection:'row', marginLeft:'30%'},
-    postUserInfo:{flexDirection:'column',flex:1},
-    postImageView: {flexDirection:'column',flex:1},
-    anonymousAuthorText: {textAlignVertical:'center',fontSize: 24, marginLeft:20,color: 'black',},
-    postImage: {marginTop:20,alignSelf:'center',borderRadius:10,height:200,width:290,overlayColor: '#a8a1a6'},
-    cancelButtonText: {fontWeight:'bold', fontSize:14, textAlign:'left',color:"black"},
-    postButtonText:{fontWeight:'bold', fontSize:14,justifyContent:'flex-end',color:'black'},
-    majorText : {fontWeight:'bold',fontSize:12,textAlign:'auto',marginTop:'4%',marginLeft:'5%',color:'black'},
-    postPfp: {height: 60, width: 60, borderRadius:40},
-
-    postContainer: {
-      flexDirection:'row', flex:1
-    },
-    postView: {
-      height:'45%',
-      width:'90%',
-      backgroundColor: 'white',
-      alignSelf:'center',
-      marginTop:'60%',
-      borderRadius:20,
-      justifyContent:'center'
-
-    },
-    postTextView: {
-      flex:.82,
-      borderRadius:20,
-      justifyContent:'center',
-      marginTop:'5%',
-      marginHorizontal:'10%',
-      backgroundColor: '#f2f2f2',
-    },
-    postInput: {
-      backgroundColor: '#f2f2f2',
-      flex: 1,
-      color: 'black',
-      marginHorizontal:'2%',
-      marginVertical:'2%',
-      borderRadius: 20,
-    },
-    postButton: {
-      marginLeft:'57%',
-      marginBottom:'1%',
-    },
-    cancelButton: {
-      alignSelf:'flex-start',
-      marginLeft:'10%',
-      marginBottom:'1%'
-    },
-    container: {
-      flex: 1,
-    },
-    horizontal: {
-      flexDirection: "row",
-      justifyContent: "space-around",
-      padding: 10
-    },
-    post: {
-      backgroundColor: '#a8a1a6',
-      borderRadius:10,
-      padding: 20,
-      marginVertical: 8,
-      marginRight: '5%',
-      alignSelf: 'flex-end',
-      flex: 1
-    },
-    body: {
-      fontSize: 18,
-      color: 'black',
-      marginTop: '5%',
-      justifyContent: 'center'
-    },
-    upvoteBox: {
-      height: 40,
-      width:35,
-      marginRight:5,
-      backgroundColor: '#f2f2f2',
-      alignContent: 'center',
-      justifyContent: 'center',
-      alignSelf:'center'
-    },
-    upvote: {
-      fontSize: 15,
-      alignSelf:'center',
-      textAlignVertical:'center',
-      color: 'black',
-    },
-    date: {
-      fontSize: 10,
-      marginTop:20,
-      color: 'black',
-      fontStyle: 'italic'
-    },
-    name: {
-      justifyContent:'center',
-      fontSize: 24,
-      marginLeft:20,
-      color: 'black',
-    },
-  });
-
-

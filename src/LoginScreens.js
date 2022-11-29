@@ -1,4 +1,4 @@
-import { Modal, StatusBar } from 'react-native';
+import { Modal, StatusBar ,SafeAreaView, Platform} from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
@@ -16,11 +16,24 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-import styles from './loginStyles';
+import iosstyles from './styles/ios/WelcomeScreenStyles';
+import androidstyles from './styles/android/WelcomeScreenStyles';
+
+var styles;
+
+if (Platform.OS === 'ios'){
+  styles = iosstyles;
+}
+else if (Platform.OS === 'android') {
+  styles = androidstyles
+}
+
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
 import AppContext from './AppContext';
+
+
 
 
 export function WelcomeScreen({navigation}) {
@@ -74,7 +87,7 @@ export function WelcomeScreen({navigation}) {
   if (initializing) return null;
  
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image style={styles.imageLarge} source={require("./assets/gamecock.png")} />
       <Text style= {styles.title}>Campus Connect</Text>
 
@@ -88,7 +101,7 @@ export function WelcomeScreen({navigation}) {
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -115,7 +128,7 @@ export function LoginScreen({ navigation}) {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <BackButton/>
       <Image style={styles.imageSmall} source={require("./assets/gamecock.png")} />
       <Text style= {styles.title}>Campus Connect</Text>
@@ -159,7 +172,7 @@ export function LoginScreen({ navigation}) {
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -208,7 +221,7 @@ export function RegisterScreen({ navigation}){
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <BackButton/>
       <Image style={styles.imageSmall} source={require("./assets/gamecock.png")} />
       <Text style= {styles.title}>Campus Connect</Text>
@@ -258,7 +271,7 @@ export function RegisterScreen({ navigation}){
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz, All rights reserved.</Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -3,18 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* CampusConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CampusConnectTests.m */; };
-		1244930DE7EFE734704DAB5C /* Pods_CampusConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B4E1C3346DE664EAC7E9AB9 /* Pods_CampusConnect.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		191AACD1354B4D58D5DF79B2 /* Pods_Campus_Connect_Campus_ConnectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE132AEEB76AC2917C9DE47F /* Pods_Campus_Connect_Campus_ConnectTests.framework */; };
+		26ECD766B20FBD05EED5E083 /* Pods_Campus_Connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B394B933CC33523F26D865 /* Pods_Campus_Connect.framework */; };
 		722CE7E32922B2B800304F12 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 722CE7E22922B2B800304F12 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		E6BFC00CBDAC1E7A80DF2B9F /* Pods_CampusConnect_CampusConnectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 897603E4EAC08972FED3652D /* Pods_CampusConnect_CampusConnectTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,23 +28,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* CampusConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CampusConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* Campus ConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Campus ConnectTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CampusConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CampusConnectTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* CampusConnect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampusConnect.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Campus Connect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Campus Connect.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CampusConnect/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = CampusConnect/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CampusConnect/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CampusConnect/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CampusConnect/main.m; sourceTree = "<group>"; };
 		1528994909BB0567D30D65F9 /* Pods-CampusConnect-CampusConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect-CampusConnectTests.release.xcconfig"; path = "Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests.release.xcconfig"; sourceTree = "<group>"; };
+		177598C5FD475CEEDEAA143B /* Pods-Campus Connect-Campus ConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Campus Connect-Campus ConnectTests.release.xcconfig"; path = "Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests.release.xcconfig"; sourceTree = "<group>"; };
 		1A912F3ECAAE91B787BC8175 /* Pods-CampusConnect-CampusConnectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect-CampusConnectTests.debug.xcconfig"; path = "Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests.debug.xcconfig"; sourceTree = "<group>"; };
-		1B4E1C3346DE664EAC7E9AB9 /* Pods_CampusConnect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CampusConnect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2278A4C7878D18E2DEAE551E /* Pods-Campus Connect-Campus ConnectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Campus Connect-Campus ConnectTests.debug.xcconfig"; path = "Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		23515F2CAD2F0EAEBD02051B /* Pods-CampusConnect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect.release.xcconfig"; path = "Target Support Files/Pods-CampusConnect/Pods-CampusConnect.release.xcconfig"; sourceTree = "<group>"; };
 		722CE7E22922B2B800304F12 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7F00A1D2BEBD57E235A5F222 /* Pods-Campus Connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Campus Connect.debug.xcconfig"; path = "Target Support Files/Pods-Campus Connect/Pods-Campus Connect.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CampusConnect/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		897603E4EAC08972FED3652D /* Pods_CampusConnect_CampusConnectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CampusConnect_CampusConnectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A347B86655F406ED309C2C51 /* Pods-CampusConnect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect.debug.xcconfig"; path = "Target Support Files/Pods-CampusConnect/Pods-CampusConnect.debug.xcconfig"; sourceTree = "<group>"; };
+		AC6655149EAF7B1EBA7ED4B7 /* Pods-Campus Connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Campus Connect.release.xcconfig"; path = "Target Support Files/Pods-Campus Connect/Pods-Campus Connect.release.xcconfig"; sourceTree = "<group>"; };
+		DE132AEEB76AC2917C9DE47F /* Pods_Campus_Connect_Campus_ConnectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Campus_Connect_Campus_ConnectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2B394B933CC33523F26D865 /* Pods_Campus_Connect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Campus_Connect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -53,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6BFC00CBDAC1E7A80DF2B9F /* Pods_CampusConnect_CampusConnectTests.framework in Frameworks */,
+				191AACD1354B4D58D5DF79B2 /* Pods_Campus_Connect_Campus_ConnectTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1244930DE7EFE734704DAB5C /* Pods_CampusConnect.framework in Frameworks */,
+				26ECD766B20FBD05EED5E083 /* Pods_Campus_Connect.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,8 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				1B4E1C3346DE664EAC7E9AB9 /* Pods_CampusConnect.framework */,
-				897603E4EAC08972FED3652D /* Pods_CampusConnect_CampusConnectTests.framework */,
+				E2B394B933CC33523F26D865 /* Pods_Campus_Connect.framework */,
+				DE132AEEB76AC2917C9DE47F /* Pods_Campus_Connect_Campus_ConnectTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -143,8 +147,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* CampusConnect.app */,
-				00E356EE1AD99517003FC87E /* CampusConnectTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Campus Connect.app */,
+				00E356EE1AD99517003FC87E /* Campus ConnectTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,6 +160,10 @@
 				23515F2CAD2F0EAEBD02051B /* Pods-CampusConnect.release.xcconfig */,
 				1A912F3ECAAE91B787BC8175 /* Pods-CampusConnect-CampusConnectTests.debug.xcconfig */,
 				1528994909BB0567D30D65F9 /* Pods-CampusConnect-CampusConnectTests.release.xcconfig */,
+				7F00A1D2BEBD57E235A5F222 /* Pods-Campus Connect.debug.xcconfig */,
+				AC6655149EAF7B1EBA7ED4B7 /* Pods-Campus Connect.release.xcconfig */,
+				2278A4C7878D18E2DEAE551E /* Pods-Campus Connect-Campus ConnectTests.debug.xcconfig */,
+				177598C5FD475CEEDEAA143B /* Pods-Campus Connect-Campus ConnectTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -163,30 +171,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* CampusConnectTests */ = {
+		00E356ED1AD99517003FC87E /* Campus ConnectTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "CampusConnectTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "Campus ConnectTests" */;
 			buildPhases = (
 				981333D8B5F89A3960907E66 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				551BA4345A6BCED798609C13 /* [CP] Embed Pods Frameworks */,
-				69F53FF1A440BD3AA9899F7C /* [CP] Copy Pods Resources */,
+				94D29924D75C69F27B2CED38 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = CampusConnectTests;
+			name = "Campus ConnectTests";
 			productName = CampusConnectTests;
-			productReference = 00E356EE1AD99517003FC87E /* CampusConnectTests.xctest */;
+			productReference = 00E356EE1AD99517003FC87E /* Campus ConnectTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* CampusConnect */ = {
+		13B07F861A680F5B00A75B9A /* Campus Connect */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CampusConnect" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Campus Connect" */;
 			buildPhases = (
 				D2F05AD74F066E010C9BD03F /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -195,16 +203,16 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				61BE9F4D82D8022C35E2FA7E /* [CP] Embed Pods Frameworks */,
-				05E5A6C997FEB880356A936C /* [CP] Copy Pods Resources */,
 				BB9802595990112CBCB09468 /* [CP-User] [RNFB] Core Configuration */,
+				06F49E342FE240DB61632C56 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = CampusConnect;
+			name = "Campus Connect";
 			productName = CampusConnect;
-			productReference = 13B07F961A680F5B00A75B9A /* CampusConnect.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Campus Connect.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -213,6 +221,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -224,8 +233,8 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CampusConnect" */;
-			compatibilityVersion = "Xcode 12.0";
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Campus Connect" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -237,8 +246,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* CampusConnect */,
-				00E356ED1AD99517003FC87E /* CampusConnectTests */,
+				13B07F861A680F5B00A75B9A /* Campus Connect */,
+				00E356ED1AD99517003FC87E /* Campus ConnectTests */,
 			);
 		};
 /* End PBXProject section */
@@ -280,21 +289,21 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		05E5A6C997FEB880356A936C /* [CP] Copy Pods Resources */ = {
+		06F49E342FE240DB61632C56 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect/Pods-CampusConnect-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect/Pods-Campus Connect-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect/Pods-CampusConnect-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect/Pods-Campus Connect-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CampusConnect/Pods-CampusConnect-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Campus Connect/Pods-Campus Connect-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		551BA4345A6BCED798609C13 /* [CP] Embed Pods Frameworks */ = {
@@ -303,15 +312,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		61BE9F4D82D8022C35E2FA7E /* [CP] Embed Pods Frameworks */ = {
@@ -320,32 +329,32 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect/Pods-CampusConnect-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect/Pods-Campus Connect-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect/Pods-CampusConnect-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect/Pods-Campus Connect-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CampusConnect/Pods-CampusConnect-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Campus Connect/Pods-Campus Connect-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		69F53FF1A440BD3AA9899F7C /* [CP] Copy Pods Resources */ = {
+		94D29924D75C69F27B2CED38 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		981333D8B5F89A3960907E66 /* [CP] Check Pods Manifest.lock */ = {
@@ -363,7 +372,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CampusConnect-CampusConnectTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Campus Connect-Campus ConnectTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -398,7 +407,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CampusConnect-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Campus Connect-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -449,7 +458,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* CampusConnect */;
+			target = 13B07F861A680F5B00A75B9A /* Campus Connect */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -457,7 +466,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1A912F3ECAAE91B787BC8175 /* Pods-CampusConnect-CampusConnectTests.debug.xcconfig */;
+			baseConfigurationReference = 2278A4C7878D18E2DEAE551E /* Pods-Campus Connect-Campus ConnectTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -479,13 +488,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CampusConnect.app/CampusConnect";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Campus Connect.app/Campus Connect";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1528994909BB0567D30D65F9 /* Pods-CampusConnect-CampusConnectTests.release.xcconfig */;
+			baseConfigurationReference = 177598C5FD475CEEDEAA143B /* Pods-Campus Connect-Campus ConnectTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -504,56 +513,256 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CampusConnect.app/CampusConnect";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Campus Connect.app/Campus Connect";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A347B86655F406ED309C2C51 /* Pods-CampusConnect.debug.xcconfig */;
+			baseConfigurationReference = 7F00A1D2BEBD57E235A5F222 /* Pods-Campus Connect.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F2NFDVT7GR;
 				ENABLE_BITCODE = NO;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/BoringSSL-GRPC/openssl_grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion/DoubleConversion.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuth/FirebaseAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuthInterop/FirebaseAuthInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseDatabase/FirebaseDatabase.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/FirebaseFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseStorage/FirebaseStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Libuv-gRPC/uv.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/folly.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety/RCTTypeSafety.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNCMaskedView/RNCMaskedView.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBApp/RNFBApp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBAuth/RNFBAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBDatabase/RNFBDatabase.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBFirestore/RNFBFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBStorage/RNFBStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFastImage/RNFastImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNGestureHandler/RNGestureHandler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/RNImageCropPicker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNReanimated/RNReanimated.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVG.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNScreens/RNScreens.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Codegen/React_Codegen.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules/CoreModules.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation/RCTAnimation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob/RCTBlob.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage/RCTImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking/RCTLinking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork/RCTNetwork.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings/RCTSettings.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText/RCTText.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration/RCTVibration.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-bridging/react_bridging.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/cxxreact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-hermes/reacthermes.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi/jsi.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor/jsireact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-logger/logger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-perflogger/reactperflogger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImageWebPCoder/SDWebImageWebPCoder.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewController.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga/yoga.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/abseil/absl.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/fmt/fmt.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/grpcpp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-Core/grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/leveldb-library/leveldb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/libevent/libevent.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/libwebp/libwebp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-document-picker/react_native_document_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-image-picker/react_native_image_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context/react_native_safe_area_context.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/React-callinvoker\"",
+					"\"${PODS_ROOT}/Headers/Public/React-runtimeexecutor\"",
+					"\"${PODS_ROOT}/Headers/Public/hermes-engine\"",
+					"\"$(PODS_ROOT)/DoubleConversion\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost-for-react-native\"",
+					"\"$(PODS_ROOT)/glog\"",
+					"\"$(PODS_ROOT)/RCT-Folly\"",
+					"\"$(PODS_ROOT)/RCT-Folly\"",
+					"\"${PODS_ROOT}/Headers/Public/React-hermes\"",
+					"\"${PODS_ROOT}/Headers/Public/hermes-engine\"",
+					"\"$(PODS_ROOT)/../../node_modules/react-native/ReactCommon\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"\"$(PODS_TARGET_SRCROOT)/include/\"",
+					"${SRCROOT}/../../../ios/Pods/Headers/**",
+					"${PODS_ROOT}",
+				);
 				INFOPLIST_FILE = CampusConnect/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Campus Connect";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = CampusConnect;
+				PRODUCT_NAME = "Campus Connect";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 23515F2CAD2F0EAEBD02051B /* Pods-CampusConnect.release.xcconfig */;
+			baseConfigurationReference = AC6655149EAF7B1EBA7ED4B7 /* Pods-Campus Connect.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F2NFDVT7GR;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/BoringSSL-GRPC/openssl_grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion/DoubleConversion.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuth/FirebaseAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuthInterop/FirebaseAuthInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseDatabase/FirebaseDatabase.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/FirebaseFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseStorage/FirebaseStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Libuv-gRPC/uv.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/folly.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety/RCTTypeSafety.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNCMaskedView/RNCMaskedView.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBApp/RNFBApp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBAuth/RNFBAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBDatabase/RNFBDatabase.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBFirestore/RNFBFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBStorage/RNFBStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFastImage/RNFastImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNGestureHandler/RNGestureHandler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/RNImageCropPicker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNReanimated/RNReanimated.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVG.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNScreens/RNScreens.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Codegen/React_Codegen.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules/CoreModules.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation/RCTAnimation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob/RCTBlob.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage/RCTImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking/RCTLinking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork/RCTNetwork.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings/RCTSettings.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText/RCTText.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration/RCTVibration.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-bridging/react_bridging.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/cxxreact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-hermes/reacthermes.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi/jsi.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor/jsireact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-logger/logger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-perflogger/reactperflogger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImageWebPCoder/SDWebImageWebPCoder.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewController.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga/yoga.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/abseil/absl.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/fmt/fmt.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/grpcpp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-Core/grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/leveldb-library/leveldb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/libevent/libevent.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/libwebp/libwebp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-document-picker/react_native_document_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-image-picker/react_native_image_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context/react_native_safe_area_context.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/React-callinvoker\"",
+					"\"${PODS_ROOT}/Headers/Public/React-runtimeexecutor\"",
+					"\"${PODS_ROOT}/Headers/Public/hermes-engine\"",
+					"\"$(PODS_ROOT)/DoubleConversion\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost-for-react-native\"",
+					"\"$(PODS_ROOT)/glog\"",
+					"\"$(PODS_ROOT)/RCT-Folly\"",
+					"\"$(PODS_ROOT)/RCT-Folly\"",
+					"\"${PODS_ROOT}/Headers/Public/React-hermes\"",
+					"\"${PODS_ROOT}/Headers/Public/hermes-engine\"",
+					"\"$(PODS_ROOT)/../../node_modules/react-native/ReactCommon\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"\"$(PODS_TARGET_SRCROOT)/include/\"",
+					"${PODS_ROOT}",
+					"${SRCROOT}/../../../ios/Pods/Headers/**",
+				);
 				INFOPLIST_FILE = CampusConnect/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Campus Connect";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = CampusConnect;
+				PRODUCT_NAME = "Campus Connect";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -701,7 +910,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "CampusConnectTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "Campus ConnectTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -710,7 +919,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CampusConnect" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Campus Connect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -719,7 +928,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CampusConnect" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Campus Connect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
