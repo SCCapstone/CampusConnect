@@ -1,6 +1,6 @@
 import React from 'react';
-import {useState, useEffect, useContext} from 'react';
-import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image, Platform } from 'react-native';
+import {useState, useEffect, useContext, useRef} from 'react';
+import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image, Platform, LayoutAnimation, UIManager } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -32,7 +32,9 @@ else if (Platform.OS === 'android') {
 }
 
 
+
 export function PostsScreen({navigation}) {
+  
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -46,6 +48,8 @@ export function PostsScreen({navigation}) {
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
+
+  const list= useRef(null);
 
 
   const PostAlert = () => {
@@ -96,116 +100,6 @@ export function PostsScreen({navigation}) {
       PostError();
     }
   }
-
-  const getPosts = () => {
-    firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
-      if(!snapShot.metadata.hasPendingWrites) {
-        postIndex = 0;
-        var imageIndex = 0;
-        const posts = [];
-        const images = [];
-        snapShot.forEach(documentSnapshot => {
-          const post = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-            isUpVoted: false,
-            isDownVoted: false
-          }
-          post.isUpVoted = post.upvoters[auth().currentUser.uid];
-          post.isDownVoted = post.downvoters[auth().currentUser.uid];
-          posts.push(post);
-          if (post.extraData){
-            images.push({
-              uri: post.extraData,
-              key: documentSnapshot.id
-            })
-            setImageMap(imageMap.set(postIndex,imageIndex))
-            imageIndex++;
-          }
-          postIndex++;
-        });
-        setPosts(posts);
-        setImages(images);
-        setLoading(false);
-      }
-      
-    });
-  }
-
-  const DeletePost = ({item}) => {
-    firestore().collection('Posts').doc(item.key).delete();
-  }
-  const OpenImage = ({index}) => {
-    setImageIndex(imageMap.get(index))
-    setIsVisible(true);
-  }
-
-  const UpvotePost = async ({item}) => {
-    const postRef = firestore().collection('Posts').doc(item.key);
-
-
-    if(item.isUpVoted) {
-      firestore().runTransaction(async (transaction) => {
-        var newUpVoters = new Map()
-        const post = await transaction.get(postRef);
-        const newUpvoteCount = post.data().upvoteCount -1;
-        newUpVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, upvoters: newUpVoters})
-      });
-    }
-
-    else if (!item.isUpVoted){
-      firestore().runTransaction(async (transaction) => {
-        const post = await transaction.get(postRef);
-        const newUpvoteCount = post.data().upvoteCount +1;
-        const upvoters = post.data().upvoters
-
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: true})
-    
-      });
-    }
-    else if (item.isDownVoted) {
-
-    }
-    else if (!item.isDownVoted) {
-      
-    }
-  }
-
-  
-  const DownvotePost = async ({item}) => {
-    const postRef = firestore().collection('Posts').doc(item.key);
-
-
-    if(item.isDownVoted) {
-      firestore().runTransaction(async (transaction) => {
-        var newDownVoters = new Map()
-        const post = await transaction.get(postRef);
-        const newUpvoteCount = post.data().upvoteCount +1;
-        newDownVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, downvoters: newDownVoters})
-      });
-    }
-
-    else if (!item.isDownVoted){
-      firestore().runTransaction(async (transaction) => {
-        const post = await transaction.get(postRef);
-        const newUpvoteCount = post.data().upvoteCount -1;
-        const upvoters = post.data().upvoters
-
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: true})
-    
-      });
-    }
-    else if (item.isUpVoted){
-
-    }
-    else if (!item.isUpVoted){
-      
-    }
-  }
-
   useEffect(() => { //gets posts asynchronously in the background
     const subscriber = firestore()
     .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the posts and order them by their upvote count
@@ -241,9 +135,13 @@ export function PostsScreen({navigation}) {
           
         });
 
+        
         setPosts(posts);
         setImages(images);
         setLoading(false);
+        // After removing the item, we can start the animation.
+        list.current?.prepareForLayoutAnimationRender();
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       }
     });     
     
@@ -251,8 +149,128 @@ export function PostsScreen({navigation}) {
     return () => subscriber();
   }, []);
 
+  const getPosts = () => {
+    //For the time being, users cannot refresh the home page. it is wasteful of resources, and doesn't really do anything, because everything already updates asynchronously
 
-  const Post = pure(({item, index}) => {
+    /*firestore()
+    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
+      if(!snapShot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+            isUpVoted: false,
+            isDownVoted: false
+          }
+          post.isUpVoted = post.upvoters[auth().currentUser.uid];
+          post.isDownVoted = post.downvoters[auth().currentUser.uid];
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+        });
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+      
+    });*/
+  }
+
+  const DeletePost = ({item}) => {
+    firestore().collection('Posts').doc(item.key).delete();
+  }
+  const OpenImage = ({index}) => {
+    setImageIndex(imageMap.get(index))
+    setIsVisible(true);
+  }
+
+  const UpvotePost = async ({item}) => {
+    const postRef = firestore().collection('Posts').doc(item.key);
+
+    if ("/Users/"+auth().currentUser.uid === item.user){/*you can't take away your own upvote from your post*/}
+    else if(item.isUpVoted) {
+      firestore().runTransaction(async (transaction) => {
+        var newUpVoters = new Map()
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount -1;
+        newUpVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, upvoters: newUpVoters})
+      });
+    }
+
+    else if (!item.UpVoted && !item.isDownVoted){
+      firestore().runTransaction(async (transaction) => {
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount +1;
+
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: true})
+    
+      });
+    }
+    else if (!item.UpVoted && item.isDownVoted){
+      firestore().runTransaction(async (transaction) => {
+        var newDownVoters = new Map()
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount +2;
+        newDownVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
+
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, downvoters: newDownVoters,['upvoters.'+auth().currentUser.uid]: true})
+    
+      });
+    }
+  }
+
+  
+  const DownvotePost = async ({item}) => {
+    const postRef = firestore().collection('Posts').doc(item.key);
+
+  if (item.upvoteCount == 1 || "/Users/"+auth().currentUser.uid === item.user){/*We will not downvote you below 1, and you cannot downvote your own post*/}
+    else if(item.isDownVoted) {
+      firestore().runTransaction(async (transaction) => {
+        var newDownVoters = new Map()
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount +1;
+        newDownVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, downvoters: newDownVoters})
+      });
+    }
+
+    else if (!item.isDownVoted && !item.isUpVoted){
+      firestore().runTransaction(async (transaction) => {
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount -1;
+
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: true})
+    
+      });
+    }
+    else if (!item.isDownVoted && item.isUpVoted){
+      firestore().runTransaction(async (transaction) => {
+        var newUpVoters = new Map()
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount -2;
+        newUpVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
+
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, upvoters: newUpVoters,['downvoters.'+auth().currentUser.uid]: true})
+    
+      });
+    }
+  }
+
+
+
+  const Post = ({item, index}) => {
     
     return (
       <View style={styles.postContainer}>
@@ -293,7 +311,7 @@ export function PostsScreen({navigation}) {
         </Pressable>
       </View>
     )
-  })
+  }
 
 
     const onRefresh = () => {
@@ -356,6 +374,7 @@ export function PostsScreen({navigation}) {
 
               <FlashList
                 data={posts}
+                ref={list}
                 renderItem={renderPost}
                 keyExtractor={item => item.key}
                 onRefresh={() => onRefresh()}
