@@ -30,4 +30,11 @@ export default StyleSheet.create({
         marginHorizontal: 20,
         flex: 1
       },
+    canvas: {
+        position: 'absolute',
+        top: -20,
+        left: -20,
+        bottom: -40,
+        right: -20,
+      },  
   });
