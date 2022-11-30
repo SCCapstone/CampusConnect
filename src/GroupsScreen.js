@@ -4,7 +4,7 @@ import { FloatingAction } from "react-native-floating-action";
 
 export function GroupsScreen({navigation}) {
 
-const DATA = [
+const DATA = [ 
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'CSCE 490: Capstone Project',
