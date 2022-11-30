@@ -170,6 +170,7 @@ export function PostsScreen({navigation}) {
     setIsVisible(true);
   }
 
+  //This code is very delicate and needs to be done right.
   const UpvotePost =  ({item}) => {
     if(!transactionStarted){
       const postRef = firestore().collection('Posts').doc(item.key);
