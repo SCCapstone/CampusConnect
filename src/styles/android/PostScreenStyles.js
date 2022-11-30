@@ -66,6 +66,7 @@ export default StyleSheet.create({
       },
       post: {
         backgroundColor: '#a8a1a6',
+        shadowColor:'black',
         borderRadius:10,
         padding: 20,
         marginVertical: 8,
