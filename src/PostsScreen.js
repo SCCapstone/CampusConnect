@@ -56,8 +56,9 @@ export function PostsScreen({navigation}) {
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
+  const [transactionStarted,setTransactionState] = useState(false);
 
-  const list= useRef(FlashList);
+  const list = useRef(FlashList);
 
 
   const PostAlert = () => {
@@ -147,9 +148,12 @@ export function PostsScreen({navigation}) {
         setPosts(posts);
         setImages(images);
         setLoading(false);
+        
         // After removing the item, we can start the animation.
-        list.current?.prepareForLayoutAnimationRender();
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        if (posts.length > 0) {
+          list.current?.prepareForLayoutAnimationRender();
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        }
       }
     });     
     
@@ -157,43 +161,6 @@ export function PostsScreen({navigation}) {
     return () => subscriber();
   }, []);
 
-  const getPosts = () => {
-    //For the time being, users cannot refresh the home page. it is wasteful of resources, and doesn't really do anything, because everything already updates asynchronously
-
-    /*firestore()
-    .collection('Posts').orderBy('upvoteCount', 'desc').orderBy('date','desc').get().then(snapShot => {
-      if(!snapShot.metadata.hasPendingWrites) {
-        postIndex = 0;
-        var imageIndex = 0;
-        const posts = [];
-        const images = [];
-        snapShot.forEach(documentSnapshot => {
-          const post = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-            isUpVoted: false,
-            isDownVoted: false
-          }
-          post.isUpVoted = post.upvoters[auth().currentUser.uid];
-          post.isDownVoted = post.downvoters[auth().currentUser.uid];
-          posts.push(post);
-          if (post.extraData){
-            images.push({
-              uri: post.extraData,
-              key: documentSnapshot.id
-            })
-            setImageMap(imageMap.set(postIndex,imageIndex))
-            imageIndex++;
-          }
-          postIndex++;
-        });
-        setPosts(posts);
-        setImages(images);
-        setLoading(false);
-      }
-      
-    });*/
-  }
 
   const DeletePost = ({item}) => {
     firestore().collection('Posts').doc(item.key).delete();
@@ -203,86 +170,23 @@ export function PostsScreen({navigation}) {
     setIsVisible(true);
   }
 
-  const UpvotePost = ({item}) => {
-    const postRef = firestore().collection('Posts').doc(item.key);
+  const UpvotePost =  ({item}) => {
+    if(!transactionStarted){
+      const postRef = firestore().collection('Posts').doc(item.key);
+      firestore().runTransaction((transaction) => {
 
-    postRef.get().then((post) => {
-      var isUpVoted = post.get('upvoters')[auth().currentUser.uid]
-      var isDownVoted = post.get('downvoters')[auth().currentUser.uid]
-      if ("/Users/"+auth().currentUser.uid === item.user){/*you can't take away your own upvote from your post*/}
-      else if(isUpVoted) {
-         firestore().runTransaction(async (transaction) => {
-          const post = await transaction.get(postRef);
-          const newUpvoteCount = post.data().upvoteCount -1;
-          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+ auth().currentUser.uid]: firestore.FieldValue.delete()})
-        });
-      }
-  
-      else if (!isUpVoted && !isDownVoted){
-         firestore().runTransaction(async (transaction) => {
-          const post = await transaction.get(postRef);
-          const newUpvoteCount = post.data().upvoteCount +1;
-  
-          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: true})
-      
-        });
-      }
-      else if (!isUpVoted && isDownVoted){
-         firestore().runTransaction(async (transaction) => {
-          const post = await transaction.get(postRef);
-          const newUpvoteCount = post.data().upvoteCount +2;
-  
-          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete(),['upvoters.'+auth().currentUser.uid]: true})
-      
-        });
-      }
-
-    });
+      }).then(() => {setTransactionState(false)})
+    }
 
   }
 
   
-  const DownvotePost =  ({item}) => {
-    const postRef = firestore().collection('Posts').doc(item.key);
-
-    postRef.get().then((post) => {
-      var isUpVoted = post.get('upvoters')[auth().currentUser.uid]
-      var isDownVoted = post.get('downvoters')[auth().currentUser.uid]
-
-      if (item.upvoteCount == 1 || "/Users/"+auth().currentUser.uid === item.user){/*We will not downvote you below 1, and you cannot downvote your own post*/}
-      else if(isDownVoted) {
-        firestore().runTransaction(async (transaction) => {
-          const post = await transaction.get(postRef);
-          const newUpvoteCount = post.data().upvoteCount +1;
-          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete()})
-        });
-      }
-
-      else if (!isDownVoted && !isUpVoted){
-        firestore().runTransaction(async (transaction) => {
-          const post = await transaction.get(postRef);
-          const newUpvoteCount = post.data().upvoteCount -1;
-
-          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: true})
-      
-        });
-      }
-      else if (!isDownVoted && isUpVoted){
-        firestore().runTransaction(async (transaction) => {
-          const post = await transaction.get(postRef);
-          var newUpvoteCount = post.data().upvoteCount -2;
-          if (newUpvoteCount < 1) {
-            newUpvoteCount++;
-            transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete()})
-          }
-          else{
-            transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete(),['downvoters.'+auth().currentUser.uid]: true})
-          }
-    
-        });
-      
-      }
-    });
+  const DownvotePost = ({item}) => {
+    if(!transactionStarted){
+      const postRef = firestore().collection('Posts').doc(item.key);
+      firestore().runTransaction((transaction) => {
+      }).then(() => {setTransactionState(false)})
+    }
   }
 
 
@@ -446,7 +350,6 @@ export function PostsScreen({navigation}) {
               ref={list}
               renderItem={renderPost}
               keyExtractor={item => item.key}
-              onRefresh={() => onRefresh()}
               refreshing={refreshing}
               estimatedItemSize={150}
             />
