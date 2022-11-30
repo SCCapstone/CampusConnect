@@ -55,7 +55,7 @@ export function PostsScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
 
-  const list= useRef(null);
+  const list= useRef(FlashList);
 
 
   const PostAlert = () => {
