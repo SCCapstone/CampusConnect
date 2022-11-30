@@ -4,7 +4,7 @@ import React from 'react';
 import {useState, useEffect, useContext, useRef} from 'react';
 import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image, Platform, LayoutAnimation, UIManager } from 'react-native';
 
-import auth from '@react-native-firebase/auth';
+import auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import { FloatingAction } from "react-native-floating-action";
@@ -56,7 +56,7 @@ export function PostsScreen({navigation}) {
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
-  const [transactionStarted,setTransactionState] = useState(false);
+  var transactionStarted = false;
 
   const list = useRef(FlashList);
 
@@ -171,23 +171,75 @@ export function PostsScreen({navigation}) {
   }
 
   //This code is very delicate and needs to be done right.
-  const UpvotePost =  ({item}) => {
+  const UpvotePost =  async ({item}) => {
     if(!transactionStarted){
+      transactionStarted = true;
       const postRef = firestore().collection('Posts').doc(item.key);
-      firestore().runTransaction((transaction) => {
 
-      }).then(() => {setTransactionState(false)})
+      await firestore().runTransaction(async (transaction) => {
+
+      const post = await transaction.get(postRef)
+      const postData = post.data();
+
+      const isUpVoted = postData.upvoters[auth().currentUser.uid]
+      const isDownVoted = postData.downvoters[auth().currentUser.uid]
+      const upvoteCount = postData.upvoteCount
+      const userId = postData.user
+
+      if (userId === '/Users/'+auth().currentUser.uid) {/*Can't take away your own upcote*/}
+      else if (isUpVoted) {
+        transaction.update(postRef,{['upvoters.' + auth().currentUser.uid]:firestore.FieldValue.delete(),upvoteCount: upvoteCount-1})
+      }
+      else if (!isUpVoted && !isDownVoted) {
+        transaction.update(postRef,{['upvoters.' + auth().currentUser.uid]:true,upvoteCount: upvoteCount+1})
+      }
+      else if (!isUpVoted && isDownVoted) {
+        transaction.update(postRef,{['upvoters.' + auth().currentUser.uid]:true,upvoteCount: upvoteCount+2,['downvoters.'+auth().currentUser.uid]:firestore.FieldValue.delete()})
+      }
+
+
+      }).then(() => {transactionStarted = false})
     }
 
   }
 
   
-  const DownvotePost = ({item}) => {
+  const DownvotePost =  async ({item}) => {
     if(!transactionStarted){
+      transactionStarted = true;
       const postRef = firestore().collection('Posts').doc(item.key);
-      firestore().runTransaction((transaction) => {
-      }).then(() => {setTransactionState(false)})
+
+      await firestore().runTransaction(async (transaction) => {
+
+      const post = await transaction.get(postRef)
+      const postData = post.data();
+
+      const isUpVoted = postData.upvoters[auth().currentUser.uid]
+      const isDownVoted = postData.downvoters[auth().currentUser.uid]
+      const upvoteCount = postData.upvoteCount
+      console.log(upvoteCount)
+      const userId = postData.user
+
+      if (upvoteCount === 1 || '/Users/'+auth().currentUser.uid === userId){/*Can't downvote below 1*/}
+      else if (isDownVoted) {
+        transaction.update(postRef,{['downvoters.' + auth().currentUser.uid]:firestore.FieldValue.delete(),upvoteCount: upvoteCount+1})
+      }
+      else if (!isDownVoted && !isUpVoted) {
+        transaction.update(postRef,{['downvoters.' + auth().currentUser.uid]:true,upvoteCount: upvoteCount-1})
+      }
+      else if (!isDownVoted && isUpVoted) {
+        if(upvoteCount-2 < 1){
+          transaction.update(postRef,{upvoteCount: upvoteCount-1,['upvoters.'+auth().currentUser.uid]:firestore.FieldValue.delete()})
+        }
+        else{
+          transaction.update(postRef,{['downvoters.' + auth().currentUser.uid]:true,upvoteCount: upvoteCount-2,['upvoters.'+auth().currentUser.uid]:firestore.FieldValue.delete()})
+        }
+      }
+
+
+      }).then(() => {transactionStarted = false})
     }
+
   }
 
 
