@@ -1,3 +1,5 @@
+//The code looks terrible, I know.
+
 import React from 'react';
 import {useState, useEffect, useContext, useRef} from 'react';
 import { SafeAreaView, Alert, View, KeyboardAvoidingView,FlatList, StyleSheet, Text, StatusBar, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Modal,Image, Platform, LayoutAnimation, UIManager } from 'react-native';
@@ -201,7 +203,7 @@ export function PostsScreen({navigation}) {
     setIsVisible(true);
   }
 
-  const UpvotePost = async ({item}) => {
+  const UpvotePost = ({item}) => {
     const postRef = firestore().collection('Posts').doc(item.key);
 
     if ("/Users/"+auth().currentUser.uid === item.user){/*you can't take away your own upvote from your post*/}
@@ -234,7 +236,7 @@ export function PostsScreen({navigation}) {
   }
 
   
-  const DownvotePost = async ({item}) => {
+  const DownvotePost =  ({item}) => {
     const postRef = firestore().collection('Posts').doc(item.key);
 
   if (item.upvoteCount == 1 || "/Users/"+auth().currentUser.uid === item.user){/*We will not downvote you below 1, and you cannot downvote your own post*/}
@@ -328,6 +330,10 @@ export function PostsScreen({navigation}) {
       setPostText("");
     }
 
+    const renderPost = ({ item, index }) => (
+      <Post item={item} index={index}/>
+    )
+
     if (loading) {
       return (
         <View style={styles.activityIndicator}>
@@ -335,12 +341,14 @@ export function PostsScreen({navigation}) {
         </View>
       )
     }
-    const renderPost = ({ item, index }) => (
-      <Post item={item} index={index}/>
-    )
+
+
+
+    if (posts.length == 0) {
       return (
         <SafeAreaView style={styles.container}>
-            <Modal style={styles.modal}
+          <Text style={{color:'white',fontSize:32,justifyContent:'center',alignSelf:'center',marginVertical:'75%'}}>Kind of empty in here....</Text>
+          <Modal style={styles.modal}
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -373,17 +381,6 @@ export function PostsScreen({navigation}) {
                 </View>
                 </KeyboardAvoidingView>
               </Modal>
-
-
-              <FlashList
-                data={posts}
-                ref={list}
-                renderItem={renderPost}
-                keyExtractor={item => item.key}
-                onRefresh={() => onRefresh()}
-                refreshing={refreshing}
-                estimatedItemSize={150}
-              />
               <FloatingAction
                 color='#73000a'
                 ref={(ref) => { this.floatingAction = ref; }}
@@ -391,16 +388,73 @@ export function PostsScreen({navigation}) {
                   setModalVisible(!modalVisible);
                 }}
               />
-              <ImageView
-                images={images}
-                
-                imageIndex={imageIndex}
-                visible={isVisible}
-                keyExtractor={item => item.key}
-                onRequestClose={() => setIsVisible(false)}
-              />
-          </SafeAreaView>
-      );
+        </SafeAreaView>
+      )
+    }
+
+    return (
+      <SafeAreaView style={styles.container}>
+          <Modal style={styles.modal}
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                closeModal()
+              }}
+            >
+            <KeyboardAvoidingView behavior='padding'>
+              <View style={styles.postView}>
+                <View style={{flexDirection:'row'}}>
+                  <TouchableOpacity onPress={ () => closeModal()} style={styles.cancelButton}>
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={ () => PostAlert()} style={styles.postButton}>
+                    <Text style={styles.postButtonText}>Post?</Text>
+                  </TouchableOpacity>
+                  </View>
+                  <View style={styles.postTextView}>
+                    <TextInput
+                      style={styles.postInput}
+                      multiline={true}
+                      onChangeText={(postText) => setPostText(postText)}
+                      placeholder="Enter your post"
+                      textAlignVertical='top'
+                      placeholderTextColor="black"
+                      blurOnSubmit={false}
+                    />
+                  </View>
+                  
+              </View>
+              </KeyboardAvoidingView>
+            </Modal>
+
+
+            <FlashList
+              data={posts}
+              ref={list}
+              renderItem={renderPost}
+              keyExtractor={item => item.key}
+              onRefresh={() => onRefresh()}
+              refreshing={refreshing}
+              estimatedItemSize={150}
+            />
+            <FloatingAction
+              color='#73000a'
+              ref={(ref) => { this.floatingAction = ref; }}
+              onPressMain= { () => {
+                setModalVisible(!modalVisible);
+              }}
+            />
+            <ImageView
+              images={images}
+              
+              imageIndex={imageIndex}
+              visible={isVisible}
+              keyExtractor={item => item.key}
+              onRequestClose={() => setIsVisible(false)}
+            />
+        </SafeAreaView>
+    );
 }
 
 const PostError = () => {
