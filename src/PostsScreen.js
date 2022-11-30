@@ -217,13 +217,12 @@ export function PostsScreen({navigation}) {
       const isUpVoted = postData.upvoters[auth().currentUser.uid]
       const isDownVoted = postData.downvoters[auth().currentUser.uid]
       const upvoteCount = postData.upvoteCount
-      console.log(upvoteCount)
       const userId = postData.user
 
-      if (upvoteCount === 1 || '/Users/'+auth().currentUser.uid === userId){/*Can't downvote below 1*/}
-      else if (isDownVoted) {
+      if (isDownVoted) {
         transaction.update(postRef,{['downvoters.' + auth().currentUser.uid]:firestore.FieldValue.delete(),upvoteCount: upvoteCount+1})
       }
+      else if (upvoteCount === 1 || '/Users/'+auth().currentUser.uid === userId){/*Can't downvote below 1*/}
       else if (!isDownVoted && !isUpVoted) {
         transaction.update(postRef,{['downvoters.' + auth().currentUser.uid]:true,upvoteCount: upvoteCount-1})
       }
