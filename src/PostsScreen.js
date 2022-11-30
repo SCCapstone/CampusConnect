@@ -34,6 +34,12 @@ else if (Platform.OS === 'android') {
 
 
 export function PostsScreen({navigation}) {
+
+  if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
   
 
   //Global userdata var
@@ -141,7 +147,7 @@ export function PostsScreen({navigation}) {
         setLoading(false);
         // After removing the item, we can start the animation.
         list.current?.prepareForLayoutAnimationRender();
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
       }
     });     
     
@@ -201,11 +207,9 @@ export function PostsScreen({navigation}) {
     if ("/Users/"+auth().currentUser.uid === item.user){/*you can't take away your own upvote from your post*/}
     else if(item.isUpVoted) {
       firestore().runTransaction(async (transaction) => {
-        var newUpVoters = new Map()
         const post = await transaction.get(postRef);
         const newUpvoteCount = post.data().upvoteCount -1;
-        newUpVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, upvoters: newUpVoters})
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+ auth().currentUser.uid]: firestore.FieldValue.delete()})
       });
     }
 
@@ -220,12 +224,10 @@ export function PostsScreen({navigation}) {
     }
     else if (!item.UpVoted && item.isDownVoted){
       firestore().runTransaction(async (transaction) => {
-        var newDownVoters = new Map()
         const post = await transaction.get(postRef);
         const newUpvoteCount = post.data().upvoteCount +2;
-        newDownVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
 
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, downvoters: newDownVoters,['upvoters.'+auth().currentUser.uid]: true})
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete(),['upvoters.'+auth().currentUser.uid]: true})
     
       });
     }
@@ -238,11 +240,9 @@ export function PostsScreen({navigation}) {
   if (item.upvoteCount == 1 || "/Users/"+auth().currentUser.uid === item.user){/*We will not downvote you below 1, and you cannot downvote your own post*/}
     else if(item.isDownVoted) {
       firestore().runTransaction(async (transaction) => {
-        var newDownVoters = new Map()
         const post = await transaction.get(postRef);
         const newUpvoteCount = post.data().upvoteCount +1;
-        newDownVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, downvoters: newDownVoters})
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete()})
       });
     }
 
@@ -257,12 +257,15 @@ export function PostsScreen({navigation}) {
     }
     else if (!item.isDownVoted && item.isUpVoted){
       firestore().runTransaction(async (transaction) => {
-        var newUpVoters = new Map()
         const post = await transaction.get(postRef);
-        const newUpvoteCount = post.data().upvoteCount -2;
-        newUpVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
-
-        transaction.update(postRef,{upvoteCount:newUpvoteCount, upvoters: newUpVoters,['downvoters.'+auth().currentUser.uid]: true})
+        var newUpvoteCount = post.data().upvoteCount -2;
+        if (newUpvoteCount < 1) {
+          newUpvoteCount++;
+          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete()})
+        }
+        else{
+          transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: firestore.FieldValue.delete(),['downvoters.'+auth().currentUser.uid]: true})
+        }
     
       });
     }
