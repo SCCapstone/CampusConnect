@@ -1,6 +1,18 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Image } from 'react-native';
 
+import iosstyles from './styles/ios/EventsScreenStyles';
+import androidstyles from './styles/android/EventsScreenStyles';
+
+var styles;
+
+if (Platform.OS === 'ios'){
+  styles = iosstyles;// do dark mode in here as well
+}
+else if (Platform.OS === 'android') {
+  styles = androidstyles
+}
+
 export function EventsScreen({navigation}) {
     const DATA = [
         {
@@ -86,35 +98,3 @@ export function EventsScreen({navigation}) {
         </SafeAreaView>
       );
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: StatusBar.currentHeight || 0,
-    },
-    item: {
-      backgroundColor: '#808080',
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-    },
-    date: {
-      fontSize: 10,
-      marginTop:20,
-      color: 'black',
-      fontStyle: 'italic'
-    },
-    event: {
-      fontSize: 18,
-      color: 'black',
-      marginTop: 10,
-      justifyContent: 'center'
-    },
-    box: {
-        backgroundColor: '#cecece',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 20,
-        flex: 1
-      },
-  });
