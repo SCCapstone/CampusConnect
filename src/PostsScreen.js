@@ -20,6 +20,7 @@ import { FlashList } from "@shopify/flash-list";
 
 import iosstyles from './styles/ios/PostScreenStyles';
 import androidstyles from './styles/android/PostScreenStyles';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 var styles;
 
@@ -77,7 +78,7 @@ export function PostsScreen({navigation}) {
         authorMajor: userData.major,
         body: postText,
         replyCount:0,
-        upvoteCount:1000,
+        upvoteCount:1,
         date: firestore.FieldValue.serverTimestamp(),
         pfp: userData.pfp,
         replies: [],
@@ -108,7 +109,11 @@ export function PostsScreen({navigation}) {
           const post = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
+            isUpVoted: false,
+            isDownVoted: false
           }
+          post.isUpVoted = post.upvoters[auth().currentUser.uid];
+          post.isDownVoted = post.downvoters[auth().currentUser.uid];
           posts.push(post);
           if (post.extraData){
             images.push({
@@ -136,11 +141,69 @@ export function PostsScreen({navigation}) {
     setIsVisible(true);
   }
 
-  const UpvotePost = ({item}) => {
+  const UpvotePost = async ({item}) => {
+    const postRef = firestore().collection('Posts').doc(item.key);
 
+
+    if(item.isUpVoted) {
+      firestore().runTransaction(async (transaction) => {
+        var newUpVoters = new Map()
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount -1;
+        newUpVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, upvoters: newUpVoters})
+      });
+    }
+
+    else if (!item.isUpVoted){
+      firestore().runTransaction(async (transaction) => {
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount +1;
+        const upvoters = post.data().upvoters
+
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['upvoters.'+auth().currentUser.uid]: true})
+    
+      });
+    }
+    else if (item.isDownVoted) {
+
+    }
+    else if (!item.isDownVoted) {
+      
+    }
   }
-  const DownvotePost = ({item}) => {
 
+  
+  const DownvotePost = async ({item}) => {
+    const postRef = firestore().collection('Posts').doc(item.key);
+
+
+    if(item.isDownVoted) {
+      firestore().runTransaction(async (transaction) => {
+        var newDownVoters = new Map()
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount +1;
+        newDownVoters.set(auth().currentUser.uid, firestore.FieldValue.delete)
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, downvoters: newDownVoters})
+      });
+    }
+
+    else if (!item.isDownVoted){
+      firestore().runTransaction(async (transaction) => {
+        const post = await transaction.get(postRef);
+        const newUpvoteCount = post.data().upvoteCount -1;
+        const upvoters = post.data().upvoters
+
+        transaction.update(postRef,{upvoteCount:newUpvoteCount, ['downvoters.'+auth().currentUser.uid]: true})
+    
+      });
+    }
+    else if (item.isUpVoted){
+
+    }
+    else if (!item.isUpVoted){
+      
+    }
   }
 
   useEffect(() => { //gets posts asynchronously in the background
@@ -153,10 +216,18 @@ export function PostsScreen({navigation}) {
         const posts = [];
         const images = [];
         querySnapshot.forEach(documentSnapshot => {
+
+          //Determine whether the user has upvoted or downvoted the post yet
           const post = {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
+            isUpVoted: false,
+            isDownVoted: false
           }
+          post.isUpVoted = post.upvoters[auth().currentUser.uid];
+          post.isDownVoted = post.downvoters[auth().currentUser.uid];
+
+
           posts.push(post);
           if (post.extraData){
             images.push({
@@ -181,47 +252,48 @@ export function PostsScreen({navigation}) {
   }, []);
 
 
-  const Post = pure(({item, index}) => (
+  const Post = pure(({item, index}) => {
+    
+    return (
+      <View style={styles.postContainer}>
+        <View style={styles.upvoteBox}>
+          <TouchableOpacity onPress={() => UpvotePost({item})}>
+            <Image  style={styles.voteButtons} source= {item.isUpVoted ? require('./assets/upvote_highlighted.png') : require('./assets/upvote.png') }></Image>
+          </TouchableOpacity>
+          <Text style={styles.upvote}>{item.upvoteCount}</Text>
+          <TouchableOpacity onPress={() => DownvotePost({item})}>
+            <Image style={styles.voteButtons} source={item.isDownVoted ? require('./assets/downvote_highlighted.png') : require('./assets/downvote.png')}></Image>
+          </TouchableOpacity>
+        </View>
+        <Pressable elevation={20} android_ripple={styles.rippleConfig} style={ Platform.OS === 'ios' ? ({ pressed }) => [styles.post || {}, {opacity:pressed ? 0.9 : 1}] : styles.post} onLongPress={() => DeletePostAlert({item})}>
+            <View style={styles.postUserImageAndInfoBox}>
+              <FastImage defaultSource={require('./assets/blank2.jpeg')} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
+                                  style={styles.postPfp}/>
+                {item.author !== 'Anonymous' ?
+                <View style={styles.postUserInfo}>
 
-    <View style={styles.postContainer}>
-      <View style={styles.upvoteBox}>
-        <TouchableOpacity>
-          <Image style={styles.voteButtons} source={require('./assets/upvote.png')}></Image>
-        </TouchableOpacity>
-        <Text style={styles.upvote}>1000</Text>
-        <TouchableOpacity>
-          <Image style={styles.voteButtons} source={require('./assets/downvote.png')}></Image>
-        </TouchableOpacity>
-      </View>
-      <Pressable android_ripple={styles.rippleConfig} style={ Platform.OS === 'ios' ? ({ pressed }) => [styles.post || {}, {opacity:pressed ? 0.9 : 1}] : styles.post} onLongPress={() => DeletePostAlert({item})}>
-          <View style={styles.postUserImageAndInfoBox}>
-            <FastImage defaultSource={require('./assets/blank2.jpeg')} source= {item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}
-                                style={styles.postPfp}/>
-              {item.author !== 'Anonymous' ?
-              <View style={styles.postUserInfo}>
-
-                <Text style={styles.name}>{item.author}</Text>
-                  <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
-              </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
-          </View>
-          <View style={styles.postImageView}>
-            <Text style={styles.body}>{item.body}</Text>
-            {item.extraData ?
-              <TouchableOpacity onPress={() => OpenImage({index})}>
-                <FastImage source={{uri: item.extraData}}
-                                  style={styles.postImage}/></TouchableOpacity>: null}
-          </View>
-          <View style={styles.dateAndReplyBox}>
-            <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-            <View style={styles.replyCountBox}>
-              <Text style={styles.replies}>Replies: </Text>
-              <Text style={styles.date}>{item.replyCount}</Text>
+                  <Text style={styles.name}>{item.author}</Text>
+                    <Text style={styles.majorText}>{item.authorMajor} | Class of {item.authorGradYear}</Text>
+                </View>: <Text style={styles.anonymousAuthorText}>{item.author}</Text>}
             </View>
-          </View>
-      </Pressable>
-    </View>
-
-  ))
+            <View style={styles.postImageView}>
+              <Text style={styles.body}>{item.body}</Text>
+              {item.extraData ?
+                <TouchableOpacity onPress={() => OpenImage({index})}>
+                  <FastImage source={{uri: item.extraData}}
+                                    style={styles.postImage}/></TouchableOpacity>: null}
+            </View>
+            <View style={styles.dateAndReplyBox}>
+              <Text style={styles.date}>{moment(new Date(item.date.toDate())).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+              <View style={styles.replyCountBox}>
+                <Text style={styles.replies}>Replies: </Text>
+                <Text style={styles.date}>{item.replyCount}</Text>
+              </View>
+            </View>
+        </Pressable>
+      </View>
+    )
+  })
 
 
     const onRefresh = () => {
