@@ -129,6 +129,10 @@ export function Chat({navigation}) {
     );
   };
 
+  const createAGroup = () => {
+    navigation.navigate('Create Group')
+  }
+
   return (
     <View style={styles.chatContain}>
       <View style={styles.searchActionContainer}>
@@ -181,13 +185,12 @@ export function Chat({navigation}) {
         />
       </View>
 
-      <FloatingAction
+      <FloatingAction color='#73000a'
         ref={ref => {
           this.floatingAction = ref;
         }}
-        onPressMain={() => {
-          navigation.navigate('Create Group');
-        }}
+        onOpen={() => this.floatingAction.animateButton()}
+        onPressMain={() => createAGroup()}
       />
     </View>
   );
