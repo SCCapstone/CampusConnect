@@ -41,8 +41,6 @@ const DATA = [
         Alert.alert('test');
    }
 
-   
-
   const Item = ({ item, onPress }) => (
     <TouchableOpacity onPress={onPress} style={styles.item}>
         <Image
@@ -83,9 +81,9 @@ return (
     container: {
       flex: 1,
       marginTop: StatusBar.currentHeight || 0,
+      backgroundColor: '#73000a',
     },
     item: {
-      
       flexDirection: "row",
       padding: 20,
       marginVertical: 8,
@@ -106,7 +104,7 @@ return (
     button: {
         width: 400,
         alignItems: 'center',
-        backgroundColor: '#2196F3',
+        backgroundColor: '#73000',
       },
     buttonText: {
         textAlign: 'center',
@@ -114,8 +112,8 @@ return (
         color: 'black',
     },
     buttonIcon: {
-        width: 10,
-        height: 10,
+        width: 1,
+        height: 1,
     },
     addButton: {
         width: 100,
@@ -124,8 +122,7 @@ return (
         alignItems: 'center',
         padding: 10,
         borderRadius: 100,
-        backgroundColor: '#2196F3',
-        
+        backgroundColor: '#73000a',     
     }
 
   });
