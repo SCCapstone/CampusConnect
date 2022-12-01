@@ -28,18 +28,20 @@ const DATA = [
         name: "bt_Create",
         icon: source={uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png'},
         position: 2,
+        color: '#73000a',
     },
     {
         text: "Search Group",
         name: "bt_search",
         icon: source={uri:'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png'},
         position: 1,
+        color: '#73000a',
     }
 ];
 
   const CreateAlert = () => {
-        Alert.alert('test');
-   }
+    Alert.alert('This will take you to this button\'s group page');
+  }
 
   const Item = ({ item, onPress }) => (
     <TouchableOpacity onPress={onPress} style={styles.item}>
@@ -69,7 +71,7 @@ return (
             renderItem={renderItem}
             >
             </FlatList>
-            <FloatingAction actions={actions} onPress={ () => CreateAlert()} />
+            <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
         </SafeAreaView>
     );
    
@@ -80,7 +82,6 @@ return (
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      marginTop: StatusBar.currentHeight || 0,
       backgroundColor: '#73000a',
     },
     item: {
@@ -104,7 +105,7 @@ return (
     button: {
         width: 400,
         alignItems: 'center',
-        backgroundColor: '#73000',
+        color: '#73000',
       },
     buttonText: {
         textAlign: 'center',
@@ -122,7 +123,7 @@ return (
         alignItems: 'center',
         padding: 10,
         borderRadius: 100,
-        backgroundColor: '#73000a',     
+        color: '#73000a',     
     }
 
   });
