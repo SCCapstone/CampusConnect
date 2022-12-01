@@ -111,7 +111,7 @@ export function CreateGroup() {
       </Text>
       <TextInput
         onChangeText={onGroupNameChanged}
-        placeholder="What would you like your group to be called..."
+        placeholder="Enter group name here..."
         style={styles.groupInput}
       />
       <View style={styles.btnParentSection}>
