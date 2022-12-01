@@ -50,10 +50,9 @@
     "react-native-video": "^5.2.1",
     "react-native-video-controls": "^2.8.1",
     "react-navigation": "^4.4.4",
+    "recompose": "^0.17.0",
     "uuid": "^9.0.0",
-    "validator": "^13.7.0",
-    "recompose": "^0.17.0"
-
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -63,7 +62,7 @@
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
-    "prettier": "^2.8.0",
+    "prettier": "2.8.0",
     "react-test-renderer": "18.1.0"
   },
   "jest": {

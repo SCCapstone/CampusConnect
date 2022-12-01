@@ -50,14 +50,14 @@ export function HomeScreen({navigation}) {
         options={{headerTitle: 'Campus Connect: Events'}}
       />
       <Drawer.Screen
-        name="Edit Profile"
-        component={RegistrationScreen}
-        options={{headerTitle: 'Campus Connect: Edit Profile'}}
-      />
-      <Drawer.Screen
         name="Chats"
         component={Chat}
         options={{headerTitle: 'Campus Connect: Chats'}}
+      />
+      <Drawer.Screen
+        name="Edit Profile"
+        component={RegistrationScreen}
+        options={{headerTitle: 'Campus Connect: Edit Profile'}}
       />
       <Drawer.Screen
         name="Create Group"

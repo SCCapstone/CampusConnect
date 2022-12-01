@@ -11,10 +11,13 @@ import {useState, useEffect} from 'react';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import {FloatingAction} from 'react-native-floating-action';
 import androidstyles from './styles/android/ChatStyles';
+import iosstyles from './styles/ios/ChatStyles';
 
 var styles;
 
-if (Platform.OS === 'android') {
+if (Platform.OS === 'ios') {
+  styles = iosstyles; // do dark mode in here as well
+} else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
 
