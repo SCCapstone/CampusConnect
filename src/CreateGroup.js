@@ -28,7 +28,7 @@ if (Platform.OS === 'ios') {
   styles = androidstyles;
 }
 
-export function CreateGroup() {
+export function CreateGroup({navigation}) {
   const [groupName, setGroupName] = React.useState('');
   const [image, setImage] = React.useState('');
   var url = '';
@@ -142,7 +142,7 @@ const BackButton = () => {
   return (
     <TouchableOpacity
       style={styles.backButtonContainer}
-      onPress={() => navigation.goBack()}>
+      onPress={() => navigation.navigate('Chats')}>
       <ImageBackground
         style={styles.backButtonImage}
         source={require('./assets/back_arrow.png')}
