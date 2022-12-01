@@ -53,11 +53,17 @@ export function WelcomeScreen({navigation}) {
               routes: [{name: 'RegistrationScreen'}],
             });
           } else if (auth().currentUser && !firstLogin) {
-            navigation.navigate('HomeScreen');
             const cometChatLoggedUser = await CometChat.login(
               auth().currentUser.uid,
               COMETCHAT_CONSTANTS.AUTH_KEY,
-            );
+            ).then(() => {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'HomeScreen'}],
+              });
+            }).catch((error) => console.log(error));
+            
+
           }
         })
         .catch(error => {

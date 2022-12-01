@@ -183,8 +183,9 @@ export function Chat({navigation}) {
 
       <FloatingAction
         ref={ref => {
-          this.floatingAction = ref;
+          this.floatingAction2 = ref;
         }}
+        onOpen={() => this.floatingAction2.animateButton()}
         onPressMain={() => {
           navigation.navigate('Create Group');
         }}
