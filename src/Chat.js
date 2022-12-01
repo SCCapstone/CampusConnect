@@ -187,10 +187,12 @@ export function Chat({navigation}) {
 
       <FloatingAction color='#73000a'
         ref={ref => {
-          this.floatingAction = ref;
+          this.floatingAction2 = ref;
         }}
-        onOpen={() => this.floatingAction.animateButton()}
-        onPressMain={() => createAGroup()}
+        onOpen={() => this.floatingAction2.animateButton()}
+        onPressMain={() => {
+          navigation.navigate('Create Group');
+        }}
       />
     </View>
   );
