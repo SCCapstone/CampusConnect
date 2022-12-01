@@ -85,22 +85,25 @@ return (
       marginTop: StatusBar.currentHeight || 0,
     },
     item: {
+      
+      flexDirection: "row",
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
       backgroundColor: '#a8a1a6',
     },
     title: {
-      fontSize: 32,
+      flex: 2,
+      fontSize: 28,
       color: 'black',
     },
     groupImg: {
-        marginLeft: 1,
+        marginTop: 10,
+        marginRight: 20,
         width: 50,
         height: 50,
     },
     button: {
-        marginBottom: 10,
         width: 400,
         alignItems: 'center',
         backgroundColor: '#2196F3',
