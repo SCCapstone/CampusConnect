@@ -1,30 +1,21 @@
-import { Modal, StatusBar } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Image,
   ImageBackground,
   TextInput,
-  Button,
   TouchableOpacity,
   Alert,
-  ScrollView,
-  ActivityIndicator
 } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import styles from './loginStyles';
-import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import AppContext from './AppContext';
 
 import { COMETCHAT_CONSTANTS } from '../env';
 import {CometChat} from '@cometchat-pro/react-native-chat';
-import {useCometChatAuth} from './CometChatAuthContext';
 
 export function WelcomeScreen({navigation}) {
  

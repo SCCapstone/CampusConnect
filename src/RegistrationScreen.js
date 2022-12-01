@@ -1,24 +1,15 @@
 import * as React from 'react';
-import { useState, useEffect, useContext, Component, Fragment } from 'react';
+import { useState, useContext} from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {
-    SafeAreaView,
-    TextInput,
-    KeyboardAvoidingView,
-    Alert,
-    ScrollView,
-    ActivityIndicator,
-} from "react-native";
-
+import {SafeAreaView,TextInput,KeyboardAvoidingView,Alert,ScrollView,ActivityIndicator} from "react-native";
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
 import regstyles from './registrationStyles';
-import {useCometChatAuth} from './CometChatAuthContext';
 import {COMETCHAT_CONSTANTS} from '../env';
 
 export function RegistrationScreen({navigation}) {  

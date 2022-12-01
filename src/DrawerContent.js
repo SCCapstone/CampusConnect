@@ -1,28 +1,11 @@
 import React from 'react';
-import {
-    View,
-    Text,
-    ImageBackground,
-    Image,
-    Caption,
-    TouchableOpacity,
-    Title,
-    Pressable,
-    Alert
-} from 'react-native';
-
-import {
-    DrawerContentScrollView,
-    DrawerItem,
-    DrawerItemList
-} from '@react-navigation/drawer';
-
+import {View, Text, ImageBackground, Image, TouchableOpacity, Alert} from 'react-native';
+import { DrawerContentScrollView,DrawerItemList} from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
-
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
-import { useEffect, useState, setState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
 
