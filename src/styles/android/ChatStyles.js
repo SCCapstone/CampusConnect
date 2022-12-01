@@ -121,4 +121,21 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  backButtonContainer: {
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    marginLeft: '5%',
+    height: '6%',
+    width: '10%',
+  },
+
+  backButtonImage: {
+    resizeMode: 'stretch',
+    marginTop: '15%',
+    width: '100%',
+    height: '86%',
+  },
+
 });

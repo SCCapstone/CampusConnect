@@ -6,6 +6,7 @@ import {
   Text,
   Alert,
   Image,
+  ImageBackground
 } from 'react-native';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -14,6 +15,7 @@ import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import validator from 'validator';
+import {useNavigation} from '@react-navigation/native';
 
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
@@ -109,6 +111,7 @@ export function CreateGroup() {
 
   return (
     <View style={styles.groupContainer}>
+      <BackButton></BackButton>
       <Text style={styles.textGroupStyle}>
         What would you like your group to be called
       </Text>
@@ -132,3 +135,18 @@ export function CreateGroup() {
     </View>
   );
 }
+
+const BackButton = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      style={styles.backButtonContainer}
+      onPress={() => navigation.goBack()}>
+      <ImageBackground
+        style={styles.backButtonImage}
+        source={require('./assets/back_arrow.png')}
+      />
+    </TouchableOpacity>
+  );
+};
+

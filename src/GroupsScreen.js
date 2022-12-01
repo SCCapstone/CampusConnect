@@ -64,14 +64,6 @@ export function GroupsScreen({navigation}) {
     return <Item item={item} onPress={() => CreateAlert()} />;
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList data={DATA} renderItem={renderItem}></FlatList>
-      <FloatingAction actions={actions} onPress={() => CreateAlert()} />
-    </SafeAreaView>
-  );
-}
-
 return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -82,55 +74,53 @@ return (
             <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
         </SafeAreaView>
     );
-   
-};
+}
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#73000a',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#73000a',
+  },
+  item: {
+    flexDirection: "row",
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: '#a8a1a6',
+  },
+  title: {
+    flex: 2,
+    fontSize: 28,
+    color: 'black',
+  },
+  groupImg: {
+      marginTop: 10,
+      marginRight: 20,
+      width: 50,
+      height: 50,
+  },
+  button: {
+      width: 400,
+      alignItems: 'center',
+      color: '#73000',
     },
-    item: {
-      flexDirection: "row",
+  buttonText: {
+      textAlign: 'center',
       padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-      backgroundColor: '#a8a1a6',
-    },
-    title: {
-      flex: 2,
-      fontSize: 28,
       color: 'black',
-    },
-    groupImg: {
-        marginTop: 10,
-        marginRight: 20,
-        width: 50,
-        height: 50,
-    },
-    button: {
-        width: 400,
-        alignItems: 'center',
-        color: '#73000',
-      },
-    buttonText: {
-        textAlign: 'center',
-        padding: 20,
-        color: 'black',
-    },
-    buttonIcon: {
-        width: 1,
-        height: 1,
-    },
-    addButton: {
-        width: 100,
-        height: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
-        borderRadius: 100,
-        color: '#73000a',     
-    }
+  },
+  buttonIcon: {
+      width: 1,
+      height: 1,
+  },
+  addButton: {
+      width: 100,
+      height: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 100,
+      color: '#73000a',     
+  }
 
-  });
+});
