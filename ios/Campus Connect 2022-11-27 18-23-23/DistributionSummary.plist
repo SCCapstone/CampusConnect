@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Campus Connect.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>31FEDD74075B713490E73BC578B3E4D33C82419D</string>
+				<key>dateExpires</key>
+				<string>11/27/23</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>0.11.0</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>31FEDD74075B713490E73BC578B3E4D33C82419D</string>
+						<key>dateExpires</key>
+						<string>11/27/23</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>hermes.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>F2NFDVT7GR</string>
+						<key>name</key>
+						<string>Erik Connerty</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.11.0</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>F2NFDVT7GR.org.reactjs.native.example.Campus-Connect</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>F2NFDVT7GR</string>
+				<key>get-task-allow</key>
+				<true/>
+			</dict>
+			<key>name</key>
+			<string>Campus Connect.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>19107d37-a8e3-45ea-b9d1-cd1b0a82ec50</string>
+				<key>dateExpires</key>
+				<string>11/27/23</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: *</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>F2NFDVT7GR</string>
+				<key>name</key>
+				<string>Erik Connerty</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

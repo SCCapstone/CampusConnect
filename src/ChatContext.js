@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, {createContext, useState} from 'react';
 
 const ChatContext = createContext();
 
@@ -11,7 +11,10 @@ export default function ChatComponent() {
   };
 
   return (
-    <ChatContext.Provider value={chatData}>
-    </ChatContext.Provider>
+    <ChatContext.Provider
+      value={{
+        selectedConversation,
+        setSelectedConversation,
+      }}></ChatContext.Provider>
   );
 }

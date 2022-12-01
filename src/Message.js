@@ -1,14 +1,17 @@
 import * as React from 'react';
 import {useEffect, useCallback} from 'react';
-import { View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
-import { v4 as uuidv4 } from "uuid";
-import {CometChat } from '@cometchat-pro/react-native-chat';
+import {View} from 'react-native';
+import {GiftedChat} from 'react-native-gifted-chat';
+import {v4 as uuidv4} from 'uuid';
+import {CometChat} from '@cometchat-pro/react-native-chat';
 import auth from '@react-native-firebase/auth';
 
 export function Message() {
   const [messages, setMessages] = React.useState([]);
-  const {selectedConversation} = require('./Chat.js')
+  const messageLimit = 50;
+
+  //need to fix this
+  const {selectedConversation} = require('./Chat.js');
 
   useEffect(() => {
     if (selectedConversation) {
@@ -17,18 +20,24 @@ export function Message() {
     }
     return () => {
       if (selectedConversation) {
-        const conversationId = selectedConversation && selectedConversation.guid ? selectedConversation.guid : selectedConversation.uid ? selectedConversation.uid : null;
+        const conversationId =
+          selectedConversation && selectedConversation.guid
+            ? selectedConversation.guid
+            : selectedConversation.uid
+            ? selectedConversation.uid
+            : null;
         if (conversationId) {
           CometChat.removeMessageListener();
         }
         setMessages(() => []);
         CometChat.removeUserListener(auth().currentUser.uid);
       }
-    }
+    };
   }, [selectedConversation]);
-
-  const isValidMessage = (message) => {
-    return message &&
+  //checks if message is valid
+  const isValidMessage = message => {
+    return (
+      message &&
       message.id &&
       message.sentAt &&
       message.sender &&
@@ -37,19 +46,21 @@ export function Message() {
       message.sender.avatar &&
       message.category &&
       message.category === 'message'
+    );
   };
 
-  const transformSingleMessage = (message) => {
+  const transformSingleMessage = message => {
     if (isValidMessage(message)) {
       let transformedMessage = {
         _id: message.id ? message.id : uuidv4(),
         createdAt: new Date(message.sentAt * 1000),
         user: {
-          _id: message.sender.uid,
-          name: message.sender.name,
-          avatar: message.sender.avatar,
+          uid: message.sender.uid,
+          avatar: message.sender.avatar
+            ? message.sender.avatar
+            : auth().currentUser.photoURL,
         },
-      }
+      };
       if (message.text) {
         transformedMessage.text = message.text;
       }
@@ -58,7 +69,7 @@ export function Message() {
     return message;
   };
 
-  const transformMessages = (messages) => {
+  const transformMessages = messages => {
     if (messages && messages.length !== 0) {
       const transformedMessages = [];
       for (const message of messages) {
@@ -68,42 +79,51 @@ export function Message() {
       }
       return transformedMessages.sort(function (a, b) {
         return new Date(b.createdAt) - new Date(a.createdAt);
-      });;
+      });
     }
     return [];
   };
 
   const listenForMessages = () => {
-    const conversationId = selectedConversation && selectedConversation.guid ? selectedConversation.guid : selectedConversation.uid ? selectedConversation.uid : null;
+    const conversationId =
+      selectedConversation && selectedConversation.guid
+        ? selectedConversation.guid
+        : selectedConversation.uid
+        ? selectedConversation.uid
+        : null;
     if (conversationId) {
       CometChat.addMessageListener(
         conversationId,
         new CometChat.MessageListener({
-          onTextMessageReceived: (message) => {
-            setMessages(previousMessages => GiftedChat.append(previousMessages, [transformSingleMessage(message)]))
+          onTextMessageReceived: message => {
+            setMessages(previousMessages =>
+              GiftedChat.append(previousMessages, [
+                transformSingleMessage(message),
+              ]),
+            );
           },
-        })
+        }),
       );
     }
-  }
+  };
 
   const loadMessages = () => {
-    const limit = 50;
-    const messageRequestBuilder = new CometChat.MessagesRequestBuilder().setLimit(limit)
+    const messageRequestBuilder =
+      new CometChat.MessagesRequestBuilder().setLimit(messageLimit);
     if (selectedConversation.contactType === 1) {
       messageRequestBuilder.setGUID(selectedConversation.guid);
     } else if (selectedConversation.contactType === 0) {
       messageRequestBuilder.setUID(selectedConversation.uid);
     }
     const messagesRequest = messageRequestBuilder
-      .setCategories(["message"])
+      .setCategories(['message'])
       .build();
     messagesRequest
       .fetchPrevious()
-      .then((messages) => {
+      .then(messages => {
         setMessages(() => transformMessages(messages));
       })
-      .catch((error) => { });
+      .catch(error => {});
   };
 
   const getReceiverId = () => {
@@ -119,10 +139,11 @@ export function Message() {
   const getReceiverType = () => {
     if (selectedConversation && selectedConversation.guid) {
       return CometChat.RECEIVER_TYPE.GROUP;
-    } return CometChat.RECEIVER_TYPE.USER;
+    }
+    return CometChat.RECEIVER_TYPE.USER;
   };
-
-  const sendMessageCometChat = (messages) => {
+  //stores message in cometchat server
+  const sendMessageCometChat = messages => {
     if (messages && messages.length !== 0) {
       const receiverID = getReceiverId();
       const receiverType = getReceiverType();
@@ -131,14 +152,17 @@ export function Message() {
         const textMessage = new CometChat.TextMessage(
           receiverID,
           messageText,
-          receiverType
+          receiverType,
         );
         CometChat.sendMessage(textMessage).then(
           message => {
-            setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+            setMessages(previousMessages =>
+              GiftedChat.append(previousMessages, messages),
+            );
           },
           error => {
-          }
+            console.log('Error, please try again later...');
+          },
         );
       }
     }
@@ -149,17 +173,18 @@ export function Message() {
   }, []);
 
   return (
-      <View style={{ backgroundColor: '#fff', flex: 1 }}>
-        <GiftedChat
-          scrollToBottom
-          messages={messages}
-          onSend={messages => onSend(messages)}
-          user={{
-            _id: auth().currentUser.uid,
-            avatar: auth().currentUser.pfp,
-            pfp: auth().currentUser.photoURL
-          }}
-        />
-      </View>
-  )
-};
+    <View style={{backgroundColor: 'white', flex: 1}}>
+      <GiftedChat
+        scrollToBottom
+        messages={messages}
+        showAvatarForEveryMessage={true}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: auth().currentUser.uid,
+          avatar: auth().currentUser.pfp,
+          pfp: auth().currentUser.photoURL,
+        }}
+      />
+    </View>
+  );
+}

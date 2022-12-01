@@ -25,6 +25,7 @@
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.0",
     "@react-navigation/stack": "^6.3.4",
+    "@shopify/flash-list": "^1.4.0",
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.70.5",
@@ -37,6 +38,7 @@
     "react-native-gifted-chat": "^1.0.4",
     "react-native-image-crop-picker": "^0.38.1",
     "react-native-image-picker": "^4.10.1",
+    "react-native-image-viewer": "^0.0.3",
     "react-native-image-viewing": "^0.2.2",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-onboarding-swiper": "^1.2.0",
@@ -49,7 +51,9 @@
     "react-native-video-controls": "^2.8.1",
     "react-navigation": "^4.4.4",
     "uuid": "^9.0.0",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "recompose": "^0.17.0"
+
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

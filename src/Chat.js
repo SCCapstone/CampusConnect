@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  StyleSheet,
   View,
   TextInput,
   TouchableOpacity,
@@ -9,17 +8,24 @@ import {
   Image,
 } from 'react-native';
 import {useState, useEffect} from 'react';
-import {v4 as uuidv4} from 'uuid';
 import {CometChat} from '@cometchat-pro/react-native-chat';
-import { FloatingAction } from "react-native-floating-action";
+import {FloatingAction} from 'react-native-floating-action';
+import androidstyles from './styles/android/ChatStyles';
+
+var styles;
+
+if (Platform.OS === 'android') {
+  styles = androidstyles;
+}
 
 export function Chat({navigation}) {
-
-  const [selectedConversation, setSelectedConversation] = useState(null);
-  const [keyword, setKeyword] = useState('');
-  const [selectedType, setSelectedType] = useState(0);
   const [data, setData] = useState([]);
+  const [keyword, setKeyword] = useState('');
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [selectedType, setSelectedType] = useState(0);
+  const searchLimit = 20;
 
+  //need to fix this and use context
   exports.selectedConversation = selectedConversation;
 
   useEffect(() => {
@@ -30,11 +36,11 @@ export function Chat({navigation}) {
     }
   }, [CometChat, selectedType, keyword]);
 
+  //searches users when selected type is 0
   const searchUsers = () => {
     if (CometChat) {
-      const limit = 20;
       const usersRequestBuilder = new CometChat.UsersRequestBuilder().setLimit(
-        limit,
+        searchLimit,
       );
       const usersRequest = keyword
         ? usersRequestBuilder.setSearchKeyword(keyword).build()
@@ -44,16 +50,15 @@ export function Chat({navigation}) {
           setData(() => userList);
         },
         error => {
-          console.log("Error, please try again later...")
-        }
+          console.log('Error, please try again later...');
+        },
       );
     }
   };
-
+  //searches groups when selected type is 1
   const searchGroups = () => {
-    const limit = 30;
     const groupRequestBuilder = new CometChat.GroupsRequestBuilder().setLimit(
-      limit,
+      searchLimit,
     );
     const groupsRequest = keyword
       ? groupRequestBuilder.setSearchKeyword(keyword).build()
@@ -63,19 +68,19 @@ export function Chat({navigation}) {
         setData(() => groupList);
       },
       error => {
-        console.log("Error, please try again later")
-      }
+        console.log('Error, please try again later...');
+      },
     );
   };
-
+  //sets keyword for search
   const onKeywordChanged = keyword => {
     setKeyword(() => keyword);
   };
-
+  //sets selectedtype
   const updateSelectedType = selectedType => () => {
     setSelectedType(() => selectedType);
   };
-
+  //joins group with groupuid if users hasn't join
   const joinGroup = item => {
     if (item && item.guid && !item.hasJoined) {
       const GUID = item.guid;
@@ -84,12 +89,12 @@ export function Chat({navigation}) {
       CometChat.joinGroup(GUID, groupType, password).then(
         group => {},
         error => {
-          console.log("Failed to join group")
+          console.log('Failed to join group');
         },
       );
     }
   };
-
+  //sends user to chat
   const selectItem = item => () => {
     if (item && item.guid && !item.hasJoined) {
       joinGroup(item);
@@ -97,7 +102,7 @@ export function Chat({navigation}) {
     setSelectedConversation({...item, contactType: selectedType});
     navigation.navigate('Message');
   };
-
+  //returns uid of chat
   const getKey = item => {
     if (item && item.uid) {
       return item.uid;
@@ -105,9 +110,8 @@ export function Chat({navigation}) {
     if (item && item.guid) {
       return item.guid;
     }
-    return uuidv4();
   };
-
+  //shows list of chats
   const renderItems = ({item}) => {
     return (
       <TouchableOpacity style={styles.chatListItem} onPress={selectItem(item)}>
@@ -137,9 +141,10 @@ export function Chat({navigation}) {
               styles.searchActionLabel,
               selectedType === 0 && styles.searchActionLabelActive,
             ]}>
-            User
+            Users
           </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={[
             styles.searchActionButton,
@@ -152,17 +157,19 @@ export function Chat({navigation}) {
               styles.searchActionLabel,
               selectedType === 1 && styles.searchActionLabelActive,
             ]}>
-            Group
+            Groups
           </Text>
         </TouchableOpacity>
       </View>
+
       <View>
         <TextInput
           onChangeText={onKeywordChanged}
-          placeholder="Search for user by name..."
+          placeholder="Search for user or group by name..."
           style={styles.chatInput}
         />
       </View>
+
       <View style={styles.chatList}>
         <FlatList
           data={data}
@@ -170,82 +177,15 @@ export function Chat({navigation}) {
           keyExtractor={(item, index) => getKey(item)}
         />
       </View>
+
       <FloatingAction
-        ref={(ref) => { this.floatingAction = ref; }}
-        onPressMain= { () => {
+        ref={ref => {
+          this.floatingAction = ref;
+        }}
+        onPressMain={() => {
           navigation.navigate('Create Group');
         }}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  chatContain: {
-    backgroundColor: '#ffffff',
-    flex: 1,
-    flexDirection: 'column',
-  },
-  chatInput: {
-    borderColor: '#00000',
-    borderRadius: 8,
-    borderWidth: 1,
-    fontSize: 16,
-    marginHorizontal: 8,
-    padding: 12,
-  },
-  searchActionContainer: {
-    borderRadius: 8,
-    flexDirection: 'row',
-    margin: 8,
-  },
-  searchActionButton: {
-    backgroundColor: '#ffffff',
-    borderColor: '#000000',
-    flex: 1,
-    fontSize: 16,
-    padding: 8,
-  },
-  searchLeftActionButton: {
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    marginRight: 0,
-  },
-  searchRightActionButton: {
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
-    marginLeft: 0,
-  },
-  searchActionButtonActive: {
-    backgroundColor: '#73000a',
-  },
-  searchActionLabel: {
-    color: '#000',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  searchActionLabelActive: {
-    color: '#ffffff',
-  },
-  chatList: {
-    flex: 1,
-  },
-  chatListItem: {
-    flex: 1,
-    flexDirection: 'row',
-    marginHorizontal: 12,
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
-  },
-  chatListItemImage: {
-    width: 64,
-    height: 64,
-    marginRight: 16,
-  },
-  chatListItemLabel: {
-    fontSize: 24,
-    color: 'black',
-  },
-});

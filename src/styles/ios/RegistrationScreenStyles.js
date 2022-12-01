@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
@@ -16,45 +15,20 @@ export default StyleSheet.create({
       justifyContent: "space-around",
       padding: 10
     },
+
     SectionStyle: {
         flexDirection: 'row',
         height: 46,
         margin: 10,
     },
-    groupContainer: {
-      backgroundColor: '#fff',
-      flex: 1,
-      flexDirection: 'column',
-    },
-    groupInput: {
-      borderColor: '#00000',
-      borderRadius: 8,
-      borderWidth: 1,
-      fontSize: 16,
-      marginHorizontal: 8,
-      padding: 12,
-    },
-    createGroup: {
-      backgroundColor: '#73000a',
-      borderRadius: 8,
-      fontSize: 16,
-      marginHorizontal: 24,
-      marginVertical: 8,
-      padding: 16,
-    },
-    createGroupLabel: {
-      color: '#fff',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textTransform: 'uppercase',
-    },
+
     buttonStyle: {
         backgroundColor: 'black',
         color: '#FFFFFF',
         borderColor: 'black',
         height: 50,
         alignItems: 'center',
-        borderRadius: 0,
+        borderRadius: 5,
         marginLeft: 55,
         marginRight: 55,
         marginTop: 30,
@@ -75,7 +49,7 @@ export default StyleSheet.create({
         paddingLeft: 25,
         paddingRight: 25,
         borderWidth: 1,
-        borderRadius: 0,
+        borderRadius: 5,
         borderColor: '#a9a9a9',
     },
     
@@ -91,12 +65,6 @@ export default StyleSheet.create({
         fontSize: 24,
         padding: 5,
     },
-    textGroupStyle: {
-      color: 'black',
-      textAlign: 'center',
-      fontSize: 24,
-      padding: 30,
-  },
 
     bottomContainer: {
         flex: 1,
@@ -115,7 +83,7 @@ export default StyleSheet.create({
         paddingLeft: 12,
         paddingRight: 12,
         borderWidth: 1,
-        borderRadius: 0,
+        borderRadius: 5,
         borderColor: '#a9a9a9',
         marginBottom: 10
     },
