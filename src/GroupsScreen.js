@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { View, FlatList, Text, StyleSheet, SafeAreaView, StatusBar, Image, TouchableOpacity, Alert } from 'react-native';
-import { FloatingAction } from "react-native-floating-action";
+import React, {useState} from 'react';
+import {
+  View,
+  FlatList,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import {FloatingAction} from 'react-native-floating-action';
 
 export function GroupsScreen({navigation}) {
-
-const DATA = [ 
+  const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'CSCE 490: Capstone Project',
@@ -21,7 +30,7 @@ const DATA = [
       img: 'https://digitalhub.fifa.com/transform/cc484be3-24c2-4315-a331-71f252d70349/Brand_Protection_fwc2022_oe_4ct_3D_ps_l',
     },
   ];
-  
+
   const actions = [
     {
         text: "Create Group",
@@ -43,26 +52,25 @@ const DATA = [
     Alert.alert('This will take you to this button\'s group page');
   }
 
-  const Item = ({ item, onPress }) => (
+  const Item = ({item, onPress}) => (
     <TouchableOpacity onPress={onPress} style={styles.item}>
-        <Image
-        style={styles.groupImg}
-        source={{ uri: item.img }}
-        />
-        <Text style={styles.title}>{item.title}</Text>   
+      <Image style={styles.groupImg} source={{uri: item.img}} />
+      <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );
 
-    const [selectedId, setSelectedId] = useState(null);
-    const renderItem = ({ item }) => {
-    return (
-        <Item
-            item={item}
-            onPress={() => CreateAlert()}
-        />
-    );
+  const [selectedId, setSelectedId] = useState(null);
+  const renderItem = ({item}) => {
+    return <Item item={item} onPress={() => CreateAlert()} />;
   };
 
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList data={DATA} renderItem={renderItem}></FlatList>
+      <FloatingAction actions={actions} onPress={() => CreateAlert()} />
+    </SafeAreaView>
+  );
+}
 
 return (
         <SafeAreaView style={styles.container}>
@@ -76,7 +84,6 @@ return (
     );
    
 };
-
 
 
   const styles = StyleSheet.create({

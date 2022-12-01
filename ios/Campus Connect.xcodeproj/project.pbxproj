@@ -13,8 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		191AACD1354B4D58D5DF79B2 /* Pods_Campus_Connect_Campus_ConnectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE132AEEB76AC2917C9DE47F /* Pods_Campus_Connect_Campus_ConnectTests.framework */; };
 		26ECD766B20FBD05EED5E083 /* Pods_Campus_Connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B394B933CC33523F26D865 /* Pods_Campus_Connect.framework */; };
-		722CE7E32922B2B800304F12 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 722CE7E22922B2B800304F12 /* GoogleService-Info.plist */; };
-		724F5BB2293925C7003DCDF5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 724F5BB1293925C7003DCDF5 /* GoogleService-Info.plist */; };
+		72218115293930B8001DF091 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72218114293930B8001DF091 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -43,8 +42,7 @@
 		1A912F3ECAAE91B787BC8175 /* Pods-CampusConnect-CampusConnectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect-CampusConnectTests.debug.xcconfig"; path = "Target Support Files/Pods-CampusConnect-CampusConnectTests/Pods-CampusConnect-CampusConnectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2278A4C7878D18E2DEAE551E /* Pods-Campus Connect-Campus ConnectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Campus Connect-Campus ConnectTests.debug.xcconfig"; path = "Target Support Files/Pods-Campus Connect-Campus ConnectTests/Pods-Campus Connect-Campus ConnectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		23515F2CAD2F0EAEBD02051B /* Pods-CampusConnect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect.release.xcconfig"; path = "Target Support Files/Pods-CampusConnect/Pods-CampusConnect.release.xcconfig"; sourceTree = "<group>"; };
-		722CE7E22922B2B800304F12 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		724F5BB1293925C7003DCDF5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		72218114293930B8001DF091 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7F00A1D2BEBD57E235A5F222 /* Pods-Campus Connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Campus Connect.debug.xcconfig"; path = "Target Support Files/Pods-Campus Connect/Pods-Campus Connect.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CampusConnect/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A347B86655F406ED309C2C51 /* Pods-CampusConnect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusConnect.debug.xcconfig"; path = "Target Support Files/Pods-CampusConnect/Pods-CampusConnect.debug.xcconfig"; sourceTree = "<group>"; };
@@ -132,9 +130,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				724F5BB1293925C7003DCDF5 /* GoogleService-Info.plist */,
+				72218114293930B8001DF091 /* GoogleService-Info.plist */,
 				72C92AF92922B9AE00AA15E6 /* Fonts */,
-				722CE7E22922B2B800304F12 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* CampusConnect */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CampusConnectTests */,
@@ -270,7 +267,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				724F5BB2293925C7003DCDF5 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				722CE7E32922B2B800304F12 /* GoogleService-Info.plist in Resources */,
+				72218115293930B8001DF091 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,7 +487,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.demboyz.campusconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Campus Connect.app/Campus Connect";
 			};
@@ -515,7 +512,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.demboyz.campusconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Campus Connect.app/Campus Connect";
 			};
@@ -629,7 +626,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -754,7 +751,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
