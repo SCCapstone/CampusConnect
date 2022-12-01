@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 
+
 export default StyleSheet.create({
   chatContain: {
     backgroundColor: 'white',
@@ -8,6 +9,7 @@ export default StyleSheet.create({
   },
   chatInput: {
     borderColor: 'black',
+    color:'black',
     borderRadius: 8,
     borderWidth: 1,
     fontSize: 16,
@@ -76,6 +78,7 @@ export default StyleSheet.create({
   },
   groupInput: {
     borderColor: 'black',
+    color:'black',
     borderRadius: 8,
     borderWidth: 1,
     fontSize: 16,

@@ -6,6 +6,17 @@ import {v4 as uuidv4} from 'uuid';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import auth from '@react-native-firebase/auth';
 
+import androidstyles from './styles/android/ChatStyles';
+import iosstyles from './styles/ios/ChatStyles';
+
+var styles;
+
+if (Platform.OS === 'ios') {
+  styles = iosstyles; // do dark mode in here as well
+} else if (Platform.OS === 'android') {
+  styles = androidstyles;
+}
+
 export function Message() {
   const [messages, setMessages] = React.useState([]);
   const messageLimit = 50;

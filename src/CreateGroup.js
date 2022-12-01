@@ -117,6 +117,7 @@ export function CreateGroup() {
       </Text>
       <TextInput
         onChangeText={onGroupNameChanged}
+        placeholderTextColor='black'
         placeholder="Enter group name here..."
         style={styles.groupInput}
       />

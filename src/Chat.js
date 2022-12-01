@@ -171,7 +171,8 @@ export function Chat({navigation}) {
 
       <View>
         <TextInput
-          onChangeText={onKeywordChanged}
+          onChangeText= {onKeywordChanged}
+          placeholderTextColor= 'black'
           placeholder="Search for user or group by name..."
           style={styles.chatInput}
         />
