@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>948827091126-u9kod3c4igeua7hgv7ksfgbm4089np0q.apps.googleusercontent.com</string>
+	<string>948827091126-753djpj24lb7bqjhhhoram0o2gm266fu.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.948827091126-u9kod3c4igeua7hgv7ksfgbm4089np0q</string>
+	<string>com.googleusercontent.apps.948827091126-753djpj24lb7bqjhhhoram0o2gm266fu</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC-lKHYYmgKA2Bt1qpmnNVXnlPq19GV8-o</string>
+	<string>AIzaSyDCIvxFJBpN_iromFFwfHlLmipEKrhc2i4</string>
 	<key>GCM_SENDER_ID</key>
 	<string>948827091126</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.CampusConnect</string>
+	<string>org.demboyz.campusconnect</string>
 	<key>PROJECT_ID</key>
 	<string>campusconnect-45088</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:948827091126:ios:bae71b50b73fb0ca9df617</string>
+	<string>1:948827091126:ios:0ede1b24483d52cc9df617</string>
 	<key>DATABASE_URL</key>
 	<string>https://campusconnect-45088-default-rtdb.firebaseio.com</string>
 </dict>
