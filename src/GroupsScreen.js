@@ -33,26 +33,24 @@ export function GroupsScreen({navigation}) {
 
   const actions = [
     {
-      text: 'Create Group',
-      name: 'bt_Create',
-      icon: (source = {
-        uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png',
-      }),
-      position: 2,
+        text: "Create Group",
+        name: "bt_Create",
+        icon: source={uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png'},
+        position: 2,
+        color: '#73000a',
     },
     {
-      text: 'Search Group',
-      name: 'bt_search',
-      icon: (source = {
-        uri: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png',
-      }),
-      position: 1,
-    },
-  ];
+        text: "Search Group",
+        name: "bt_search",
+        icon: source={uri:'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png'},
+        position: 1,
+        color: '#73000a',
+    }
+];
 
   const CreateAlert = () => {
-    Alert.alert('test');
-  };
+    Alert.alert('This will take you to this button\'s group page');
+  }
 
   const Item = ({item, onPress}) => (
     <TouchableOpacity onPress={onPress} style={styles.item}>
@@ -74,48 +72,65 @@ export function GroupsScreen({navigation}) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    backgroundColor: '#a8a1a6',
-  },
-  title: {
-    fontSize: 32,
-    color: 'black',
-  },
-  groupImg: {
-    marginLeft: 1,
-    width: 50,
-    height: 50,
-  },
-  button: {
-    marginBottom: 10,
-    width: 400,
-    alignItems: 'center',
-    backgroundColor: '#2196F3',
-  },
-  buttonText: {
-    textAlign: 'center',
-    padding: 20,
-    color: 'black',
-  },
-  buttonIcon: {
-    width: 10,
-    height: 10,
-  },
-  addButton: {
-    width: 100,
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    backgroundColor: '#2196F3',
-  },
-});
+return (
+        <SafeAreaView style={styles.container}>
+            <FlatList
+            data={DATA}
+            renderItem={renderItem}
+            >
+            </FlatList>
+            <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
+        </SafeAreaView>
+    );
+   
+};
+
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#73000a',
+    },
+    item: {
+      flexDirection: "row",
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+      backgroundColor: '#a8a1a6',
+    },
+    title: {
+      flex: 2,
+      fontSize: 28,
+      color: 'black',
+    },
+    groupImg: {
+        marginTop: 10,
+        marginRight: 20,
+        width: 50,
+        height: 50,
+    },
+    button: {
+        width: 400,
+        alignItems: 'center',
+        color: '#73000',
+      },
+    buttonText: {
+        textAlign: 'center',
+        padding: 20,
+        color: 'black',
+    },
+    buttonIcon: {
+        width: 1,
+        height: 1,
+    },
+    addButton: {
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 100,
+        color: '#73000a',     
+    }
+
+  });
