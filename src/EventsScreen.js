@@ -12,11 +12,10 @@ import ImageView from "react-native-image-viewing";
 
 var styles;
 
-if (Platform.OS === 'ios'){
-  styles = iosstyles;// do dark mode in here as well
-}
-else if (Platform.OS === 'android') {
-  styles = androidstyles
+if (Platform.OS === 'ios') {
+  styles = iosstyles; // do dark mode in here as well
+} else if (Platform.OS === 'android') {
+  styles = androidstyles;
 }
 
 
