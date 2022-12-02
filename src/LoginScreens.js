@@ -34,16 +34,16 @@ export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-  var authAlreadyCalled =false; //There is a bug with on auth changed that causes it to get called twice. So i will block the code manually.
+
 
   // Handle user state changes
   function onAuthStateChanged(user) {
-    if(!authAlreadyCalled){
-      authAlreadyCalled = true;
-      firstLogin = false;
-      setUser(user);
 
-      if (initializing) setInitializing(false);
+    firstLogin = false;
+    setUser(user);
+
+    if (initializing) setInitializing(false);
+
       if (auth().currentUser) {
         console.log(auth().currentUser)
         firestore()
@@ -51,7 +51,6 @@ export function WelcomeScreen({navigation}) {
           .doc(auth().currentUser.uid)
           .get()
           .then(userData => {
-            authAlreadyCalled = false;
             firstLogin = userData.get('firstLogin');
             if (auth().currentUser && firstLogin) {
               navigation.reset({
@@ -73,12 +72,11 @@ export function WelcomeScreen({navigation}) {
             }
           })
           .catch(error => {
-            authAlreadyCalled = false;
             FirebaseError(error.code);
           });
       }
 
-    }
+
   }
 
   useEffect(() => {
