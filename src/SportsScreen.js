@@ -12,35 +12,28 @@ import {
 } from 'react-native';
 import {FloatingAction} from 'react-native-floating-action';
 
-export function GroupsScreen({navigation}) {
+export function SportsScreen({navigation}) {
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'CSCE 490: Capstone Project',
-      img: 'https://capstone.cse.sc.edu/big-c-white-128x128.png',
+      title: 'USC VS. Georgia Swim Meet at Blatt Natatorium',
+      img: 'https://images.rivals.com/image/upload/f_auto,q_auto/f0wv2kjrvsdmn0e3f7sk',
     },
     {
       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Intramural Ultimate Frisbee',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Frisbee_090719.jpg',
+      title: 'USC VS. Tennessee Football at Williams Brice Stadium',
+      img: 'https://cdn.vox-cdn.com/thumbor/8uZZv_G7q-VIvd5dkGG0k2Ez4-8=/0x0:2661x2050/1200x800/filters:focal(792x536:1216x960)/cdn.vox-cdn.com/uploads/chorus_image/image/71651720/usa_today_19469372.0.jpg',
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'World Cup Watch Party',
-      img: 'https://digitalhub.fifa.com/transform/cc484be3-24c2-4315-a331-71f252d70349/Brand_Protection_fwc2022_oe_4ct_3D_ps_l',
+      title: 'USC Women\'s Basketball VS. UConn at Colonial Life Arena',
+      img: 'https://www.si.com/.image/ar_4:3%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTg4NTE1MzU3OTI3OTQxNzQ4/aliyah-boston-paige-bueckers-final-preview.jpg',
     },
   ];
 
   const actions = [
     {
-        text: "Create Group",
-        name: "bt_Create",
-        icon: source={uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png'},
-        position: 2,
-        color: '#73000a',
-    },
-    {
-        text: "Search Group",
+        text: "Search for a team or game",
         name: "bt_search",
         icon: source={uri:'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png'},
         position: 1,
