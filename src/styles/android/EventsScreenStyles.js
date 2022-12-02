@@ -21,16 +21,13 @@ export default StyleSheet.create({
       fontSize: 18,
       color: 'black',
       marginTop: 10,
-      justifyContent: 'center'
+      textAlign:'center',
     },
     box: {
-        backgroundColor: '#cecece',
-        padding: 20,
-        marginLeft: 35,
-        marginVertical: 8,
-        marginHorizontal: 20,
-        flex: 1,
-        borderRadius: 15,
+      marginHorizontal:'1%',
+      backgroundColor:'white',
+      flex:4,
+      borderRadius:10,
       },
     canvas: {
         position: 'absolute',
@@ -47,14 +44,13 @@ export default StyleSheet.create({
         width:'80%'
       },
       upvoteBox: {
-        flexDirection: 'row',
-        flex: 1,
-        height:25,
-        width:32,
-        flexDirection:'column',
+        height: 50,
+        width: 40,
+        marginHorizontal: '1.5%',
+        flexDirection: 'column',
         backgroundColor: '#73000a',
         justifyContent: 'center',
-       // alignItems: 'center',
+        alignSelf: 'center',
       },
       upvote: {
         fontSize: 15,
