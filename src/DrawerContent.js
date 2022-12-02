@@ -127,23 +127,34 @@ export function DrawerContent(props) {
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
-      <TouchableOpacity
-        onPress={() =>
-          auth()
-            .signOut()
-            .then(() => {
-              CometChat.logout();
-              props.navigation.reset({
-                index: 0,
-                routes: [{name: 'WelcomeScreen'}],
-              });
-            })
-        }
-        style={styles.touchableSignout}>
-        <View>
-          <Text style={styles.signOutText}>Sign Out</Text>
+      <View style={{flexDirection:'row'}}>
+        <View style={styles.touchableSignout}>
+          <TouchableOpacity
+            onPress={() =>
+              auth()
+                .signOut()
+                .then(() => {
+                  CometChat.logout();
+                  props.navigation.reset({
+                    index: 0,
+                    routes: [{name: 'WelcomeScreen'}],
+                  });
+                })
+            }
+            style={styles.touchableSignout}>
+              <Text style={styles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+        <View style={styles.touchableEditProfile}>
+          <TouchableOpacity 
+            onPress={() => {
+                  props.navigation.navigate('Edit Profile')
+            }}
+            style={styles.touchableEditProfile}>
+          <Text style={styles.editProfileText}>Edit Profile</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }

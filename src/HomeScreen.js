@@ -68,7 +68,10 @@ export function HomeScreen({navigation}) {
       <Drawer.Screen
         name="Edit Profile"
         component={RegistrationScreen}
-        options={{headerTitle: 'Campus Connect: Edit Profile'}}
+        options={{
+          headerTitle: 'Campus Connect: Edit Profile',
+          drawerItemStyle: {height: 0},
+        }}
       />
       <Drawer.Screen
         name="Create Group"

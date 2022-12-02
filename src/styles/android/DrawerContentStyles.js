@@ -64,12 +64,20 @@ export default StyleSheet.create({
     paddingTop: 10,
     color: 'white',
   },
-  touchableSignout: {paddingVertical: 15},
+  touchableSignout: {paddingVertical: 15,justifyContent:'flex-start'},
+  touchableEditProfile: {paddingVertical: 15,justifyContent:'flex-end',marginRight:'5%',flex:1},
   signOutText: {
     fontSize: 15,
     marginLeft: 20,
     fontWeight: 'bold',
     color: 'white',
+  },
+  editProfileText: {
+    fontSize: 15,
+    marginLeft: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    alignSelf:'flex-end'
   },
   backButtonContainer: {
     backgroundColor: 'white',
