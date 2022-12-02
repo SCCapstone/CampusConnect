@@ -35,41 +35,48 @@ export function WelcomeScreen({navigation}) {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
+
   // Handle user state changes
   function onAuthStateChanged(user) {
+
     firstLogin = false;
     setUser(user);
+
     if (initializing) setInitializing(false);
-    if (auth().currentUser) {
-      firestore()
-        .collection('Users')
-        .doc(auth().currentUser.uid)
-        .get()
-        .then(async userData => {
-          firstLogin = userData.get('firstLogin');
-          if (auth().currentUser && firstLogin) {
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'RegistrationScreen'}],
-            });
-          } else if (auth().currentUser && !firstLogin) {
-            const cometChatLoggedUser = await CometChat.login(
-              auth().currentUser.uid,
-              COMETCHAT_CONSTANTS.AUTH_KEY,
-            ).then(() => {
+
+      if (auth().currentUser) {
+        console.log(auth().currentUser)
+        firestore()
+          .collection('Users')
+          .doc(auth().currentUser.uid)
+          .get()
+          .then(userData => {
+            firstLogin = userData.get('firstLogin');
+            if (auth().currentUser && firstLogin) {
               navigation.reset({
                 index: 0,
-                routes: [{name: 'HomeScreen'}],
+                routes: [{name: 'RegistrationScreen'}],
               });
-            }).catch((error) => console.log(error));
-            
+            } else if (auth().currentUser && !firstLogin) {
+              const cometChatLoggedUser = CometChat.login(
+                auth().currentUser.uid,
+                COMETCHAT_CONSTANTS.AUTH_KEY,
+              ).then(() => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'HomeScreen'}],
+                });
+              }).catch((error) => console.log(error));
+              
 
-          }
-        })
-        .catch(error => {
-          FirebaseError(error.code);
-        });
-    }
+            }
+          })
+          .catch(error => {
+            FirebaseError(error.code);
+          });
+      }
+
+
   }
 
   useEffect(() => {
