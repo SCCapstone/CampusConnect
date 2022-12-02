@@ -45,7 +45,6 @@ export function WelcomeScreen({navigation}) {
     if (initializing) setInitializing(false);
 
       if (auth().currentUser) {
-        console.log(auth().currentUser)
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
