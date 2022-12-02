@@ -78,6 +78,7 @@ export default StyleSheet.create({
   },
   groupInput: {
     borderColor: 'black',
+    color:'black',
     borderRadius: 8,
     borderWidth: 1,
     fontSize: 16,
@@ -127,17 +128,16 @@ export default StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderRadius: 5,
+    borderRadius: 0,
     marginLeft: '5%',
-    height: '6%',
-    width: '10%',
+    height: 50,
+    width: 50,
   },
 
   backButtonImage: {
     resizeMode: 'stretch',
-    marginTop: '15%',
-    width: '100%',
-    height: '86%',
+    width: 50,
+    height: 40,
   },
 
 });
