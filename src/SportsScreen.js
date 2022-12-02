@@ -42,7 +42,7 @@ export function SportsScreen({navigation}) {
 ];
 
   const CreateAlert = () => {
-    Alert.alert('This will take you to this button\'s group page');
+    Alert.alert('This will take you to this button\'s sport\'s page');
   }
 
   const Item = ({item, onPress}) => (
