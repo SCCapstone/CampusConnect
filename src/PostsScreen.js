@@ -212,7 +212,7 @@ export function PostsScreen({navigation}) {
         })
         .then(() => {
           transactionStarted = false;
-        });
+        }).catch(() => {transactionStarted = false});
     }
   };
 
@@ -266,7 +266,7 @@ export function PostsScreen({navigation}) {
         })
         .then(() => {
           transactionStarted = false;
-        });
+        }).catch(() => {transactionStarted = false});
     }
   };
 
