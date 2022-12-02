@@ -128,7 +128,7 @@ export function DrawerContent(props) {
         </View>
       </DrawerContentScrollView>
       <View style={{flexDirection:'row'}}>
-        <View style={style.touchableSignout}>
+        <View style={styles.touchableSignout}>
           <TouchableOpacity
             onPress={() =>
               auth()
