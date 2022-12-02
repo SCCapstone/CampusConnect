@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Image, Pressable, TouchableOpacity } from 'react-native';
+import {Alert, SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Image, Pressable, TouchableOpacity } from 'react-native';
 
 import iosstyles from './styles/ios/EventsScreenStyles';
 import androidstyles from './styles/android/EventsScreenStyles';
@@ -26,7 +26,7 @@ export function EventsScreen({navigation}) {
           type:'Other',
           event: 'Student Protest for Better Campus wi-fi',
           date: '11/18/22 4:15:00 PM',
-          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/dM4DrsLJ8GbyJMG4g3p18LFmolj1?alt=media&token=2e847802-258d-4ed6-8135-813ecacf8c2e',
+          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/3GsL94dezIWjjuPTFuCFy6nXSXt2?alt=media&token=74158a14-0045-4503-9e9b-0f64ee4f16db',
           upvoteCount:'100',
           description:'Test', 
         },
@@ -106,28 +106,37 @@ export function EventsScreen({navigation}) {
       ];
 
     const Event = ({item}) => (
-      
-      <View style={{flexDirection:'row',flex:1,padding:20}}>
-        <View style={upvoteBox}>
-          <TouchableOpacity>
-          <Image style={styles.voteButtons} source={require('./assets/upvote.png')}></Image>            
-          </TouchableOpacity>
-          <Text>100</Text>
-          <TouchableOpacity>
-          <Image style={styles.voteButtons} source={require('./assets/downvote.png')}></Image>
-          </TouchableOpacity>
-
-        </View>
-        <View style={styles.box}>
-          <TouchableOpacity>
-              <Text style={styles.event}>{item.event}</Text>
-          </TouchableOpacity>cd ..
-        </View>
-
-
+      <View style={styles.eventContainer}>
+      <View style={styles.upvoteBox}>
+        <TouchableOpacity onPress={() => CreateAlertupVote()}>
+          <Image
+            style={styles.voteButtons}
+            source={
+              item.isUpVoted
+                ? require('./assets/upvote_highlighted.png')
+                : require('./assets/upvote.png')
+            }></Image>
+        </TouchableOpacity>
+        <Text style={styles.upvote}>{item.upvoteCount}</Text>
+        <TouchableOpacity onPress={() => CreateAlertdownVote()}>
+          <Image
+            style={styles.voteButtons}
+            source={
+              item.isDownVoted
+                ? require('./assets/downvote_highlighted.png')
+                : require('./assets/downvote.png')
+            }></Image>
+        </TouchableOpacity>
       </View>
-      
-      );
+      <TouchableOpacity onPress={() => CreateAlertevent()} style ={styles.event}>
+      <Image source={{uri: item.imageUrl}}
+             style={styles.canvas}/>
+            <Text style={styles.body}>{item.event}</Text>
+            <Text style={styles.date}>{item.date}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
 
       const renderEvent = ({ item }) => (
         <Event item={item} />
@@ -180,6 +189,14 @@ export function EventsScreen({navigation}) {
       }, []);
 }
 
-
+const CreateAlertupVote = () => {
+  Alert.alert('This will upvote');
+}
+const CreateAlertdownVote = () => {
+  Alert.alert('This will downvote');
+}
+const CreateAlertevent = () => {
+  Alert.alert('This will hold event info');
+}
      
     
