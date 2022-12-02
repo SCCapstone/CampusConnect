@@ -44,6 +44,9 @@ export function SportsScreen({navigation}) {
   const CreateAlert = () => {
     Alert.alert('This will take you to this button\'s sport\'s page');
   }
+  const AddToCalendar = () => {
+    Alert.alert('Added event to calendar');
+  }
 
   const Item = ({item, onPress}) => (
     <TouchableOpacity onPress={onPress} style={styles.item}>
@@ -65,6 +68,7 @@ return (
             >
             </FlatList>
             <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
+            <FloatingAction color='#FFFFFF' actions={actions} onPress={ () => AddToCalendar()} />
         </SafeAreaView>
     );
 }
@@ -114,6 +118,15 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 100,
       color: '#73000a',     
-  }
+  },
+  addButton: {
+    width: 50,
+    height: 50,
+    justifyContent: 'right',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 100,
+    color: '#FFFFFF',     
+}
 
 });
