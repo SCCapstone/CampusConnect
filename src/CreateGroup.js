@@ -51,7 +51,7 @@ export function CreateGroup({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref(crypto.randomUUID());
+    const reference = storage().ref(uuidv4());
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
