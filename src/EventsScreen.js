@@ -108,20 +108,20 @@ export function EventsScreen({navigation}) {
     const Event = ({item}) => (
       
       <View style={{flexDirection:'row',flex:1,padding:20}}>
-        <View style={{width:10,height:70,alignSelf:'center',flex:1,justifyContent:'center'}}>
+        <View style={upvoteBox}>
           <TouchableOpacity>
-            <Image></Image>
+          <Image style={styles.voteButtons} source={require('./assets/upvote.png')}></Image>            
           </TouchableOpacity>
           <Text>100</Text>
           <TouchableOpacity>
-            <Image></Image>
+          <Image style={styles.voteButtons} source={require('./assets/downvote.png')}></Image>
           </TouchableOpacity>
 
         </View>
-        <View style={{marginHorizontal:'1%',backgroundColor:'white',flex:4}}>
+        <View style={styles.box}>
           <TouchableOpacity>
-              <Text style={{textAlign:'center',fontSize:32}}>Event name</Text>
-          </TouchableOpacity>
+              <Text style={styles.event}>{item.event}</Text>
+          </TouchableOpacity>cd ..
         </View>
 
 
