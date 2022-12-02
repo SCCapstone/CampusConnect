@@ -3,6 +3,7 @@ import {Button, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CommonActions} from '@react-navigation/native';
 
+import {SportsScreen} from './SportsScreen.js'
 import {PostsScreen} from './PostsScreen.js';
 import {RegistrationScreen} from './RegistrationScreen.js';
 import {EventsScreen} from './EventsScreen.js';
@@ -58,6 +59,11 @@ export function HomeScreen({navigation}) {
         name="Groups"
         component={GroupsScreen}
         options={{headerTitle: 'Campus Connect: Groups'}}
+      />
+      <Drawer.Screen
+        name="Sports"
+        component={SportsScreen}
+        options={{headerTitle: 'Campus Connect: Sports'}}
       />
       <Drawer.Screen
         name="Edit Profile"
