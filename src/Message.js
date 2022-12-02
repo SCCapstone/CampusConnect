@@ -188,6 +188,7 @@ export function Message() {
       <GiftedChat
         scrollToBottom
         messages={messages}
+        textInputProps
         showAvatarForEveryMessage={true}
         onSend={messages => onSend(messages)}
         user={{
