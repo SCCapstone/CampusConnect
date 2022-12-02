@@ -51,7 +51,7 @@ export function CreateGroup({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref(auth().currentUser.uid);
+    const reference = storage().ref();
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
