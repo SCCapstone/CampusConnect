@@ -34,7 +34,7 @@ export function RegistrationScreen({navigation}) {
   const [bio, setBio] = React.useState('');
   const [firstName, setFirstName] = React.useState(userData.name.split(' ')[0]);
   const [lastName, setLastName] = React.useState(userData.name.split(' ')[1]);
-  const [gradDate, setGradDate] = React.useState('');
+  const [gradDate, setGradDate] = React.useState(userData.gradYear);
   var url = '';
   const [registraionSuccess, setRegistraionSuccess] = useState(false);
   const [loading, setLoading] = useState(false); // Set loading to true on component mount
@@ -42,6 +42,9 @@ export function RegistrationScreen({navigation}) {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [image, setImage] = React.useState('');
+
+  const [major, setMajor] = useState(userData.major);
+
 
   const onMajorOpen = React.useCallback(() => {
     setOpen2(false);
@@ -95,8 +98,6 @@ export function RegistrationScreen({navigation}) {
     {label: '2030', value: '2030'},
     {label: '2031', value: '2031'},
   ]);
-
-  const [major, setMajor] = useState(null);
   const [majors, setMajors] = useState([
     {label: 'Accounting', value: 'Accounting'},
     {label: 'Advertising', value: 'Advertising'},
@@ -339,6 +340,8 @@ export function RegistrationScreen({navigation}) {
     {label: 'Visual Communications', value: 'Visual Communications'},
     {label: "Women's and Gender Studies", value: "Women's and Gender Studies"},
   ]);
+
+
 
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
