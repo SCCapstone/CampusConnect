@@ -133,12 +133,8 @@ export function DrawerContent(props) {
             onPress={() =>
               auth()
                 .signOut()
-                .then(() => {
-                  CometChat.logout();
-                  props.navigation.reset({
-                    index: 0,
-                    routes: [{name: 'WelcomeScreen'}],
-                  });
+                .then(async () => {
+                  await CometChat.logout();
                 })
             }
             style={styles.touchableSignout}>

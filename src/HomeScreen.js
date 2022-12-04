@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Button, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CommonActions} from '@react-navigation/native';
+import {useEffect, useContext, useState} from 'react';
 
 import {SportsScreen} from './SportsScreen.js'
 import {PostsScreen} from './PostsScreen.js';
@@ -11,6 +12,8 @@ import {GroupsScreen} from './GroupsScreen.js';
 import {Chat} from './Chat.js';
 import {CreateGroup} from './CreateGroup.js';
 import {Message} from './Message.js';
+
+import AppContext from './AppContext';
 
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 
@@ -30,12 +33,35 @@ if (Platform.OS === 'ios') {
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
-  if (!auth().currentUser) {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'WelcomeScreen'}],
-    });
+
+  const userData = useContext(AppContext);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+
+    if (initializing) setInitializing(false);
+
+    if (!auth().currentUser) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'WelcomeScreen'}],
+      });
+    }
+
   }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+
   return (
     <Drawer.Navigator
       drawerContent={props => <DrawerContent {...props} />}
