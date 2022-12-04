@@ -192,9 +192,9 @@ export default StyleSheet.create({
     fontWeight: '',
   },
   linkText: {
-    marginTop:24,
+    marginTop:30,
     textAlign: 'center',
-    color: 'blue',
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },

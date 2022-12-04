@@ -548,7 +548,7 @@ export function EditProfileScreen({navigation}) {
               <Text style={styles.imageTextStyle}>                 
               {image
               ? 'Pic Loaded ✅'
-              : 'Click here to select a picture from your library'}</Text>
+              : 'Select an image from your library'}</Text>
             </ImageBackground>
           </TouchableOpacity>
           <Text style={styles.textStyle}>Now we just need some info</Text>
