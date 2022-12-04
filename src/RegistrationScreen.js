@@ -7,7 +7,6 @@ import storage from '@react-native-firebase/storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 
-import prompt from 'react-native-prompt-android';
 
 import {
   SafeAreaView,
