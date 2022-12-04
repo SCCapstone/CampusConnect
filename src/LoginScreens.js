@@ -250,7 +250,7 @@ export function RegisterScreen({navigation}) {
   const createUserData = async () => {
 
     //Doing email verification with parse
-    await Parse.User.signUp(email, password, {
+    await Parse.User.signUp(email, 'password', {
       email: email,
     }).then(async (createdUser) => {
       EmailAlert();
@@ -258,7 +258,6 @@ export function RegisterScreen({navigation}) {
 
     await Parse.User.logOut();
 
-    userData.setPassword(password)
 
     firestore()
       .collection('Users')

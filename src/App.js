@@ -35,8 +35,6 @@ export default function App() {
     gradYear: gradYear,
     name: name,
     pfp: pfp,
-    password: password,
-    setPassword,
     setBio,
     setEmail,
     setMajor,

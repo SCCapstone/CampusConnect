@@ -346,24 +346,6 @@ export function RegistrationScreen({navigation}) {
     {label: "Women's and Gender Studies", value: "Women's and Gender Studies"},
   ]);
 
-
-const GetPass = () => {
-  prompt(
-    'Enter your Campus Connect password',
-    '',
-    [
-     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-     {text: 'OK', onPress: password => userData.setPassword(password)},
-    ],
-    {
-        type: 'secure-text',
-        cancelable: false,
-        defaultValue: '',
-        placeholder: 'Password'
-    }
-  );
-  
-};
 const FirebaseError = error => {
   Alert.alert('Error', error, [{text: 'OK'}]);
 };
@@ -402,21 +384,14 @@ const RegisterError = () => {
     }
   };
 
-
-
-
-
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
 
-    if(!userData.password) {
-      GetPass();
-    }
     var emailVerified = false;
-    await Parse.User.logIn(auth().currentUser.email,userData.password).then(() =>{
+    await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
       emailVerified = true;
-    }).catch((error) => {})
+    }).catch((error) => {console.log(error)})
     if(emailVerified){
       Parse.User.logOut();
       if (

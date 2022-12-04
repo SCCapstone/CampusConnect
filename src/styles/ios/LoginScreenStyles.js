@@ -107,4 +107,17 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 10,
   },
+    helpBtn: {
+     width: '40%',
+     borderRadius: 4,
+     height: 30,
+     alignItems: 'center',
+     justifyContent: 'center',
+     marginTop: 80,
+     backgroundColor: '#73000a',
+   },
+   loginText: {
+     placeholderTextColor: '000000',
+     color: 'white',
+   },
 });
