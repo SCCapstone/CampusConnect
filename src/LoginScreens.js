@@ -73,9 +73,10 @@ export function WelcomeScreen({navigation}) {
                   index: 0,
                   routes: [{name: 'HomeScreen'}],
                 });
-              }).catch((error) => {
+              }).catch(async (error) => {
                 console.log(error);
                 CometChatError();
+                await auth().signOut();
                 navigation.reset({
                   index: 0,
                   routes: [{name: 'WelcomeScreen'}],
