@@ -387,7 +387,6 @@ const RegisterError = () => {
       /*cropping: true*/
     })
       .then(image => {
-        console.log(image);
         setImage(image.path);
       })
       .catch(error => {});
@@ -574,6 +573,7 @@ const RegisterError = () => {
     setFirstName('');
     setLastName('');
     setGradDate('');
+    setPassword('');
     setMajor('');
     setBio('');
     setImage('');
