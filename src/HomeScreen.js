@@ -6,7 +6,7 @@ import {useEffect, useContext, useState} from 'react';
 
 import {SportsScreen} from './SportsScreen.js'
 import {PostsScreen} from './PostsScreen.js';
-import {RegistrationScreen} from './RegistrationScreen.js';
+import {EditProfileScreen} from './EditProfile';
 import {EventsScreen} from './EventsScreen.js';
 import {GroupsScreen} from './GroupsScreen.js';
 import {Chat} from './Chat.js';
@@ -93,7 +93,7 @@ export function HomeScreen({navigation}) {
       />
       <Drawer.Screen
         name="Edit Profile"
-        component={RegistrationScreen}
+        component={EditProfileScreen}
         options={{
           headerTitle: 'Campus Connect: Edit Profile',
           drawerItemStyle: {height: 0},

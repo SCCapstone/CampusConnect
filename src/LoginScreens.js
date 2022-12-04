@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import Parse from 'parse/react-native';
+
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-import iosstyles from './styles/ios/WelcomeScreenStyles';
-import androidstyles from './styles/android/WelcomeScreenStyles';
+import iosstyles from './styles/ios/LoginScreenStyles';
+import androidstyles from './styles/android/LoginScreenStyles';
 
 var styles;
 
@@ -41,6 +43,7 @@ export function WelcomeScreen({navigation}) {
 
     firstLogin = false;
     setUser(user);
+    console.log('hello')
 
     if (initializing) setInitializing(false);
 
@@ -50,7 +53,11 @@ export function WelcomeScreen({navigation}) {
           .doc(auth().currentUser.uid)
           .get()
           .then(userData => {
-            firstLogin = userData.get('firstLogin');
+            firstLogin = userData.get('firstLogin')
+            if (userData.get('firstLogin') == undefined){
+              firstLogin = true
+            }
+            
             if (auth().currentUser && firstLogin) {
               navigation.reset({
                 index: 0,
@@ -120,11 +127,13 @@ export function WelcomeScreen({navigation}) {
 }
 
 export function LoginScreen({navigation}) {
+  const userData = useContext(AppContext);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const login = () => {
     if (email && password) {
+      userData.setPassword(password)
       auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
@@ -198,22 +207,17 @@ export function LoginScreen({navigation}) {
 }
 
 export function RegisterScreen({navigation}) {
+
+  const userData = useContext(AppContext);
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
   const register = () => {
-    if (
-      email &&
-      password &&
-      password === password2 &&
-      email.split('@').length > 1 &&
-      email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'
-    ) {
+    if (true) {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          console.log('User account created & signed in!');
           createUserData();
         })
         .catch(error => {
@@ -224,7 +228,19 @@ export function RegisterScreen({navigation}) {
     }
   };
 
-  const createUserData = () => {
+  const createUserData = async () => {
+
+    //Doing email verification with parse
+    await Parse.User.signUp(email, password, {
+      email: email,
+    }).then(async (createdUser) => {
+      EmailAlert();
+    })
+
+    await Parse.User.logOut();
+
+    userData.setPassword(password)
+
     firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
@@ -337,8 +353,15 @@ const RegisterError = () => {
   );
 };
 
-const FirebaseError = error => {
+const FirebaseError = (error) => {
   Alert.alert('Error', error, [{text: 'OK'}]);
+};
+const EmailAlert = () => {
+  Alert.alert(
+    'Email Sent',
+    'A verication email has been sent to your USC email. You will have to click the link before the app will allow you to fully sign in.',
+    [{text: 'OK'}],
+  );
 };
 
 const LoginError = () => {

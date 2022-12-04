@@ -18,8 +18,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import Parse from 'parse/react-native';
-import {CometChat} from '@cometchat-pro/react-native-chat';
+
 import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/RegistrationScreenStyles';
@@ -32,14 +31,13 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
-import {COMETCHAT_CONSTANTS} from '../env';
-export function RegistrationScreen({navigation}) {
+export function EditProfileScreen({navigation}) {
   const userData = useContext(AppContext);
 
   const [bio, setBio] = React.useState('');
-  const [firstName, setFirstName] = React.useState();
-  const [lastName, setLastName] = React.useState();
-  const [gradDate, setGradDate] = React.useState();
+  const [firstName, setFirstName] = React.useState(userData.name.split(' ')[0]);
+  const [lastName, setLastName] = React.useState(userData.name.split(' ')[1]);
+  const [gradDate, setGradDate] = React.useState(userData.gradYear);
   var url = '';
   const [registraionSuccess, setRegistraionSuccess] = useState(false);
   const [loading, setLoading] = useState(false); // Set loading to true on component mount
@@ -347,37 +345,6 @@ export function RegistrationScreen({navigation}) {
   ]);
 
 
-const GetPass = () => {
-  prompt(
-    'Enter your Campus Connect password',
-    '',
-    [
-     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-     {text: 'OK', onPress: password => userData.setPassword(password)},
-    ],
-    {
-        type: 'secure-text',
-        cancelable: false,
-        defaultValue: '',
-        placeholder: 'Password'
-    }
-  );
-  
-};
-const FirebaseError = error => {
-  Alert.alert('Error', error, [{text: 'OK'}]);
-};
-const EmailAlert = error => {
-  Alert.alert('Email Not Verified', 'You have not verified your email. Click the link sent to your USC email first.', [{text: 'OK'}]);
-};
-const RegisterError = () => {
-  Alert.alert(
-    'Error',
-    'Make sure all required fields are filled out and that the bio is less than 151 characters',
-    [{text: 'OK'}],
-  );
-};
-
 
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
@@ -392,6 +359,10 @@ const RegisterError = () => {
       })
       .catch(error => {});
   };
+
+  if (auth().currentUser == null) {
+    navigation.navigate('WelcomeScreen');
+  }
 
   const uploadPic = async () => {
     const reference = storage().ref(auth().currentUser.uid);
@@ -414,12 +385,12 @@ const RegisterError = () => {
     if(!userData.password) {
       GetPass();
     }
+
     var emailVerified = false;
     await Parse.User.logIn(auth().currentUser.email,userData.password).then(() =>{
       emailVerified = true;
     }).catch((error) => {})
     if(emailVerified){
-      Parse.User.logOut();
       if (
         firstName.trim() &&
         lastName.trim() &&
@@ -431,18 +402,6 @@ const RegisterError = () => {
       ) {
         await uploadPic();
 
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar = url;
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -467,18 +426,6 @@ const RegisterError = () => {
       ) {
         await uploadPic();
 
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar = url;
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
 
         firestore()
           .collection('Users')
@@ -501,18 +448,6 @@ const RegisterError = () => {
         bio &&
         bioLengthValid
       ) {
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar =
-          'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg';
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
 
         firestore()
           .collection('Users')
@@ -534,18 +469,6 @@ const RegisterError = () => {
         gradDate &&
         bioLengthValid
       ) {
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar =
-          'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg';
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
 
         firestore()
           .collection('Users')
@@ -718,12 +641,6 @@ const RegisterError = () => {
               <Text style={styles.buttonTextStyle}>REGISTER</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
-
-          <Text style={styles.emailText}>NOTE: Your spam filter may be blocking our emails. Please login to your USC email and click the link below to release the email from the Campus Connect Team</Text>
-          <Text style={styles.linkText}
-          onPress={() => Linking.openURL('https://security.microsoft.com/quarantine')}>
-          Microsoft Quarantine
-          </Text>
           <View style={styles.bottomContainer}>
             <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
           </View>
@@ -732,4 +649,16 @@ const RegisterError = () => {
     </SafeAreaView>
   );
 }
+
+const FirebaseError = error => {
+  Alert.alert('Error', error, [{text: 'OK'}]);
+};
+const RegisterError = () => {
+  Alert.alert(
+    'Error',
+    'Make sure all required fields are filled out and that the bio is less than 151 characters',
+    [{text: 'OK'}],
+  );
+};
+
 

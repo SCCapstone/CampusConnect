@@ -99,9 +99,12 @@ export default StyleSheet.create({
   bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    alignItems:'flex-end',
+    alignItems:'flex-end'
   },
 
   copyWrightText: {
+    marginTop:20,
     color: 'black',
     fontWeight: 'bold',
     fontSize: 12,
@@ -179,6 +182,20 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
     fontSize: 14,
+    fontWeight: 'bold',
+  },
+  emailText: {
+    marginTop:15,
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '',
+  },
+  linkText: {
+    marginTop:24,
+    textAlign: 'center',
+    color: 'blue',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

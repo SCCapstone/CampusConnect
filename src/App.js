@@ -8,9 +8,17 @@ import {RegistrationScreen} from './RegistrationScreen.js';
 import {HomeScreen} from './HomeScreen.js';
 import AppContext from './AppContext';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Parse from 'parse/react-native';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  //initialitize parse for handling user verification
+  Parse.setAsyncStorage(AsyncStorage);
+  Parse.initialize('PRySkWPWEvW5AtgEPe0E9SZsvdG4zD7UUFh5eupR','Jh3wogXir5FhuLjBlGHl74amYu7VwbOG17n2McqU');
+  Parse.serverURL = 'https://parseapi.back4app.com/';
   //gloval user variable
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState('');
@@ -18,6 +26,7 @@ export default function App() {
   const [gradYear, setGradYear] = useState('2001');
   const [name, setName] = useState('Unknown');
   const [pfp, setProfilePic] = useState('');
+  const [password, setPassword] = useState(''); //This might be really stupid, but I need the password to do email verification on another screen
 
   const userData = {
     bio: bio,
@@ -26,6 +35,8 @@ export default function App() {
     gradYear: gradYear,
     name: name,
     pfp: pfp,
+    password: password,
+    setPassword,
     setBio,
     setEmail,
     setMajor,
