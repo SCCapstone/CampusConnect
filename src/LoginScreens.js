@@ -146,7 +146,6 @@ export function LoginScreen({navigation}) {
 
   const login = () => {
     if (email && password) {
-      userData.setPassword(password)
       auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
