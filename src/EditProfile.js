@@ -359,10 +359,6 @@ export function EditProfileScreen({navigation}) {
       .catch(error => {});
   };
 
-  if (auth().currentUser == null) {
-    navigation.navigate('WelcomeScreen');
-  }
-
   const uploadPic = async () => {
     const reference = storage().ref(auth().currentUser.uid);
     if (image) {
