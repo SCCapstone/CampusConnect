@@ -73,8 +73,14 @@ export function WelcomeScreen({navigation}) {
                   index: 0,
                   routes: [{name: 'HomeScreen'}],
                 });
-              }).catch((error) => console.log(error));
-              
+              }).catch((error) => {
+                console.log(error);
+                CometChatError();
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'WelcomeScreen'}],
+                });
+              });
 
             }
           })
@@ -375,6 +381,13 @@ const LoginError = () => {
   Alert.alert(
     'Invalid format',
     'Make sure email and password field are not empty.',
+    [{text: 'OK'}],
+  );
+};
+const CometChatError = () => {
+  Alert.alert(
+    'There was a problem.',
+    'Please contact supper at demboyz.sc@gmail.com for help.',
     [{text: 'OK'}],
   );
 };
