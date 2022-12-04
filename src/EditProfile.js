@@ -378,14 +378,9 @@ export function EditProfileScreen({navigation}) {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
 
-    if(!userData.password) {
-      GetPass();
-    }
 
-    var emailVerified = false;
-    await Parse.User.logIn(auth().currentUser.email,userData.password).then(() =>{
-      emailVerified = true;
-    }).catch((error) => {})
+    var emailVerified = true;
+
     if(emailVerified){
       if (
         firstName.trim() &&
