@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState, useContext} from 'react';
-import {View, Image, Text, TouchableOpacity,Linking} from 'react-native';
+import {View, Image, Text, TouchableOpacity,Linking,ImageBackground} from 'react-native';
 import auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -540,16 +540,17 @@ export function EditProfileScreen({navigation}) {
     <SafeAreaView style={styles.container}>
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
-          <View style={{alignItems: 'center'}}>
-            <Image
-              source={require('./assets/gamecock.png')}
-              style={{
-                height: 75,
-                width: 75,
-                margin: 10,
-              }}
-            />
-          </View>
+        <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
+            <ImageBackground
+              source={require('./assets/blank2.jpeg')}
+              imageStyle={styles.blankImageStyle}
+              style={styles.blankImageBackgroundStyle}>
+              <Text style={styles.imageTextStyle}>                 
+              {image
+              ? 'Pic Loaded ✅'
+              : 'Click here to select a picture from your library'}</Text>
+            </ImageBackground>
+          </TouchableOpacity>
           <Text style={styles.textStyle}>Now we just need some info</Text>
           <KeyboardAvoidingView enabled>
             <View style={styles.SectionStyle}>
@@ -619,18 +620,6 @@ export function EditProfileScreen({navigation}) {
                 placeholderTextColor="gray"
                 blurOnSubmit={false}
               />
-            </View>
-
-            <View style={styles.btnParentSection}>
-              <TouchableOpacity
-                onPress={choosePhotoFromLibrary}
-                style={styles.btnSection}>
-                <Text style={styles.btnText}>
-                  {image
-                    ? 'Pic Loaded ✅'
-                    : 'Choose Photo From Library (optional)'}
-                </Text>
-              </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={styles.buttonStyle}

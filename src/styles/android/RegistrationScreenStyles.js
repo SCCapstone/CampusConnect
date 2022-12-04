@@ -198,4 +198,43 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  helpBtn: {
+    width: '40%',
+    borderRadius: 4,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    backgroundColor: '#73000a',
+  },
+  loginText: {
+    placeholderTextColor: '000000',
+    color: 'white',
+    fontWeight:'bold'
+  },
+  imageBackgroungView: {
+    alignItems:'center',
+    justifyContent:'center'
+
+  },
+  blankImageBackgroundStyle: {
+    height: 100,
+    width: 100,
+    marginTop:10,
+    justifyContent:'center',
+    alignItems:'center',
+    alignContent:'center'
+  },
+  blankImageStyle: {
+    borderRadius:50,
+    marginTop:0,
+    height: 100,
+    width: 100,
+  },
+  imageTextStyle: {
+    textAlign:'center',
+    color:'black',
+    fontWeight:'bold',
+    fontSize:12
+  }
 });

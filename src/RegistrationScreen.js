@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState, useContext} from 'react';
-import {View, Image, Text, TouchableOpacity,Linking} from 'react-native';
+import {View, Image,Bac, Text, TouchableOpacity,Linking,ImageBackground} from 'react-native';
 import auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -395,7 +395,7 @@ const RegisterError = () => {
   const uploadPic = async () => {
     const reference = storage().ref(auth().currentUser.uid);
     if (image) {
-      await reference.putFile(image).catch(error => {
+      await reference.putFile(image.path).catch(error => {
         FirebaseError(error.code);
       });
       url = await reference.getDownloadURL();
@@ -620,16 +620,17 @@ const RegisterError = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
-          <View style={{alignItems: 'center'}}>
-            <Image
-              source={require('./assets/gamecock.png')}
-              style={{
-                height: 75,
-                width: 75,
-                margin: 10,
-              }}
-            />
-          </View>
+          <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
+            <ImageBackground
+              source={require('./assets/blank2.jpeg')}
+              imageStyle={styles.blankImageStyle}
+              style={styles.blankImageBackgroundStyle}>
+              <Text style={styles.imageTextStyle}>                 
+              {image
+              ? 'Pic Loaded ✅'
+              : 'Click here to select a picture from your library'}</Text>
+            </ImageBackground>
+          </TouchableOpacity>
           <Text style={styles.textStyle}>Now we just need some info</Text>
           <KeyboardAvoidingView enabled>
             <View style={styles.SectionStyle}>
@@ -700,18 +701,6 @@ const RegisterError = () => {
                 blurOnSubmit={false}
               />
             </View>
-
-            <View style={styles.btnParentSection}>
-              <TouchableOpacity
-                onPress={choosePhotoFromLibrary}
-                style={styles.btnSection}>
-                <Text style={styles.btnText}>
-                  {image
-                    ? 'Pic Loaded ✅'
-                    : 'Choose Photo From Library (optional)'}
-                </Text>
-              </TouchableOpacity>
-            </View>
             <TouchableOpacity
               style={styles.buttonStyle}
               onPress={writeUserData}>
@@ -724,6 +713,11 @@ const RegisterError = () => {
           onPress={() => Linking.openURL('https://security.microsoft.com/quarantine')}>
           Microsoft Quarantine
           </Text>
+          <TouchableOpacity
+              onPress={() => NeedHelpError()}
+              style={styles.helpBtn}>
+              <Text style={styles.loginText}>Need help?</Text>
+            </TouchableOpacity>
           <View style={styles.bottomContainer}>
             <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
           </View>
@@ -732,4 +726,12 @@ const RegisterError = () => {
     </SafeAreaView>
   );
 }
+
+const NeedHelpError = () => {
+  Alert.alert(
+    'Need Help?',
+    'Please contact support at \n\ndemboyz.sc@gmail.com for help.',
+    [{text: 'OK'}],
+  );
+};
 

@@ -125,6 +125,11 @@ export function WelcomeScreen({navigation}) {
         style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => NeedHelpError()}
+        style={styles.helpBtn}>
+        <Text style={styles.loginText}>Need help?</Text>
+      </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>
           Copywright Ⓒ2022 DemBoyz, All rights reserved.
@@ -385,10 +390,17 @@ const LoginError = () => {
     [{text: 'OK'}],
   );
 };
+const NeedHelpError = () => {
+  Alert.alert(
+    'Need Help?',
+    'Please contact support at \n\ndemboyz.sc@gmail.com for help.',
+    [{text: 'OK'}],
+  );
+};
 const CometChatError = () => {
   Alert.alert(
     'There was a problem.',
-    'Please contact supper at demboyz.sc@gmail.com for help.',
+    'Please contact support at \n\ndemboyz.sc@gmail.com for help.',
     [{text: 'OK'}],
   );
 };
