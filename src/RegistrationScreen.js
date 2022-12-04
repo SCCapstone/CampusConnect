@@ -36,9 +36,9 @@ export function RegistrationScreen({navigation}) {
   const userData = useContext(AppContext);
 
   const [bio, setBio] = React.useState('');
-  const [firstName, setFirstName] = React.useState();
-  const [lastName, setLastName] = React.useState();
-  const [gradDate, setGradDate] = React.useState();
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [gradDate, setGradDate] = React.useState('');
   var url = '';
   const [registraionSuccess, setRegistraionSuccess] = useState(false);
   const [loading, setLoading] = useState(false); // Set loading to true on component mount
@@ -547,7 +547,6 @@ const RegisterError = () => {
     setFirstName('');
     setLastName('');
     setGradDate('');
-    setPassword('');
     setMajor('');
     setBio('');
     setImage('');

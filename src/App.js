@@ -24,9 +24,8 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [major, setMajor] = useState('Not logged in');
   const [gradYear, setGradYear] = useState('2001');
-  const [name, setName] = useState('Unknown');
+  const [name, setName] = useState('Unknown Person');
   const [pfp, setProfilePic] = useState('');
-  const [password, setPassword] = useState(''); //This might be really stupid, but I need the password to do email verification on another screen
 
   const userData = {
     bio: bio,
