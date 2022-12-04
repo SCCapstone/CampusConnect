@@ -43,7 +43,6 @@ export function WelcomeScreen({navigation}) {
 
     firstLogin = false;
     setUser(user);
-    console.log('hello')
 
     if (initializing) setInitializing(false);
 
@@ -54,6 +53,8 @@ export function WelcomeScreen({navigation}) {
           .get()
           .then(userData => {
             firstLogin = userData.get('firstLogin')
+
+            //If this variable doesn't exist for whatever reason, then firstLogin is true. Just in case.
             if (userData.get('firstLogin') == undefined){
               firstLogin = true
             }
@@ -63,7 +64,7 @@ export function WelcomeScreen({navigation}) {
                 index: 0,
                 routes: [{name: 'RegistrationScreen'}],
               });
-            } else if (auth().currentUser && !firstLogin) {
+            } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
               const cometChatLoggedUser = CometChat.login(
                 auth().currentUser.uid,
                 COMETCHAT_CONSTANTS.AUTH_KEY,
@@ -214,7 +215,13 @@ export function RegisterScreen({navigation}) {
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
   const register = () => {
-    if (true) {
+    if (
+      email &&
+      password &&
+      password === password2 &&
+      email.split('@').length > 1 &&
+      email.split('@')[1].includes('sc.edu') &&
+      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu') {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {

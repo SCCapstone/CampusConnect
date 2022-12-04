@@ -375,9 +375,6 @@ export function EditProfileScreen({navigation}) {
   };
 
 
-
-
-
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
