@@ -1,11 +1,13 @@
 # What is Campus Connect?
-Please see [Project Description](https://github.com/SCCapstone/DemBoyz/wiki/Project-Description).
-This should explain everything :)
+Campus Connect is a cross-platform chat and social media app developed by USC students, for USC students. 
 
 # Hardware Requirements
-This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a modern 4 or more core processor.
+This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a 4 or more core processor from the past few years. 
 
-iOS Development requires a Macintosh Computer, and will run best on an M1 mac, because of the shared architecture between the Mac and our dev targets.
+iOS Development requires a Macintosh Computer.
+
+We recommend a beefy desktop computer for Android Development and an M1 Mac for iOS development. 
+
 # External Requirements  
 
 Please install these:  
