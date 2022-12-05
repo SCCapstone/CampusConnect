@@ -1,6 +1,11 @@
 # What is Campus Connect?
 Please see [Project Description](https://github.com/SCCapstone/DemBoyz/wiki/Project-Description).
 This should explain everything :)
+
+# Hardware Requirements
+This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a modern 4 or more core processor.
+
+iOS Development requires a Macintosh Computer, and will run best on an M1 mac, because of the shared architecture of our dev target.
 # External Requirements  
 
 Please install these:  
