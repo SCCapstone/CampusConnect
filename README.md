@@ -5,7 +5,7 @@ This should explain everything :)
 # Hardware Requirements
 This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a modern 4 or more core processor.
 
-iOS Development requires a Macintosh Computer, and will run best on an M1 mac, because of the shared architecture of our dev target.
+iOS Development requires a Macintosh Computer, and will run best on an M1 mac, because of the shared architecture between the Mac and our dev targets.
 # External Requirements  
 
 Please install these:  
