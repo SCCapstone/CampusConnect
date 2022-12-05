@@ -36,6 +36,7 @@ export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  var transactionStarted = false;
 
 
   // Handle user state changes
@@ -47,47 +48,60 @@ export function WelcomeScreen({navigation}) {
     if (initializing) setInitializing(false);
 
       if (auth().currentUser) {
-        firestore()
-          .collection('Users')
-          .doc(auth().currentUser.uid)
-          .get()
-          .then(userData => {
-            firstLogin = userData.get('firstLogin')
+        if(!transactionStarted){
+          console.log('login detexted')
+          transactionStarted = true;
+          firestore()
+            .collection('Users')
+            .doc(auth().currentUser.uid)
+            .get()
+            .then(userData => {
+              firstLogin = userData.get('firstLogin')
 
-            //If this variable doesn't exist for whatever reason, then firstLogin is true. Just in case.
-            if (userData.get('firstLogin') == undefined){
-              firstLogin = true
-            }
+              //If this variable doesn't exist for whatever reason, then firstLogin is true. Just in case.
+              if (userData.get('firstLogin') == undefined){
+                firstLogin = true
+              }
+              
+              if (auth().currentUser && firstLogin) {
+                transactionStarted = false;
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'RegistrationScreen'}],
+                });
+              } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
+                
+                const cometChatLoggedUser = CometChat.login(
+                  auth().currentUser.uid,
+                  COMETCHAT_CONSTANTS.AUTH_KEY,
+                ).then(() => {
+                  transactionStarted = false;
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'HomeScreen'}],
+                  });
+                }).catch(async (error) => {
+                  transactionStarted = false;
+                  CometChatError();
+                  await auth().signOut();
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'WelcomeScreen'}],
+                  });
+                });
+              }
+              else {
+                transactionStarted = false;
+              }
             
-            if (auth().currentUser && firstLogin) {
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'RegistrationScreen'}],
-              });
-            } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
-              const cometChatLoggedUser = CometChat.login(
-                auth().currentUser.uid,
-                COMETCHAT_CONSTANTS.AUTH_KEY,
-              ).then(() => {
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'HomeScreen'}],
-                });
-              }).catch(async (error) => {
-                console.log(error);
-                CometChatError();
-                await auth().signOut();
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'WelcomeScreen'}],
-                });
-              });
 
-            }
+            
           })
           .catch(error => {
             FirebaseError(error.code);
           });
+          
+        }
       }
 
 
