@@ -1,6 +1,6 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef} from 'react'
-import { SafeAreaView ,View,TouchableOpacity} from "react-native";
+import { SafeAreaView ,View,TouchableOpacity, Text} from "react-native";
 
 import {
     ChannelList,
@@ -41,14 +41,21 @@ export function ChatsScreen(props) {
         last_message_at: -1,
       };
 
+      //You can customize the persons display name and extra data like major if wanted
+      const CustomPreviewTitle = ({ channel }) => (
+        <Text>
+          {channel.data.name}
+        </Text>
+      );
+
 
     return(
         <GestureHandlerRootView style={{ flex: 1}}>
             <View style={{ flex: 1}}>
               <ChannelList 
+                  PreviewTitle={CustomPreviewTitle}
                   filters={filters} 
-                  setFlatListRef={ref => (flatListRef.current = ref)}
-                  onAddedToChannel={flatListRef.render}
+                  
                   onSelect={(channel) => {
                       setChannel(channel);
                       navigation.navigate('DM');
@@ -56,10 +63,11 @@ export function ChatsScreen(props) {
                   />
               <FloatingAction
                 color="#73000a"
+                onOpen={this.floatingAction.animateButton}
                 ref={ref => {
                   this.floatingAction = ref;
                 }}
-                onPressMain={() => {
+                onPressMain={() => {navigation.navigate('SearchUsers')
                 }}
               />
             </View>

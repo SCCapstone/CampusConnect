@@ -14,11 +14,12 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { DM } from './DM.js';
 import {ChatsScreen} from './ChatsScreen.js'
+import { SearchUsers } from './SearchUsers.js';
 import { ChatProvider } from "./ChatContext";
 
 
 import {
-  OverlayProvider, Chat
+  OverlayProvider, Chat, Search
 } from 'stream-chat-react-native'; // Or stream-chat-expo
 
 
@@ -54,7 +55,8 @@ export const ChatNavigator = () => {
   <ChatProvider>
     <Chat client={chatClient}>
       <Stack.Navigator>
-        <Stack.Screen name="Chats-Home" component={ChatsScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="ChatsHome" component={ChatsScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="SearchUsers" component={SearchUsers} options={{headerShown: false}}/>
         <Stack.Screen name="DM" component={DM} options={{headerShown: false}}/>
       </Stack.Navigator>
     </Chat>
