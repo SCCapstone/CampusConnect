@@ -71,6 +71,7 @@ export function WelcomeScreen({navigation}) {
               } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
                 
                 transactionStarted = false;
+                console.log('hello')
                 navigation.reset({
                   index: 0,
                   routes: [{name: 'HomeScreen'}],

@@ -13,7 +13,8 @@ import {
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { DM } from './DM.js';
-import {ChatsScreen} from './ChatsScreen.js'
+import {GroupsScreen} from './GroupsScreen.js'
+import { CreateGroup } from './CreateGroup.js';
 import { ChatProvider } from "./ChatContext";
 
 
@@ -30,7 +31,6 @@ import { useChatClient } from './useChatClient';
 
 import {
     ChannelList,
-    ChannelAvatar
   } from 'stream-chat-react-native';
   import {useNavigation} from '@react-navigation/native';
 
@@ -39,11 +39,11 @@ const Stack = createNativeStackNavigator();
 
 //The top level stack navigaor for chats. I don't think this needs to be changed much anymore....
 
-export const ChatNavigator = () => {
+export const GroupsNavigator = () => {
   const { clientIsReady } = useChatClient();
 
   if (!clientIsReady) {
-    return <Text>Loading chat ...</Text>
+    return <Text>Loading groups ...</Text>
   }
 
   const chatClient = StreamChat.getInstance(chatApiKey);
@@ -54,7 +54,8 @@ export const ChatNavigator = () => {
   <ChatProvider>
     <Chat client={chatClient}>
       <Stack.Navigator>
-        <Stack.Screen name="Chats-Home" component={ChatsScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="Groups-Home" component={GroupsScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="Groups-Create" component={CreateGroup} options={{headerShown: false}}/>
         <Stack.Screen name="DM" component={DM} options={{headerShown: false}}/>
       </Stack.Navigator>
     </Chat>
