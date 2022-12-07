@@ -15,8 +15,8 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import {useEffect, useContext} from 'react';
-import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
+import { useChatClient } from './useChatClient';
 
 import iosstyles from './styles/ios/DrawerContentStyles';
 import androidstyles from './styles/android/DrawerContentStyles';
@@ -28,6 +28,9 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
+
+import { StreamChat } from 'stream-chat';
+import { chatApiKey } from '../chatConfig';
 
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
@@ -73,6 +76,12 @@ export function DrawerContent(props) {
       pfp: '',
     });
     getPhoto();
+  };
+
+  const SignOut = async () => {
+    const chatClient = StreamChat.getInstance(chatApiKey);
+    chatClient.disconnectUser();
+    auth().signOut();
   };
 
   useEffect(() => {
@@ -131,11 +140,7 @@ export function DrawerContent(props) {
         <View style={styles.touchableSignout}>
           <TouchableOpacity
             onPress={() =>
-              auth()
-                .signOut()
-                .then(async () => {
-                  await CometChat.logout();
-                })
+              SignOut()
             }
             style={styles.touchableSignout}>
               <Text style={styles.signOutText}>Sign Out</Text>

@@ -9,7 +9,7 @@ import {PostsScreen} from './PostsScreen.js';
 import {EditProfileScreen} from './EditProfile';
 import {EventsScreen} from './EventsScreen.js';
 import {GroupsScreen} from './GroupsScreen.js';
-import {Chat} from './Chat.js';
+import {ChatNavigator} from './ChatNavigator';
 import {CreateGroup} from './CreateGroup.js';
 import {Message} from './Message.js';
 
@@ -75,6 +75,11 @@ export function HomeScreen({navigation}) {
         name="Events"
         component={EventsScreen}
         options={{headerTitle: 'Campus Connect: Events'}}
+      />
+      <Drawer.Screen
+        name="Chat"
+        component={ChatNavigator}
+        options={{headerTitle: 'Campus Connect: Chats'}}
       />
       <Drawer.Screen
         name="Groups"

@@ -29,8 +29,7 @@ import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import AppContext from './AppContext';
 
-import {COMETCHAT_CONSTANTS} from '../env';
-import {CometChat} from '@cometchat-pro/react-native-chat';
+
 
 export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
@@ -71,30 +70,15 @@ export function WelcomeScreen({navigation}) {
                 });
               } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
                 
-                const cometChatLoggedUser = CometChat.login(
-                  auth().currentUser.uid,
-                  COMETCHAT_CONSTANTS.AUTH_KEY,
-                ).then(() => {
-                  transactionStarted = false;
-                  navigation.reset({
-                    index: 0,
-                    routes: [{name: 'HomeScreen'}],
-                  });
-                }).catch(async (error) => {
-                  transactionStarted = false;
-                  CometChatError();
-                  await auth().signOut();
-                  navigation.reset({
-                    index: 0,
-                    routes: [{name: 'WelcomeScreen'}],
-                  });
+                transactionStarted = false;
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'HomeScreen'}],
                 });
               }
               else {
                 transactionStarted = false;
               }
-            
-
             
           })
           .catch(error => {
@@ -241,12 +225,12 @@ export function RegisterScreen({navigation}) {
   const [password2, setPassword2] = React.useState('');
   const register = () => {
     if (
-      email &&
+      /*email &&
       password &&
       password === password2 &&
       email.split('@').length > 1 &&
       email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu') {
+      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'*/true) {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
@@ -263,13 +247,13 @@ export function RegisterScreen({navigation}) {
   const createUserData = async () => {
 
     //Doing email verification with parse
-    await Parse.User.signUp(email, 'password', {
+    /*await Parse.User.signUp(email, 'password', {
       email: email,
     }).then(async (createdUser) => {
       EmailAlert();
     })
 
-    await Parse.User.logOut();
+    await Parse.User.logOut();*/
 
 
     firestore()
