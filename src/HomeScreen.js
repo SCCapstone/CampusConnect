@@ -77,11 +77,6 @@ export function HomeScreen({navigation}) {
         options={{headerTitle: 'Campus Connect: Events'}}
       />
       <Drawer.Screen
-        name="Chats"
-        component={Chat}
-        options={{headerTitle: 'Campus Connect: Chats'}}
-      />
-      <Drawer.Screen
         name="Groups"
         component={GroupsScreen}
         options={{headerTitle: 'Campus Connect: Groups'}}
@@ -97,24 +92,8 @@ export function HomeScreen({navigation}) {
         options={{
           headerTitle: 'Campus Connect: Edit Profile',
           drawerItemStyle: {height: 0},
-        }}
-      />
-      <Drawer.Screen
-        name="Create Group"
-        component={CreateGroup}
-        options={{
-          headerTitle: 'Create Group Chat',
-          drawerItemStyle: {height: 0},
-        }}
-      />
-      <Drawer.Screen
-        name="Message"
-        component={Message}
-        options={{
-          headerTitle: 'Currently Chatting',
-          drawerItemStyle: {height: 0},
-        }}
-      />
+        }}/>
+
     </Drawer.Navigator>
   );
 }

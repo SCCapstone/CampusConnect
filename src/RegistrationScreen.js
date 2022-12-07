@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 
 import Parse from 'parse/react-native';
-import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/RegistrationScreenStyles';
@@ -404,18 +403,6 @@ const RegisterError = () => {
       ) {
         await uploadPic();
 
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar = url;
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -440,19 +427,6 @@ const RegisterError = () => {
       ) {
         await uploadPic();
 
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar = url;
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -474,18 +448,6 @@ const RegisterError = () => {
         bio &&
         bioLengthValid
       ) {
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar =
-          'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg';
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
 
         firestore()
           .collection('Users')
@@ -507,18 +469,6 @@ const RegisterError = () => {
         gradDate &&
         bioLengthValid
       ) {
-        let cometChatUser = new CometChat.User(auth().currentUser.uid);
-        cometChatUser.setName(firstName.trim() + ' ' + lastName.trim());
-        cometChatUser.avatar =
-          'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg';
-        const cometChatRegisteredUser = await CometChat.createUser(
-          cometChatUser,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
-        const cometChatLoggedUser = await CometChat.login(
-          auth().currentUser.uid,
-          COMETCHAT_CONSTANTS.AUTH_KEY,
-        );
 
         firestore()
           .collection('Users')
