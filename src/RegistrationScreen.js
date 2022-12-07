@@ -387,11 +387,11 @@ const RegisterError = () => {
     const bioLengthValid = bio.length <= 150;
 
     var emailVerified = false;
-    await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
+    /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
       emailVerified = true;
-    }).catch((error) => {console.log(error)})
-    if(emailVerified){
-      Parse.User.logOut();
+    }).catch((error) => {console.log(error)})*/
+    if(true){
+      //Parse.User.logOut();
       if (
         firstName.trim() &&
         lastName.trim() &&
