@@ -20,12 +20,16 @@ export default StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     margin: 8,
+    height:36,
+    justifyContent:'center'
+    
   },
   searchActionButton: {
     backgroundColor: 'white',
     borderColor: 'black',
     flex: 1,
     fontSize: 16,
+    width:190,
     padding: 8,
   },
   searchLeftActionButton: {

@@ -7,10 +7,12 @@ import {
 
 
   import { useChatContext} from './ChatContext';
+  import {useNavigation} from '@react-navigation/native';
   
   
   export function DMScreen(props) {
     const { channel,setThread } = useChatContext();
+    const navigation = useNavigation();   
   
     return (
         <Channel channel={channel}>
