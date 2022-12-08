@@ -6,9 +6,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
     ChannelList,
     ChannelsContext,
-    ChannelAvatar
+    ChannelAvatar,
   } from 'stream-chat-react-native';
 
+
+import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
 import auth from '@react-native-firebase/auth';
 import {FloatingAction} from 'react-native-floating-action';
@@ -53,8 +55,9 @@ export function ChatsScreen(props) {
 
     const { setChannel } = useChatContext();
     const navigation = useNavigation();   
-    const { channels, refreshList, reloadList} = useContext(ChannelsContext);
+    const {reloadList} = useContext(ChannelsContext);
     const [selectedType, setSelectedType] = useState(0);
+    const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
       //Right here, create a query that will only return the private DMs a User is in
 
@@ -76,6 +79,11 @@ export function ChatsScreen(props) {
       };
     const sort = {
       last_message_at: -1,
+    };
+    const options = {
+      presence: true,
+      state: true,
+      watch: true,
     };
 
     useEffect(() => {
@@ -148,9 +156,9 @@ export function ChatsScreen(props) {
                     <ChannelAvatar channel={channel} />
                   </TouchableOpacity>
                   )}
-
-                  PreviewTitle={CustomPreviewTitle}
                   filters={filter} 
+                  options={options}
+                  sort={sort}
                   
                   onSelect={(channel) => {
                       setChannel(channel);

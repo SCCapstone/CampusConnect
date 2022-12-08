@@ -6,11 +6,14 @@ import {
   Text,
   FlatList,
   Image,
+  Alert,
 } from 'react-native';
 import {useState, useEffect} from 'react';
 
 import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
+import { useChatContext } from './ChatContext';
+import {useNavigation} from '@react-navigation/native';
 
 import {FloatingAction} from 'react-native-floating-action';
 import androidstyles from './styles/android/ChatStyles';
@@ -27,9 +30,15 @@ if (Platform.OS === 'ios') {
 export function ChatSearch(props) {
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState('');
+  const { setChannel } = useChatContext();
   const [selectedType, setSelectedType] = useState(0);
   const searchLimit = 30;
   const chatClient = StreamChat.getInstance(chatApiKey);
+  const navigation = useNavigation();  
+
+  //For groups query
+  const filter = { type: 'team' };
+  const sort = [{ member_count: -1 }];
 
   useEffect(() => {
     if (selectedType === 0) {
@@ -41,30 +50,29 @@ export function ChatSearch(props) {
 
   //searches users when selected type is 0
   const searchUsers = async () => {
-
+    var response;
     //I can't get it to return a list of all users if there's no keyword set yet.
-    if(keyword){
-      const response = await chatClient.queryUsers({ name: { $autocomplete: keyword }},{last_active:-1},{limit:searchLimit})
+    keyword 
+    ? response = await chatClient.queryUsers({ name: { $autocomplete: keyword },},{last_active:-1},{limit:searchLimit})
+    : response = await chatClient.queryUsers({online:true},{last_active:-1},{limit:searchLimit}) //Displays all users that are online
       setData(response.users)
+      console.log(response.users)
     }
 
-  };
   //searches groups when selected type is 1
-  const searchGroups = () => {
-    /*const groupRequestBuilder = new CometChat.GroupsRequestBuilder().setLimit(
-      searchLimit,
-    );
-    const groupsRequest = keyword
-      ? groupRequestBuilder.setSearchKeyword(keyword).build()
-      : groupRequestBuilder.build();
-    groupsRequest.fetchNext().then(
-      groupList => {
-        setData(() => groupList);
-      },
-      error => {
-        console.log('Error, please try again later...');
-      },
-    );*/
+  const searchGroups = async () => {
+    var response;
+    var groups = []
+    //I can't get it to return a list of all users if there's no keyword set yet.
+    keyword 
+    ? response = await chatClient.queryChannels({type:'team' ,name: { $autocomplete: keyword },},{last_active:-1},{limit:searchLimit})
+    : response = await chatClient.queryChannels({type:'team'},{member_count:-1},{limit:searchLimit}) //Displays all users that are online
+    response.map((channel) => {
+      groups.push(channel.data)
+
+    })
+    setData(groups)
+      
   };
   //sets keyword for search
   const onKeywordChanged = keyword => {
@@ -76,34 +84,35 @@ export function ChatSearch(props) {
   };
   //joins group with groupuid if users hasn't join
   const joinGroup = item => {
-   /*if (item && item.guid && !item.hasJoined) {
-      const GUID = item.guid;
-      const password = '';
-      const groupType = CometChat.GROUP_TYPE.PUBLIC;
-      CometChat.joinGroup(GUID, groupType, password).then(
-        group => {},
-        error => {
-          console.log('Failed to join group');
-        },
-      );
-    }*/
+
   };
   //sends user to chat
-  const selectItem = item => () => {
-    /*if (item && item.guid && !item.hasJoined) {
-      joinGroup(item);
+  const selectItem = item => async () => {
+    if(item.type === 'messaging'){
+      if(!(chatClient.user.id === item.id)) {
+        const channel = chatClient.channel('messaging', {
+            members: [chatClient.user.id, item.id],
+        });
+        await channel.watch()
+        setChannel(channel)
+        navigation.navigate('DMScreen');
+      }
+      else {
+        Alert.alert('You can\'t create a DM with yourself!');
+      }
     }
-    setSelectedConversation({...item, contactType: selectedType});
-    navigation.navigate('Message');*/
+    else if (item.type === 'team'){
+      console.log(item.id)
+      const channel = chatClient.channel('team', item.id, {});
+      if(chatClient.user.id)
+        await channel.addMembers([chatClient.user.id]);
+      setChannel(channel)
+      navigation.navigate('DMScreen');
+    }
   };
   //returns uid of chat
   const getKey = item => {
-    if (item && item.uid) {
-      return item.uid;
-    }
-    if (item && item.guid) {
-      return item.guid;
-    }
+    return item.id
   };
   //Make this users instead
   //shows list of chats
@@ -124,6 +133,7 @@ export function ChatSearch(props) {
   const createAGroup = () => {
     navigation.navigate('Create Group')
   }
+
 
   return (
     <View style={styles.chatContain}>
@@ -169,14 +179,17 @@ export function ChatSearch(props) {
           style={styles.chatInput}
         />
       </View>
-
+      {(!keyword && data.length < 1) ?
+      <View style={styles.placeholderView}>
+        <Text style={styles.placeholderText}>Guess no one's online...</Text>
+      </View> :
       <View style={styles.chatList}>
         <FlatList
           data={data}
           renderItem={renderItems}
           keyExtractor={(item, index) => getKey(item)}
         />
-      </View>
+      </View>}
     </View>
   );
 }

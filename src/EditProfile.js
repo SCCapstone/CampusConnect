@@ -541,36 +541,8 @@ export function EditProfileScreen({navigation}) {
               : 'Select an image from your library'}</Text>
             </ImageBackground>
           </TouchableOpacity>
-          <Text style={styles.textStyle}>Now we just need some info</Text>
+          <Text style={styles.textStyle}>{firstName} {lastName}</Text>
           <KeyboardAvoidingView enabled>
-            <View style={styles.SectionStyle}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={FirstName => setFirstName(FirstName)}
-                defaultValue={
-                  userData.name.split(' ').length > 0
-                    ? userData.name.split(' ')[0]
-                    : null
-                }
-                placeholder="Enter first name (Required)"
-                placeholderTextColor="gray"
-                blurOnSubmit={false}
-              />
-            </View>
-            <View style={styles.SectionStyle}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={LastName => setLastName(LastName)}
-                defaultValue={
-                  userData.name.split(' ').length > 1
-                    ? userData.name.split(' ')[1]
-                    : null
-                }
-                placeholder="Enter last name (Required)"
-                placeholderTextColor="gray"
-                blurOnSubmit={false}
-              />
-            </View>
             <View style={styles.SectionStyle}>
               <DropDownPicker
                 style={styles.inputStyle}
@@ -614,7 +586,7 @@ export function EditProfileScreen({navigation}) {
             <TouchableOpacity
               style={styles.buttonStyle}
               onPress={writeUserData}>
-              <Text style={styles.buttonTextStyle}>REGISTER</Text>
+              <Text style={styles.buttonTextStyle}>UPDATE</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
           <View style={styles.bottomContainer}>

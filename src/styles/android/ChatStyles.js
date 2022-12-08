@@ -143,5 +143,9 @@ export default StyleSheet.create({
     width: 50,
     height: 40,
   },
+  placeholderText: 
+    {fontSize:30, alignSelf:'center',color:'black',marginBottom:250},
+  placeholderView:{justifyContent:'center'},
+  
 
 });
