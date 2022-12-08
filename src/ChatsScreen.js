@@ -1,6 +1,7 @@
 import { ChatProvider } from "./ChatContext";
-import {useContext, useRef} from 'react'
-import { SafeAreaView ,View,TouchableOpacity, Text} from "react-native";
+import {useContext, useRef, useState, useEffect} from 'react'
+import { SafeAreaView ,View, Text} from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import {
     ChannelList,
@@ -14,22 +15,50 @@ import {FloatingAction} from 'react-native-floating-action';
 
 import { useChatContext } from './ChatContext';
 
-
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {useNavigation} from '@react-navigation/native';
 
+import androidstyles from './styles/android/ChatStyles';
+import iosstyles from './styles/ios/ChatStyles';
+
+var styles;
+
+if (Platform.OS === 'ios') {
+  styles = iosstyles; // do dark mode in here as well
+} else if (Platform.OS === 'android') {
+  styles = androidstyles;
+}
+
 export function ChatsScreen(props) {
+
+  const actions = [
+    {
+        text: "Create Group",
+        name: "bt_create_group",
+        icon: source={uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png'},
+        position: 2,
+        color: '#73000a',
+    },
+    {
+        text: "Search User or Group",
+        name: "bt_search",
+        icon: source={uri:'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png'},
+        position: 1,
+        color: '#73000a',
+    }
+];
+
 
 ///This page shouls have all the functionality for adding a creating a DM. And searching for users.
 
     const { setChannel } = useChatContext();
     const navigation = useNavigation();   
     const { channels, refreshList, reloadList} = useContext(ChannelsContext);
-    const flatListRef = useRef();
+    const [selectedType, setSelectedType] = useState(0);
+    const [filter, setFilter] = useState('') //We will swap between groups and DMs here
+      //Right here, create a query that will only return the private DMs a User is in
 
-
-    //Right here, create a query that will only return the private DMs a User is in
-    const filters = {
+    const DMFilter = {
       $and: [
         {type:'messaging'},
         {members: {
@@ -37,41 +66,114 @@ export function ChatsScreen(props) {
         }},
         ]
       };
-      const sort = {
-        last_message_at: -1,
+    const GroupFilter = {
+      $and: [
+        {type:'team'},
+        {members: {
+          '$in': [auth().currentUser.uid]
+        }},
+        ]
       };
+    const sort = {
+      last_message_at: -1,
+    };
 
-      //You can customize the persons display name and extra data like major if wanted
-      const CustomPreviewTitle = ({ channel }) => (
-        <Text>
-          {channel.data.name}
-        </Text>
-      );
+    useEffect(() => {
+      if (selectedType === 0) {
+        setFilter(DMFilter);
+      } else {
+        setFilter(GroupFilter)
+      }
+    }, [selectedType]); //I guess this tells react to update when these variables change?
+
+
+    //sets selectedtype
+    const updateSelectedType = selectedType => () => {
+      setSelectedType(() => selectedType);
+    };
+
+    //You can customize the persons display name and extra data like major if wanted
+    const CustomPreviewTitle = ({ channel }) => (
+      <Text>
+        {channel.data.name}
+      </Text>
+    );
 
 
     return(
-        <GestureHandlerRootView style={{ flex: 1}}>
-            <View style={{ flex: 1}}>
+
+          <View style={{ flex: 1}}>
+            <View style={styles.searchActionContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.searchActionButton,
+                  styles.searchLeftActionButton,
+                  selectedType === 0 && styles.searchActionButtonActive,
+                ]}
+                onPress={updateSelectedType(0)}>
+                <Text
+                  style={[
+                    styles.searchActionLabel,
+                    selectedType === 0 && styles.searchActionLabelActive,
+                  ]}>
+                  Users
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.searchActionButton,
+                  styles.searchRightActionButton,
+                  selectedType === 1 && styles.searchActionButtonActive,
+                ]}
+                onPress={updateSelectedType(1)}>
+                <Text
+                  style={[
+                    styles.searchActionLabel,
+                    selectedType === 1 && styles.searchActionLabelActive,
+                  ]}>
+                  Groups
+                </Text>
+              </TouchableOpacity>
+            </View>
               <ChannelList 
+                PreviewAvatar={({ channel }) => (
+                  <TouchableOpacity
+                    disallowInterruption={true}
+                    onPress={() => {
+                      console.log('now go to profile screen')
+                      /** Handler for press action */
+                    }}
+                  >
+                    <ChannelAvatar channel={channel} />
+                  </TouchableOpacity>
+                  )}
+
                   PreviewTitle={CustomPreviewTitle}
-                  filters={filters} 
+                  filters={filter} 
                   
                   onSelect={(channel) => {
                       setChannel(channel);
-                      navigation.navigate('DM');
+                      navigation.navigate('DMScreen');
                   }}
                   />
               <FloatingAction
                 color="#73000a"
-                onOpen={this.floatingAction.animateButton}
+                actions={actions}
+                onPressItem={name => {
+                  if(name === 'bt_create_group'){
+                    navigation.navigate('CreateGroup')
+                  }
+                  else if (name === 'bt_search'){
+                    navigation.navigate('ChatSearch')
+                  }
+                }}
                 ref={ref => {
                   this.floatingAction = ref;
                 }}
-                onPressMain={() => {navigation.navigate('SearchUsers')
-                }}
               />
-            </View>
+          </View>
 
-        </GestureHandlerRootView>
+
     )
 }

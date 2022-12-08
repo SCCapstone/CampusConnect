@@ -8,7 +8,10 @@ import {
   Image,
 } from 'react-native';
 import {useState, useEffect} from 'react';
-import {CometChat} from '@cometchat-pro/react-native-chat';
+
+import { StreamChat } from 'stream-chat';
+import { chatApiKey } from '../chatConfig';
+
 import {FloatingAction} from 'react-native-floating-action';
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
@@ -21,12 +24,12 @@ if (Platform.OS === 'ios') {
   styles = androidstyles;
 }
 
-export function SearchUsers(props) {
+export function ChatSearch(props) {
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState('');
-  const [selectedConversation, setSelectedConversation] = useState(null);
   const [selectedType, setSelectedType] = useState(0);
-  const searchLimit = 20;
+  const searchLimit = 30;
+  const chatClient = StreamChat.getInstance(chatApiKey);
 
   useEffect(() => {
     if (selectedType === 0) {
@@ -34,26 +37,17 @@ export function SearchUsers(props) {
     } else {
       searchGroups();
     }
-  }, [CometChat, selectedType, keyword]);
+  }, [selectedType, keyword]); //I guess this tells react to update when these variables change?
 
   //searches users when selected type is 0
-  const searchUsers = () => {
-    /*if (CometChat) {
-      const usersRequestBuilder = new CometChat.UsersRequestBuilder().setLimit(
-        searchLimit,
-      );
-      const usersRequest = keyword
-        ? usersRequestBuilder.setSearchKeyword(keyword).build()
-        : usersRequestBuilder.build();
-      usersRequest.fetchNext().then(
-        userList => {
-          setData(() => userList);
-        },
-        error => {
-          console.log('Error, please try again later...');
-        },
-      );
-    }*/
+  const searchUsers = async () => {
+
+    //I can't get it to return a list of all users if there's no keyword set yet.
+    if(keyword){
+      const response = await chatClient.queryUsers({ name: { $autocomplete: keyword }},{last_active:-1},{limit:searchLimit})
+      setData(response.users)
+    }
+
   };
   //searches groups when selected type is 1
   const searchGroups = () => {
@@ -96,11 +90,11 @@ export function SearchUsers(props) {
   };
   //sends user to chat
   const selectItem = item => () => {
-    if (item && item.guid && !item.hasJoined) {
+    /*if (item && item.guid && !item.hasJoined) {
       joinGroup(item);
     }
     setSelectedConversation({...item, contactType: selectedType});
-    navigation.navigate('Message');
+    navigation.navigate('Message');*/
   };
   //returns uid of chat
   const getKey = item => {
@@ -119,7 +113,7 @@ export function SearchUsers(props) {
         <Image
           style={styles.chatListItemImage}
           source={{
-            uri: item.avatar ? item.avatar : item.icon,
+            uri: item.image ? item.image : 'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg',
           }}
         />
         <Text style={styles.chatListItemLabel}>{item.name}</Text>

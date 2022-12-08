@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {
   View,
   TextInput,
@@ -30,6 +31,7 @@ if (Platform.OS === 'ios') {
 export function CreateGroup(props) {
   const [groupName, setGroupName] = React.useState('');
   const [image, setImage] = React.useState('');
+  const [selectedType, setSelectedType] = useState(0);
   var url = '';
 
   const onGroupNameChanged = groupName => {
