@@ -36,9 +36,6 @@ export function ChatSearch(props) {
   const chatClient = StreamChat.getInstance(chatApiKey);
   const navigation = useNavigation();  
 
-  //For groups query
-  const filter = { type: 'team' };
-  const sort = [{ member_count: -1 }];
 
   useEffect(() => {
     if (selectedType === 0) {
@@ -51,12 +48,10 @@ export function ChatSearch(props) {
   //searches users when selected type is 0
   const searchUsers = async () => {
     var response;
-    //I can't get it to return a list of all users if there's no keyword set yet.
     keyword 
-    ? response = await chatClient.queryUsers({ name: { $autocomplete: keyword },},{last_active:-1},{limit:searchLimit})
-    : response = await chatClient.queryUsers({online:true},{last_active:-1},{limit:searchLimit}) //Displays all users that are online
+    ? response = await chatClient.queryUsers({ name: { $autocomplete: keyword },id: {$ne:chatClient.user.id}},{last_active:-1},{limit:searchLimit})
+    : response = await chatClient.queryUsers({role:'user' ,id: {$ne:chatClient.user.id}},{last_active:-1},{limit:searchLimit}) //Displays all users that are not yourself. Displaying users that are online is not working yet
       setData(response.users)
-      console.log(response.users)
     }
 
   //searches groups when selected type is 1
@@ -69,7 +64,6 @@ export function ChatSearch(props) {
     : response = await chatClient.queryChannels({type:'team'},{member_count:-1},{limit:searchLimit}) //Displays all users that are online
     response.map((channel) => {
       groups.push(channel.data)
-
     })
     setData(groups)
       
@@ -88,18 +82,14 @@ export function ChatSearch(props) {
   };
   //sends user to chat
   const selectItem = item => async () => {
-    if(item.type === 'messaging'){
-      if(!(chatClient.user.id === item.id)) {
-        const channel = chatClient.channel('messaging', {
-            members: [chatClient.user.id, item.id],
-        });
-        await channel.watch()
-        setChannel(channel)
-        navigation.navigate('DMScreen');
-      }
-      else {
-        Alert.alert('You can\'t create a DM with yourself!');
-      }
+    if(item.role === 'user'){
+      const channel = chatClient.channel('messaging', {
+          members: [chatClient.user.id, item.id],
+      });
+      await channel.watch()
+      setChannel(channel)
+      navigation.navigate('DMScreen');
+      
     }
     else if (item.type === 'team'){
       console.log(item.id)

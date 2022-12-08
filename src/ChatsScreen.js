@@ -1,12 +1,14 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import { SafeAreaView ,View, Text} from "react-native";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView ,View, Text, Pressable} from "react-native";
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 import {
     ChannelList,
     ChannelsContext,
     ChannelAvatar,
+    ChannelPreviewMessenger,
+    ChannelPreview
   } from 'stream-chat-react-native';
 
 
@@ -33,6 +35,7 @@ if (Platform.OS === 'ios') {
 
 export function ChatsScreen(props) {
 
+
   const actions = [
     {
         text: "Create Group",
@@ -54,8 +57,9 @@ export function ChatsScreen(props) {
 ///This page shouls have all the functionality for adding a creating a DM. And searching for users.
 
     const { setChannel } = useChatContext();
-    const navigation = useNavigation();   
-    const {reloadList} = useContext(ChannelsContext);
+    const navigation = useNavigation();
+    const list = useRef(FlatList)
+    const {reloadList,refreshList} = useContext(ChannelsContext);
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
@@ -108,8 +112,8 @@ export function ChatsScreen(props) {
     );
 
 
-    return(
 
+    return(
           <View style={{ flex: 1}}>
             <View style={styles.searchActionContainer}>
               <TouchableOpacity
@@ -144,22 +148,10 @@ export function ChatsScreen(props) {
                 </Text>
               </TouchableOpacity>
             </View>
-              <ChannelList 
-                PreviewAvatar={({ channel }) => (
-                  <TouchableOpacity
-                    disallowInterruption={true}
-                    onPress={() => {
-                      console.log('now go to profile screen')
-                      /** Handler for press action */
-                    }}
-                  >
-                    <ChannelAvatar channel={channel} />
-                  </TouchableOpacity>
-                  )}
+              <ChannelList
                   filters={filter} 
                   options={options}
                   sort={sort}
-                  
                   onSelect={(channel) => {
                       setChannel(channel);
                       navigation.navigate('DMScreen');
@@ -168,7 +160,9 @@ export function ChatsScreen(props) {
               <FloatingAction
                 color="#73000a"
                 actions={actions}
+                onPressMain={() => {}}
                 onPressItem={name => {
+                  
                   if(name === 'bt_create_group'){
                     navigation.navigate('CreateGroup')
                   }

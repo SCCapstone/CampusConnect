@@ -40,14 +40,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 
-
+darkMode = false;
 //The top level stack navigaor for chats. I don't think this needs to be changed much anymore....
 
 export const ChatNavigator = () => {
   const { clientIsReady } = useChatClient();
 
   if (!clientIsReady) {
-    return <Text>Loading chat ...</Text>
+    return <Text style={darkMode ? {color:'white',textAlign:'center'}:{color:black,textAlign:'center'}}>Loading chat ...</Text>
   }
 
   const chatClient = StreamChat.getInstance(chatApiKey);

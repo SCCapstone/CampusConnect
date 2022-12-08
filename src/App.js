@@ -49,9 +49,9 @@ export default function App() {
   return (
 
     <AppContext.Provider value={userData}>
-      <OverlayProvider>
+      <GestureHandlerRootView style={{flex:1}}>
+        <OverlayProvider>
           <NavigationContainer>
-
             <Stack.Navigator>
               <Stack.Screen
                 name="WelcomeScreen"
@@ -79,9 +79,9 @@ export default function App() {
                 options={{headerShown: false}}
               />
             </Stack.Navigator>
-
-        </NavigationContainer>
-      </OverlayProvider>
+          </NavigationContainer>
+        </OverlayProvider>
+      </GestureHandlerRootView>
     </AppContext.Provider>
 
   );

@@ -2,12 +2,13 @@ import {
     Channel,
     MessageList,
     MessageInput,
-    ChannelAvatar
   } from 'stream-chat-react-native'; // Or stream-chat-expo
+  import {FlashList} from '@shopify/flash-list';
 
 
   import { useChatContext} from './ChatContext';
   import {useNavigation} from '@react-navigation/native';
+import { FlatList } from 'react-native';
   
   
   export function DMScreen(props) {
@@ -20,7 +21,6 @@ import {
                 onThreadSelect={(message) => {
                 if (channel?.id) {
                   setThread(message);
-                  console.log('gello')
                   navigation.navigate('ThreadScreen');
                 }
               }} />
