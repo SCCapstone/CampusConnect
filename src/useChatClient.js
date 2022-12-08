@@ -21,7 +21,8 @@ export const useChatClient = () => {
 
   const user = {
     id: auth().currentUser.uid,
-    name: userData.name
+    name: userData.name,
+    image: userData.pfp
   }
 
   const getToken = async () => {
@@ -40,12 +41,10 @@ export const useChatClient = () => {
   useEffect(() => {
 
     //Generate token here
-
-
     const setupClient = async () => {
       try {
         const chatUserToken = await getToken();
-        chatClient.connectUser(user, chatUserToken).catch(error => {console.log(error)});
+        await chatClient.connectUser(user, chatUserToken).catch(error => {console.log(error)});
         setClientIsReady(true);
 
         // connectUser is an async function. So you can choose to await for it or not depending on your use case (e.g. to show custom loading indicator)
