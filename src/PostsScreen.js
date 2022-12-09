@@ -40,11 +40,11 @@ if (Platform.OS === 'ios') {
 }
 
 export function PostsScreen({navigation}) {
-  if (Platform.OS === 'android') {
+ /* if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-  }
+  }*/
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -151,11 +151,14 @@ export function PostsScreen({navigation}) {
           setLoading(false);
 
           // After removing the item, we can start the animation.
-          if (posts.length > 0) {
-            list.current?.prepareForLayoutAnimationRender();
-            LayoutAnimation.configureNext(
-              LayoutAnimation.Presets.easeInEaseOut,
-            );
+          //This feature is way too buggy on android right now
+          if(Platform.OS === 'ios'){
+            if (posts.length > 0) {
+              list.current?.prepareForLayoutAnimationRender();
+              LayoutAnimation.configureNext(
+                LayoutAnimation.Presets.easeInEaseOut,
+              );
+            }
           }
         }
       });
