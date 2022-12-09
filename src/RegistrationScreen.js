@@ -375,7 +375,7 @@ const RegisterError = () => {
   const uploadPic = async () => {
     const reference = storage().ref(auth().currentUser.uid);
     if (image) {
-      await reference.putFile(image.path).catch(error => {
+      await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
       });
       url = await reference.getDownloadURL();

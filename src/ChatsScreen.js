@@ -1,12 +1,14 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import { SafeAreaView ,View, Text, Pressable} from "react-native";
+import { SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet} from "react-native";
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { RectButton } from 'react-native-gesture-handler';
 
 import {
     ChannelList,
     ChannelsContext,
-    ChannelAvatar,
+    ChannelAvatarWithContext,
     ChannelPreviewMessenger,
     ChannelPreview
   } from 'stream-chat-react-native';
@@ -24,6 +26,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
+import { channel } from "diagnostics_channel";
 
 var styles;
 
@@ -99,23 +102,98 @@ export function ChatsScreen(props) {
     }, [selectedType]); //I guess this tells react to update when these variables change?
 
 
-    // Listener for all events on client
-    chatClient.on(event => {
-      console.log('Received an event on client - ', event)
-    })
+
     //sets selectedtype
     const updateSelectedType = selectedType => () => {
       setSelectedType(() => selectedType);
     };
 
+
+    //Need to make the little preview chat slidable so we can delete and stuff, but very hard
+    const SlidablePreview = ( {channel} ) => (
+        <ChannelPreviewMessenger channel={channel}></ChannelPreviewMessenger>
+    )
+
+    //Attempting to fix error where group loads in users chat
+    const customOnMessageNew = async (setChannels, event) => {
+      console.log('message new')
+      const eventChannel = event.channel;
+      // If the channel is frozen, then don't add it to the list.
+      if (!eventChannel?.id || !eventChannel.frozen) return;
+    
+      try {
+        const newChannel = chatClient.channel(eventChannel.type, eventChannel.id);
+
+        await newChannel.watch();
+        if(selectedType === 0){
+          if (newChannel.type === 'messaging'){
+            setChannels(channels => [newChannel, ...channels]);
+          }
+        }
+        else if (selectedType === 1){
+          if(newChannel.type === 'team'){
+            setChannels(channels => [newChannel, ...channels]);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const customOnUpdate = async (setChannels, event) => {
+      console.log('update')
+      const eventChannel = event.channel;
+      // If the channel is frozen, then don't add it to the list.
+      if (!eventChannel?.id || !eventChannel.frozen) return;
+    
+      try {
+        const newChannel = chatClient.channel(eventChannel.type, eventChannel.id);
+
+        await newChannel._update()
+        if(selectedType === 0){
+          if (newChannel.type === 'messaging'){
+            setChannels(channels => [newChannel, ...channels]);
+          }
+        }
+        else if (selectedType === 1){
+          if(newChannel.type === 'team'){
+            setChannels(channels => [newChannel, ...channels]);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const customOnAdd = async (setChannels, event) => {
+      console.log('add')
+      const eventChannel = event.channel;
+      // If the channel is frozen, then don't add it to the list.
+      if (!eventChannel?.id || !eventChannel.frozen) return;
+    
+      try {
+        const newChannel = chatClient.channel(eventChannel.type, eventChannel.id);
+
+        await newChannel.watch()
+        if(selectedType === 0){
+          if (newChannel.type === 'messaging'){
+            setChannels(channels => [newChannel, ...channels]);
+          }
+        }
+        else if (selectedType === 1){
+          if(newChannel.type === 'team'){
+            setChannels(channels => [newChannel, ...channels]);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     //You can customize the persons display name and extra data like major if wanted
-    const CustomPreviewTitle = ({ channel }) => (
+    const CustomPreviewTitle = ( {channel} ) => (
       <Text>
         {channel.data.name}
       </Text>
     );
-
-
 
     return(
           <View style={{ flex: 1}}>
@@ -153,12 +231,20 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
+                PreviewAvatar={({ channel }) => (
+                  <TouchableOpacity
+                    style={{flex:1}}
+                    disallowInterruption={true}
+                    onPress={() => {
+                      Alert.alert('Navigate to profile screen here.')
+                    }}
+                  >
+                    <ChannelAvatarWithContext channel={channel}></ChannelAvatarWithContext>
+                  </TouchableOpacity>
+                  )}
                   filters={filter} 
                   options={options}
                   sort={sort}
-                  onMessageNew={() => {
-                    console.log('asklfjhsakfjhasdkjf')
-                  }}
                   onSelect={(channel) => {
                       setChannel(channel);
                       navigation.navigate('DMScreen');

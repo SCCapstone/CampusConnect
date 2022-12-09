@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import {FloatingAction} from 'react-native-floating-action';
 
-export function GroupsScreen({navigation}) {
+export function ClubsScreen({navigation}) {
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'CSCE 490: Capstone Project',
-      img: 'https://capstone.cse.sc.edu/big-c-white-128x128.png',
+      title: 'Carolina Mountaineering and White Water Club',
+      img: 'https://se-images.campuslabs.com/clink/images/851a1e25-5995-4b5a-80be-93ba9f37aa0f1d0ef086-745e-4ab0-9533-db175728451e.jpg?preset=med-sq',
     },
     {
       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
@@ -26,8 +26,8 @@ export function GroupsScreen({navigation}) {
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'World Cup Watch Party',
-      img: 'https://digitalhub.fifa.com/transform/cc484be3-24c2-4315-a331-71f252d70349/Brand_Protection_fwc2022_oe_4ct_3D_ps_l',
+      title: 'Gamecock Barbell Club',
+      img: 'https://se-images.campuslabs.com/clink/images/1d10a454-1496-4d77-b37b-32543c08af56b610ef6e-e88e-4919-8c65-8bf325b20374.jpg?preset=med-sq/transform/cc484be3-24c2-4315--71f252d70349/',
     },
   ];
 
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: "row",
+    borderRadius:20,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -98,6 +99,8 @@ const styles = StyleSheet.create({
       marginRight: 20,
       width: 50,
       height: 50,
+      borderRadius:20,
+      resizeMode:'cover'
   },
   button: {
       width: 400,

@@ -7,6 +7,7 @@ import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js';
 import {RegistrationScreen} from './RegistrationScreen.js';
 import {HomeScreen} from './HomeScreen.js';
 import AppContext from './AppContext';
+import { vw } from 'stream-chat-react-native';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { OverlayProvider } from 'stream-chat-react-native';
@@ -14,10 +15,35 @@ import { OverlayProvider } from 'stream-chat-react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
+import type { DeepPartial, Theme } from 'stream-chat-react-native';
 
 const Stack = createNativeStackNavigator();
+const maxWidth = (vw(100) - 72)-120;
 
 export default function App() {
+
+  //Theme for chats
+  const theme: DeepPartial<Theme> = {
+    channelPreview: {
+      container : {
+        height:85,
+      },
+      contentContainer: { 
+      },
+      title: {
+        fontSize:20
+      },
+      message: {
+        fontSize:17,
+        color:'black'
+      },
+    },
+    channelListMessenger: {
+      flatList: {
+        padding:10
+      }
+    },
+  };
 
   //initialitize parse for handling user verification
   Parse.setAsyncStorage(AsyncStorage);
@@ -50,7 +76,7 @@ export default function App() {
 
     <AppContext.Provider value={userData}>
       <GestureHandlerRootView style={{flex:1}}>
-        <OverlayProvider>
+        <OverlayProvider value={{style: theme}}>
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen

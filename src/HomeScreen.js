@@ -8,7 +8,7 @@ import {SportsScreen} from './SportsScreen.js'
 import {PostsScreen} from './PostsScreen.js';
 import {EditProfileScreen} from './EditProfile';
 import {EventsScreen} from './EventsScreen.js';
-import {GroupsScreen} from './GroupsScreen';
+import {ClubsScreen} from './ClubsScreen';
 import {ChatNavigator} from './ChatNavigator';
 import {CreateGroup} from './CreateGroup.js';
 import {Message} from './Message.js';
@@ -82,9 +82,9 @@ export function HomeScreen({navigation}) {
         options={{headerTitle: 'Campus Connect: DMs'}}
       />
       <Drawer.Screen
-        name="Groups"
-        component={GroupsScreen}
-        options={{headerTitle: 'Campus Connect: Groups'}}
+        name="Clubs"
+        component={ClubsScreen}
+        options={{headerTitle: 'Campus Connect: Clubs'}}
       />
       <Drawer.Screen
         name="Sports"
