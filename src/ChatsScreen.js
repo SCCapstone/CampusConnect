@@ -99,6 +99,10 @@ export function ChatsScreen(props) {
     }, [selectedType]); //I guess this tells react to update when these variables change?
 
 
+    // Listener for all events on client
+    chatClient.on(event => {
+      console.log('Received an event on client - ', event)
+    })
     //sets selectedtype
     const updateSelectedType = selectedType => () => {
       setSelectedType(() => selectedType);
@@ -152,6 +156,9 @@ export function ChatsScreen(props) {
                   filters={filter} 
                   options={options}
                   sort={sort}
+                  onMessageNew={() => {
+                    console.log('asklfjhsakfjhasdkjf')
+                  }}
                   onSelect={(channel) => {
                       setChannel(channel);
                       navigation.navigate('DMScreen');
