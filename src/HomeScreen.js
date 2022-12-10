@@ -77,9 +77,9 @@ export function HomeScreen({navigation}) {
         options={{headerTitle: 'Campus Connect: Events'}}
       />
       <Drawer.Screen
-        name="DMs"
+        name="Chats"
         component={ChatNavigator}
-        options={{headerTitle: 'Campus Connect: DMs'}}
+        options={{headerTitle: 'Campus Connect: Chats', headerShown:false}}
       />
       <Drawer.Screen
         name="Clubs"

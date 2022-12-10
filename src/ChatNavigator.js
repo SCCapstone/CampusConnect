@@ -7,9 +7,13 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
+  ImageBackground,
   TouchableOpacity,
   Alert,
+  Button
 } from 'react-native';
+
+import { HeaderBackButton } from "@react-navigation/elements";
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { DMScreen } from './DMScreen.js';
@@ -40,6 +44,17 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 
+import androidscreenOptions from './styles/android/ChatNavigatorOptions';
+import iosscreenOptions from './styles/ios/ChatNavigatorOptions';
+
+var screenOptions;
+
+if (Platform.OS === 'ios') {
+  screenOptions = iosscreenOptions;
+} else if (Platform.OS === 'android') {
+  screenOptions = androidscreenOptions;
+}
+
 darkMode = false;
 //The top level stack navigaor for chats. I don't think this needs to be changed much anymore....
 
@@ -51,22 +66,29 @@ export const ChatNavigator = () => {
   }
 
   const chatClient = StreamChat.getInstance(chatApiKey);
+  const navigation = useNavigation();
 
-
+  const navigationOption = () => {
+   return (<HeaderBackButton onPress={() => navigation.goBack(null)} />);
+ }
   
   return (
 
     <ChatProvider>
       <Chat client={chatClient}>
-        <Stack.Navigator>
-          <Stack.Screen name="ChatsHome" component={ChatsScreen} options={{headerShown: false}}/>
-          <Stack.Screen name="ChatSearch" component={ChatSearch} options={{headerShown: false}}/>
-          <Stack.Screen name="CreateGroup" component={CreateGroup} options={{headerShown: false}}/>
-          <Stack.Screen name="DMScreen" component={DMScreen} options={{headerShown: false}}/>
-          <Stack.Screen name="ThreadScreen" component={ThreadScreen} options={{headerShown: false}}/>
+        <Stack.Navigator screenOptions={screenOptions}>
+          <Stack.Screen name="ChatsHome" component={ChatsScreen} options={{headerShown:true, headerLeft: () => (
+        <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.goBack()} />
+      ),}}/>
+          <Stack.Screen name="ChatSearch" component={ChatSearch} options={{headerShown: true}}/>
+          <Stack.Screen name="CreateGroup" component={CreateGroup} options={{headerShown: true}}/>
+          <Stack.Screen name="DMScreen" component={DMScreen} options={{headerShown: true}}/>
+          <Stack.Screen name="ThreadScreen" component={ThreadScreen} options={{headerShown: true}}/>
         </Stack.Navigator>
       </Chat>
     </ChatProvider>
 
   );
 };
+
+

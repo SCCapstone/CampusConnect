@@ -109,7 +109,6 @@ export function CreateGroup(props) {
 
   return (
     <View style={styles.groupContainer}>
-      <BackButton></BackButton>
       <Text style={styles.textGroupStyle}>
         What would you like your group to be called
       </Text>
@@ -134,17 +133,3 @@ export function CreateGroup(props) {
     </View>
   );
 }
-
-const BackButton = () => {
-  const navigation = useNavigation();
-  return (
-    <TouchableOpacity
-      style={styles.backButtonContainer}
-      onPress={() => navigation.goBack()}>
-      <ImageBackground
-        style={styles.backButtonImage}
-        source={require('./assets/back_arrow.png')}
-      />
-    </TouchableOpacity>
-  );
-};
