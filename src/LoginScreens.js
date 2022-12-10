@@ -109,7 +109,7 @@ export function WelcomeScreen({navigation}) {
     <SafeAreaView style={styles.container}>
       <Image
         style={styles.imageLarge}
-        source={require('./assets/gamecock.png')}
+        source={require('./assets/logo.png')}
       />
       <Text style={styles.title}>Campus Connect</Text>
 
@@ -164,7 +164,7 @@ export function LoginScreen({navigation}) {
       <BackButton />
       <Image
         style={styles.imageSmall}
-        source={require('./assets/gamecock.png')}
+        source={require('./assets/logo.png')}
       />
       <Text style={styles.title}>Campus Connect</Text>
 
@@ -281,7 +281,7 @@ export function RegisterScreen({navigation}) {
       <BackButton />
       <Image
         style={styles.imageSmall}
-        source={require('./assets/gamecock.png')}
+        source={require('./assets/logo.png')}
       />
       <Text style={styles.title}>Campus Connect</Text>
       <View style={styles.inputView}>

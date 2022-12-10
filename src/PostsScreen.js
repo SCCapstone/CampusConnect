@@ -67,7 +67,7 @@ export function PostsScreen({navigation}) {
   const offsetHeight = Platform.OS === 'ios' ? 64 : 0 //keyboard view doesnt work on ios without this
 
   const list = useRef(FlashList);
-  const sortingOptions = ["Descending", "Ascending", "New", "Anonymous", "No Anonymous"]
+  const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
 
   const PostAlert = () => {
     Alert.alert('Post?', 'Are you sure you want to post?', [

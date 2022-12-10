@@ -76,9 +76,9 @@ export function HomeScreen({navigation}) {
           headerTitle: (props) => <LogoTitle {...props} />,
           // Add a placeholder button without the `onPress` to avoid flicker
           headerRight: () => (
-            <SelectDropdown
-              defaultButtonText='Sort'
-            />
+              <SelectDropdown
+                defaultButtonText='Sort'
+              />
           ),
           headerTitle: 'Campus Connect: Posts'
         })}
