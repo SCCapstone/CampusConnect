@@ -59,6 +59,7 @@ darkMode = false;
 //The top level stack navigaor for chats. I don't think this needs to be changed much anymore....
 
 export const ChatNavigator = () => {
+  const navigation = useNavigation();
   const { clientIsReady } = useChatClient();
 
   if (!clientIsReady) {
@@ -66,11 +67,8 @@ export const ChatNavigator = () => {
   }
 
   const chatClient = StreamChat.getInstance(chatApiKey);
-  const navigation = useNavigation();
 
-  const navigationOption = () => {
-   return (<HeaderBackButton onPress={() => navigation.goBack(null)} />);
- }
+
   
   return (
 

@@ -64,6 +64,8 @@ export function PostsScreen({navigation}) {
   const [sortMode, setSortMode] = useState('Descending')
   var transactionStarted = false;
 
+  const offsetHeight = Platform.OS === 'ios' ? 64 : 0 //keyboard view doesnt work on ios without this
+
   const list = useRef(FlashList);
   const sortingOptions = ["Descending", "Ascending", "New", "Anonymous", "No Anonymous"]
 
@@ -448,7 +450,7 @@ export function PostsScreen({navigation}) {
         onRequestClose={() => {
           closeModal();
         }}>
-        <KeyboardAvoidingView keyboardVerticalOffset={64} behavior="padding">
+        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior="padding">
           <View style={styles.postView}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
