@@ -146,7 +146,7 @@ export default StyleSheet.create({
   },
   name: {
     justifyContent: 'center',
-    fontSize: 24,
+    fontSize: 23,
     marginLeft: 20,
     color: 'black',
   },
@@ -156,4 +156,7 @@ export default StyleSheet.create({
     height: '110%',
     width: '90%',
   },
+  checkBoxBox : {
+    justifyContent:'center', alignContent:'center', alignItems:'center',flex:.1
+  }
 });

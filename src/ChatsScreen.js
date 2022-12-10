@@ -10,7 +10,7 @@ import {
     ChannelsContext,
     ChannelAvatarWithContext,
     ChannelPreviewMessenger,
-    ChannelPreview
+    ChannelPreview,
   } from 'stream-chat-react-native';
 
 

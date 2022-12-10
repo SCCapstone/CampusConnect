@@ -15,6 +15,8 @@ import {Message} from './Message.js';
 
 import AppContext from './AppContext';
 
+import SelectDropdown from 'react-native-select-dropdown'
+
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 
 import {DrawerContent} from './DrawerContent.js';
@@ -37,6 +39,7 @@ export function HomeScreen({navigation}) {
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+
 
 
   // Handle user state changes
@@ -69,7 +72,16 @@ export function HomeScreen({navigation}) {
       <Drawer.Screen
         name="Home"
         component={PostsScreen}
-        options={{headerTitle: 'Campus Connect: Posts'}}
+        options={({ navigation, route }) => ({
+          headerTitle: (props) => <LogoTitle {...props} />,
+          // Add a placeholder button without the `onPress` to avoid flicker
+          headerRight: () => (
+            <SelectDropdown
+              defaultButtonText='Sort'
+            />
+          ),
+          headerTitle: 'Campus Connect: Posts'
+        })}
       />
       <Drawer.Screen
         name="Events"

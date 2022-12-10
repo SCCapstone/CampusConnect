@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   pfpStyle: {height: 80, width: 80, borderRadius: 40},
-  imageBackgroundView: {padding: 30},
+  imageBackgroundView: {resizeMode:'contain' },
   pressableImageView: {
     height: 80,
     width: 80,

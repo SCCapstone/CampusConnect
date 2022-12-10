@@ -375,6 +375,7 @@ export function EditProfileScreen({navigation}) {
     const bioLengthValid = bio.length <= 150;
 
 
+
     var emailVerified = true;
 
     if(emailVerified){
@@ -531,7 +532,7 @@ export function EditProfileScreen({navigation}) {
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
         <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
-            <ImageBackground
+            {userData.pfp? <Image style={styles.blankImageStyle} source={{uri: userData.pfp}}></Image> :<ImageBackground
               source={require('./assets/blank2.jpeg')}
               imageStyle={styles.blankImageStyle}
               style={styles.blankImageBackgroundStyle}>
@@ -539,7 +540,7 @@ export function EditProfileScreen({navigation}) {
               {image
               ? 'Pic Loaded ✅'
               : 'Select an image from your library'}</Text>
-            </ImageBackground>
+            </ImageBackground>}
           </TouchableOpacity>
           <Text style={styles.textStyle}>{firstName} {lastName}</Text>
           <KeyboardAvoidingView enabled>

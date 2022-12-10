@@ -95,7 +95,7 @@ export function DrawerContent(props) {
         {...props}
         contentContainerStyle={styles.drawerScrollView}>
         <ImageBackground
-          blurRadius={4}
+          blurRadius={15}
           source={require('./assets/gamecock.png')}
           style={styles.imageBackgroundView}>
           <View style={styles.drawerUserView}>

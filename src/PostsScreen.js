@@ -30,6 +30,8 @@ import {FlashList} from '@shopify/flash-list';
 import iosstyles from './styles/ios/PostScreenStyles';
 import androidstyles from './styles/android/PostScreenStyles';
 import {TouchableHighlight} from 'react-native-gesture-handler';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import SelectDropdown from 'react-native-select-dropdown'
 
 var styles;
 
@@ -58,9 +60,12 @@ export function PostsScreen({navigation}) {
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
+  const [postIsAnonymous,setPostIsAnonymous] = useState(false);
+  const [sortMode, setSortMode] = useState('Descending')
   var transactionStarted = false;
 
   const list = useRef(FlashList);
+  const sortingOptions = ["Descending", "Ascending", "New", "Anonymous", "No Anonymous"]
 
   const PostAlert = () => {
     Alert.alert('Post?', 'Are you sure you want to post?', [
@@ -84,33 +89,77 @@ export function PostsScreen({navigation}) {
       postText.split(/\r\n|\r|\n/).length <=
         25 /*this last one checks that there are not too many lines */
     ) {
-      firestore()
+      if(!postIsAnonymous){
+        firestore()
+          .collection('Posts')
+          .doc()
+          .set({
+            author: userData.name,
+            authorGradYear: userData.gradYear,
+            authorMajor: userData.major,
+            body: postText,
+            replyCount: 0,
+            upvoteCount: 1,
+            date: firestore.FieldValue.serverTimestamp(),
+            pfp: userData.pfp,
+            replies: [],
+            user: '/Users/' + auth().currentUser.uid,
+            extraData: '',
+            upvoters: {[auth().currentUser.uid]: true},
+            downvoters: new Map(),
+          })
+          .then(() => {closeModal()})
+          .catch(error => {
+            console.log(error.code);
+          });
+        }
+      else if (postIsAnonymous) {
+        firestore()
         .collection('Posts')
         .doc()
         .set({
-          author: userData.name,
-          authorGradYear: userData.gradYear,
-          authorMajor: userData.major,
+          author: 'Anonymous',
+          authorGradYear: '',
+          authorMajor: '',
           body: postText,
           replyCount: 0,
           upvoteCount: 1,
           date: firestore.FieldValue.serverTimestamp(),
-          pfp: userData.pfp,
+          pfp: '',
           replies: [],
           user: '/Users/' + auth().currentUser.uid,
           extraData: '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
         })
-        .then(() => closeModal())
+        .then(() => {closeModal()})
         .catch(error => {
           console.log(error.code);
         });
+      }
     } else {
       PostError();
     }
   };
+
   useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <SelectDropdown
+        defaultButtonText='Sort'
+        data={sortingOptions}
+        buttonStyle={{width:110,height:50,backgroundColor:'#73000a'}}
+        rowTextStyle={{fontSize:11}}
+        buttonTextAfterSelection={(selectedItem,index) => {
+          return 'Sort:\n' + selectedItem
+        }}
+        buttonTextStyle={{fontSize:12,color:'white'}}
+        onSelect={(selectedItem, index) => {
+          setSortMode(selectedItem)
+        }}
+      />
+      ),
+    });
     //gets posts asynchronously in the background
     const subscriber = firestore()
       .collection('Posts')
@@ -130,9 +179,11 @@ export function PostsScreen({navigation}) {
               key: documentSnapshot.id,
               isUpVoted: false,
               isDownVoted: false,
+              postIsYours:false
             };
             post.isUpVoted = post.upvoters[auth().currentUser.uid];
             post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
 
             posts.push(post);
             if (post.extraData) {
@@ -152,20 +203,21 @@ export function PostsScreen({navigation}) {
 
           // After removing the item, we can start the animation.
           //This feature is way too buggy on android right now
-          if(Platform.OS === 'ios'){
+          //This feature is just too buggy in general honestly
+          /*if(Platform.OS === 'ios'){
             if (posts.length > 0) {
               list.current?.prepareForLayoutAnimationRender();
               LayoutAnimation.configureNext(
                 LayoutAnimation.Presets.easeInEaseOut,
               );
             }
-          }
+          }*/
         }
       });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, []);
+  }, [navigation]);
 
   const DeletePost = ({item}) => {
     firestore().collection('Posts').doc(item.key).delete();
@@ -316,13 +368,13 @@ export function PostsScreen({navigation}) {
             />
             {item.author !== 'Anonymous' ? (
               <View style={styles.postUserInfo}>
-                <Text style={styles.name}>{item.author}</Text>
+                <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
                 <Text style={styles.majorText}>
                   {item.authorMajor} | Class of {item.authorGradYear}
                 </Text>
               </View>
             ) : (
-              <Text style={styles.anonymousAuthorText}>{item.author}</Text>
+              <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
             )}
           </View>
           <View style={styles.postImageView}>
@@ -360,6 +412,7 @@ export function PostsScreen({navigation}) {
 
   const closeModal = () => {
     this.floatingAction.animateButton();
+    setPostIsAnonymous(false)
     setPostText('');
   };
 
@@ -373,70 +426,20 @@ export function PostsScreen({navigation}) {
     );
   }
 
-  if (posts.length == 0) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 32,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            marginVertical: '75%',
-          }}>
-          Kind of empty in here....
-        </Text>
-        <Modal
-          style={styles.modal}
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            closeModal();
-          }}>
-          <KeyboardAvoidingView behavior="padding">
-            <View style={styles.postView}>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                  onPress={() => closeModal()}
-                  style={styles.cancelButton}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => PostAlert()}
-                  style={styles.postButton}>
-                  <Text style={styles.postButtonText}>Post?</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.postTextView}>
-                <TextInput
-                  style={styles.postInput}
-                  multiline={true}
-                  onChangeText={postText => setPostText(postText)}
-                  placeholder="Enter your post"
-                  textAlignVertical="top"
-                  placeholderTextColor="black"
-                  blurOnSubmit={false}
-                />
-              </View>
-            </View>
-          </KeyboardAvoidingView>
-        </Modal>
-        <FloatingAction
-          color="#73000a"
-          ref={ref => {
-            this.floatingAction = ref;
-          }}
-          onPressMain={() => {
-            setModalVisible(!modalVisible);
-          }}
-        />
-      </SafeAreaView>
-    );
-  }
-
   return (
+
     <SafeAreaView style={styles.container}>
+      {(posts.length == 0) &&
+      <Text
+      style={{
+        color: 'white',
+        fontSize: 32,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginVertical: '75%',
+      }}>
+      Kind of empty in here....
+      </Text>}
       <Modal
         style={styles.modal}
         animationType="slide"
@@ -445,7 +448,7 @@ export function PostsScreen({navigation}) {
         onRequestClose={() => {
           closeModal();
         }}>
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView keyboardVerticalOffset={64} behavior="padding">
           <View style={styles.postView}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -468,6 +471,21 @@ export function PostsScreen({navigation}) {
                 textAlignVertical="top"
                 placeholderTextColor="black"
                 blurOnSubmit={false}
+              />
+            </View>
+            <View style={styles.checkBoxBox}>
+              <BouncyCheckbox
+                size={20}
+                fillColor="#73000a"
+                disableBuiltInState={true}
+                style={{alignSelf:'center'}}
+                isChecked={postIsAnonymous}
+                unfillColor="#FFFFFF"
+                text="Post Anonymously?"
+                iconStyle={{ borderColor: "#73000a" }}
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ fontFamily: "JosefinSans-Regular", color:'black' }}
+                onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
               />
             </View>
           </View>

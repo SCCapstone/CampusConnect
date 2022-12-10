@@ -353,7 +353,7 @@ const EmailAlert = error => {
 const RegisterError = () => {
   Alert.alert(
     'Error',
-    'Make sure all required fields are filled out and that the bio is less than 151 characters',
+    'Make sure all required fields are filled out, the bio is 150 characters or less, and your name is less than 25 characters',
     [{text: 'OK'}],
   );
 };
@@ -385,6 +385,7 @@ const RegisterError = () => {
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
+    const nameValid = (firstName.length + lastName.length) < 25
 
     var emailVerified = false;
     /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
@@ -393,6 +394,7 @@ const RegisterError = () => {
     if(true){
       //Parse.User.logOut();
       if (
+        nameValid &&
         firstName.trim() &&
         lastName.trim() &&
         major &&
@@ -418,6 +420,7 @@ const RegisterError = () => {
             setRegistraionSuccess(true);
           });
       } else if (
+        nameValid &&
         firstName.trim() &&
         lastName.trim() &&
         major &&
@@ -441,6 +444,7 @@ const RegisterError = () => {
             setRegistraionSuccess(true);
           });
       } else if (
+        nameValid &&
         firstName.trim() &&
         lastName.trim() &&
         major &&
@@ -463,6 +467,7 @@ const RegisterError = () => {
             setRegistraionSuccess(true);
           });
       } else if (
+        nameValid &&
         firstName.trim() &&
         lastName.trim() &&
         major &&
