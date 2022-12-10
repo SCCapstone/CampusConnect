@@ -150,12 +150,12 @@ export function PostsScreen({navigation}) {
         <SelectDropdown
         defaultButtonText='Sort'
         data={sortingOptions}
-        buttonStyle={{width:110,height:50,backgroundColor:'#73000a'}}
+        buttonStyle={{width:110,height:20,backgroundColor:'#73000a'}}
         rowTextStyle={{fontSize:11}}
         buttonTextAfterSelection={(selectedItem,index) => {
-          return 'Sort:\n' + selectedItem
+          return selectedItem
         }}
-        buttonTextStyle={{fontSize:12,color:'white'}}
+        buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
         onSelect={(selectedItem, index) => {
           setSortMode(selectedItem)
         }}
@@ -486,7 +486,7 @@ export function PostsScreen({navigation}) {
                 text="Post Anonymously?"
                 iconStyle={{ borderColor: "#73000a" }}
                 innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ fontFamily: "JosefinSans-Regular", color:'black' }}
+                textStyle={{ color:'black' }}
                 onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
               />
             </View>

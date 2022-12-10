@@ -62,11 +62,17 @@ export function ChatsScreen(props) {
     const { setChannel } = useChatContext();
     const navigation = useNavigation();
     const list = useRef(FlatList)
-    const {reloadList,refreshList} = useContext(ChannelsContext);
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
+    const [key, setKey] = useState(0)
       //Right here, create a query that will only return the private DMs a User is in
+
+      const ReloadList = () => {
+      setKey((key)=>key+1)
+    }
+
+    const myClientEventListener = chatClient.on('message.new', ReloadList)
 
     const DMFilter = {
       $and: [
@@ -93,12 +99,18 @@ export function ChatsScreen(props) {
       watch: true,
     };
 
+
+
+
     useEffect(() => {
+      
       if (selectedType === 0) {
         setFilter(DMFilter);
       } else {
         setFilter(GroupFilter)
       }
+
+      return () => {myClientEventListener.unsubscribe();};
     }, [selectedType]); //I guess this tells react to update when these variables change?
 
 
@@ -113,80 +125,6 @@ export function ChatsScreen(props) {
     const SlidablePreview = ( {channel} ) => (
         <ChannelPreviewMessenger channel={channel}></ChannelPreviewMessenger>
     )
-
-    //Attempting to fix error where group loads in users chat
-    const customOnMessageNew = async (setChannels, event) => {
-      console.log('message new')
-      const eventChannel = event.channel;
-      // If the channel is frozen, then don't add it to the list.
-      if (!eventChannel?.id || !eventChannel.frozen) return;
-    
-      try {
-        const newChannel = chatClient.channel(eventChannel.type, eventChannel.id);
-
-        await newChannel.watch();
-        if(selectedType === 0){
-          if (newChannel.type === 'messaging'){
-            setChannels(channels => [newChannel, ...channels]);
-          }
-        }
-        else if (selectedType === 1){
-          if(newChannel.type === 'team'){
-            setChannels(channels => [newChannel, ...channels]);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const customOnUpdate = async (setChannels, event) => {
-      console.log('update')
-      const eventChannel = event.channel;
-      // If the channel is frozen, then don't add it to the list.
-      if (!eventChannel?.id || !eventChannel.frozen) return;
-    
-      try {
-        const newChannel = chatClient.channel(eventChannel.type, eventChannel.id);
-
-        await newChannel._update()
-        if(selectedType === 0){
-          if (newChannel.type === 'messaging'){
-            setChannels(channels => [newChannel, ...channels]);
-          }
-        }
-        else if (selectedType === 1){
-          if(newChannel.type === 'team'){
-            setChannels(channels => [newChannel, ...channels]);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const customOnAdd = async (setChannels, event) => {
-      console.log('add')
-      const eventChannel = event.channel;
-      // If the channel is frozen, then don't add it to the list.
-      if (!eventChannel?.id || !eventChannel.frozen) return;
-    
-      try {
-        const newChannel = chatClient.channel(eventChannel.type, eventChannel.id);
-
-        await newChannel.watch()
-        if(selectedType === 0){
-          if (newChannel.type === 'messaging'){
-            setChannels(channels => [newChannel, ...channels]);
-          }
-        }
-        else if (selectedType === 1){
-          if(newChannel.type === 'team'){
-            setChannels(channels => [newChannel, ...channels]);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
     //You can customize the persons display name and extra data like major if wanted
     const CustomPreviewTitle = ( {channel} ) => (
@@ -231,6 +169,8 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
+                key={key}
+                
                 PreviewAvatar={({ channel }) => (
                   <TouchableOpacity
                     style={{flex:1}}

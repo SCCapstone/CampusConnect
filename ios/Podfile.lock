@@ -1018,7 +1018,7 @@ PODS:
   - React-jsinspector (0.70.5)
   - React-logger (0.70.5):
     - glog
-  - react-native-cameraroll (5.1.1):
+  - react-native-cameraroll (5.2.0):
     - React-Core
   - react-native-document-picker (8.1.3):
     - React-Core
@@ -1193,7 +1193,7 @@ PODS:
   - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
-  - RNShare (8.0.0):
+  - RNShare (8.0.1):
     - React-Core
   - RNSVG (13.6.0):
     - React-Core
@@ -1484,7 +1484,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 31564fa6912459921568e8b0e49024285a4d584b
   React-jsinspector: badd81696361249893a80477983e697aab3c1a34
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
-  react-native-cameraroll: b6ed29e77c64174824f11a950872e953405dd5ce
+  react-native-cameraroll: 0ff04cc4e0ff5f19a94ff4313e5c8bc4503cd86d
   react-native-document-picker: 958e2bc82e128be69055be261aeac8d872c8d34c
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-image-picker: bf34f3f516d139ed3e24c5f5a381a91819e349ea
@@ -1522,7 +1522,7 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
   RNReanimated: ce445c233a6ff5600223484a88ad5704945d972a
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
-  RNShare: 36aa3e6958373a0ad1c95a1c960adef589da3794
+  RNShare: d93e00e906e6174657f6370b480437e4702bc86e
   RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
   SDWebImage: 23d714cd599354ee7906dbae26dff89b421c4370
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
