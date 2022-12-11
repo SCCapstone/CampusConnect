@@ -97,6 +97,11 @@ export default function App() {
                   options={{headerShown: false}}
                 />
                 <Stack.Screen
+                name="RegistrationScreen"
+                component={RegistrationScreen}
+                options={{headerShown: false}}
+                />
+                <Stack.Screen
                   name="HomeScreen"
                   component={HomeScreen}
                   options={{headerShown: false}}
