@@ -23,7 +23,7 @@ import {FloatingAction} from 'react-native-floating-action';
 import ImageView from 'react-native-image-viewing';
 import moment from 'moment';
 import AppContext from './AppContext';
-import {color} from 'react-native-reanimated';
+import {color, sub} from 'react-native-reanimated';
 import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
@@ -62,9 +62,9 @@ export function PostsScreen({navigation}) {
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
   const [sortMode, setSortMode] = useState('Best')
-  const [postCount, setPostCount] = useState(5)
+  const [postCount, setPostCount] = useState(4)
   var transactionStarted = false;
-  var subscriber;
+
 
   const offsetHeight = Platform.OS === 'ios' ? 64 : 0 //keyboard view doesnt work on ios without this
 
@@ -149,7 +149,7 @@ export function PostsScreen({navigation}) {
 
   useEffect(() => {
     //Make sure to only set this once next time
-
+    var subscriber;
 
     navigation.setOptions({
       headerRight: () => (
@@ -163,8 +163,6 @@ export function PostsScreen({navigation}) {
         }}
         buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
         onSelect={(selectedItem, index) => {
-
-          subscriber() //Not sure this does anything, and not sure if I need to unsubscribe from previous snapshot listener when changing modes
           setPostCount(5)
           setSortMode(selectedItem)
         }}
@@ -230,7 +228,7 @@ export function PostsScreen({navigation}) {
     }
     else if(sortMode === 'Worst'){
       //gets posts asynchronously in the background
-      subscriber = firestore()
+        subscriber = firestore()
         .collection('Posts')
         .orderBy('upvoteCount', 'asc')
         .orderBy('date', 'asc')
@@ -669,7 +667,7 @@ export function PostsScreen({navigation}) {
 
       <FlashList
         onEndReached={() => {
-          setPostCount(postCount+5)
+          setPostCount(postCount+4)
         }}
         onEndReachedThreshold={.77}
         data={posts}
