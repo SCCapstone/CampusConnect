@@ -231,7 +231,7 @@ export function PostsScreen({navigation}) {
         subscriber = firestore()
         .collection('Posts')
         .orderBy('upvoteCount', 'asc')
-        .orderBy('date', 'asc')
+        .orderBy('date', 'desc')
         .limit(postCount) //get the posts and order them by their upvote count
         .onSnapshot(querySnapshot => {
           if (!querySnapshot.metadata.hasPendingWrites) {
