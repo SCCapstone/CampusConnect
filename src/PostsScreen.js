@@ -64,6 +64,7 @@ export function PostsScreen({navigation}) {
   const [sortMode, setSortMode] = useState('Best')
   const [postCount, setPostCount] = useState(5)
   var transactionStarted = false;
+  var subscriber;
 
   const offsetHeight = Platform.OS === 'ios' ? 64 : 0 //keyboard view doesnt work on ios without this
 
@@ -145,9 +146,10 @@ export function PostsScreen({navigation}) {
     }
   };
 
+
   useEffect(() => {
     //Make sure to only set this once next time
-    var subscriber;
+
 
     navigation.setOptions({
       headerRight: () => (
@@ -161,6 +163,8 @@ export function PostsScreen({navigation}) {
         }}
         buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
         onSelect={(selectedItem, index) => {
+
+          subscriber() //Not sure this does anything, and not sure if I need to unsubscribe from previous snapshot listener when changing modes
           setPostCount(5)
           setSortMode(selectedItem)
         }}
