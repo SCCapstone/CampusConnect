@@ -493,6 +493,7 @@ export function PostsScreen({navigation}) {
   return (
 
     <SafeAreaView style={styles.container}>
+            <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Search a post by name' value={search}></SearchBar>
       {(posts.length == 0) &&
       <Text
       style={{
@@ -555,7 +556,7 @@ export function PostsScreen({navigation}) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-      <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Search a post by name' value={search}></SearchBar>
+
 
       <FlashList
         onRefresh={() => {getPosts}}

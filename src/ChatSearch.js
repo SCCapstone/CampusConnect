@@ -112,9 +112,7 @@ export function ChatSearch(props) {
       <TouchableOpacity style={styles.chatListItem} onPress={selectItem(item)}>
         <Image
           style={styles.chatListItemImage}
-          source={{
-            uri: item.image ? item.image : 'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg',
-          }}
+          source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}
         />
         <Text style={styles.chatListItemLabel}>{item.name}</Text>
       </TouchableOpacity>
