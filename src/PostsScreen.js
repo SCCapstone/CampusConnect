@@ -62,6 +62,7 @@ export function PostsScreen({navigation}) {
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
   const [sortMode, setSortMode] = useState('Best')
+  const [postCount, setPostCount] = useState(5)
   var transactionStarted = false;
 
   const offsetHeight = Platform.OS === 'ios' ? 64 : 0 //keyboard view doesnt work on ios without this
@@ -160,6 +161,7 @@ export function PostsScreen({navigation}) {
         }}
         buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
         onSelect={(selectedItem, index) => {
+          setPostCount(5)
           setSortMode(selectedItem)
         }}
       />
@@ -170,7 +172,8 @@ export function PostsScreen({navigation}) {
       subscriber = firestore()
         .collection('Posts')
         .orderBy('upvoteCount', 'desc')
-        .orderBy('date', 'desc') //get the posts and order them by their upvote count
+        .orderBy('date', 'desc')
+        .limit(postCount)//get the posts and order them by their upvote count
         .onSnapshot(querySnapshot => {
           if (!querySnapshot.metadata.hasPendingWrites) {
             //This will prevent unecessary reads, because the firebase server may be doing something
@@ -226,7 +229,8 @@ export function PostsScreen({navigation}) {
       subscriber = firestore()
         .collection('Posts')
         .orderBy('upvoteCount', 'asc')
-        .orderBy('date', 'asc') //get the posts and order them by their upvote count
+        .orderBy('date', 'asc')
+        .limit(postCount) //get the posts and order them by their upvote count
         .onSnapshot(querySnapshot => {
           if (!querySnapshot.metadata.hasPendingWrites) {
             //This will prevent unecessary reads, because the firebase server may be doing something
@@ -281,7 +285,8 @@ export function PostsScreen({navigation}) {
       //gets posts asynchronously in the background
       subscriber = firestore()
         .collection('Posts')
-        .orderBy('date', 'desc') //get the posts and order them by their upvote count
+        .orderBy('date', 'desc')
+        .limit(postCount) //get the posts and order them by their upvote count
         .onSnapshot(querySnapshot => {
           if (!querySnapshot.metadata.hasPendingWrites) {
             //This will prevent unecessary reads, because the firebase server may be doing something
@@ -338,9 +343,9 @@ export function PostsScreen({navigation}) {
         .collection('Posts')
         .where('author','==', 'Anonymous')
         .orderBy('upvoteCount', 'desc')
-        .orderBy('date', 'desc')  //get the posts and order them by their upvote count
+        .orderBy('date', 'desc')
+        .limit(postCount)  //get the posts and order them by their upvote count
         .onSnapshot((querySnapshot,error) =>{
-          console.log(error)
           if (!querySnapshot.metadata.hasPendingWrites) {
             //This will prevent unecessary reads, because the firebase server may be doing something
             postIndex = 0;
@@ -393,7 +398,7 @@ export function PostsScreen({navigation}) {
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, [navigation,sortMode]);
+  }, [navigation,sortMode,postCount]);
 
   const DeletePost = ({item}) => {
     firestore().collection('Posts').doc(item.key).delete();
@@ -418,10 +423,8 @@ export function PostsScreen({navigation}) {
           const isDownVoted = postData.downvoters[auth().currentUser.uid];
           const upvoteCount = postData.upvoteCount;
           const userId = postData.user;
-
-          if (userId === '/Users/' + auth().currentUser.uid) {
-            /*Can't take away your own upcote*/
-          } else if (isUpVoted) {
+          
+          if (isUpVoted) {
             transaction.update(postRef, {
               ['upvoters.' + auth().currentUser.uid]:
                 firestore.FieldValue.delete(),
@@ -468,10 +471,7 @@ export function PostsScreen({navigation}) {
                 firestore.FieldValue.delete(),
               upvoteCount: upvoteCount + 1,
             });
-          } else if (
-            '/Users/' + auth().currentUser.uid === userId
-          ) {
-          } else if (!isDownVoted && !isUpVoted) {
+          }  else if (!isDownVoted && !isUpVoted) {
             transaction.update(postRef, {
               ['downvoters.' + auth().currentUser.uid]: true,
               upvoteCount: upvoteCount - 1,
@@ -518,6 +518,8 @@ export function PostsScreen({navigation}) {
         </View>
         <Pressable
           elevation={20}
+          delayLongPress={400}
+          cancelable={false}
           android_ripple={styles.rippleConfig}
           style={
             Platform.OS === 'ios'
@@ -526,13 +528,15 @@ export function PostsScreen({navigation}) {
           }
           onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <FastImage
-              defaultSource={require('./assets/blank2.jpeg')}
-              source={
-                item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
-              }
-              style={styles.postPfp}
-            />
+            <Pressable onPress={() => Alert.alert('Navigate to user profile here')}>
+              <FastImage
+                defaultSource={require('./assets/blank2.jpeg')}
+                source={
+                  item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
+                }
+                style={styles.postPfp}
+              />
+            </Pressable>
             {item.author !== 'Anonymous' ? (
               <View style={styles.postUserInfo}>
                 <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
@@ -660,12 +664,16 @@ export function PostsScreen({navigation}) {
       </Modal>
 
       <FlashList
+        onEndReached={() => {
+          setPostCount(postCount+5)
+        }}
+        onEndReachedThreshold={.77}
         data={posts}
         ref={list}
         renderItem={renderPost}
         keyExtractor={item => item.key}
         refreshing={refreshing}
-        estimatedItemSize={150}
+        estimatedItemSize={100}
       />
       <FloatingAction
         color="#73000a"

@@ -148,7 +148,7 @@ export function ChatsScreen(props) {
                     styles.searchActionLabel,
                     selectedType === 0 && styles.searchActionLabelActive,
                   ]}>
-                  Users
+                  Private
                 </Text>
               </TouchableOpacity>
 
@@ -164,7 +164,7 @@ export function ChatsScreen(props) {
                     styles.searchActionLabel,
                     selectedType === 1 && styles.searchActionLabelActive,
                   ]}>
-                  Groups
+                  Public
                 </Text>
               </TouchableOpacity>
             </View>

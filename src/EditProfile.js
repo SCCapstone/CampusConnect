@@ -360,7 +360,7 @@ export function EditProfileScreen({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref(auth().currentUser.uid);
+    const reference = storage().ref('/Profile Pictures/'+auth().currentUser.uid);
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
