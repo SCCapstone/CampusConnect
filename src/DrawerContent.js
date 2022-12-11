@@ -95,8 +95,8 @@ export function DrawerContent(props) {
         {...props}
         contentContainerStyle={styles.drawerScrollView}>
         <ImageBackground
-          blurRadius={15}
-          source={require('./assets/gamecock.png')}
+          blurRadius={4}
+          source={require('./assets/logo.png')}
           style={styles.imageBackgroundView}>
           <View style={styles.drawerUserView}>
             <TouchableOpacity
@@ -127,7 +127,6 @@ export function DrawerContent(props) {
               <Text style={styles.userMajorText}>{userData.major}</Text>
             </View>
             <View style={styles.classBox}>
-              <Text style={styles.classText}>Class of </Text>
               <Text style={styles.userClassText}>{userData.gradYear}</Text>
             </View>
           </View>

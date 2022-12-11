@@ -32,6 +32,7 @@ import androidstyles from './styles/android/PostScreenStyles';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
+import { SearchBar } from '@rneui/themed';
 
 var styles;
 
@@ -62,11 +63,12 @@ export function PostsScreen({navigation}) {
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
   const [sortMode, setSortMode] = useState('Best')
-  const [postCount, setPostCount] = useState(5)
+  const [postCount, setPostCount] = useState(6)
+  const [search, setSearch] = useState("");
   var transactionStarted = false;
 
 
-  const offsetHeight = Platform.OS === 'ios' ? 64 : 32 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? 64 : -32 //keyboard view doesnt work on ios without this
 
   const list = useRef(FlashList);
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
@@ -163,6 +165,7 @@ export function PostsScreen({navigation}) {
         }}
         buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
         onSelect={(selectedItem, index) => {
+          setPostCount(5)
           setSortMode(selectedItem)
           setPostCount(5)
         }}
@@ -414,7 +417,7 @@ export function PostsScreen({navigation}) {
         </View>
         <Pressable
           elevation={20}
-          delayLongPress={400}
+          delayLongPress={250}
           cancelable={false}
           android_ripple={styles.rippleConfig}
           style={
@@ -437,7 +440,7 @@ export function PostsScreen({navigation}) {
               <View style={styles.postUserInfo}>
                 <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
                 <Text style={styles.majorText}>
-                  {item.authorMajor} | Class of {item.authorGradYear}
+                  {item.authorMajor} | {item.authorGradYear}
                 </Text>
               </View>
             ) : (
@@ -552,11 +555,12 @@ export function PostsScreen({navigation}) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+      <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Search a post by name' value={search}></SearchBar>
 
       <FlashList
         onRefresh={() => {getPosts}}
         onEndReached={() => {
-          setPostCount(postCount+4)
+          setPostCount(postCount+6)
         }}
         onEndReachedThreshold={.77}
         data={posts}

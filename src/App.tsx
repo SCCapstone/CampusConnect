@@ -11,6 +11,7 @@ import { vw } from 'stream-chat-react-native';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { OverlayProvider } from 'stream-chat-react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,7 +54,7 @@ export default function App() {
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState('');
   const [major, setMajor] = useState('Not logged in');
-  const [gradYear, setGradYear] = useState('2001');
+  const [gradYear, setGradYear] = useState('Freshman');
   const [name, setName] = useState('Unknown Person');
   const [pfp, setProfilePic] = useState('');
 
@@ -77,35 +78,32 @@ export default function App() {
     <AppContext.Provider value={userData}>
       <GestureHandlerRootView style={{flex:1}}>
         <OverlayProvider value={{style: theme}}>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="WelcomeScreen"
-                component={WelcomeScreen}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="LoginScreen"
-                component={LoginScreen}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="RegisterScreen"
-                component={RegisterScreen}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="RegistrationScreen"
-                component={RegistrationScreen}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="HomeScreen"
-                component={HomeScreen}
-                options={{headerShown: false}}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="WelcomeScreen"
+                  component={WelcomeScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="LoginScreen"
+                  component={LoginScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="RegisterScreen"
+                  component={RegisterScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="HomeScreen"
+                  component={HomeScreen}
+                  options={{headerShown: false}}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaProvider>
         </OverlayProvider>
       </GestureHandlerRootView>
     </AppContext.Provider>

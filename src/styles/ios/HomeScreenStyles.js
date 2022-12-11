@@ -6,5 +6,5 @@ export default screenOptions = {
   drawerActiveTintColor: 'black',
   swipeEdgeWidth: 0,
   drawerLabelStyle: {color: 'white'},
-  drawerStyle: {width: 241, backgroundColor: '#73000a'},
+  drawerStyle: {width: 275, backgroundColor: '#73000a'},
 };

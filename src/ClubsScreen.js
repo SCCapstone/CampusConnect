@@ -10,9 +10,12 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {FloatingAction} from 'react-native-floating-action';
+import { SearchBar } from '@rneui/themed';
 
 export function ClubsScreen({navigation}) {
+
+  const [search, setSearch] = useState("");
+
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -66,12 +69,13 @@ export function ClubsScreen({navigation}) {
 
 return (
         <SafeAreaView style={styles.container}>
+          <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}>
+          </SearchBar>
             <FlatList
             data={DATA}
             renderItem={renderItem}
             >
             </FlatList>
-            <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
         </SafeAreaView>
     );
 }

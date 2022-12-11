@@ -14,6 +14,7 @@ import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
 import { useChatContext } from './ChatContext';
 import {useNavigation} from '@react-navigation/native';
+import { SearchBar } from '@rneui/themed';
 
 import {FloatingAction} from 'react-native-floating-action';
 import androidstyles from './styles/android/ChatStyles';
@@ -162,12 +163,7 @@ export function ChatSearch(props) {
       </View>
 
       <View>
-        <TextInput
-          onChangeText= {onKeywordChanged}
-          placeholderTextColor= 'black'
-          placeholder="Search for user or group by name..."
-          style={styles.chatInput}
-        />
+      <SearchBar containerStyle={{backgroundColor:'white'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#0001'}} onChangeText={setKeyword} placeholder='Enter a name to search' value={keyword}></SearchBar>
       </View>
       {(!keyword && data.length < 1) ?
       <View style={styles.placeholderView}>
