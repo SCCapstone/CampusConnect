@@ -66,7 +66,7 @@ export function PostsScreen({navigation}) {
   var transactionStarted = false;
 
 
-  const offsetHeight = Platform.OS === 'ios' ? 64 : 0 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? 64 : 32 //keyboard view doesnt work on ios without this
 
   const list = useRef(FlashList);
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
