@@ -2,7 +2,8 @@ export const classes = [
     {label:'Freshman',value:'Freshman'},
     {label:'Sophomore',value:'Sophomore'},
     {label:'Junior',value:'Junior'},
-    {label:'Senior',value:'Senior'}
+    {label:'Senior',value:'Senior'},
+    {label:'Alumni',value: 'Alumni'}
   ]
 
 export const majors = [
