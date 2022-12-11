@@ -350,7 +350,7 @@ export function EditProfileScreen({navigation}) {
       width: 300,
       height: 300,
       mediaType: 'photo',
-      /*cropping: true*/
+      cropping: true
     })
       .then(image => {
         console.log(image);

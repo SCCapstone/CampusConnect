@@ -364,7 +364,7 @@ const RegisterError = () => {
       width: 300,
       height: 300,
       mediaType: 'photo',
-      /*cropping: true*/
+      cropping: true
     })
       .then(image => {
         setImage(image.path);
