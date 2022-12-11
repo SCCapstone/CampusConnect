@@ -62,7 +62,7 @@ export function PostsScreen({navigation}) {
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
   const [sortMode, setSortMode] = useState('Best')
-  const [postCount, setPostCount] = useState(4)
+  const [postCount, setPostCount] = useState(5)
   var transactionStarted = false;
 
 
@@ -149,7 +149,7 @@ export function PostsScreen({navigation}) {
 
   useEffect(() => {
     //Make sure to only set this once next time
-    var subscriber;
+
 
     navigation.setOptions({
       headerRight: () => (
@@ -163,240 +163,77 @@ export function PostsScreen({navigation}) {
         }}
         buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
         onSelect={(selectedItem, index) => {
-          setPostCount(5)
           setSortMode(selectedItem)
+          setPostCount(5)
         }}
       />
       ),
     });
-    if(sortMode === 'Best'){
-      //gets posts asynchronously in the background
-      subscriber = firestore()
-        .collection('Posts')
-        .orderBy('upvoteCount', 'desc')
-        .orderBy('date', 'desc')
-        .limit(postCount)//get the posts and order them by their upvote count
-        .onSnapshot(querySnapshot => {
-          if (!querySnapshot.metadata.hasPendingWrites) {
-            //This will prevent unecessary reads, because the firebase server may be doing something
-            postIndex = 0;
-            var imageIndex = 0;
-            const posts = [];
-            const images = [];
-            querySnapshot.forEach(documentSnapshot => {
-              //Determine whether the user has upvoted or downvoted the post yet
-              const post = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              };
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
 
-              posts.push(post);
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(postIndex, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
-            });
+    var postsRef = firestore().collection('Posts')
+    var query; 
+    if(sortMode === 'Best') {
+      query = postsRef
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(postCount)
+    } else if (sortMode === 'Worst') {
+      query = postsRef
+      .orderBy('upvoteCount', 'asc')
+      .orderBy('date', 'desc')
+      .limit(postCount) 
+
+    } else if (sortMode === 'New') {
+      query = postsRef
+      .orderBy('date', 'desc')
+      .limit(postCount) 
+
+    } else if (sortMode === 'Anonymous') {
+      query = postsRef
+      .where('author','==', 'Anonymous')
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(postCount) 
+    }
+    //gets posts asynchronously in the background
+    const subscriber = query.onSnapshot(querySnapshot => {
+        if (!querySnapshot.metadata.hasPendingWrites) {
+          //This will prevent unecessary reads, because the firebase server may be doing something
+          postIndex = 0;
+          var imageIndex = 0;
+          const posts = [];
+          const images = [];
+          querySnapshot.forEach(documentSnapshot => {
+            //Determine whether the user has upvoted or downvoted the post yet
+            const post = {
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+              isUpVoted: false,
+              isDownVoted: false,
+              postIsYours:false
+            };
+            post.isUpVoted = post.upvoters[auth().currentUser.uid];
+            post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
+
+            posts.push(post);
+            if (post.extraData) {
+              images.push({
+                uri: post.extraData,
+                key: documentSnapshot.id,
+              });
+              setImageMap(imageMap.set(postIndex, imageIndex));
+              imageIndex++;
+            }
+            postIndex++;
+          });
 
             setPosts(posts);
             setImages(images);
             setLoading(false);
 
-            // After removing the item, we can start the animation.
-            //This feature is way too buggy on android right now
-            //This feature is just too buggy in general honestly
-            /*if(Platform.OS === 'ios'){
-              if (posts.length > 0) {
-                list.current?.prepareForLayoutAnimationRender();
-                LayoutAnimation.configureNext(
-                  LayoutAnimation.Presets.easeInEaseOut,
-                );
-              }
-            }*/
           }
         });
-    }
-    else if(sortMode === 'Worst'){
-      //gets posts asynchronously in the background
-        subscriber = firestore()
-        .collection('Posts')
-        .orderBy('upvoteCount', 'asc')
-        .orderBy('date', 'desc')
-        .limit(postCount) //get the posts and order them by their upvote count
-        .onSnapshot(querySnapshot => {
-          if (!querySnapshot.metadata.hasPendingWrites) {
-            //This will prevent unecessary reads, because the firebase server may be doing something
-            postIndex = 0;
-            var imageIndex = 0;
-            const posts = [];
-            const images = [];
-            querySnapshot.forEach(documentSnapshot => {
-              //Determine whether the user has upvoted or downvoted the post yet
-              const post = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              };
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-
-              posts.push(post);
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(postIndex, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
-            });
-
-            setPosts(posts);
-            setImages(images);
-            setLoading(false);
-
-            // After removing the item, we can start the animation.
-            //This feature is way too buggy on android right now
-            //This feature is just too buggy in general honestly
-            /*if(Platform.OS === 'ios'){
-              if (posts.length > 0) {
-                list.current?.prepareForLayoutAnimationRender();
-                LayoutAnimation.configureNext(
-                  LayoutAnimation.Presets.easeInEaseOut,
-                );
-              }
-            }*/
-          }
-        });
-    }
-    else if(sortMode === 'New'){
-      //gets posts asynchronously in the background
-      subscriber = firestore()
-        .collection('Posts')
-        .orderBy('date', 'desc')
-        .limit(postCount) //get the posts and order them by their upvote count
-        .onSnapshot(querySnapshot => {
-          if (!querySnapshot.metadata.hasPendingWrites) {
-            //This will prevent unecessary reads, because the firebase server may be doing something
-            postIndex = 0;
-            var imageIndex = 0;
-            const posts = [];
-            const images = [];
-            querySnapshot.forEach(documentSnapshot => {
-              //Determine whether the user has upvoted or downvoted the post yet
-              const post = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              };
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-
-              posts.push(post);
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(postIndex, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
-            });
-
-            setPosts(posts);
-            setImages(images);
-            setLoading(false);
-
-            // After removing the item, we can start the animation.
-            //This feature is way too buggy on android right now
-            //This feature is just too buggy in general honestly
-            /*if(Platform.OS === 'ios'){
-              if (posts.length > 0) {
-                list.current?.prepareForLayoutAnimationRender();
-                LayoutAnimation.configureNext(
-                  LayoutAnimation.Presets.easeInEaseOut,
-                );
-              }
-            }*/
-          }
-        });
-    }
-    else if(sortMode === 'Anonymous'){
-      //gets posts asynchronously in the background
-      subscriber = firestore()
-        .collection('Posts')
-        .where('author','==', 'Anonymous')
-        .orderBy('upvoteCount', 'desc')
-        .orderBy('date', 'desc')
-        .limit(postCount)  //get the posts and order them by their upvote count
-        .onSnapshot((querySnapshot,error) =>{
-          if (!querySnapshot.metadata.hasPendingWrites) {
-            //This will prevent unecessary reads, because the firebase server may be doing something
-            postIndex = 0;
-            var imageIndex = 0;
-            const posts = [];
-            const images = [];
-            querySnapshot.forEach(documentSnapshot => {
-              //Determine whether the user has upvoted or downvoted the post yet
-              const post = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              };
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-
-              posts.push(post);
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(postIndex, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
-            });
-
-            setPosts(posts);
-            setImages(images);
-            setLoading(false);
-
-            // After removing the item, we can start the animation.
-            //This feature is way too buggy on android right now
-            //This feature is just too buggy in general honestly
-            /*if(Platform.OS === 'ios'){
-              if (posts.length > 0) {
-                list.current?.prepareForLayoutAnimationRender();
-                LayoutAnimation.configureNext(
-                  LayoutAnimation.Presets.easeInEaseOut,
-                );
-              }
-            }*/
-          }
-        });
-    }
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -494,6 +331,63 @@ export function PostsScreen({navigation}) {
     }
   };
 
+  const getPosts = () => {
+    setRefresh(true)
+    var postsRef = firestore().collection('Posts')
+    var query; 
+    if(sortMode === 'Best') {
+      query = postsRef
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(5)
+    } else if (sortMode === 'Worst') {
+      query = postsRef
+      .orderBy('upvoteCount', 'asc')
+      .orderBy('date', 'desc')
+      .limit(5) 
+
+    } else if (sortMode === 'New') {
+      query = postsRef
+      .orderBy('date', 'desc')
+      .limit(5) 
+
+    } else if (sortMode === 'Anonymous') {
+      query = postsRef
+      .where('author','==', 'Anonymous')
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(5) 
+    }
+    query.get().then(snapShot => {
+      if(!snapShot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+        });
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+      setRefresh(false)
+    });
+  }
+
   const Post = ({item, index}) => {
     return (
       <View style={styles.postContainer}>
@@ -575,12 +469,6 @@ export function PostsScreen({navigation}) {
         </Pressable>
       </View>
     );
-  };
-
-  const onRefresh = () => {
-    setRefresh(true);
-    getPosts();
-    setRefresh(false);
   };
 
   const closeModal = () => {
@@ -666,6 +554,7 @@ export function PostsScreen({navigation}) {
       </Modal>
 
       <FlashList
+        onRefresh={() => {getPosts}}
         onEndReached={() => {
           setPostCount(postCount+4)
         }}
