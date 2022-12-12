@@ -27,23 +27,31 @@ import {color, sub} from 'react-native-reanimated';
 import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
-import iosstyles from './styles/ios/PostScreenStyles';
-import androidstyles from './styles/android/PostScreenStyles';
+
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
-import { SearchBar, Button } from '@rneui/themed';
+import { SearchBar, Button, ListItem, Avatar ,Input} from '@rneui/themed';
 import ImagePicker from 'react-native-image-crop-picker';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 import { LoadingIndicator } from 'stream-chat-react-native';
 
+
+import iosstyles from './styles/ios/PostScreenStyles';
+import iosCommentStyles from './styles/ios/CommentStyles'
+import androidstyles from './styles/android/PostScreenStyles';
+import androidCommentStyles from './styles/android/CommentStyles'
+
 var styles;
+var commentStylesl
 
 if (Platform.OS === 'ios') {
   styles = iosstyles;
+  commentStyles = iosCommentStyles
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
+  commentStyles = androidCommentStyles
 }
 
 export function PostsScreen({navigation}) {
@@ -64,6 +72,7 @@ export function PostsScreen({navigation}) {
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [replyModalVisible, setReplyModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
   const [sortMode, setSortMode] = useState('Best')
@@ -71,6 +80,8 @@ export function PostsScreen({navigation}) {
   const [search, setSearch] = useState("");
   const [image, setImage] = React.useState('');
   const [postUploading, setPostUploading] = useState(false);
+  const [reply, setReply] = React.useState('');
+  const [replyItem,setReplyItem] = React.useState(new Map())
   var transactionStarted = false;
   var url = '';
 
@@ -79,6 +90,8 @@ export function PostsScreen({navigation}) {
 
   const list = useRef(FlashList);
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
+  const postOptions = ["Reply", "Delete"]
+  const postOptions2 = ["Reply"]
 
   const PostAlert = () => {
     Alert.alert('Post?', 'Are you sure you want to post?', [
@@ -345,7 +358,7 @@ export function PostsScreen({navigation}) {
             post.isUpVoted = post.upvoters[auth().currentUser.uid];
             post.isDownVoted = post.downvoters[auth().currentUser.uid];
             post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-            
+
             posts.push(post);
             if (post.extraData){
               images.push({
@@ -477,6 +490,12 @@ export function PostsScreen({navigation}) {
       url = await reference.getDownloadURL();
     }
   };
+  const PostReply = ({item, index}) => {
+    return (
+      <View></View>
+    );
+  };
+
 
   const Post = ({item, index}) => {
     return (
@@ -502,17 +521,25 @@ export function PostsScreen({navigation}) {
               }></Image>
           </TouchableOpacity>
         </View>
-        <Pressable
-          elevation={20}
-          delayLongPress={150}
-          cancelable={false}
-          android_ripple={styles.rippleConfig}
-          style={
-            Platform.OS === 'ios'
-              ? ({pressed}) => [styles.post || {}, {opacity: pressed ? 0.9 : 1}]
-              : styles.post
-          }
-          onLongPress={() => DeletePostAlert({item})}>
+        <View style={styles.post}>
+          <SelectDropdown
+            data={item.postIsYours ? postOptions : postOptions2}
+            buttonTextAfterSelection={() => {return '• • •'}}
+            onSelect={(option) => {
+              if(option === 'Reply') {
+                setReplyItem(item)
+                setReplyModalVisible(true)
+              }
+              else if (option === 'Delete') {
+                DeletePostAlert({item});
+              }
+            }}
+            
+            defaultButtonText='• • •'
+            buttonTextStyle={{color:'white',fontSize:20}}
+            buttonStyle={{width:69,height:20,backgroundColor:'#a8a1a6',alignSelf:'flex-end'}}
+          
+          />
           <View style={styles.postUserImageAndInfoBox}>
             <Pressable onPress={() => Alert.alert('Navigate to user profile here')}>
               <FastImage
@@ -524,20 +551,21 @@ export function PostsScreen({navigation}) {
               />
             </Pressable>
             {item.author !== 'Anonymous' ? (
-              <View style={styles.postUserInfo}>
-                <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
-                <Text style={styles.majorText}>
-                  {item.authorMajor} | {item.authorGradYear}
-                </Text>
-              </View>
+                <View style={styles.postUserInfo}>
+                  <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+                  <Text style={styles.majorText}>
+                    {item.authorMajor} | {item.authorGradYear}
+                  </Text>
+                </View>
             ) : (
-              <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+                <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+  
             )}
           </View>
           <View style={styles.postImageView}>
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ? (
-              <TouchableOpacity onPress={() => OpenImage({index})}>
+              <TouchableOpacity onPress={() => {OpenImage(index)}}>
                 <FastImage
                   source={{uri: item.extraData}}
                   style={styles.postImage}
@@ -556,10 +584,11 @@ export function PostsScreen({navigation}) {
               <Text style={styles.date}>{item.replyCount}</Text>
             </View>
           </View>
-        </Pressable>
+        </View>
       </View>
     );
   };
+
 
   const closeModal = () => {
     this.floatingAction.animateButton();
@@ -667,6 +696,48 @@ export function PostsScreen({navigation}) {
             </View>
           </View>
         </KeyboardAvoidingView>
+      </Modal>
+      <Modal
+
+        animationType="slide"
+        transparent={true}
+        visible={replyModalVisible}>
+          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:'22%'}}>
+          <Button 
+                  buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
+                  size='lg'
+                  onPress={() =>{setReplyModalVisible(false);
+                  setReplyItem(null)}}
+                  titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
+                  title={'Cancel'}
+                  />
+            <PostReply item={replyItem}>
+                  
+            </PostReply>
+            
+            {Platform.OS === 'ios' ?
+            <KeyboardAvoidingView keyboardVerticalOffset={70} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
+              <Input 
+                style={{alignSelf:'flex-end',alignItems:'flex-end'}}
+                placeholder="Comment"
+                leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                onChangeText={setReply}>
+              </Input>
+
+            </KeyboardAvoidingView> :
+            
+            <KeyboardAvoidingView keyboardVerticalOffset={64} behavior='padding' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
+            <Input 
+              style={{alignSelf:'flex-end',alignItems:'flex-end'}}
+              placeholder="Comment"
+              leftIcon={{ type: 'font-awesome', name: 'comment' }}
+              onChangeText={setReply}>
+            </Input>
+
+          </KeyboardAvoidingView>
+          }
+        </View>
+
       </Modal>
 
 

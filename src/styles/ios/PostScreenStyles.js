@@ -2,11 +2,13 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   rippleConfig: {color: '#877d84'},
-  postUserImageAndInfoBox: {flexDirection: 'row', flex: 1},
+  postUserImageAndInfoBox: {flexDirection: 'row', flex: .4},
   dateAndReplyBox: {
     flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'flex-start',
+    flex:.5,
+    alignSelf:'flex-end',
+    alignItems:'flex-end'
+
   },
   replyCountBox: {flexDirection: 'row', flex: 1, justifyContent: 'flex-end'},
   postUserInfo: {flexDirection: 'column', flex: 1},
@@ -20,10 +22,21 @@ export default StyleSheet.create({
   postImage: {
     marginTop: 20,
     alignSelf: 'center',
+
     borderRadius: 10,
     height: 200,
     width: 290,
     overlayColor: '#a8a1a6',
+  },
+  postReplyImage: {
+    marginTop: 20,
+    alignSelf: 'center',
+    resizeMode:'contain',
+    borderRadius: 10,
+    height: '100%',
+    width: '100%',
+    overlayColor: '#a8a1a6',
+    
   },
   cancelButtonText: {
     fontWeight: 'bold',
@@ -51,6 +64,15 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
   },
+
+  postReplyContainer: {
+    flex: 1,
+    borderRadius:20,
+    flexDirection:'row',
+    marginHorizontal:'5%',
+    backgroundColor:'#a8a1a6'
+
+  },
   postView: {
     height: '50%',
     width: '90%',
@@ -59,6 +81,7 @@ export default StyleSheet.create({
     marginVertical: '50%',
     borderRadius: 20,
     justifyContent: 'center',
+    
   },
   postTextView: {
     flex: 0.82,
@@ -108,11 +131,28 @@ export default StyleSheet.create({
     alignSelf: 'flex-end',
     flex: 1,
   },
+  postReply: {
+    backgroundColor: '#a8a1a6',
+    shadowColor: 'black',
+    marginRight:'4.5%',
+    borderRadius: 10,
+    padding: 0,
+    marginVertical: 8,
+
+  },
   body: {
     fontSize: 18,
     color: 'black',
     marginTop: '5%',
     justifyContent: 'center',
+    
+  },
+  replyBody: {
+    fontSize: 18,
+    color: 'black',
+
+    justifyContent: 'center',
+    
   },
   upvoteBox: {
     height: 50,
@@ -123,6 +163,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
+  replyUpvoteBox: {
+  height: 50,
+  width: 40,
+  marginRight: '0%',
+  flexDirection: 'column',
+  backgroundColor: '#a8a1a6',
+  justifyContent: 'center',
+  alignSelf: 'center',
+},
   upvote: {
     fontSize: 15,
     margin: 0,
@@ -131,6 +180,15 @@ export default StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
     color: 'white',
+  },
+  replyUpvote: {
+    fontSize: 15,
+    margin: 0,
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    color: 'black',
   },
   date: {
     fontSize: 10,
