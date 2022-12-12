@@ -338,7 +338,14 @@ export function PostsScreen({navigation}) {
             const post = {
               ...documentSnapshot.data(),
               key: documentSnapshot.id,
+              isUpVoted: false,
+              isDownVoted: false,
+              postIsYours:false
             }
+            post.isUpVoted = post.upvoters[auth().currentUser.uid];
+            post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
+            
             posts.push(post);
             if (post.extraData){
               images.push({
