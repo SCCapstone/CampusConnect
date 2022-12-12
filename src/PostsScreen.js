@@ -583,7 +583,7 @@ export function PostsScreen({navigation}) {
           <View style={styles.postImageView}>
             <Text style={styles.body}>{item.body}</Text>
             {item.extraData ? (
-              <TouchableOpacity onPress={() => {OpenImage(index)}}>
+              <TouchableOpacity onPress={() => {OpenImage({index})}}>
                 <FastImage
                   source={{uri: item.extraData}}
                   style={styles.postImage}

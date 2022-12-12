@@ -120,7 +120,6 @@ export default function App() {
                     headerStyle:{backgroundColor:'#73000a'},
                     headerTitleStyle:{color:'white'},
                   })}
-                  
                 />
               </Stack.Navigator>
             </NavigationContainer>
