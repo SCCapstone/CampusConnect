@@ -157,6 +157,32 @@ export default StyleSheet.create({
     width: '90%',
   },
   checkBoxBox : {
-    justifyContent:'center', alignContent:'center', alignItems:'center',flex:.1
+    justifyContent:'flex-start', alignContent:'flex-start', alignItems:'flex-start'
+  },
+  bottomPostButtonsContainer : {
+    flexDirection:'row',
+    alignSelf:'center',
+    width:'100%'
+  },
+  postImageAddButtonContainer : {
+    alignSelf:'flex-end',
+    justifyContent:'center',
+    flex:1,
+    height:40,
+    backgroundColor:'#73000a',
+    borderRadius:20,
+    marginTop:12,
+    marginHorizontal:20
+
+  },
+  postImageButton : {
+    width:120,
+    height:120,
+    backgroundColor:'#73000a',
+    justifyContent:'center',
+    alignItems:'center',
+    alignSelf:'center',
+    alignContent:'center',
+
   }
 });

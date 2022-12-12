@@ -32,7 +32,8 @@ import androidstyles from './styles/android/PostScreenStyles';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
-import { SearchBar } from '@rneui/themed';
+import { SearchBar, Button } from '@rneui/themed';
+import ImagePicker from 'react-native-image-crop-picker';
 
 var styles;
 
@@ -65,7 +66,9 @@ export function PostsScreen({navigation}) {
   const [sortMode, setSortMode] = useState('Best')
   const [postCount, setPostCount] = useState(6)
   const [search, setSearch] = useState("");
+  const [image, setImage] = React.useState('');
   var transactionStarted = false;
+  var url = '';
 
 
   const offsetHeight = Platform.OS === 'ios' ? 64 : -32 //keyboard view doesnt work on ios without this
@@ -88,13 +91,15 @@ export function PostsScreen({navigation}) {
     }
   };
 
-  const CreatePost = () => {
+  const CreatePost = async () => {
     if (
       postText &&
       postText.length < 1000 &&
       postText.split(/\r\n|\r|\n/).length <=
         25 /*this last one checks that there are not too many lines */
     ) {
+      setLoading(true)
+      if (image) {await uploadPic()}
       if(!postIsAnonymous){
         firestore()
           .collection('Posts')
@@ -110,11 +115,16 @@ export function PostsScreen({navigation}) {
             pfp: userData.pfp,
             replies: [],
             user: '/Users/' + auth().currentUser.uid,
-            extraData: '',
+            extraData: {url} ? url : '',
             upvoters: {[auth().currentUser.uid]: true},
             downvoters: new Map(),
           })
-          .then(() => {closeModal()})
+          .then(() => {
+            setImage('')
+            setLoading(false)
+            url = ''
+            closeModal()
+          })
           .catch(error => {
             console.log(error.code);
           });
@@ -134,11 +144,16 @@ export function PostsScreen({navigation}) {
           pfp: '',
           replies: [],
           user: '/Users/' + auth().currentUser.uid,
-          extraData: '',
+          extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
         })
-        .then(() => {closeModal()})
+        .then(() => {
+          setImage('')
+          url = ''
+          setLoading(false)
+          closeModal()
+        })
         .catch(error => {
           console.log(error.code);
         });
@@ -333,63 +348,28 @@ export function PostsScreen({navigation}) {
         }).catch(() => {transactionStarted = false});
     }
   };
+  const choosePhotoFromLibrary = async () => {
+    await ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      mediaType: 'photo',
+      cropping: true
+    })
+      .then(image => {
+        setImage(image.path);
+      })
+      .catch(error => {});
+  };
 
-  const getPosts = () => {
-    setRefresh(true)
-    var postsRef = firestore().collection('Posts')
-    var query; 
-    if(sortMode === 'Best') {
-      query = postsRef
-      .orderBy('upvoteCount', 'desc')
-      .orderBy('date', 'desc')
-      .limit(5)
-    } else if (sortMode === 'Worst') {
-      query = postsRef
-      .orderBy('upvoteCount', 'asc')
-      .orderBy('date', 'desc')
-      .limit(5) 
-
-    } else if (sortMode === 'New') {
-      query = postsRef
-      .orderBy('date', 'desc')
-      .limit(5) 
-
-    } else if (sortMode === 'Anonymous') {
-      query = postsRef
-      .where('author','==', 'Anonymous')
-      .orderBy('upvoteCount', 'desc')
-      .orderBy('date', 'desc')
-      .limit(5) 
+  const uploadPic = async () => {
+    const reference = storage().ref('/Posts/' +auth().currentUser.uid);
+    if (image) {
+      await reference.putFile(image).catch(error => {
+        FirebaseError(error.code);
+      });
+      url = await reference.getDownloadURL();
     }
-    query.get().then(snapShot => {
-      if(!snapShot.metadata.hasPendingWrites) {
-        postIndex = 0;
-        var imageIndex = 0;
-        const posts = [];
-        const images = [];
-        snapShot.forEach(documentSnapshot => {
-          const post = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          }
-          posts.push(post);
-          if (post.extraData){
-            images.push({
-              uri: post.extraData,
-              key: documentSnapshot.id
-            })
-            setImageMap(imageMap.set(postIndex,imageIndex))
-            imageIndex++;
-          }
-          postIndex++;
-        });
-        setPosts(posts);
-        setImages(images);
-        setLoading(false);
-      }
-      setRefresh(false)
-    });
-  }
+  };
 
   const Post = ({item, index}) => {
     return (
@@ -538,20 +518,32 @@ export function PostsScreen({navigation}) {
                 blurOnSubmit={false}
               />
             </View>
-            <View style={styles.checkBoxBox}>
-              <BouncyCheckbox
-                size={20}
-                fillColor="#73000a"
-                disableBuiltInState={true}
-                style={{alignSelf:'center'}}
-                isChecked={postIsAnonymous}
-                unfillColor="#FFFFFF"
-                text="Post Anonymously?"
-                iconStyle={{ borderColor: "#73000a" }}
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ color:'black' }}
-                onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
-              />
+            <View style={styles.bottomPostButtonsContainer}>
+              <View style={styles.checkBoxBox}>
+                <BouncyCheckbox
+                  size={20}
+                  
+                  fillColor="#73000a"
+                  disableBuiltInState={true}
+                  style={{alignSelf:'flex-start',marginLeft:20,marginTop:20}}
+                  isChecked={postIsAnonymous}
+                  unfillColor="#FFFFFF"
+                  text="Post Anonymously?"
+                  iconStyle={{ borderColor: "#73000a"}}
+                  innerIconStyle={{ borderWidth: 2 }}
+                  textStyle={{ color:'black' }}
+                  onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
+                />
+              </View>
+                <Button 
+                  containerStyle={styles.postImageAddButtonContainer}
+                  buttonStyle={styles.postImageButton}
+                  size='lg'
+                  onPress={choosePhotoFromLibrary}
+                  titleStyle={{fontSize:10,fontWeight:'bold'}}
+                  title={image ? 'Image Loaded ✅' : 'Upload a picture'}
+                  />
+
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -559,7 +551,6 @@ export function PostsScreen({navigation}) {
 
 
       <FlashList
-        onRefresh={() => {getPosts}}
         onEndReached={() => {
           setPostCount(postCount+6)
         }}

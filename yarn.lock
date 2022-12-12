@@ -1734,9 +1734,9 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@^18.11.12":
-  "integrity" "sha512-FgD3NtTAKvyMmD44T07zz2fEf+OKwutgBCEVM8GcvMGVGaDktiLNTDvPwC/LUe3PinMW+X6CuLOF2Ui1mAlSXg=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-18.11.12.tgz"
-  "version" "18.11.12"
+  "integrity" "sha512-IASpMGVcWpUsx5xBOrxMj7Bl8lqfuTY7FKAnPmu5cHkfQVWF8GulWS1jbRqA934qZL35xh5xN/+Xe/i26Bod4w=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-18.11.13.tgz"
+  "version" "18.11.13"
 
 "@types/normalize-package-data@^2.4.0":
   "integrity" "sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw=="
