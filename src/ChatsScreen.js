@@ -11,6 +11,7 @@ import {
     ChannelAvatarWithContext,
     ChannelPreviewMessenger,
     ChannelPreview,
+    AnimatedGalleryImage,
   } from 'stream-chat-react-native';
 
 
@@ -18,6 +19,7 @@ import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
 import auth from '@react-native-firebase/auth';
 import {FloatingAction} from 'react-native-floating-action';
+import AppContext from './AppContext';
 
 import { useChatContext } from './ChatContext';
 
@@ -28,6 +30,7 @@ import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
 import { channel } from "diagnostics_channel";
 
+
 var styles;
 
 if (Platform.OS === 'ios') {
@@ -37,6 +40,7 @@ if (Platform.OS === 'ios') {
 }
 
 export function ChatsScreen(props) {
+  const userData = useContext(AppContext);
 
 
   const actions = [
@@ -175,8 +179,15 @@ export function ChatsScreen(props) {
                   <TouchableOpacity
                     style={{flex:1}}
                     disallowInterruption={true}
-                    onPress={() => {
-                      Alert.alert('Navigate to profile screen here.')
+                    onPress={async () => {
+                      if(channel.data.member_count == 2 && channel.type === 'messaging') {
+                        const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
+                        userData.setProfileView(member.members[0].user_id)
+                        navigation.navigate('ProfileView')
+                      }
+                      else if (channel.type === 'team') {
+                        Alert.alert('Create a group page and navigate to that here')
+                      }
                     }}
                   >
                     <ChannelAvatarWithContext channel={channel}></ChannelAvatarWithContext>

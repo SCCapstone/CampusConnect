@@ -9,6 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from "@react-native-firebase/storage";
 
 import ImageView from "react-native-image-viewing";
+import FastImage from 'react-native-fast-image';
 
 var styles;
 
@@ -129,7 +130,7 @@ export function EventsScreen({navigation}) {
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => CreateAlertevent()} style ={styles.event}>
-      <Image source={{uri: item.imageUrl}}
+      <FastImage source={{uri: item.imageUrl}}
              style={styles.canvas}/>
             <Text style={styles.body}>{item.event}</Text>
             <Text style={styles.date}>{item.date}</Text>

@@ -35,7 +35,7 @@ import { SearchBar, Button, ListItem, Avatar ,Input} from '@rneui/themed';
 import ImagePicker from 'react-native-image-crop-picker';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
-import { LoadingIndicator } from 'stream-chat-react-native';
+import { AnimatedGalleryImage, LoadingIndicator } from 'stream-chat-react-native';
 
 
 import iosstyles from './styles/ios/PostScreenStyles';
@@ -202,7 +202,11 @@ export function PostsScreen({navigation}) {
             downvoters: new Map(),
           })
           .then(() => {
-            closeModal()
+            closeModal();
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'HomeScreen'}],
+            });
 
           })
           .catch(error => {
@@ -229,7 +233,12 @@ export function PostsScreen({navigation}) {
           downvoters: new Map(),
         })
         .then(() => {
-          closeModal()
+          closeModal();
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'HomeScreen'}],
+          });
+
 
         })
         .catch(error => {
@@ -542,7 +551,15 @@ export function PostsScreen({navigation}) {
           
           />
           <View style={styles.postUserImageAndInfoBox}>
-            <Pressable onPress={() => Alert.alert('Navigate to user profile here')}>
+            <Pressable onPress={() => {
+              if(item.author !== 'Anonymous'){
+                userData.setProfileView(item.user.replace('/Users/',''))
+                navigation.navigate('ProfileView')
+              }
+              else if (item.author === 'Anonymous') {
+                Alert.alert('This user wishes to remain anonymous.')
+              }
+            }}>
               <FastImage
                 defaultSource={require('./assets/blank2.jpeg')}
                 source={

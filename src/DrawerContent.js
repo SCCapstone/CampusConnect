@@ -17,6 +17,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useEffect, useContext} from 'react';
 import AppContext from './AppContext';
 import { useChatClient } from './useChatClient';
+import {useNavigation} from '@react-navigation/native';
 
 import iosstyles from './styles/ios/DrawerContentStyles';
 import androidstyles from './styles/android/DrawerContentStyles';
@@ -34,6 +35,8 @@ import { chatApiKey } from '../chatConfig';
 
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
+
+  const navigation = useNavigation()
 
   const getUserData = () => {
     firestore()
@@ -102,6 +105,10 @@ export function DrawerContent(props) {
             <TouchableOpacity
               activeOpacity={0.9}
               style={styles.pressableImageView}
+              onPress={() => {
+                userData.setProfileView(auth().currentUser.uid)
+                navigation.navigate('ProfileView')
+              }}
               onLongPress={userData.pfp ? () => DeleteAlert() : null}>
               <Image
                 source={
