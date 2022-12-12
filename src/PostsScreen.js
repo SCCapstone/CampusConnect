@@ -86,7 +86,7 @@ export function PostsScreen({navigation}) {
   var url = '';
 
 
-  const offsetHeight = Platform.OS === 'ios' ? 70 : 20 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
   const list = useRef(FlashList);
@@ -767,8 +767,8 @@ export function PostsScreen({navigation}) {
 
 const PostError = () => {
   Alert.alert(
-    'Post is too long',
-    'Shorten your post to less than 1000 characters and 25 or less lines',
+    'Post is invalid',
+    'Make sure post is not empty or shorten your post to less than 1000 characters and 25 or less lines',
     [{text: 'Okay.'}],
   );
 };
