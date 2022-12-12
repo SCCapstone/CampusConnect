@@ -21,8 +21,8 @@ import {
 
 import AppContext from './AppContext';
 
-import iosstyles from './styles/ios/RegistrationScreenStyles';
-import androidstyles from './styles/android/RegistrationScreenStyles';
+import iosstyles from './styles/ios/EditProfileStyles';
+import androidstyles from './styles/android/EditProfileStyles';
 
 var styles;
 
@@ -321,5 +321,4 @@ const RegisterError = () => {
     [{text: 'OK'}],
   );
 };
-
 

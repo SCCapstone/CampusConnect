@@ -88,6 +88,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
     padding: 5,
+    marginBottom:80
 
   },
   textGroupStyle: {
