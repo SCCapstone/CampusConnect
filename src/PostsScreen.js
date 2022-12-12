@@ -497,7 +497,7 @@ export function PostsScreen({navigation}) {
         </View>
         <Pressable
           elevation={20}
-          delayLongPress={250}
+          delayLongPress={150}
           cancelable={false}
           android_ripple={styles.rippleConfig}
           style={
