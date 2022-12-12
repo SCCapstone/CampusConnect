@@ -87,6 +87,7 @@ export function PostsScreen({navigation}) {
 
 
   const offsetHeight = Platform.OS === 'ios' ? 70 : 20 //keyboard view doesnt work on ios without this
+  const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
   const list = useRef(FlashList);
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
@@ -639,7 +640,7 @@ export function PostsScreen({navigation}) {
         onRequestClose={() => {
           this.floatingAction
         }}>
-        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior="padding">
+        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeightPadding} behavior="padding">
           <View style={styles.postView}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
