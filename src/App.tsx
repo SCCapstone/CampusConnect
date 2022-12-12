@@ -6,6 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js';
 import {RegistrationScreen} from './RegistrationScreen.js';
 import {HomeScreen} from './HomeScreen.js';
+import {ProfileView} from './ProfileView.js'
 import AppContext from './AppContext';
 import { vw } from 'stream-chat-react-native';
 
@@ -57,6 +58,7 @@ export default function App() {
   const [gradYear, setGradYear] = useState('Freshman');
   const [name, setName] = useState('Unknown Person');
   const [pfp, setProfilePic] = useState('');
+  const [profileView, setProfileView] = useState('');
 
   const userData = {
     bio: bio,
@@ -65,12 +67,14 @@ export default function App() {
     gradYear: gradYear,
     name: name,
     pfp: pfp,
+    profileView: profileView,
     setBio,
     setEmail,
     setMajor,
     setGradYear,
     setName,
     setProfilePic,
+    setProfileView
   };
 
   return (
@@ -105,6 +109,18 @@ export default function App() {
                   name="HomeScreen"
                   component={HomeScreen}
                   options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="ProfileView"
+                  
+                  component={ProfileView}
+                  options={({ navigation, route }) => ({
+                    // Add a placeholder button without the `onPress` to avoid flicker
+                    headerTitle: 'Profile:',
+                    headerStyle:{backgroundColor:'#73000a'},
+                    headerTitleStyle:{color:'white'},
+                  })}
+                  
                 />
               </Stack.Navigator>
             </NavigationContainer>
