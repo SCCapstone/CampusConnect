@@ -86,7 +86,7 @@ export function PostsScreen({navigation}) {
   var url = '';
 
 
-  const offsetHeight = Platform.OS === 'ios' ? 64 : -32 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? 70 : 20 //keyboard view doesnt work on ios without this
 
   const list = useRef(FlashList);
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
@@ -715,8 +715,7 @@ export function PostsScreen({navigation}) {
                   
             </PostReply>
             
-            {Platform.OS === 'ios' ?
-            <KeyboardAvoidingView keyboardVerticalOffset={70} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
+            <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
               <Input 
                 style={{alignSelf:'flex-end',alignItems:'flex-end'}}
                 placeholder="Comment"
@@ -724,18 +723,9 @@ export function PostsScreen({navigation}) {
                 onChangeText={setReply}>
               </Input>
 
-            </KeyboardAvoidingView> :
-            
-            <KeyboardAvoidingView keyboardVerticalOffset={64} behavior='padding' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
-            <Input 
-              style={{alignSelf:'flex-end',alignItems:'flex-end'}}
-              placeholder="Comment"
-              leftIcon={{ type: 'font-awesome', name: 'comment' }}
-              onChangeText={setReply}>
-            </Input>
-
-          </KeyboardAvoidingView>
-          }
+            </KeyboardAvoidingView>
+          
+          
         </View>
 
       </Modal>
