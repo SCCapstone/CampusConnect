@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import Parse from 'parse/react-native';
+
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-import iosstyles from './styles/ios/WelcomeScreenStyles';
-import androidstyles from './styles/android/WelcomeScreenStyles';
+import iosstyles from './styles/ios/LoginScreenStyles';
+import androidstyles from './styles/android/LoginScreenStyles';
 
 var styles;
 
@@ -27,13 +29,13 @@ import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import AppContext from './AppContext';
 
-import {COMETCHAT_CONSTANTS} from '../env';
-import {CometChat} from '@cometchat-pro/react-native-chat';
+
 
 export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  var transactionStarted = false;
 
 
   // Handle user state changes
@@ -45,34 +47,46 @@ export function WelcomeScreen({navigation}) {
     if (initializing) setInitializing(false);
 
       if (auth().currentUser) {
-        firestore()
-          .collection('Users')
-          .doc(auth().currentUser.uid)
-          .get()
-          .then(userData => {
-            firstLogin = userData.get('firstLogin');
-            if (auth().currentUser && firstLogin) {
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'RegistrationScreen'}],
-              });
-            } else if (auth().currentUser && !firstLogin) {
-              const cometChatLoggedUser = CometChat.login(
-                auth().currentUser.uid,
-                COMETCHAT_CONSTANTS.AUTH_KEY,
-              ).then(() => {
+        if(!transactionStarted){
+          console.log('login detexted')
+          transactionStarted = true;
+          firestore()
+            .collection('Users')
+            .doc(auth().currentUser.uid)
+            .get()
+            .then(userData => {
+              firstLogin = userData.get('firstLogin')
+
+              //If this variable doesn't exist for whatever reason, then firstLogin is true. Just in case.
+              if (userData.get('firstLogin') == undefined){
+                firstLogin = true
+              }
+              
+              if (auth().currentUser && firstLogin) {
+                transactionStarted = false;
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'RegistrationScreen'}],
+                });
+              } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
+                
+                transactionStarted = false;
+                console.log('hello')
                 navigation.reset({
                   index: 0,
                   routes: [{name: 'HomeScreen'}],
                 });
-              }).catch((error) => console.log(error));
-              
-
-            }
+              }
+              else {
+                transactionStarted = false;
+              }
+            
           })
           .catch(error => {
             FirebaseError(error.code);
           });
+          
+        }
       }
 
 
@@ -95,7 +109,7 @@ export function WelcomeScreen({navigation}) {
     <SafeAreaView style={styles.container}>
       <Image
         style={styles.imageLarge}
-        source={require('./assets/gamecock.png')}
+        source={require('./assets/logo.png')}
       />
       <Text style={styles.title}>Campus Connect</Text>
 
@@ -110,6 +124,11 @@ export function WelcomeScreen({navigation}) {
         style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => NeedHelpError()}
+        style={styles.helpBtn}>
+        <Text style={styles.loginText}>Need help?</Text>
+      </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>
           Copywright Ⓒ2022 DemBoyz, All rights reserved.
@@ -120,6 +139,7 @@ export function WelcomeScreen({navigation}) {
 }
 
 export function LoginScreen({navigation}) {
+  const userData = useContext(AppContext);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -144,7 +164,7 @@ export function LoginScreen({navigation}) {
       <BackButton />
       <Image
         style={styles.imageSmall}
-        source={require('./assets/gamecock.png')}
+        source={require('./assets/logo.png')}
       />
       <Text style={styles.title}>Campus Connect</Text>
 
@@ -198,22 +218,23 @@ export function LoginScreen({navigation}) {
 }
 
 export function RegisterScreen({navigation}) {
+
+  const userData = useContext(AppContext);
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
   const register = () => {
     if (
-      email &&
+      /*email &&
       password &&
       password === password2 &&
       email.split('@').length > 1 &&
       email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'
-    ) {
+      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'*/true) {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          console.log('User account created & signed in!');
           createUserData();
         })
         .catch(error => {
@@ -224,7 +245,18 @@ export function RegisterScreen({navigation}) {
     }
   };
 
-  const createUserData = () => {
+  const createUserData = async () => {
+
+    //Doing email verification with parse
+    /*await Parse.User.signUp(email, 'password', {
+      email: email,
+    }).then(async (createdUser) => {
+      EmailAlert();
+    })
+
+    await Parse.User.logOut();*/
+
+
     firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
@@ -249,7 +281,7 @@ export function RegisterScreen({navigation}) {
       <BackButton />
       <Image
         style={styles.imageSmall}
-        source={require('./assets/gamecock.png')}
+        source={require('./assets/logo.png')}
       />
       <Text style={styles.title}>Campus Connect</Text>
       <View style={styles.inputView}>
@@ -337,14 +369,35 @@ const RegisterError = () => {
   );
 };
 
-const FirebaseError = error => {
+const FirebaseError = (error) => {
   Alert.alert('Error', error, [{text: 'OK'}]);
+};
+const EmailAlert = () => {
+  Alert.alert(
+    'Email Sent',
+    'A verication email has been sent to your USC email. You will have to click the link before the app will allow you to fully sign in.',
+    [{text: 'OK'}],
+  );
 };
 
 const LoginError = () => {
   Alert.alert(
     'Invalid format',
     'Make sure email and password field are not empty.',
+    [{text: 'OK'}],
+  );
+};
+const NeedHelpError = () => {
+  Alert.alert(
+    'Need Help?',
+    'Please contact support at \n\ndemboyz.sc@gmail.com for help.',
+    [{text: 'OK'}],
+  );
+};
+const CometChatError = () => {
+  Alert.alert(
+    'There was a problem.',
+    'Please contact support at \n\ndemboyz.sc@gmail.com for help.',
     [{text: 'OK'}],
   );
 };

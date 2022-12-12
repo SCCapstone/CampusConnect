@@ -23,13 +23,16 @@ import {FloatingAction} from 'react-native-floating-action';
 import ImageView from 'react-native-image-viewing';
 import moment from 'moment';
 import AppContext from './AppContext';
-import {color} from 'react-native-reanimated';
+import {color, sub} from 'react-native-reanimated';
 import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
 import iosstyles from './styles/ios/PostScreenStyles';
 import androidstyles from './styles/android/PostScreenStyles';
 import {TouchableHighlight} from 'react-native-gesture-handler';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import SelectDropdown from 'react-native-select-dropdown'
+import { SearchBar } from '@rneui/themed';
 
 var styles;
 
@@ -40,11 +43,11 @@ if (Platform.OS === 'ios') {
 }
 
 export function PostsScreen({navigation}) {
-  if (Platform.OS === 'android') {
+ /* if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-  }
+  }*/
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -58,9 +61,17 @@ export function PostsScreen({navigation}) {
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
+  const [postIsAnonymous,setPostIsAnonymous] = useState(false);
+  const [sortMode, setSortMode] = useState('Best')
+  const [postCount, setPostCount] = useState(6)
+  const [search, setSearch] = useState("");
   var transactionStarted = false;
 
+
+  const offsetHeight = Platform.OS === 'ios' ? 64 : -32 //keyboard view doesnt work on ios without this
+
   const list = useRef(FlashList);
+  const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
 
   const PostAlert = () => {
     Alert.alert('Post?', 'Are you sure you want to post?', [
@@ -84,39 +95,111 @@ export function PostsScreen({navigation}) {
       postText.split(/\r\n|\r|\n/).length <=
         25 /*this last one checks that there are not too many lines */
     ) {
-      firestore()
+      if(!postIsAnonymous){
+        firestore()
+          .collection('Posts')
+          .doc()
+          .set({
+            author: userData.name,
+            authorGradYear: userData.gradYear,
+            authorMajor: userData.major,
+            body: postText,
+            replyCount: 0,
+            upvoteCount: 1,
+            date: firestore.FieldValue.serverTimestamp(),
+            pfp: userData.pfp,
+            replies: [],
+            user: '/Users/' + auth().currentUser.uid,
+            extraData: '',
+            upvoters: {[auth().currentUser.uid]: true},
+            downvoters: new Map(),
+          })
+          .then(() => {closeModal()})
+          .catch(error => {
+            console.log(error.code);
+          });
+        }
+      else if (postIsAnonymous) {
+        firestore()
         .collection('Posts')
         .doc()
         .set({
-          author: userData.name,
-          authorGradYear: userData.gradYear,
-          authorMajor: userData.major,
+          author: 'Anonymous',
+          authorGradYear: '',
+          authorMajor: '',
           body: postText,
           replyCount: 0,
           upvoteCount: 1,
           date: firestore.FieldValue.serverTimestamp(),
-          pfp: userData.pfp,
+          pfp: '',
           replies: [],
           user: '/Users/' + auth().currentUser.uid,
           extraData: '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
         })
-        .then(() => closeModal())
+        .then(() => {closeModal()})
         .catch(error => {
           console.log(error.code);
         });
+      }
     } else {
       PostError();
     }
   };
+
+
   useEffect(() => {
-    //gets posts asynchronously in the background
-    const subscriber = firestore()
-      .collection('Posts')
+    //Make sure to only set this once next time
+
+
+    navigation.setOptions({
+      headerRight: () => (
+        <SelectDropdown
+        defaultButtonText='Sort'
+        data={sortingOptions}
+        buttonStyle={{width:110,height:20,backgroundColor:'#73000a'}}
+        rowTextStyle={{fontSize:11}}
+        buttonTextAfterSelection={(selectedItem,index) => {
+          return selectedItem
+        }}
+        buttonTextStyle={{fontSize:12,color:'white',fontWeight:'bold'}}
+        onSelect={(selectedItem, index) => {
+          setPostCount(5)
+          setSortMode(selectedItem)
+          setPostCount(5)
+        }}
+      />
+      ),
+    });
+
+    var postsRef = firestore().collection('Posts')
+    var query; 
+    if(sortMode === 'Best') {
+      query = postsRef
       .orderBy('upvoteCount', 'desc')
-      .orderBy('date', 'desc') //get the posts and order them by their upvote count
-      .onSnapshot(querySnapshot => {
+      .orderBy('date', 'desc')
+      .limit(postCount)
+    } else if (sortMode === 'Worst') {
+      query = postsRef
+      .orderBy('upvoteCount', 'asc')
+      .orderBy('date', 'desc')
+      .limit(postCount) 
+
+    } else if (sortMode === 'New') {
+      query = postsRef
+      .orderBy('date', 'desc')
+      .limit(postCount) 
+
+    } else if (sortMode === 'Anonymous') {
+      query = postsRef
+      .where('author','==', 'Anonymous')
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(postCount) 
+    }
+    //gets posts asynchronously in the background
+    const subscriber = query.onSnapshot(querySnapshot => {
         if (!querySnapshot.metadata.hasPendingWrites) {
           //This will prevent unecessary reads, because the firebase server may be doing something
           postIndex = 0;
@@ -130,9 +213,11 @@ export function PostsScreen({navigation}) {
               key: documentSnapshot.id,
               isUpVoted: false,
               isDownVoted: false,
+              postIsYours:false
             };
             post.isUpVoted = post.upvoters[auth().currentUser.uid];
             post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
 
             posts.push(post);
             if (post.extraData) {
@@ -146,23 +231,16 @@ export function PostsScreen({navigation}) {
             postIndex++;
           });
 
-          setPosts(posts);
-          setImages(images);
-          setLoading(false);
+            setPosts(posts);
+            setImages(images);
+            setLoading(false);
 
-          // After removing the item, we can start the animation.
-          if (posts.length > 0) {
-            list.current?.prepareForLayoutAnimationRender();
-            LayoutAnimation.configureNext(
-              LayoutAnimation.Presets.easeInEaseOut,
-            );
           }
-        }
-      });
+        });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, []);
+  }, [navigation,sortMode,postCount]);
 
   const DeletePost = ({item}) => {
     firestore().collection('Posts').doc(item.key).delete();
@@ -187,10 +265,8 @@ export function PostsScreen({navigation}) {
           const isDownVoted = postData.downvoters[auth().currentUser.uid];
           const upvoteCount = postData.upvoteCount;
           const userId = postData.user;
-
-          if (userId === '/Users/' + auth().currentUser.uid) {
-            /*Can't take away your own upcote*/
-          } else if (isUpVoted) {
+          
+          if (isUpVoted) {
             transaction.update(postRef, {
               ['upvoters.' + auth().currentUser.uid]:
                 firestore.FieldValue.delete(),
@@ -237,31 +313,19 @@ export function PostsScreen({navigation}) {
                 firestore.FieldValue.delete(),
               upvoteCount: upvoteCount + 1,
             });
-          } else if (
-            upvoteCount === 1 ||
-            '/Users/' + auth().currentUser.uid === userId
-          ) {
-            /*Can't downvote below 1*/
-          } else if (!isDownVoted && !isUpVoted) {
+          }  else if (!isDownVoted && !isUpVoted) {
             transaction.update(postRef, {
               ['downvoters.' + auth().currentUser.uid]: true,
               upvoteCount: upvoteCount - 1,
             });
           } else if (!isDownVoted && isUpVoted) {
-            if (upvoteCount - 2 < 1) {
-              transaction.update(postRef, {
-                upvoteCount: upvoteCount - 1,
-                ['upvoters.' + auth().currentUser.uid]:
-                  firestore.FieldValue.delete(),
-              });
-            } else {
               transaction.update(postRef, {
                 ['downvoters.' + auth().currentUser.uid]: true,
                 upvoteCount: upvoteCount - 2,
                 ['upvoters.' + auth().currentUser.uid]:
                   firestore.FieldValue.delete(),
               });
-            }
+
           }
         })
         .then(() => {
@@ -269,6 +333,63 @@ export function PostsScreen({navigation}) {
         }).catch(() => {transactionStarted = false});
     }
   };
+
+  const getPosts = () => {
+    setRefresh(true)
+    var postsRef = firestore().collection('Posts')
+    var query; 
+    if(sortMode === 'Best') {
+      query = postsRef
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(5)
+    } else if (sortMode === 'Worst') {
+      query = postsRef
+      .orderBy('upvoteCount', 'asc')
+      .orderBy('date', 'desc')
+      .limit(5) 
+
+    } else if (sortMode === 'New') {
+      query = postsRef
+      .orderBy('date', 'desc')
+      .limit(5) 
+
+    } else if (sortMode === 'Anonymous') {
+      query = postsRef
+      .where('author','==', 'Anonymous')
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(5) 
+    }
+    query.get().then(snapShot => {
+      if(!snapShot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+        });
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+      setRefresh(false)
+    });
+  }
 
   const Post = ({item, index}) => {
     return (
@@ -296,6 +417,8 @@ export function PostsScreen({navigation}) {
         </View>
         <Pressable
           elevation={20}
+          delayLongPress={250}
+          cancelable={false}
           android_ripple={styles.rippleConfig}
           style={
             Platform.OS === 'ios'
@@ -304,22 +427,24 @@ export function PostsScreen({navigation}) {
           }
           onLongPress={() => DeletePostAlert({item})}>
           <View style={styles.postUserImageAndInfoBox}>
-            <FastImage
-              defaultSource={require('./assets/blank2.jpeg')}
-              source={
-                item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
-              }
-              style={styles.postPfp}
-            />
+            <Pressable onPress={() => Alert.alert('Navigate to user profile here')}>
+              <FastImage
+                defaultSource={require('./assets/blank2.jpeg')}
+                source={
+                  item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
+                }
+                style={styles.postPfp}
+              />
+            </Pressable>
             {item.author !== 'Anonymous' ? (
               <View style={styles.postUserInfo}>
-                <Text style={styles.name}>{item.author}</Text>
+                <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
                 <Text style={styles.majorText}>
-                  {item.authorMajor} | Class of {item.authorGradYear}
+                  {item.authorMajor} | {item.authorGradYear}
                 </Text>
               </View>
             ) : (
-              <Text style={styles.anonymousAuthorText}>{item.author}</Text>
+              <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
             )}
           </View>
           <View style={styles.postImageView}>
@@ -349,14 +474,9 @@ export function PostsScreen({navigation}) {
     );
   };
 
-  const onRefresh = () => {
-    setRefresh(true);
-    getPosts();
-    setRefresh(false);
-  };
-
   const closeModal = () => {
     this.floatingAction.animateButton();
+    setPostIsAnonymous(false)
     setPostText('');
   };
 
@@ -370,70 +490,21 @@ export function PostsScreen({navigation}) {
     );
   }
 
-  if (posts.length == 0) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 32,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            marginVertical: '75%',
-          }}>
-          Kind of empty in here....
-        </Text>
-        <Modal
-          style={styles.modal}
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            closeModal();
-          }}>
-          <KeyboardAvoidingView behavior="padding">
-            <View style={styles.postView}>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                  onPress={() => closeModal()}
-                  style={styles.cancelButton}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => PostAlert()}
-                  style={styles.postButton}>
-                  <Text style={styles.postButtonText}>Post?</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.postTextView}>
-                <TextInput
-                  style={styles.postInput}
-                  multiline={true}
-                  onChangeText={postText => setPostText(postText)}
-                  placeholder="Enter your post"
-                  textAlignVertical="top"
-                  placeholderTextColor="black"
-                  blurOnSubmit={false}
-                />
-              </View>
-            </View>
-          </KeyboardAvoidingView>
-        </Modal>
-        <FloatingAction
-          color="#73000a"
-          ref={ref => {
-            this.floatingAction = ref;
-          }}
-          onPressMain={() => {
-            setModalVisible(!modalVisible);
-          }}
-        />
-      </SafeAreaView>
-    );
-  }
-
   return (
+
     <SafeAreaView style={styles.container}>
+            <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Search a post by name' value={search}></SearchBar>
+      {(posts.length == 0) &&
+      <Text
+      style={{
+        color: 'white',
+        fontSize: 32,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginVertical: '75%',
+      }}>
+      Kind of empty in here....
+      </Text>}
       <Modal
         style={styles.modal}
         animationType="slide"
@@ -442,7 +513,7 @@ export function PostsScreen({navigation}) {
         onRequestClose={() => {
           closeModal();
         }}>
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior="padding">
           <View style={styles.postView}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -467,17 +538,38 @@ export function PostsScreen({navigation}) {
                 blurOnSubmit={false}
               />
             </View>
+            <View style={styles.checkBoxBox}>
+              <BouncyCheckbox
+                size={20}
+                fillColor="#73000a"
+                disableBuiltInState={true}
+                style={{alignSelf:'center'}}
+                isChecked={postIsAnonymous}
+                unfillColor="#FFFFFF"
+                text="Post Anonymously?"
+                iconStyle={{ borderColor: "#73000a" }}
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ color:'black' }}
+                onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
+              />
+            </View>
           </View>
         </KeyboardAvoidingView>
       </Modal>
 
+
       <FlashList
+        onRefresh={() => {getPosts}}
+        onEndReached={() => {
+          setPostCount(postCount+6)
+        }}
+        onEndReachedThreshold={.77}
         data={posts}
         ref={list}
         renderItem={renderPost}
         keyExtractor={item => item.key}
         refreshing={refreshing}
-        estimatedItemSize={150}
+        estimatedItemSize={100}
       />
       <FloatingAction
         color="#73000a"

@@ -15,8 +15,8 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import {useEffect, useContext} from 'react';
-import {CometChat} from '@cometchat-pro/react-native-chat';
 import AppContext from './AppContext';
+import { useChatClient } from './useChatClient';
 
 import iosstyles from './styles/ios/DrawerContentStyles';
 import androidstyles from './styles/android/DrawerContentStyles';
@@ -28,6 +28,9 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
+
+import { StreamChat } from 'stream-chat';
+import { chatApiKey } from '../chatConfig';
 
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
@@ -75,6 +78,12 @@ export function DrawerContent(props) {
     getPhoto();
   };
 
+  const SignOut = async () => {
+    const chatClient = StreamChat.getInstance(chatApiKey);
+    chatClient.disconnectUser();
+    auth().signOut();
+  };
+
   useEffect(() => {
     getUserData();
     getPhoto();
@@ -87,7 +96,7 @@ export function DrawerContent(props) {
         contentContainerStyle={styles.drawerScrollView}>
         <ImageBackground
           blurRadius={4}
-          source={require('./assets/gamecock.png')}
+          source={require('./assets/logo.png')}
           style={styles.imageBackgroundView}>
           <View style={styles.drawerUserView}>
             <TouchableOpacity
@@ -118,7 +127,6 @@ export function DrawerContent(props) {
               <Text style={styles.userMajorText}>{userData.major}</Text>
             </View>
             <View style={styles.classBox}>
-              <Text style={styles.classText}>Class of </Text>
               <Text style={styles.userClassText}>{userData.gradYear}</Text>
             </View>
           </View>
@@ -131,15 +139,7 @@ export function DrawerContent(props) {
         <View style={styles.touchableSignout}>
           <TouchableOpacity
             onPress={() =>
-              auth()
-                .signOut()
-                .then(() => {
-                  CometChat.logout();
-                  props.navigation.reset({
-                    index: 0,
-                    routes: [{name: 'WelcomeScreen'}],
-                  });
-                })
+              SignOut()
             }
             style={styles.touchableSignout}>
               <Text style={styles.signOutText}>Sign Out</Text>

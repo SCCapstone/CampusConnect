@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {
   View,
   TextInput,
@@ -13,9 +14,11 @@ import {v4 as uuidv4} from 'uuid';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
-import {CometChat} from '@cometchat-pro/react-native-chat';
 import validator from 'validator';
 import {useNavigation} from '@react-navigation/native';
+import { useChatContext } from './ChatContext';
+import { StreamChat } from 'stream-chat';
+import { chatApiKey } from '../chatConfig';
 
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
@@ -28,10 +31,14 @@ if (Platform.OS === 'ios') {
   styles = androidstyles;
 }
 
-export function CreateGroup({navigation}) {
+export function CreateGroup(props) {
   const [groupName, setGroupName] = React.useState('');
   const [image, setImage] = React.useState('');
+  const [selectedType, setSelectedType] = useState(0);
   var url = '';
+  const { setChannel } = useChatContext();
+  const navigation = useNavigation(); 
+  const chatClient = StreamChat.getInstance(chatApiKey);
 
   const onGroupNameChanged = groupName => {
     setGroupName(() => groupName);
@@ -51,7 +58,7 @@ export function CreateGroup({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref(uuidv4());
+    const reference = storage().ref('/Groups/'+uuidv4());
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
@@ -76,42 +83,32 @@ export function CreateGroup({navigation}) {
     if (isGroupValid(groupName) && image) {
       await uploadPic();
       const groupIcon = url;
-      const GUID = uuidv4();
-      const groupType = CometChat.GROUP_TYPE.PUBLIC;
-      const password = '';
-      const group = new CometChat.Group(GUID, groupName, groupType, password);
-      group.setIcon(groupIcon);
-      CometChat.createGroup(group).then(
-        group => {
-          showMessage('Info', `${groupName} was created successfully`);
-        },
-        error => {
-          console.log('Error, please try again later');
-        },
-      );
+      const channel = chatClient.channel('team', uuidv4(), {
+          name: groupName,
+          image:url
+      });
+      await channel.watch();
+      setChannel(channel)
+      await channel.addMembers([chatClient.user.id]);
+      navigation.navigate('DMScreen')
+
+      
     } else if (isGroupValid(groupName) && !image) {
-      await uploadPic();
       const groupIcon =
         'https://st.depositphotos.com/2828735/4247/i/600/depositphotos_42470283-stock-photo-thailand-male-chicken-rooster-isolated.jpg';
-      const GUID = uuidv4();
-      const groupType = CometChat.GROUP_TYPE.PUBLIC;
-      const password = '';
-      const group = new CometChat.Group(GUID, groupName, groupType, password);
-      group.setIcon(groupIcon);
-      CometChat.createGroup(group).then(
-        group => {
-          showMessage('Info', `${groupName} was created successfully`);
-        },
-        error => {
-          console.log('Error, please try again later');
-        },
-      );
+      const channel = chatClient.channel('team', uuidv4(), {
+          name: groupName, 
+          image:groupIcon
+      },{});
+      await channel.watch();
+      await channel.addMembers([chatClient.user.id]);
+      setChannel(channel)
+      navigation.navigate('DMScreen')
     }
   };
 
   return (
     <View style={styles.groupContainer}>
-      <BackButton></BackButton>
       <Text style={styles.textGroupStyle}>
         What would you like your group to be called
       </Text>
@@ -136,18 +133,3 @@ export function CreateGroup({navigation}) {
     </View>
   );
 }
-
-const BackButton = () => {
-  const navigation = useNavigation();
-  return (
-    <TouchableOpacity
-      style={styles.backButtonContainer}
-      onPress={() => navigation.navigate('Chats')}>
-      <ImageBackground
-        style={styles.backButtonImage}
-        source={require('./assets/back_arrow.png')}
-      />
-    </TouchableOpacity>
-  );
-};
-

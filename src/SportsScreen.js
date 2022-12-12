@@ -11,8 +11,11 @@ import {
   Alert,
 } from 'react-native';
 import {FloatingAction} from 'react-native-floating-action';
+import { SearchBar } from '@rneui/themed';
 
 export function SportsScreen({navigation}) {
+
+  const [search, setSearch] = useState("");
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -59,6 +62,7 @@ export function SportsScreen({navigation}) {
 
 return (
         <SafeAreaView style={styles.container}>
+           <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
             <FlatList
             data={DATA}
             renderItem={renderItem}
@@ -78,6 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 20,
     marginVertical: 8,
+    borderRadius:20,
     marginHorizontal: 16,
     backgroundColor: '#a8a1a6',
   },

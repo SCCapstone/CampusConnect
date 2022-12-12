@@ -2,15 +2,20 @@ import * as React from 'react';
 import {Button, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CommonActions} from '@react-navigation/native';
+import {useEffect, useContext, useState} from 'react';
 
 import {SportsScreen} from './SportsScreen.js'
 import {PostsScreen} from './PostsScreen.js';
-import {RegistrationScreen} from './RegistrationScreen.js';
+import {EditProfileScreen} from './EditProfile';
 import {EventsScreen} from './EventsScreen.js';
-import {GroupsScreen} from './GroupsScreen.js';
-import {Chat} from './Chat.js';
+import {ClubsScreen} from './ClubsScreen';
+import {ChatNavigator} from './ChatNavigator';
 import {CreateGroup} from './CreateGroup.js';
 import {Message} from './Message.js';
+
+import AppContext from './AppContext';
+
+import SelectDropdown from 'react-native-select-dropdown'
 
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 
@@ -30,12 +35,36 @@ if (Platform.OS === 'ios') {
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
-  if (!auth().currentUser) {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'WelcomeScreen'}],
-    });
+
+  const userData = useContext(AppContext);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+
+    if (initializing) setInitializing(false);
+
+    if (!auth().currentUser) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'WelcomeScreen'}],
+      });
+    }
+
   }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+
   return (
     <Drawer.Navigator
       drawerContent={props => <DrawerContent {...props} />}
@@ -43,7 +72,16 @@ export function HomeScreen({navigation}) {
       <Drawer.Screen
         name="Home"
         component={PostsScreen}
-        options={{headerTitle: 'Campus Connect: Posts'}}
+        options={({ navigation, route }) => ({
+          headerTitle: (props) => <LogoTitle {...props} />,
+          // Add a placeholder button without the `onPress` to avoid flicker
+          headerRight: () => (
+              <SelectDropdown
+                defaultButtonText='Sort'
+              />
+          ),
+          headerTitle: 'Campus Connect: Posts'
+        })}
       />
       <Drawer.Screen
         name="Events"
@@ -52,13 +90,13 @@ export function HomeScreen({navigation}) {
       />
       <Drawer.Screen
         name="Chats"
-        component={Chat}
-        options={{headerTitle: 'Campus Connect: Chats'}}
+        component={ChatNavigator}
+        options={{headerTitle: 'Campus Connect: Chats', headerShown:false}}
       />
       <Drawer.Screen
-        name="Groups"
-        component={GroupsScreen}
-        options={{headerTitle: 'Campus Connect: Groups'}}
+        name="Clubs"
+        component={ClubsScreen}
+        options={{headerTitle: 'Campus Connect: Clubs'}}
       />
       <Drawer.Screen
         name="Sports"
@@ -67,28 +105,12 @@ export function HomeScreen({navigation}) {
       />
       <Drawer.Screen
         name="Edit Profile"
-        component={RegistrationScreen}
+        component={EditProfileScreen}
         options={{
           headerTitle: 'Campus Connect: Edit Profile',
           drawerItemStyle: {height: 0},
-        }}
-      />
-      <Drawer.Screen
-        name="Create Group"
-        component={CreateGroup}
-        options={{
-          headerTitle: 'Create Group Chat',
-          drawerItemStyle: {height: 0},
-        }}
-      />
-      <Drawer.Screen
-        name="Message"
-        component={Message}
-        options={{
-          headerTitle: 'Currently Chatting',
-          drawerItemStyle: {height: 0},
-        }}
-      />
+        }}/>
+
     </Drawer.Navigator>
   );
 }

@@ -20,12 +20,16 @@ export default StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     margin: 8,
+    height:36,
+    justifyContent:'center'
+    
   },
   searchActionButton: {
     backgroundColor: 'white',
     borderColor: 'black',
     flex: 1,
     fontSize: 16,
+    width:190,
     padding: 8,
   },
   searchLeftActionButton: {
@@ -139,5 +143,40 @@ export default StyleSheet.create({
     width: 50,
     height: 40,
   },
+  placeholderText: 
+    {fontSize:30, alignSelf:'center',color:'black',marginBottom:250,textAlignVertical:'center'},
+  placeholderView:{justifyContent:'center'},
+
+
+  rectButton: {
+    flex: 1,
+    height: 80,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    backgroundColor: 'white',
+  },
+  separator: {
+    backgroundColor: 'rgb(200, 199, 204)',
+    height: StyleSheet.hairlineWidth,
+  },
+  fromText: {
+    fontWeight: 'bold',
+    backgroundColor: 'transparent',
+  },
+  messageText: {
+    color: '#999',
+    backgroundColor: 'transparent',
+  },
+  dateText: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    right: 20,
+    top: 10,
+    color: '#999',
+    fontWeight: 'bold',
+  },
+  
 
 });

@@ -1,20 +1,19 @@
-import React, {createContext, useState} from 'react';
+// ChatContext.js
 
-const ChatContext = createContext();
+import React, { useState } from 'react';
 
-export default function ChatComponent() {
-  const [selectedConversation, setSelectedConversation] = useState(null);
+export const ChatContext = React.createContext({
+  channel: null,
+  setChannel: (channel) => {},
+  thread: null,
+  setThread: (thread) => {},
+});
 
-  const chatData = {
-    selectedConversation: selectedConversation,
-    setSelectedConversation,
-  };
+export const ChatProvider = ({ children }) => {
+  const [channel, setChannel] = useState();
+  const [thread, setThread] = useState();
 
-  return (
-    <ChatContext.Provider
-      value={{
-        selectedConversation,
-        setSelectedConversation,
-      }}></ChatContext.Provider>
-  );
-}
+  return <ChatContext.Provider value={{ channel, setChannel, thread, setThread }}>{children}</ChatContext.Provider>;
+};
+
+export const useChatContext = () => React.useContext(ChatContext);

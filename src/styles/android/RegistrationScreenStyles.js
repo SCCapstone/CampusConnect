@@ -99,9 +99,12 @@ export default StyleSheet.create({
   bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    alignItems:'flex-end',
+    alignItems:'flex-end'
   },
 
   copyWrightText: {
+    marginTop:20,
     color: 'black',
     fontWeight: 'bold',
     fontSize: 12,
@@ -181,4 +184,57 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
+  emailText: {
+    marginTop:15,
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '',
+  },
+  linkText: {
+    marginTop:30,
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  helpBtn: {
+    width: '40%',
+    borderRadius: 4,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    backgroundColor: '#73000a',
+  },
+  loginText: {
+    placeholderTextColor: '000000',
+    color: 'white',
+    fontWeight:'bold'
+  },
+  imageBackgroungView: {
+    alignItems:'center',
+    justifyContent:'center'
+
+  },
+  blankImageBackgroundStyle: {
+    height: 100,
+    width: 100,
+    marginTop:10,
+    justifyContent:'center',
+    alignItems:'center',
+    alignContent:'center'
+  },
+  blankImageStyle: {
+    borderRadius:50,
+    marginTop:0,
+    height: 100,
+    width: 100,
+  },
+  imageTextStyle: {
+    textAlign:'center',
+    color:'black',
+    fontWeight:'bold',
+    fontSize:12
+  }
 });
