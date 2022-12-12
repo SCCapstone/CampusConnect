@@ -34,6 +34,9 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
 import { SearchBar, Button } from '@rneui/themed';
 import ImagePicker from 'react-native-image-crop-picker';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
+import { LoadingIndicator } from 'stream-chat-react-native';
 
 var styles;
 
@@ -67,6 +70,7 @@ export function PostsScreen({navigation}) {
   const [postCount, setPostCount] = useState(6)
   const [search, setSearch] = useState("");
   const [image, setImage] = React.useState('');
+  const [postUploading, setPostUploading] = useState(false);
   var transactionStarted = false;
   var url = '';
 
@@ -91,6 +95,70 @@ export function PostsScreen({navigation}) {
     }
   };
 
+  const getPosts = () => {
+    setRefresh(true)
+    console.log(search)
+    var postsRef = firestore().collection('Posts')
+    var query; 
+    if(search) {
+      query = postsRef
+      .where('author', '>=', search)
+      .where('author', '<=', search+ '\uf8ff')
+      .limit(15)
+    }
+    else if(sortMode === 'Best') {
+      query = postsRef
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(5)
+    } else if (sortMode === 'Worst') {
+      query = postsRef
+      .orderBy('upvoteCount', 'asc')
+      .orderBy('date', 'desc')
+      .limit(5) 
+
+    } else if (sortMode === 'New') {
+      query = postsRef
+      .orderBy('date', 'desc')
+      .limit(5) 
+
+    } else if (sortMode === 'Anonymous') {
+      query = postsRef
+      .where('author','==', 'Anonymous')
+      .orderBy('upvoteCount', 'desc')
+      .orderBy('date', 'desc')
+      .limit(5) 
+    }
+    query.get().then(snapShot => {
+      if(!snapShot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = [];
+        const images = [];
+        snapShot.forEach(documentSnapshot => {
+          const post = {
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          }
+          posts.push(post);
+          if (post.extraData){
+            images.push({
+              uri: post.extraData,
+              key: documentSnapshot.id
+            })
+            setImageMap(imageMap.set(postIndex,imageIndex))
+            imageIndex++;
+          }
+          postIndex++;
+        });
+        setPosts(posts);
+        setImages(images);
+        setLoading(false);
+      }
+      setRefresh(false)
+    });
+  }
+
   const CreatePost = async () => {
     if (
       postText &&
@@ -98,7 +166,7 @@ export function PostsScreen({navigation}) {
       postText.split(/\r\n|\r|\n/).length <=
         25 /*this last one checks that there are not too many lines */
     ) {
-      setLoading(true)
+      setPostUploading(true)
       if (image) {await uploadPic()}
       if(!postIsAnonymous){
         firestore()
@@ -120,10 +188,8 @@ export function PostsScreen({navigation}) {
             downvoters: new Map(),
           })
           .then(() => {
-            setImage('')
-            setLoading(false)
-            url = ''
             closeModal()
+
           })
           .catch(error => {
             console.log(error.code);
@@ -149,10 +215,8 @@ export function PostsScreen({navigation}) {
           downvoters: new Map(),
         })
         .then(() => {
-          setImage('')
-          url = ''
-          setLoading(false)
           closeModal()
+
         })
         .catch(error => {
           console.log(error.code);
@@ -190,7 +254,13 @@ export function PostsScreen({navigation}) {
 
     var postsRef = firestore().collection('Posts')
     var query; 
-    if(sortMode === 'Best') {
+    if(search) {
+      query = postsRef
+      .where('author', '>=', search)
+      .where('author', '<=', search+ '\uf8ff')
+      .limit(15)
+    }
+    else if(sortMode === 'Best') {
       query = postsRef
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
@@ -213,49 +283,79 @@ export function PostsScreen({navigation}) {
       .orderBy('date', 'desc')
       .limit(postCount) 
     }
+    if(!search){
     //gets posts asynchronously in the background
-    const subscriber = query.onSnapshot(querySnapshot => {
-        if (!querySnapshot.metadata.hasPendingWrites) {
-          //This will prevent unecessary reads, because the firebase server may be doing something
+      const subscriber = query.onSnapshot(querySnapshot => {
+          if (!querySnapshot.metadata.hasPendingWrites) {
+            //This will prevent unecessary reads, because the firebase server may be doing something
+            postIndex = 0;
+            var imageIndex = 0;
+            const posts = [];
+            const images = [];
+            querySnapshot.forEach(documentSnapshot => {
+              //Determine whether the user has upvoted or downvoted the post yet
+              const post = {
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+                isUpVoted: false,
+                isDownVoted: false,
+                postIsYours:false
+              };
+              post.isUpVoted = post.upvoters[auth().currentUser.uid];
+              post.isDownVoted = post.downvoters[auth().currentUser.uid];
+              post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
+
+              posts.push(post);
+              if (post.extraData) {
+                images.push({
+                  uri: post.extraData,
+                  key: documentSnapshot.id,
+                });
+                setImageMap(imageMap.set(postIndex, imageIndex));
+                imageIndex++;
+              }
+              postIndex++;
+            });
+
+              setPosts(posts);
+              setImages(images);
+              setLoading(false);
+
+            }
+          });
+    
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+    } else {
+      query.get().then(snapShot => {
+        if(!snapShot.metadata.hasPendingWrites) {
           postIndex = 0;
           var imageIndex = 0;
           const posts = [];
           const images = [];
-          querySnapshot.forEach(documentSnapshot => {
-            //Determine whether the user has upvoted or downvoted the post yet
+          snapShot.forEach(documentSnapshot => {
             const post = {
               ...documentSnapshot.data(),
               key: documentSnapshot.id,
-              isUpVoted: false,
-              isDownVoted: false,
-              postIsYours:false
-            };
-            post.isUpVoted = post.upvoters[auth().currentUser.uid];
-            post.isDownVoted = post.downvoters[auth().currentUser.uid];
-            post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-
+            }
             posts.push(post);
-            if (post.extraData) {
+            if (post.extraData){
               images.push({
                 uri: post.extraData,
-                key: documentSnapshot.id,
-              });
-              setImageMap(imageMap.set(postIndex, imageIndex));
+                key: documentSnapshot.id
+              })
+              setImageMap(imageMap.set(postIndex,imageIndex))
               imageIndex++;
             }
             postIndex++;
           });
-
-            setPosts(posts);
-            setImages(images);
-            setLoading(false);
-
-          }
-        });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, [navigation,sortMode,postCount]);
+          setPosts(posts);
+          setImages(images);
+        }
+      });
+    }
+  }, [navigation,sortMode,postCount,search]);
 
   const DeletePost = ({item}) => {
     firestore().collection('Posts').doc(item.key).delete();
@@ -362,7 +462,7 @@ export function PostsScreen({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref('/Posts/' +auth().currentUser.uid);
+    const reference = storage().ref('/Posts/' +uuidv4());
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
@@ -456,7 +556,11 @@ export function PostsScreen({navigation}) {
 
   const closeModal = () => {
     this.floatingAction.animateButton();
+    setPostUploading(false)
+    setImage('')
+    url = ''
     setPostIsAnonymous(false)
+    setModalVisible(false)
     setPostText('');
   };
 
@@ -473,7 +577,13 @@ export function PostsScreen({navigation}) {
   return (
 
     <SafeAreaView style={styles.container}>
-            <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Search a post by name' value={search}></SearchBar>
+      <SearchBar 
+        containerStyle={{backgroundColor:'#73000a'}} 
+        inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
+        onChangeText={setSearch} 
+        placeholder='Search a post by name' 
+        value={search}>
+      </SearchBar>
       {(posts.length == 0) &&
       <Text
       style={{
@@ -491,7 +601,7 @@ export function PostsScreen({navigation}) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          closeModal();
+          this.floatingAction
         }}>
         <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior="padding">
           <View style={styles.postView}>
@@ -508,6 +618,9 @@ export function PostsScreen({navigation}) {
               </TouchableOpacity>
             </View>
             <View style={styles.postTextView}>
+              {postUploading ? 
+              <ActivityIndicator></ActivityIndicator>
+              :
               <TextInput
                 style={styles.postInput}
                 multiline={true}
@@ -516,7 +629,7 @@ export function PostsScreen({navigation}) {
                 textAlignVertical="top"
                 placeholderTextColor="black"
                 blurOnSubmit={false}
-              />
+              />}
             </View>
             <View style={styles.bottomPostButtonsContainer}>
               <View style={styles.checkBoxBox}>
@@ -551,6 +664,7 @@ export function PostsScreen({navigation}) {
 
 
       <FlashList
+       onRefresh={() => {getPosts}}
         onEndReached={() => {
           setPostCount(postCount+6)
         }}
