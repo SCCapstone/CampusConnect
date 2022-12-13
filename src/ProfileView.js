@@ -36,7 +36,8 @@ export function ProfileView({navigation}) {
         }
         navigation.setOptions({
             headerTitle: 'Profile: ' + profileData.name,
-            headerLeft:() =>(<HeaderBackButton onPress={()=>{
+            headerTintColor: '#ffffff',
+            headerLeft:() =>(<HeaderBackButton tintColor='white' onPress={()=>{
                 userData.setProfileView('')
                 navigation.goBack()
 

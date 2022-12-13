@@ -123,6 +123,7 @@ export default function App() {
                   options={({ navigation, route }) => ({
                     // Add a placeholder button without the `onPress` to avoid flicker
                     headerTitle: 'Profile:',
+                    headerTintColor: '#ffffff',
                     headerStyle:{backgroundColor:'#73000a'},
                     headerTitleStyle:{color:'white'},
                   })}
