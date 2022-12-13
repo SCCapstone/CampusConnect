@@ -306,85 +306,49 @@ export function PostsScreen({navigation}) {
       .orderBy('date', 'desc')
       .limit(postCount) 
     }
-    if(!search){
     //gets posts asynchronously in the background
-      const subscriber = query.onSnapshot(querySnapshot => {
-          if (!querySnapshot.metadata.hasPendingWrites) {
-            //This will prevent unecessary reads, because the firebase server may be doing something
-            postIndex = 0;
-            var imageIndex = 0;
-            const posts = [];
-            const images = [];
-            querySnapshot.forEach(documentSnapshot => {
-              //Determine whether the user has upvoted or downvoted the post yet
-              const post = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              };
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-
-              posts.push(post);
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(postIndex, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
-            });
-
-              setPosts(posts);
-              setImages(images);
-              setLoading(false);
-
-            }
-          });
-    
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-    } else {
-      query.get().then(snapShot => {
-        if(!snapShot.metadata.hasPendingWrites) {
+    const subscriber = query.onSnapshot(querySnapshot => {
+        if (!querySnapshot.metadata.hasPendingWrites) {
+          //This will prevent unecessary reads, because the firebase server may be doing something
           postIndex = 0;
           var imageIndex = 0;
           const posts = [];
           const images = [];
-          snapShot.forEach(documentSnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            //Determine whether the user has upvoted or downvoted the post yet
             const post = {
               ...documentSnapshot.data(),
               key: documentSnapshot.id,
               isUpVoted: false,
               isDownVoted: false,
               postIsYours:false
-            }
+            };
             post.isUpVoted = post.upvoters[auth().currentUser.uid];
             post.isDownVoted = post.downvoters[auth().currentUser.uid];
             post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
 
             posts.push(post);
-            if (post.extraData){
+            if (post.extraData) {
               images.push({
                 uri: post.extraData,
-                key: documentSnapshot.id
-              })
-              setImageMap(imageMap.set(postIndex,imageIndex))
+                key: documentSnapshot.id,
+              });
+              setImageMap(imageMap.set(postIndex, imageIndex));
               imageIndex++;
             }
             postIndex++;
           });
-          setPosts(posts);
-          setImages(images);
-        }
-      });
-    }
+
+            setPosts(posts);
+            setImages(images);
+            setLoading(false);
+
+          }
+        });
+    
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
   }, [navigation,sortMode,postCount,search]);
 
   const DeletePost = ({item}) => {

@@ -27,7 +27,10 @@ export default function App() {
   //Theme for chats
   const theme: DeepPartial<Theme> = {
     avatar:{
-      BASE_AVATAR_SIZE:200
+      BASE_AVATAR_SIZE:50
+    },
+    groupAvatar:{
+      
     },
     channelPreview: {
       container : {

@@ -22,11 +22,19 @@ import { chatApiKey } from '../chatConfig';
   
     //These props allow us to display the user's name with their
     return (
-        <Channel channel={channel}
-        keyboardVerticalOffset={headerHeight}
-        deletedMessagesVisibilityType='never'
-        thread={thread}>
-          <MessageList></MessageList>
+        <Channel 
+          channel={channel}
+          keyboardVerticalOffset={headerHeight}
+          deletedMessagesVisibilityType='never'
+          thread={thread}
+        >
+          <MessageList
+                onThreadSelect={(message) => {
+                if (channel?.id) {
+                  setThread(message);
+                  navigation.navigate('ThreadScreen');
+                }
+              }} />
           <MessageInput></MessageInput>
         </Channel>
     );

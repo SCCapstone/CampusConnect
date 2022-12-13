@@ -178,7 +178,7 @@ export function ChatsScreen(props) {
                 PreviewAvatar={({ channel }) => (
                   <TouchableOpacity
                     style={{flex:1}}
-                    disallowInterruption={true}
+                    disallowInterruption={false}
                     onPress={async () => {
                       if(channel.data.member_count == 2 && channel.type === 'messaging') {
                         const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
