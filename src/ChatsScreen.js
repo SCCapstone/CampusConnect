@@ -65,20 +65,15 @@ export function ChatsScreen(props) {
 
 ///This page shouls have all the functionality for adding a creating a DM. And searching for users.
 
-    const { setChannel } = useChatContext();
+    const { setChannel,key} = useChatContext();
     const navigation = useNavigation();
     const list = useRef(FlatList)
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
-    const [key, setKey] = useState(0)
       //Right here, create a query that will only return the private DMs a User is in
 
-      const ReloadList = () => {
-      setKey((key)=>key+1)
-    }
-
-    const myClientEventListener = chatClient.on('message.new', ReloadList)
+    
 
     const DMFilter = {
       $and: [
@@ -106,18 +101,7 @@ export function ChatsScreen(props) {
     };
 
 
-
-
-    useEffect(() => {
-      
-      if (selectedType === 0) {
-        setFilter(DMFilter);
-      } else {
-        setFilter(GroupFilter)
-      }
-
-      return () => {myClientEventListener.unsubscribe();};
-    }, [selectedType]); //I guess this tells react to update when these variables change?
+    
 
 
 
@@ -165,6 +149,7 @@ export function ChatsScreen(props) {
           }
         },[]);
 
+
        return (
         <View style={{}}>
           <TouchableOpacity
@@ -190,7 +175,7 @@ export function ChatsScreen(props) {
       const { unread } = props;
       const backgroundColor = unread ? '#e6f7ff' : '#fff';
       return (
-        <View style={{backgroundColor}}>
+        <View style={{backgroundColor: backgroundColor}}>
           <ChannelPreviewMessenger {...props} />
         </View>
       )
@@ -232,10 +217,8 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
-                key={key}
-                Preview={CustomListItem}
                 PreviewAvatar={CustomAvatar}
-                  filters={filter} 
+                  filters={selectedType == 0 ? DMFilter : GroupFilter} 
                   options={options}
                   sort={sort}
                   onSelect={(channel) => {

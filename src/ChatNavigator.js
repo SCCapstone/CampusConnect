@@ -32,6 +32,7 @@ import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
 
 import { useChatClient } from './useChatClient';
+import { useChatContext } from './ChatContext';
 
 
 import {
@@ -61,12 +62,15 @@ darkMode = false;
 export const ChatNavigator = () => {
   const navigation = useNavigation();
   const { clientIsReady } = useChatClient();
+  const {key,setKey} = useChatContext()
 
   if (!clientIsReady) {
     return <Text style={darkMode ? {color:'white',textAlign:'center',marginTop:150}:{color:'black',textAlign:'center',marginTop:150}}>Loading chat ...</Text>
   }
 
+
   const chatClient = StreamChat.getInstance(chatApiKey);
+
 
 
   

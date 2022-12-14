@@ -27,7 +27,7 @@ export default function App() {
   //Theme for chats
   const theme: DeepPartial<Theme> = {
     avatar:{
-      BASE_AVATAR_SIZE:60,
+      BASE_AVATAR_SIZE:45,
       image:{
         borderRadius:0
       }

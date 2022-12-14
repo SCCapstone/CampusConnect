@@ -20,7 +20,6 @@ export const useChatClient = () => {
   
   const [clientIsReady, setClientIsReady] = useState(false);
   const userData = useContext(AppContext);
-  const {key,setKey} = useChatContext()
   
 
   const user = {
