@@ -477,8 +477,13 @@ export function PostsScreen({navigation}) {
   };
   const choosePhotoFromLibrary = async () => {
     await launchImageLibrary({selectionLimit:1},(result) => {
-      if(result.assets.length >0){
-        setImage(result.assets[0].uri)
+      if(!result.didCancel){
+        if(result.assets.length >0 && result.assets[0].fileSize < 8000000){
+          setImage(result.assets[0].uri)
+        }
+        else{
+          Alert.alert('Filesize is too big or there is another error. Keep uploads below 5MB.')
+        }
       }
     })
 
