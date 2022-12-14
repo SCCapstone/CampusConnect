@@ -27,7 +27,10 @@ export default function App() {
   //Theme for chats
   const theme: DeepPartial<Theme> = {
     avatar:{
-      BASE_AVATAR_SIZE:50
+      BASE_AVATAR_SIZE:60,
+      image:{
+        borderRadius:0
+      }
     },
     groupAvatar:{
       
@@ -118,7 +121,6 @@ export default function App() {
                 />
                 <Stack.Screen
                   name="ProfileView"
-                  
                   component={ProfileView}
                   options={({ navigation, route }) => ({
                     // Add a placeholder button without the `onPress` to avoid flicker

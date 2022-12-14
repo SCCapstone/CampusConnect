@@ -116,8 +116,8 @@ export function PostsScreen({navigation}) {
     var query; 
     if(search) {
       query = postsRef
-      .where('author', '>=', search)
-      .where('author', '<=', search+ '\uf8ff')
+      .where('searchAuthor', '>=', search.toUpperCase())
+      .where('searchAuthor', '<=', search.toUpperCase()+ '\uf8ff')
       .limit(15)
     }
     else if(sortMode === 'Best') {
@@ -200,6 +200,7 @@ export function PostsScreen({navigation}) {
             extraData: {url} ? url : '',
             upvoters: {[auth().currentUser.uid]: true},
             downvoters: new Map(),
+            searchAuthor:userData.name.toUpperCase()
           })
           .then(() => {
             closeModal();
@@ -231,6 +232,7 @@ export function PostsScreen({navigation}) {
           extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
+          searchAuthor:'ANONYMOUS'
         })
         .then(() => {
           closeModal();
@@ -279,8 +281,8 @@ export function PostsScreen({navigation}) {
     var query; 
     if(search) {
       query = postsRef
-      .where('author', '>=', search)
-      .where('author', '<=', search+ '\uf8ff')
+      .where('searchAuthor', '>=', search.toUpperCase())
+      .where('searchAuthor', '<=', search.toUpperCase()+ '\uf8ff')
       .limit(15)
     }
     else if(sortMode === 'Best') {

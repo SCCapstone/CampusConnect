@@ -22,7 +22,7 @@ export default StyleSheet.create({
   postImage: {
     marginTop: 20,
     alignSelf: 'center',
-
+    resizeMode:'cover',
     borderRadius: 10,
     height: 200,
     width: 290,

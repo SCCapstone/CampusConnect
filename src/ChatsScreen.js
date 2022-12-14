@@ -1,6 +1,6 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import { SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet} from "react-native";
+import { SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator} from "react-native";
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton } from 'react-native-gesture-handler';
@@ -20,6 +20,7 @@ import { chatApiKey } from '../chatConfig';
 import auth from '@react-native-firebase/auth';
 import {FloatingAction} from 'react-native-floating-action';
 import AppContext from './AppContext';
+import storage from '@react-native-firebase/storage';
 
 import { useChatContext } from './ChatContext';
 
@@ -29,6 +30,7 @@ import {useNavigation} from '@react-navigation/native';
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
 import { channel } from "diagnostics_channel";
+import FastImage from "react-native-fast-image";
 
 
 var styles;
@@ -137,6 +139,63 @@ export function ChatsScreen(props) {
       </Text>
     );
 
+    const CustomAvatar = ({channel}) => {
+        const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
+        var member;
+        const [image,setImage] = useState('')
+        useEffect(() =>{
+          getPhotos = async () =>{
+            if (is2PersonChat) {
+              member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
+              if(!member.members[0].user.image) {
+                setImage(await storage().ref('Profile Pictures/'+member.members[0].user_id).getDownloadURL().catch(() =>{}))
+              }
+              else{
+                setImage(member.members[0].user.image)
+              }
+            }
+            else {
+              setImage(channel.data.image)
+            }
+            
+
+          }
+          if (!image){
+            getPhotos();
+          }
+        },[]);
+
+       return (
+        <View style={{}}>
+          <TouchableOpacity
+            disallowInterruption={false}
+            onPress={async () => {
+              if(is2PersonChat) {
+                const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
+                userData.setProfileView(member.members[0].user_id)
+                navigation.navigate('ProfileView')
+              }
+              else if (channel.type === 'team') {
+                Alert.alert('Create a group page and navigate to that here')
+              }
+            }}
+          >
+            <FastImage style={{width:60,height:60,borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}></FastImage>
+          </TouchableOpacity>
+        </View>
+        )
+      }
+
+    const CustomListItem = props => {
+      const { unread } = props;
+      const backgroundColor = unread ? '#e6f7ff' : '#fff';
+      return (
+        <View style={{backgroundColor}}>
+          <ChannelPreviewMessenger {...props} />
+        </View>
+      )
+    }
+    
     return(
           <View style={{ flex: 1}}>
             <View style={styles.searchActionContainer}>
@@ -174,31 +233,15 @@ export function ChatsScreen(props) {
             </View>
               <ChannelList
                 key={key}
-                
-                PreviewAvatar={({ channel }) => (
-                  <TouchableOpacity
-                    style={{flex:1}}
-                    disallowInterruption={false}
-                    onPress={async () => {
-                      if(channel.data.member_count == 2 && channel.type === 'messaging') {
-                        const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
-                        userData.setProfileView(member.members[0].user_id)
-                        navigation.navigate('ProfileView')
-                      }
-                      else if (channel.type === 'team') {
-                        Alert.alert('Create a group page and navigate to that here')
-                      }
-                    }}
-                  >
-                    <ChannelAvatarWithContext channel={channel}></ChannelAvatarWithContext>
-                  </TouchableOpacity>
-                  )}
+                Preview={CustomListItem}
+                PreviewAvatar={CustomAvatar}
                   filters={filter} 
                   options={options}
                   sort={sort}
                   onSelect={(channel) => {
                       setChannel(channel);
                       navigation.navigate('DMScreen');
+                      
                   }}
                   />
               <FloatingAction
