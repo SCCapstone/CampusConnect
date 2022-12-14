@@ -155,7 +155,7 @@ export function ChatsScreen(props) {
         <Swipeable
         overshootLeft={true}
         overshootRight={true}
-        friction={4}
+        friction={3.5}
         renderRightActions={() => (
           <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
             <SelectDropdown 
