@@ -72,6 +72,7 @@ export function PostsScreen({navigation}) {
   const [isVisible, setIsVisible] = useState(false);
   const [refreshing, setRefresh] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [editModalVisible,setEditModalVisile] = useState(false)
   const [replyModalVisible, setReplyModalVisible] = useState(false);
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
@@ -82,6 +83,7 @@ export function PostsScreen({navigation}) {
   const [postUploading, setPostUploading] = useState(false);
   const [reply, setReply] = React.useState('');
   const [replyItem,setReplyItem] = React.useState(new Map())
+  const [post,setPost] = useState();
   var transactionStarted = false;
   var url = '';
 
@@ -91,7 +93,7 @@ export function PostsScreen({navigation}) {
 
   const list = useRef(FlashList);
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
-  const postOptions = ["Reply", "Delete"]
+  const postOptions = ["Reply", "Edit","Delete"]
   const postOptions2 = ["Reply"]
 
   const PostAlert = () => {
@@ -172,6 +174,34 @@ export function PostsScreen({navigation}) {
       setRefresh(false)
     });
   }
+
+  const EditPost = async () => {
+    if (
+      postText &&
+      postText.length < 1000 &&
+      postText.split(/\r\n|\r|\n/).length <=
+        25 /*this last one checks that there are not too many lines */
+    ){
+      setPostUploading(true)
+      firestore()
+        .collection('Posts')
+        .doc(post)
+        .update({
+          body: postText,
+          })
+          .then(() => {
+            closeModal();
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'HomeScreen'}],
+            });
+          })
+          .catch(error => {
+            console.log(error.code);
+          });
+        }
+    }
+
 
   const CreatePost = async () => {
     if (
@@ -506,6 +536,13 @@ export function PostsScreen({navigation}) {
                 setReplyItem(item)
                 setReplyModalVisible(true)
               }
+              else if(option === 'Edit') {
+                setPost(item.key);
+                console.log(item.body)
+                setPostText(item.body)
+                this.floatingAction.animateButton()
+                setModalVisible(true);
+              }
               else if (option === 'Delete') {
                 DeletePostAlert({item});
               }
@@ -577,6 +614,7 @@ export function PostsScreen({navigation}) {
   const closeModal = () => {
     this.floatingAction.animateButton();
     setPostUploading(false)
+    setPost('')
     setImage('')
     url = ''
     setPostIsAnonymous(false)
@@ -632,9 +670,16 @@ export function PostsScreen({navigation}) {
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => PostAlert()}
+                onPress={() => {
+                  if(post){
+                    EditPost();
+                  }
+                  else{
+                    PostAlert()
+                  }
+                }}
                 style={styles.postButton}>
-                <Text style={styles.postButtonText}>Post?</Text>
+                <Text style={styles.postButtonText}>{post ? 'Save' :'Post?'}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.postTextView}>
@@ -644,14 +689,15 @@ export function PostsScreen({navigation}) {
               <TextInput
                 style={styles.postInput}
                 multiline={true}
+                defaultValue={postText}
                 onChangeText={postText => setPostText(postText)}
-                placeholder="Enter your post"
+                placeholder={post ? '':"Enter your post"}
                 textAlignVertical="top"
                 placeholderTextColor="black"
                 blurOnSubmit={false}
               />}
             </View>
-            <View style={styles.bottomPostButtonsContainer}>
+            {!post ? <View style={styles.bottomPostButtonsContainer}>
               <View style={styles.checkBoxBox}>
                 <BouncyCheckbox
                   size={20}
@@ -677,7 +723,7 @@ export function PostsScreen({navigation}) {
                   title={image ? 'Image Loaded ✅' : 'Upload a picture'}
                   />
 
-            </View>
+            </View>: null}
           </View>
         </KeyboardAvoidingView>
       </Modal>
