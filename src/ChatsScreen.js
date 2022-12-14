@@ -12,6 +12,9 @@ import {
     ChannelPreviewMessenger,
     ChannelPreview,
     AnimatedGalleryImage,
+    MenuPointHorizontal,
+    useTheme,
+    Delete
   } from 'stream-chat-react-native';
 
 
@@ -71,15 +74,12 @@ export function ChatsScreen(props) {
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
-    const [key,setKey] = useState(1)
-    const [loading, setLoading] = useState(true)
+    const [key,setKey] = useState(0)
       //Right here, create a query that will only return the private DMs a User is in
 
     const ReloadList = () => {
       setKey((key) => key+1)
-      console.log('hello')
     }
-    
 
     const DMFilter = {
       $and: [
@@ -106,31 +106,77 @@ export function ChatsScreen(props) {
       watch: true,
     };
 
-
-    
-
-    useEffect(() => {
-      chatClient.on('message.new',ReloadList)
-      setLoading(false)
-    },[])
-
     //sets selectedtype
     const updateSelectedType = selectedType => () => {
       setSelectedType(() => selectedType);
     };
 
 
+
+    useEffect(() => {
+      const myListener = chatClient.on('message.new',ReloadList)
+    },[])
+
+    useEffect(() => {
+      if (selectedType === 0) {
+        setFilter(DMFilter);
+      } else {
+        setFilter(GroupFilter)
+      }
+    },[selectedType])
+
+
+
     //Need to make the little preview chat slidable so we can delete and stuff, but very hard
-    const SlidablePreview = ( {channel} ) => (
-        <ChannelPreviewMessenger channel={channel}></ChannelPreviewMessenger>
-    )
+
 
     //You can customize the persons display name and extra data like major if wanted
     const CustomPreviewTitle = ( {channel} ) => (
       <Text>
-        {channel.data.name}
+        potato
       </Text>
     );
+    const CustomListItem = props => {
+      const { unread } = props;
+      const { channel } = props;
+      const backgroundColor = unread ? '#c6edff' : '#fff';
+      const {
+        theme: {
+          colors: { accent_red, white_smoke },
+        },
+      } = useTheme();
+      return (
+        <Swipeable
+        overshootLeft={true}
+        overshootRight={true}
+        friction={4}
+        renderRightActions={() => (
+          <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
+            <RectButton
+              onPress={() => {
+                
+              }}
+              style={[styles.leftSwipeableButton]}
+            >
+              <MenuPointHorizontal />
+            </RectButton>
+            <RectButton
+              onPress={() => {
+                channel.hide(null,true)
+              }}
+              style={[styles.rightSwipeableButton]}
+            >
+              <Delete pathFill={accent_red} />
+            </RectButton>
+          </View>
+        )}
+      >
+          <View style={{backgroundColor}}>
+            <ChannelPreviewMessenger {...props} />
+          </View>
+        </Swipeable>
+      )
+    }
 
     const CustomAvatar = ({channel}) => {
         const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
@@ -157,8 +203,6 @@ export function ChatsScreen(props) {
           }
         },[]);
 
-
-
        return (
         <View style={{}}>
           <TouchableOpacity
@@ -180,27 +224,7 @@ export function ChatsScreen(props) {
         )
       }
 
-    const CustomListItem = props => {
-      const { unread } = props;
-      const backgroundColor = unread ? '#e6f7ff' : '#fff';
-      return (
-        <View style={{backgroundColor: backgroundColor}}>
-          <ChannelPreviewMessenger {...props} />
-        </View>
-      )
-    }
 
-    
-    if (loading) {
-      return(
-      <View style={{flex:1}}>
-        <ActivityIndicator>
-
-        </ActivityIndicator>
-      </View>
-      )
-    }
-    
     return(
           <View style={{ flex: 1}}>
             <View style={styles.searchActionContainer}>
@@ -237,9 +261,10 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
-              key={key}
+                key={key}
+                Preview={CustomListItem}
                 PreviewAvatar={CustomAvatar}
-                  filters={selectedType == 0 ? DMFilter : GroupFilter} 
+                  filters={filter} 
                   options={options}
                   sort={sort}
                   onSelect={(channel) => {

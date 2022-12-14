@@ -146,6 +146,21 @@ export default StyleSheet.create({
   placeholderText: 
     {fontSize:30, alignSelf:'center',color:'black',marginBottom:250},
   placeholderView:{justifyContent:'center'},
+
+  leftSwipeableButton: {
+    paddingLeft: 16,
+    paddingRight: 8,
+    paddingVertical: 20,
+  },
+  rightSwipeableButton: {
+    paddingLeft: 8,
+    paddingRight: 16,
+    paddingVertical: 20,
+  },
+  swipeableContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   
 
 });

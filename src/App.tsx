@@ -38,6 +38,7 @@ export default function App() {
     channelPreview: {
       container : {
         height:85,
+        backgroundColor:'transparent'
       },
       contentContainer: { 
       },

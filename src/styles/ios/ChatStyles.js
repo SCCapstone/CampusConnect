@@ -177,6 +177,21 @@ export default StyleSheet.create({
     color: '#999',
     fontWeight: 'bold',
   },
+
+  leftSwipeableButton: {
+    paddingLeft: 16,
+    paddingRight: 8,
+    paddingVertical: 20,
+  },
+  rightSwipeableButton: {
+    paddingLeft: 8,
+    paddingRight: 16,
+    paddingVertical: 20,
+  },
+  swipeableContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   
 
 });
