@@ -65,14 +65,20 @@ export function ChatsScreen(props) {
 
 ///This page shouls have all the functionality for adding a creating a DM. And searching for users.
 
-    const { setChannel,key} = useChatContext();
+    const { setChannel} = useChatContext();
     const navigation = useNavigation();
     const list = useRef(FlatList)
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
+    const [key,setKey] = useState(1)
+    const [loading, setLoading] = useState(true)
       //Right here, create a query that will only return the private DMs a User is in
 
+    const ReloadList = () => {
+      setKey((key) => key+1)
+      console.log('hello')
+    }
     
 
     const DMFilter = {
@@ -103,7 +109,10 @@ export function ChatsScreen(props) {
 
     
 
-
+    useEffect(() => {
+      chatClient.on('message.new',ReloadList)
+      setLoading(false)
+    },[])
 
     //sets selectedtype
     const updateSelectedType = selectedType => () => {
@@ -142,12 +151,12 @@ export function ChatsScreen(props) {
               setImage(channel.data.image)
             }
             
-
           }
           if (!image){
             getPhotos();
           }
         },[]);
+
 
 
        return (
@@ -178,6 +187,17 @@ export function ChatsScreen(props) {
         <View style={{backgroundColor: backgroundColor}}>
           <ChannelPreviewMessenger {...props} />
         </View>
+      )
+    }
+
+    
+    if (loading) {
+      return(
+      <View style={{flex:1}}>
+        <ActivityIndicator>
+
+        </ActivityIndicator>
+      </View>
       )
     }
     
@@ -217,6 +237,7 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
+              key={key}
                 PreviewAvatar={CustomAvatar}
                   filters={selectedType == 0 ? DMFilter : GroupFilter} 
                   options={options}
