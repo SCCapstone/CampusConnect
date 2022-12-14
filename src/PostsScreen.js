@@ -538,7 +538,6 @@ export function PostsScreen({navigation}) {
               }
               else if(option === 'Edit') {
                 setPost(item.key);
-                console.log(item.body)
                 setPostText(item.body)
                 this.floatingAction.animateButton()
                 setModalVisible(true);
