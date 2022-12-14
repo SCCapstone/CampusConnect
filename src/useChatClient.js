@@ -5,6 +5,8 @@ import { StreamChat } from 'stream-chat';
 import { chatApiKey} from '../chatConfig';
 import AppContext from './AppContext';
 
+
+
 import functions from '@react-native-firebase/functions';
 import auth from '@react-native-firebase/auth';
 import { compiledEmojis } from 'stream-chat-react-native';
@@ -18,6 +20,8 @@ export const useChatClient = () => {
   
   const [clientIsReady, setClientIsReady] = useState(false);
   const userData = useContext(AppContext);
+  const {key,setKey} = useChatContext()
+  
 
   const user = {
     id: auth().currentUser.uid,
