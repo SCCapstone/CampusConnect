@@ -13,6 +13,7 @@ import {
     ChannelPreview,
     AnimatedGalleryImage,
     MenuPointHorizontal,
+    
     useTheme,
     Delete
   } from 'stream-chat-react-native';
@@ -24,6 +25,7 @@ import auth from '@react-native-firebase/auth';
 import {FloatingAction} from 'react-native-floating-action';
 import AppContext from './AppContext';
 import storage from '@react-native-firebase/storage';
+import SelectDropdown from 'react-native-select-dropdown'
 
 import { useChatContext } from './ChatContext';
 
@@ -139,12 +141,16 @@ export function ChatsScreen(props) {
     const CustomListItem = props => {
       const { unread } = props;
       const { channel } = props;
+      const { channels, reloadList } = useContext(ChannelsContext);
       const backgroundColor = unread ? '#c6edff' : '#fff';
       const {
         theme: {
           colors: { accent_red, white_smoke },
         },
       } = useTheme();
+      const channelOptions = ["Mute", "Block"]
+      const channelOptions2 = ["Unmute", "Block"]
+      
       return (
         <Swipeable
         overshootLeft={true}
@@ -152,17 +158,35 @@ export function ChatsScreen(props) {
         friction={4}
         renderRightActions={() => (
           <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
+            <SelectDropdown 
+            defaultButtonText="• • •" 
+            rowTextStyle={{fontSize:10}}
+            buttonTextStyle={{backgroundColor:'transparent'}}
+            buttonTextAfterSelection={() =>{return "• • •"}}
+            data={channel.muteStatus().muted? channelOptions2 : channelOptions}
+            onSelect={async (selection) => {
+              if (selection === 'Mute'){
+                await channel.mute()
+                setKey((key) => key+1)
+              }
+              else if (selection ==='Unmute'){
+                await channel.unmute()
+                setKey((key) => key+1)
+              }
+              else if (selection === 'Block'){
+                Alert.alert('Message','Sorry, this feature hasn\'t been implemented yet. Try muting and then deleting the chat.')
+              }
+            }}
+            buttonStyle={{width:70,height:70,backgroundColor:'transparent'}}>
+            </SelectDropdown>
             <RectButton
               onPress={() => {
-                
-              }}
-              style={[styles.leftSwipeableButton]}
-            >
-              <MenuPointHorizontal />
-            </RectButton>
-            <RectButton
-              onPress={() => {
-                channel.hide(null,true)
+                if(channel.type === 'messaging') {
+                  channel.hide(null,true)
+                }
+                else if (channel.type === 'team') {
+                  channel.hide()
+                }
               }}
               style={[styles.rightSwipeableButton]}
             >

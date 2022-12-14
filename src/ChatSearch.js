@@ -59,9 +59,9 @@ export function ChatSearch(props) {
   const searchGroups = async () => {
     var response;
     var groups = []
-    //I can't get it to return a list of all users if there's no keyword set yet.
+    //I can't get it to return a list of all users if there's no keyword set yet.}
     keyword 
-    ? response = await chatClient.queryChannels({type:'team' ,name: { $autocomplete: keyword },},{last_active:-1},{limit:searchLimit})
+    ? response = await chatClient.queryChannels({type:'team' ,name: { $autocomplete: keyword }},{last_active:-1},{limit:searchLimit})
     : response = await chatClient.queryChannels({type:'team'},{member_count:-1},{limit:searchLimit}) //Displays all users that are online
     response.map((channel) => {
       groups.push(channel.data)
