@@ -23,10 +23,11 @@ import {FloatingAction} from 'react-native-floating-action';
 import ImageView from 'react-native-image-viewing';
 import moment from 'moment';
 import AppContext from './AppContext';
-import {color, sub} from 'react-native-reanimated';
+import {color, sub, ZoomIn} from 'react-native-reanimated';
 import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -475,16 +476,12 @@ export function PostsScreen({navigation}) {
     }
   };
   const choosePhotoFromLibrary = async () => {
-    await ImagePicker.openPicker({
-      width: 300,
-      height: 300,
-      mediaType: 'photo',
-      cropping: true
+    await launchImageLibrary({selectionLimit:1},(result) => {
+      if(result.assets.length >0){
+        setImage(result.assets[0].uri)
+      }
     })
-      .then(image => {
-        setImage(image.path);
-      })
-      .catch(error => {});
+
   };
 
   const uploadPic = async () => {
