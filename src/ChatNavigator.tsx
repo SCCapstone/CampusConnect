@@ -63,16 +63,7 @@ darkMode = false;
 //The top level stack navigaor for chats. I don't think this needs to be changed much anymore....
 
 
-notifee.onBackgroundEvent(async ({ detail, type }) => {
-  if (type === EventType.PRESS) {
-    // user press on notification detected while app was on background on Android
-    const channelId = detail.notification?.data?.channel_id;
-    if (channelId) {
-      //navigationContainerRef.current?.navigate('DMScreen', { channelId });
-    }
-    await Promise.resolve();
-  }
-});
+
 
 export const ChatNavigator = () => {
   const navigation = useNavigation();
@@ -154,6 +145,21 @@ export const ChatNavigator = () => {
       }
     }
   });
+  notifee.onBackgroundEvent(async ({ detail, type }) => {
+    if (type === EventType.PRESS) {
+      // user press on notification detected while app was on background on Android
+      const channelId = detail.notification?.data?.channel_id;
+      if (channelId) {
+        //navigationContainerRef.current?.navigate('DMScreen', { channelId });
+      }
+      await Promise.resolve();
+    }
+  });
+
+  const clearBadge = async () => {
+    await notifee.setBadgeCount(0);
+  };
+  clearBadge();
 
     return () => {
       unsubscribeOnNotificationOpen();
