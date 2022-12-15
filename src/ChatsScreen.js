@@ -1,7 +1,6 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import { SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator} from "react-native";
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList,SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground,TouchableOpacity} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton } from 'react-native-gesture-handler';
 
@@ -13,7 +12,6 @@ import {
     ChannelPreview,
     AnimatedGalleryImage,
     MenuPointHorizontal,
-    
     useTheme,
     Delete
   } from 'stream-chat-react-native';
@@ -36,6 +34,9 @@ import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
 import { channel } from "diagnostics_channel";
 import FastImage from "react-native-fast-image";
+import { BackgroundImage , Button, Input} from "@rneui/base";
+import moment from "moment";
+import { FAB } from '@rneui/themed';
 
 
 var styles;
@@ -49,23 +50,10 @@ if (Platform.OS === 'ios') {
 export function ChatsScreen(props) {
   const userData = useContext(AppContext);
 
+  const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
+  const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
-  const actions = [
-    {
-        text: "Create Group",
-        name: "bt_create_group",
-        icon: source={uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png'},
-        position: 2,
-        color: '#73000a',
-    },
-    {
-        text: "Search User or Group",
-        name: "bt_search",
-        icon: source={uri:'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png'},
-        position: 1,
-        color: '#73000a',
-    }
-];
+
 
 
 ///This page shouls have all the functionality for adding a creating a DM. And searching for users.
@@ -77,6 +65,11 @@ export function ChatsScreen(props) {
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
     const [key,setKey] = useState(0)
+    const [userSearch,setUserSearch] = useState('')
+    const [searchModalVisible,setSearchModalVisible] = useState(false)
+    const [data, setData] = useState([]);
+    const searchLimit = 30;
+    const [addGroupVisible,setAddGroupVisible] = useState(false)
       //Right here, create a query that will only return the private DMs a User is in
 
     const ReloadList = () => {
@@ -118,16 +111,73 @@ export function ChatsScreen(props) {
     useEffect(() => {
       const myListener = chatClient.on('message.new',ReloadList)
     },[])
-
+    useEffect(() => {
+      if (selectedType === 0) {
+        searchUsers();
+      } else {
+        searchGroups();
+      }
+    }, [userSearch,selectedType]); //I guess this tells react to update when these variables change?
     useEffect(() => {
       if (selectedType === 0) {
         setFilter(DMFilter);
+        setAddGroupVisible(false)
       } else {
         setFilter(GroupFilter)
+        setAddGroupVisible(true)
       }
     },[selectedType])
 
+  //searches users when selected type is 0
+  const searchUsers = async () => {
+    var response;
+    userSearch 
+    ? response = await chatClient.queryUsers({ name: { $autocomplete: userSearch },id: {$ne:chatClient.user.id}},{last_active:-1},{limit:searchLimit})
+    : response = await chatClient.queryUsers({role:'user' ,id: {$ne:chatClient.user.id}},{last_active:-1},{limit:searchLimit}) //Displays all users that are not yourself. Displaying users that are online is not working yet
+      setData(response.users)
+    }
 
+  //searches groups when selected type is 1
+  const searchGroups = async () => {
+    var response;
+    var groups = []
+    //I can't get it to return a list of all users if there's no keyword set yet.}
+    userSearch 
+    ? response = await chatClient.queryChannels({type:'team' ,name: { $autocomplete: userSearch }},{last_active:-1},{limit:searchLimit})
+    : response = await chatClient.queryChannels({type:'team'},{member_count:-1},{limit:searchLimit}) //Displays all users that are online
+    response.map((channel) => {
+      groups.push(channel.data)
+    })
+    setData(groups)
+      
+  };
+    //sends user to chat
+    const selectItem = item => async () => {
+      console.log(item)
+      if(item.role === 'user'){
+        const channel = chatClient.channel('messaging', {
+            members: [chatClient.user.id, item.id],
+        });
+        await channel.watch()
+        setChannel(channel)
+        this.floatingAction.animateButton();
+        navigation.navigate('DMScreen');
+        
+      }
+      else if (item.type === 'team'){
+        console.log(item.id)
+        const channel = chatClient.channel('team', item.id, {});
+        if(chatClient.user.id)
+          await channel.addMembers([chatClient.user.id]);
+        setChannel(channel)
+        this.floatingAction.animateButton();
+        navigation.navigate('DMScreen');
+      }
+    };
+      //returns uid of chat
+  const getKey = item => {
+    return item.id
+  };
 
     //Need to make the little preview chat slidable so we can delete and stuff, but very hard
 
@@ -206,11 +256,13 @@ export function ChatsScreen(props) {
     const CustomAvatar = ({channel}) => {
         const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
         var member;
+        const [isOnline, setIsOnline] = useState(false)
         const [image,setImage] = useState('')
         useEffect(() =>{
           getPhotos = async () =>{
             if (is2PersonChat) {
               member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
+              setIsOnline(member.members[0].user.online)
               if(!member.members[0].user.image) {
                 setImage(await storage().ref('Profile Pictures/'+member.members[0].user_id).getDownloadURL().catch(() =>{}))
               }
@@ -243,15 +295,78 @@ export function ChatsScreen(props) {
               }
             }}
           >
-            <FastImage style={{width:60,height:60,borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}></FastImage>
+            <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+              {isOnline ? <Image style={{width:12,height:10, position:'absolute', right:2}} source={require('./assets/green_dot.png')}></Image> : null}
+            </ImageBackground>
           </TouchableOpacity>
         </View>
         )
       }
 
+        //Make this users instead
+  //shows list of chats
+  const renderUsers = ({item}) => {
+    var isOnline = item.online
+    return (
+      <TouchableOpacity style={styles.chatListItem} onPress={selectItem(item)}>
+        <ImageBackground
+          style={{width:60,height:60}}
+          imageStyle={{borderRadius:60}}
+          source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+            {isOnline ? 
+            <Image style={{width:12,height:10, position:'absolute', right:2}} source={require('./assets/green_dot.png')}></Image> : null}
+        </ImageBackground>
+        <View>
+          <Text style={styles.chatListItemLabel}>{item.name}</Text>
+          <Text style={{fontSize:10,color:'black',marginLeft:'2%'}}>{'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
 
     return(
           <View style={{ flex: 1}}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={searchModalVisible}>
+            <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:'22%'}}>
+            <Button 
+              buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
+              size='lg'
+              onPress={() =>{setSearchModalVisible(false); this.floatingAction.animateButton();setUserSearch('')}}
+              titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
+              title={'Cancel'}
+              />
+            {(!userSearch && data.length < 1) ?
+              <View style={styles.placeholderView}>
+                <Text style={styles.placeholderText}>Guess no one's online...</Text>
+              </View> :
+              <View style={{flex:1,height:'100%'}}>
+                <FlatList
+                  style={{flex:1}}
+                  data={data}
+                  renderItem={renderUsers}
+                  keyExtractor={(item, index) => getKey(item)}
+                />
+              </View>}
+
+            
+            <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:.1,marginTop:"12%",justifyContent:'flex-end'}}>
+              <Input 
+                style={{alignSelf:'flex-end',alignItems:'flex-end'}}
+                placeholder="Search"
+                leftIcon={{ type: 'font-awesome', name: 'search' }}
+                onChangeText={setUserSearch}>
+              </Input>
+
+            </KeyboardAvoidingView>
+          
+          
+            </View>
+
+          </Modal>        
             <View style={styles.searchActionContainer}>
               <TouchableOpacity
                 style={[
@@ -265,7 +380,7 @@ export function ChatsScreen(props) {
                     styles.searchActionLabel,
                     selectedType === 0 && styles.searchActionLabelActive,
                   ]}>
-                  Private
+                  Users
                 </Text>
               </TouchableOpacity>
 
@@ -281,7 +396,7 @@ export function ChatsScreen(props) {
                     styles.searchActionLabel,
                     selectedType === 1 && styles.searchActionLabelActive,
                   ]}>
-                  Public
+                  Groups
                 </Text>
               </TouchableOpacity>
             </View>
@@ -298,18 +413,22 @@ export function ChatsScreen(props) {
                       
                   }}
                   />
+              <View style={{alignItems:'flex-start',backgroundColor:'white'}}>
+                <FAB
+                  title="Create A Group"
+                  color="#73000a"
+                  style={{marginBottom:35,marginLeft:20}}
+                  visible={addGroupVisible}
+                  icon={{ name: 'add', color: 'white' }}
+                  size="small"
+                />
+              </View>
               <FloatingAction
                 color="#73000a"
-                actions={actions}
-                onPressMain={() => {}}
+                onPressMain={() => {setSearchModalVisible(!searchModalVisible)}}
                 onPressItem={name => {
                   
-                  if(name === 'bt_create_group'){
-                    navigation.navigate('CreateGroup')
-                  }
-                  else if (name === 'bt_search'){
-                    navigation.navigate('ChatSearch')
-                  }
+
                 }}
                 ref={ref => {
                   this.floatingAction = ref;
