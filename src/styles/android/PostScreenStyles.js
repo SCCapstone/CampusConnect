@@ -130,6 +130,7 @@ export default StyleSheet.create({
     marginRight: '3%',
     alignSelf: 'flex-end',
     flex: 1,
+    flexGrow:1
   },
   postReply: {
     backgroundColor: '#a8a1a6',
@@ -242,5 +243,11 @@ export default StyleSheet.create({
     alignSelf:'center',
     alignContent:'center',
 
-  }
+  },
+  postDropdownButton: {
+    width:69,height:18,backgroundColor:'transparent',alignSelf:'flex-start',position:'absolute',right:-10,top:-7
+  },
+  editedAndOptionsBox: 
+    {flexDirection:'row',flexGrow:1,height:25,backgroundColor:'transparent'},
+  
 });

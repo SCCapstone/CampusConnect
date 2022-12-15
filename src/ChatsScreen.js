@@ -141,6 +141,7 @@ export function ChatsScreen(props) {
     const CustomListItem = props => {
       const { unread } = props;
       const { channel } = props;
+      const [muteStatus, setMuteStatus] = useState(channel.muteStatus().muted)
       const { channels, reloadList } = useContext(ChannelsContext);
       const backgroundColor = unread ? '#c6edff' : '#fff';
       const {
@@ -163,7 +164,7 @@ export function ChatsScreen(props) {
             rowTextStyle={{fontSize:10}}
             buttonTextStyle={{backgroundColor:'transparent'}}
             buttonTextAfterSelection={() =>{return "• • •"}}
-            data={channel.muteStatus().muted? channelOptions2 : channelOptions}
+            data={muteStatus? channelOptions2 : channelOptions}
             onSelect={async (selection) => {
               if (selection === 'Mute'){
                 await channel.mute()
