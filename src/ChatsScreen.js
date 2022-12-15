@@ -417,6 +417,9 @@ export function ChatsScreen(props) {
                 <FAB
                   title="Create A Group"
                   color="#73000a"
+                  onPress={() => {
+                    navigation.navigate('CreateGroup')
+                  }}
                   style={{marginBottom:35,marginLeft:20}}
                   visible={addGroupVisible}
                   icon={{ name: 'add', color: 'white' }}
