@@ -163,17 +163,7 @@ export function ChatSearch(props) {
       <View>
       <SearchBar containerStyle={{backgroundColor:'white'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#0001'}} onChangeText={setKeyword} placeholder='Enter a name to search' value={keyword}></SearchBar>
       </View>
-      {(!keyword && data.length < 1) ?
-      <View style={styles.placeholderView}>
-        <Text style={styles.placeholderText}>Guess no one's online...</Text>
-      </View> :
-      <View style={styles.chatList}>
-        <FlatList
-          data={data}
-          renderItem={renderItems}
-          keyExtractor={(item, index) => getKey(item)}
-        />
-      </View>}
+
     </View>
   );
 }
