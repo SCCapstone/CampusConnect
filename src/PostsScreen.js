@@ -189,6 +189,7 @@ export function PostsScreen({navigation}) {
         .doc(post)
         .update({
           body: postText,
+          edited:true
           })
           .then(() => {
             closeModal();
@@ -231,7 +232,8 @@ export function PostsScreen({navigation}) {
             extraData: {url} ? url : '',
             upvoters: {[auth().currentUser.uid]: true},
             downvoters: new Map(),
-            searchAuthor:userData.name.toUpperCase()
+            searchAuthor:userData.name.toUpperCase(),
+            edited:false
           })
           .then(() => {
             closeModal();
@@ -263,7 +265,8 @@ export function PostsScreen({navigation}) {
           extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
-          searchAuthor:'ANONYMOUS'
+          searchAuthor:'ANONYMOUS',
+          edited:false
         })
         .then(() => {
           closeModal();
@@ -530,30 +533,34 @@ export function PostsScreen({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={styles.post}>
-          <SelectDropdown
-            data={item.postIsYours ? postOptions : postOptions2}
-            buttonTextAfterSelection={() => {return '• • •'}}
-            onSelect={(option) => {
-              if(option === 'Reply') {
-                setReplyItem(item)
-                setReplyModalVisible(true)
-              }
-              else if(option === 'Edit') {
-                setPost(item.key);
-                setPostText(item.body)
-                this.floatingAction.animateButton()
-                setModalVisible(true);
-              }
-              else if (option === 'Delete') {
-                DeletePostAlert({item});
-              }
-            }}
-            
-            defaultButtonText='• • •'
-            buttonTextStyle={{color:'white',fontSize:20}}
-            buttonStyle={{width:69,height:20,backgroundColor:'#a8a1a6',alignSelf:'flex-end'}}
-          
-          />
+          <View style={styles.editedAndOptionsBox}>
+              <Text>{item.edited ? 'EDITED' : ''}</Text>
+              <SelectDropdown
+                data={item.postIsYours ? postOptions : postOptions2}
+                buttonTextAfterSelection={() => {return '• • •'}}
+                onSelect={(option) => {
+                  if(option === 'Reply') {
+                    setReplyItem(item)
+                    setReplyModalVisible(true)
+                  }
+                  else if(option === 'Edit') {
+                    setPost(item.key);
+                    setPostText(item.body)
+                    this.floatingAction.animateButton()
+                    setModalVisible(true);
+                  }
+                  else if (option === 'Delete') {
+                    DeletePostAlert({item});
+                  }
+                }}
+                
+                defaultButtonText='• • •'
+                buttonTextStyle={{color:'white',fontSize:20}}
+                buttonStyle={styles.postDropdownButton}
+                
+              
+              />
+            </View>
           <View style={styles.postUserImageAndInfoBox}>
             <Pressable onPress={() => {
               if(item.author !== 'Anonymous'){
@@ -606,6 +613,7 @@ export function PostsScreen({navigation}) {
               <Text style={styles.date}>{item.replyCount}</Text>
             </View>
           </View>
+          
         </View>
       </View>
     );
