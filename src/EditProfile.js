@@ -114,6 +114,7 @@ export function EditProfileScreen({navigation}) {
             gradYear: gradDate,
             bio: bio,
             pfp: url,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -138,6 +139,7 @@ export function EditProfileScreen({navigation}) {
             firstLogin: false,
             gradYear: gradDate,
             pfp: url,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -160,6 +162,7 @@ export function EditProfileScreen({navigation}) {
             firstLogin: false,
             gradYear: gradDate,
             bio: bio,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -180,6 +183,7 @@ export function EditProfileScreen({navigation}) {
             major: major,
             firstLogin: false,
             gradYear: gradDate,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
           })
           .then(() => {
             setRegistraionSuccess(true);

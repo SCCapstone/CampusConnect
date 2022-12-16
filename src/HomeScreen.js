@@ -33,6 +33,8 @@ import storage from '@react-native-firebase/storage';
 
 import androidscreenOptions from './styles/android/HomeScreenStyles';
 import iosscreenOptions from './styles/ios/HomeScreenStyles';
+import { AlumniPostsScreen } from './AlumniPostsScreen.js';
+import { Search } from './Search.js';
 
 var screenOptions;
 
@@ -157,6 +159,18 @@ export function HomeScreen({navigation}) {
           component={SportsScreen}
           options={{headerTitle: 'Campus Connect: Sports'}}
         />
+        <Drawer.Screen
+          name="Alumni"
+          component={AlumniPostsScreen}
+          options={{
+            headerTitle: 'Campus Connect: Alumni',
+          }}/>
+        <Drawer.Screen
+          name="Search"
+          component={Search}
+          options={{
+            headerTitle: 'Campus Connect: Search',
+        }}/>
         <Drawer.Screen
           name="Edit Profile"
           component={EditProfileScreen}

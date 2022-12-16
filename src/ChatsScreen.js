@@ -1,8 +1,8 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableOpacity} from "react-native";
+import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { RectButton,FlatList, gestureHandlerRootHOC} from 'react-native-gesture-handler';
+import { RectButton,FlatList, gestureHandlerRootHOC,TouchableOpacity} from 'react-native-gesture-handler';
 
 import { LogBox } from 'react-native';
 
@@ -320,23 +320,9 @@ export function ChatsScreen(props) {
 
        return (
           <View style={{}}>
-            <TouchableOpacity
-              style={{width:60,height:60}}
-              onPress={async () => {
-                if(is2PersonChat) {
-                  const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
-                  userData.setProfileView(member.members[0].user_id)
-                  navigation.navigate('ProfileView')
-                }
-                else if (channel.type === 'team') {
-                  Alert.alert('Create a group page and navigate to that here')
-                }
-              }}
-            >
               <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
                 {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
               </ImageBackground>
-            </TouchableOpacity>
           </View>
         )
       }
@@ -350,7 +336,7 @@ export function ChatsScreen(props) {
       <Swipeable
       overshootLeft={true}
       overshootRight={true}
-      friction={3.5}
+      friction={3}
 
       renderLeftActions={() => (
         <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
@@ -416,7 +402,11 @@ export function ChatsScreen(props) {
       )}
     >
           <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              userData.setProfileView(item.id)
+              this.floatingAction.animateButton();
+              navigation.navigate('ProfileView')
+            }}>
               <ImageBackground
                 style={{width:60,height:60}}
                 imageStyle={{borderRadius:60}}

@@ -100,13 +100,14 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
   postButton: {
-    marginLeft: '57%',
-    marginBottom: '1%',
+    position:'absolute',
+    right:20,
+    top:-15,
   },
   cancelButton: {
-    alignSelf: 'flex-start',
-    marginLeft: '10%',
-    marginBottom: '1%',
+    position:'absolute',
+    left:20,
+    top:-15,
   },
   container: {
     flex: 1,

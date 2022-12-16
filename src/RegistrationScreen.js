@@ -131,6 +131,8 @@ const RegisterError = () => {
             gradYear: gradDate,
             bio: bio,
             pfp: url,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            joined: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -155,6 +157,9 @@ const RegisterError = () => {
             firstLogin: false,
             gradYear: gradDate,
             pfp: url,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            joined: firestore.FieldValue.serverTimestamp()
+
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -178,6 +183,8 @@ const RegisterError = () => {
             firstLogin: false,
             gradYear: gradDate,
             bio: bio,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            joined: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -199,6 +206,8 @@ const RegisterError = () => {
             major: major,
             firstLogin: false,
             gradYear: gradDate,
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            joined: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
             setRegistraionSuccess(true);

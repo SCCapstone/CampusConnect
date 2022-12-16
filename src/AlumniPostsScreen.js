@@ -1,3 +1,4 @@
+//THIS PAGE WILL BE VIRTUALLY IDENTICAL TO THE OTHER POSTS SCREEN 
 import React from 'react';
 import {useState, useEffect, useContext, useRef} from 'react';
 import {
@@ -49,7 +50,7 @@ import androidstyles from './styles/android/PostScreenStyles';
 import androidCommentStyles from './styles/android/CommentStyles'
 
 var styles;
-var commentStylesl
+var commentStyles
 
 if (Platform.OS === 'ios') {
   styles = iosstyles;
@@ -59,7 +60,7 @@ if (Platform.OS === 'ios') {
   commentStyles = androidCommentStyles
 }
 
-export function PostsScreen({navigation}) {
+export function AlumniPostsScreen({navigation}) {
  /* if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -123,7 +124,7 @@ export function PostsScreen({navigation}) {
   const getPosts = () => {
     setRefresh(true)
     console.log(search)
-    var postsRef = firestore().collection('Posts')
+    var postsRef = firestore().collection('AlumniPosts')
     var query; 
     if(search) {
       query = postsRef
@@ -200,9 +201,10 @@ export function PostsScreen({navigation}) {
           edited:true
           })
           .then(() => {
+            closeModal();
             navigation.reset({
               index: 0,
-              routes: [{name: 'Home'}],
+              routes: [{name: 'Alumni'}],
             });
           })
           .catch(error => {
@@ -223,7 +225,7 @@ export function PostsScreen({navigation}) {
       if (image) {await uploadPic()}
       if(!postIsAnonymous){
         firestore()
-          .collection('Posts')
+          .collection('AlumniPosts')
           .doc()
           .set({
             author: userData.name,
@@ -246,7 +248,7 @@ export function PostsScreen({navigation}) {
             closeModal();
             navigation.reset({
               index: 0,
-              routes: [{name: 'Home'}],
+              routes: [{name: 'Alumni'}],
             });
 
           })
@@ -256,7 +258,7 @@ export function PostsScreen({navigation}) {
         }
       else if (postIsAnonymous) {
         firestore()
-        .collection('Posts')
+        .collection('AlumniPosts')
         .doc()
         .set({
           author: 'Anonymous',
@@ -279,9 +281,8 @@ export function PostsScreen({navigation}) {
           closeModal();
           navigation.reset({
             index: 0,
-            routes: [{name: 'Home'}],
+            routes: [{name: 'Alumni'}],
           });
-
 
         })
         .catch(error => {
@@ -318,7 +319,7 @@ export function PostsScreen({navigation}) {
       ),
     });
 
-    var postsRef = firestore().collection('Posts')
+    var postsRef = firestore().collection('AlumniPosts')
     var query; 
     if(search) {
       query = postsRef
@@ -395,7 +396,7 @@ export function PostsScreen({navigation}) {
   }, [navigation,sortMode,postCount,search]);
 
   const DeletePost = ({item}) => {
-    firestore().collection('Posts').doc(item.key).delete();
+    firestore().collection('AlumniPosts').doc(item.key).delete();
   };
   const OpenImage = ({index}) => {
     setImageIndex(imageMap.get(index));
@@ -406,7 +407,7 @@ export function PostsScreen({navigation}) {
   const UpvotePost = async ({item}) => {
     if (!transactionStarted) {
       transactionStarted = true;
-      const postRef = firestore().collection('Posts').doc(item.key);
+      const postRef = firestore().collection('AlumniPosts').doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -447,7 +448,7 @@ export function PostsScreen({navigation}) {
   const DownvotePost = async ({item}) => {
     if (!transactionStarted) {
       transactionStarted = true;
-      const postRef = firestore().collection('Posts').doc(item.key);
+      const postRef = firestore().collection('AlumniPosts').doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -500,7 +501,7 @@ export function PostsScreen({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref('/Posts/' +uuidv4());
+    const reference = storage().ref('/AlumniPosts/' +uuidv4());
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
@@ -667,7 +668,7 @@ export function PostsScreen({navigation}) {
         alignSelf: 'center',
         marginVertical: '75%',
       }}>
-      Kind of empty in here....
+      (Alumni Post here please.)
       </Text>}
       <Modal
         style={styles.modal}
