@@ -28,6 +28,8 @@ import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { useHeaderHeight } from '@react-navigation/elements';
+
 
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -88,6 +90,7 @@ export function PostsScreen({navigation}) {
   var transactionStarted = false;
   var url = '';
 
+  const headerHeight = useHeaderHeight();
 
   const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
@@ -741,7 +744,7 @@ export function PostsScreen({navigation}) {
         animationType="slide"
         transparent={true}
         visible={replyModalVisible}>
-          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:'22%'}}>
+          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:headerHeight-3}}>
           <Button 
                   buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
                   size='lg'

@@ -1,8 +1,8 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import { FlatList,SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground,TouchableOpacity} from "react-native";
+import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, TouchableOpacity , FlatList} from 'react-native-gesture-handler';
 
 import {
     ChannelList,
@@ -24,6 +24,8 @@ import {FloatingAction} from 'react-native-floating-action';
 import AppContext from './AppContext';
 import storage from '@react-native-firebase/storage';
 import SelectDropdown from 'react-native-select-dropdown'
+import { useHeaderHeight } from '@react-navigation/elements';
+
 
 import { useChatContext } from './ChatContext';
 
@@ -34,7 +36,7 @@ import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
 import { channel } from "diagnostics_channel";
 import FastImage from "react-native-fast-image";
-import { BackgroundImage , Button, Input} from "@rneui/base";
+import { BackgroundImage , Button, Icon, Input} from "@rneui/base";
 import moment from "moment";
 import { FAB } from '@rneui/themed';
 
@@ -49,6 +51,7 @@ if (Platform.OS === 'ios') {
 
 export function ChatsScreen(props) {
   const userData = useContext(AppContext);
+  const headerHeight = useHeaderHeight();
 
   const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
@@ -132,8 +135,8 @@ export function ChatsScreen(props) {
   const searchUsers = async () => {
     var response;
     userSearch 
-    ? response = await chatClient.queryUsers({ name: { $autocomplete: userSearch },id: {$ne:chatClient.user.id}},{last_active:-1},{limit:searchLimit})
-    : response = await chatClient.queryUsers({role:'user' ,id: {$ne:chatClient.user.id}},{last_active:-1},{limit:searchLimit}) //Displays all users that are not yourself. Displaying users that are online is not working yet
+    ? response = await chatClient.queryUsers({ name: { $autocomplete: userSearch },id: {$ne:chatClient.user.id}},[{last_active:-1}],{limit:searchLimit})
+    : response = await chatClient.queryUsers({role:'user' ,id: {$ne:chatClient.user.id}},[{last_active:-1}],{limit:searchLimit}) //Displays all users that are not yourself. Displaying users that are online is not working yet
       setData(response.users)
     }
 
@@ -281,25 +284,26 @@ export function ChatsScreen(props) {
         },[]);
 
        return (
-        <View style={{}}>
-          <TouchableOpacity
-            disallowInterruption={false}
-            onPress={async () => {
-              if(is2PersonChat) {
-                const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
-                userData.setProfileView(member.members[0].user_id)
-                navigation.navigate('ProfileView')
-              }
-              else if (channel.type === 'team') {
-                Alert.alert('Create a group page and navigate to that here')
-              }
-            }}
-          >
-            <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
-              {isOnline ? <Image style={{width:12,height:10, position:'absolute', right:2}} source={require('./assets/green_dot.png')}></Image> : null}
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
+          <View style={{}}>
+            <TouchableOpacity
+              disallowInterruption={true}
+              style={{}}
+              onPress={async () => {
+                if(is2PersonChat) {
+                  const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
+                  userData.setProfileView(member.members[0].user_id)
+                  navigation.navigate('ProfileView')
+                }
+                else if (channel.type === 'team') {
+                  Alert.alert('Create a group page and navigate to that here')
+                }
+              }}
+            >
+              <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+                {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
         )
       }
 
@@ -309,16 +313,25 @@ export function ChatsScreen(props) {
     var isOnline = item.online
     return (
       <TouchableOpacity style={styles.chatListItem} onPress={selectItem(item)}>
-        <ImageBackground
-          style={{width:60,height:60}}
-          imageStyle={{borderRadius:60}}
-          source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
-            {isOnline ? 
-            <Image style={{width:12,height:10, position:'absolute', right:2}} source={require('./assets/green_dot.png')}></Image> : null}
-        </ImageBackground>
+        <TouchableOpacity onPress={() => {
+          userData.setProfileView(item.id)
+          setSearchModalVisible(false); 
+          this.floatingAction.animateButton();
+          setUserSearch('')
+          navigation.navigate('ProfileView')
+
+        }}>
+          <ImageBackground
+            style={{width:60,height:60}}
+            imageStyle={{borderRadius:60}}
+            source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+              {isOnline ? 
+              <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+          </ImageBackground>
+        </TouchableOpacity>
         <View>
           <Text style={styles.chatListItemLabel}>{item.name}</Text>
-          <Text style={{fontSize:10,color:'black',marginLeft:'2%'}}>{'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+          <Text style={{fontSize:10,color:'black',marginLeft:'2%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -331,7 +344,7 @@ export function ChatsScreen(props) {
               animationType="slide"
               transparent={true}
               visible={searchModalVisible}>
-            <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:'22%'}}>
+            <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:headerHeight-3}}>
             <Button 
               buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
               size='lg'
@@ -353,9 +366,10 @@ export function ChatsScreen(props) {
               </View>}
 
             
-            <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:.1,marginTop:"12%",justifyContent:'flex-end'}}>
+            <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:.1,marginTop:"2%",justifyContent:'flex-end'}}>
               <Input 
                 style={{alignSelf:'flex-end',alignItems:'flex-end'}}
+                containerStyle={{backgroundColor:'white'}}
                 placeholder="Search"
                 leftIcon={{ type: 'font-awesome', name: 'search' }}
                 onChangeText={setUserSearch}>
@@ -427,6 +441,10 @@ export function ChatsScreen(props) {
                 />
               </View>
               <FloatingAction
+                floatingIcon={(<Icon type="font-awesome" name="search" color='white'/>)}
+                iconHeight={40}
+                iconWidth={40}
+                
                 color="#73000a"
                 onPressMain={() => {setSearchModalVisible(!searchModalVisible)}}
                 onPressItem={name => {
