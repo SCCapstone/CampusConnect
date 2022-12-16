@@ -80,7 +80,7 @@ export function ProfileView({navigation}) {
                     });
 
                     await channel.watch()
-                    navigation.navigate('Chats',{screen:'DMScreen', initial:false ,params:{channelID: channel.id}})
+                    navigation.navigate('Chats',{screen:'DMScreen', initial:false ,params:{channel: channel}})
 
                 }}
                 size='lg' title={'Message'} titleStyle={{color:'white'}} color={'#a8a1a6'} containerStyle={{width:200,marginTop:50,borderRadius:10}} style={{}}></Button>: null}

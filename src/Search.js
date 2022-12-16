@@ -72,7 +72,7 @@ export function Search({navigation}) {
                 navigation.navigate('ProfileView')
 
             }} style={{width:60,height:60,borderRadius:40,alignSelf:'center',marginLeft:'4%'}}>
-                <Image defaultSource={require('./assets/blank2.jpeg')} style={{width:70,height:70,borderRadius:50}} source={item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}></Image>
+                <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{width:70,height:70,borderRadius:50}} source={item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}></FastImage>
             </TouchableOpacity>
             <View style={{justifyContent:'flex-start',marginLeft:20,marginTop:5,flexShrink:1}}>
                 <Text style={{marginLeft:'5%',fontSize:24,fontWeight:'bold',color:'black'}}>{item.name}</Text>
