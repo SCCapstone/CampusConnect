@@ -13,9 +13,11 @@ import {ChatNavigator} from './ChatNavigator';
 import {CreateGroup} from './CreateGroup.js';
 import {Message} from './Message.js';
 
+
 import AppContext from './AppContext';
 
 import SelectDropdown from 'react-native-select-dropdown'
+import { useChatClient } from './useChatClient';
 
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 
@@ -39,6 +41,7 @@ export function HomeScreen({navigation}) {
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const {chatClientIsReady} =useChatClient();
 
 
 
@@ -47,6 +50,8 @@ export function HomeScreen({navigation}) {
     setUser(user);
 
     if (initializing) setInitializing(false);
+
+    
 
     if (!auth().currentUser) {
       navigation.reset({
@@ -59,6 +64,8 @@ export function HomeScreen({navigation}) {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
+
     return subscriber; // unsubscribe on unmount
   }, []);
 

@@ -10,6 +10,8 @@ import {
   Alert,
 } from 'react-native';
 import Parse from 'parse/react-native';
+import { useChatClient } from './useChatClient';
+
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -71,7 +73,7 @@ export function WelcomeScreen({navigation}) {
               } else if (auth().currentUser && !firstLogin) { //Not first login also implies the user has fully registered.
                 
                 transactionStarted = false;
-                console.log('hello')
+                
                 navigation.reset({
                   index: 0,
                   routes: [{name: 'HomeScreen'}],
@@ -375,7 +377,7 @@ const FirebaseError = (error) => {
 const EmailAlert = () => {
   Alert.alert(
     'Email Sent',
-    'EMAIL VERIFICATIONS ARE CURRENTLY DISABLED. IGNORE THIS. A verication email has been sent to your USC email. You will have to click the link before the app will allow you to fully sign in.',
+    'Email verifications are disabled for the time being. Don\'t be a *******',
     [{text: 'OK'}],
   );
 };

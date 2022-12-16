@@ -67,7 +67,6 @@ darkMode = false;
 
 export const ChatNavigator = () => {
   const navigation = useNavigation();
-  const { clientIsReady } = useChatClient();
   const {key,setKey} = useChatContext()
   const [initialChannelId, setInitialChannelId] = useState('')
   const chatClient = StreamChat.getInstance(chatApiKey);
@@ -167,9 +166,9 @@ export const ChatNavigator = () => {
   }, []);
 
 
-  if (!clientIsReady) {
+  /*if (!clientIsReady) {
     return <Text style={darkMode ? {color:'white',textAlign:'center',marginTop:150}:{color:'black',textAlign:'center',marginTop:150}}>Loading chat ...</Text>
-  }
+  }*/
 
 
 
