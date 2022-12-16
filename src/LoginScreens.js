@@ -375,7 +375,7 @@ const FirebaseError = (error) => {
 const EmailAlert = () => {
   Alert.alert(
     'Email Sent',
-    'A verication email has been sent to your USC email. You will have to click the link before the app will allow you to fully sign in.',
+    'EMAIL VERIFICATIONS ARE CURRENTLY DISABLED. IGNORE THIS. A verication email has been sent to your USC email. You will have to click the link before the app will allow you to fully sign in.',
     [{text: 'OK'}],
   );
 };
