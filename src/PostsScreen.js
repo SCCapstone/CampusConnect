@@ -537,7 +537,7 @@ export function PostsScreen({navigation}) {
         </View>
         <View style={styles.post}>
           <View style={styles.editedAndOptionsBox}>
-              <Text>{item.edited ? 'EDITED' : ''}</Text>
+              <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
               <SelectDropdown
                 data={item.postIsYours ? postOptions : postOptions2}
                 buttonTextAfterSelection={() => {return '• • •'}}
