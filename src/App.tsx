@@ -88,9 +88,9 @@ export default function App() {
   };
 
   return (
-
+    <GestureHandlerRootView style={{flex:1}}>
     <AppContext.Provider value={userData}>
-      <GestureHandlerRootView style={{flex:1}}>
+
         <OverlayProvider value={{style: theme}}>
           <SafeAreaProvider>
             <NavigationContainer>
@@ -135,8 +135,9 @@ export default function App() {
             </NavigationContainer>
           </SafeAreaProvider>
         </OverlayProvider>
-      </GestureHandlerRootView>
+
     </AppContext.Provider>
+    </GestureHandlerRootView>
 
   );
 }

@@ -1,8 +1,8 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import {FlatList,SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableOpacity} from "react-native";
+import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableOpacity} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { RectButton} from 'react-native-gesture-handler';
+import { RectButton,FlatList, gestureHandlerRootHOC} from 'react-native-gesture-handler';
 
 import { LogBox } from 'react-native';
 
@@ -218,6 +218,20 @@ export function ChatsScreen(props) {
         overshootLeft={true}
         overshootRight={true}
         friction={3.5}
+        renderLeftActions={() => (
+          <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
+           <TouchableOpacity onPress={() => {
+      
+                setChannel(channel)
+                channel.watch().then(() => {
+                  navigation.navigate('DMScreen',{channel:channel})
+                })
+            
+           }}>
+              <Icon containerStyle={{height:60,width:60,alignItems:'center',justifyContent:'center'}} size={50} solid={true} type="entypo" name="reply" color='gray'/>
+            </TouchableOpacity>
+          </View>
+        )}
         renderRightActions={() => (
           <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
             <SelectDropdown 
@@ -329,7 +343,7 @@ export function ChatsScreen(props) {
 
         //Make this users instead
   //shows list of chats
-  const renderUsers = ({item}) => {
+  const renderUsers = gestureHandlerRootHOC(({item}) => {
     var isOnline = item.online
     const channelOptions = ["View Profile", "Block"]
     return (
@@ -402,13 +416,15 @@ export function ChatsScreen(props) {
       )}
     >
           <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
-            <ImageBackground
-              style={{width:60,height:60}}
-              imageStyle={{borderRadius:60}}
-              source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
-                {isOnline ? 
-                <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-            </ImageBackground>
+            <TouchableOpacity>
+              <ImageBackground
+                style={{width:60,height:60}}
+                imageStyle={{borderRadius:60}}
+                source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+                  {isOnline ? 
+                  <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+              </ImageBackground>
+            </TouchableOpacity>
           <View>
             <Text style={styles.chatListItemLabel}>{item.name}</Text>
             <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
@@ -416,7 +432,7 @@ export function ChatsScreen(props) {
         </View>
       </Swipeable>
     );
-  };
+  });
 
 
     return(
