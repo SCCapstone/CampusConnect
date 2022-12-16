@@ -651,7 +651,7 @@ export function PostsScreen({navigation}) {
         containerStyle={{backgroundColor:'#73000a'}} 
         inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
         onChangeText={setSearch} 
-        placeholder='Search a post by name' 
+        placeholder="Search a post by the author\'s name"
         value={search}>
       </SearchBar>
       {(posts.length == 0) &&
