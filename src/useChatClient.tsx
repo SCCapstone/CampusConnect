@@ -58,7 +58,6 @@ export const useChatClient = () => {
 
 
 
-
   useEffect(() => {
 
     if(auth().currentUser){
@@ -70,6 +69,8 @@ export const useChatClient = () => {
             chatClient._setToken(
               {
                 id: auth().currentUser.uid,
+                name: userData.name,
+                image: userData.pfp
               },
               token,
             );

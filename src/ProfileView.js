@@ -10,12 +10,18 @@ import firestore from '@react-native-firebase/firestore';
 import AppContext from './AppContext';
 import FastImage from 'react-native-fast-image';
 import { Button } from '@rneui/base';
+import auth from '@react-native-firebase/auth';
+
+import { StreamChat } from 'stream-chat';
+import { chatApiKey } from '../chatConfig';
 
 export function ProfileView({navigation}) {
     const userData = useContext(AppContext);
     const [loading, setLoading] = useState(true);
     const [profileData, setProfileData] = useState('');
     const { setChannel} = useChatContext();
+    const chatClient = StreamChat.getInstance(chatApiKey);
+
 
     const getProfile = async () => {
        const ref = firestore().collection('Users').doc(userData.profileView);
@@ -68,10 +74,16 @@ export function ProfileView({navigation}) {
                 <Text style={{fontWeight: '300', fontSize:40,color:'white',textAlign:'center'}}>{profileData.name}</Text>
                 <Text style={{fontWeight: '300', fontSize:28,color:'white',textAlign:'center'}}>{profileData.gradYear}</Text>
                 <Text style={{fontWeight: '300', fontSize:28,color:'white',textAlign:'center'}}>{profileData.major}</Text>
-                <Button onPress={() => {
+                {(!(auth().currentUser.uid === userData.profileView))?<Button onPress={async () => {
+                    const channel = chatClient.channel('messaging', {
+                        members: [chatClient.user.id, userData.profileView],
+                    });
+
+                    await channel.watch()
+                    navigation.navigate('Chats',{screen:'DMScreen', initial:false ,params:{channelID: channel.id}})
 
                 }}
-                size='lg' title={'Message'} titleStyle={{color:'white'}} color={'#a8a1a6'} containerStyle={{width:200,marginTop:50,borderRadius:10}} style={{}}></Button>
+                size='lg' title={'Message'} titleStyle={{color:'white'}} color={'#a8a1a6'} containerStyle={{width:200,marginTop:50,borderRadius:10}} style={{}}></Button>: null}
                 <Text style={{fontWeight: '300', fontSize:23,color:'white',marginTop:50,textAlign:'center'}}>{profileData.bio}</Text>
             </View>
 

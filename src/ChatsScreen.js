@@ -1,8 +1,14 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground} from "react-native";
+import {FlatList,SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableOpacity} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { RectButton, TouchableOpacity , FlatList} from 'react-native-gesture-handler';
+import { RectButton} from 'react-native-gesture-handler';
+
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 import {
     ChannelList,
@@ -13,7 +19,8 @@ import {
     AnimatedGalleryImage,
     MenuPointHorizontal,
     useTheme,
-    Delete
+    Delete,
+    ThumbsDownReaction
   } from 'stream-chat-react-native';
 
 
@@ -74,6 +81,12 @@ export function ChatsScreen(props) {
     const searchLimit = 30;
     const [addGroupVisible,setAddGroupVisible] = useState(false)
       //Right here, create a query that will only return the private DMs a User is in
+
+      const {
+        theme: {
+          colors: { accent_red, white_smoke },
+        },
+      } = useTheme();
 
     const ReloadList = () => {
       setKey((key) => key+1)
@@ -156,7 +169,6 @@ export function ChatsScreen(props) {
   };
     //sends user to chat
     const selectItem = item => async () => {
-      console.log(item)
       if(item.role === 'user'){
         const channel = chatClient.channel('messaging', {
             members: [chatClient.user.id, item.id],
@@ -164,17 +176,17 @@ export function ChatsScreen(props) {
         await channel.watch()
         setChannel(channel)
         this.floatingAction.animateButton();
-        navigation.navigate('DMScreen');
+
+        navigation.navigate('DMScreen',{channel:channel});
         
       }
       else if (item.type === 'team'){
-        console.log(item.id)
         const channel = chatClient.channel('team', item.id, {});
         if(chatClient.user.id)
           await channel.addMembers([chatClient.user.id]);
         setChannel(channel)
         this.floatingAction.animateButton();
-        navigation.navigate('DMScreen');
+        navigation.navigate('DMScreen', {channel:channel});
       }
     };
       //returns uid of chat
@@ -197,13 +209,9 @@ export function ChatsScreen(props) {
       const [muteStatus, setMuteStatus] = useState(channel.muteStatus().muted)
       const { channels, reloadList } = useContext(ChannelsContext);
       const backgroundColor = unread ? '#c6edff' : '#fff';
-      const {
-        theme: {
-          colors: { accent_red, white_smoke },
-        },
-      } = useTheme();
-      const channelOptions = ["Mute", "Block"]
-      const channelOptions2 = ["Unmute", "Block"]
+
+      const channelOptions = ["View Profile","Mute", "Block"]
+      const channelOptions2 = ["View Profile","Unmute", "Block"]
       
       return (
         <Swipeable
@@ -222,6 +230,19 @@ export function ChatsScreen(props) {
               if (selection === 'Mute'){
                 await channel.mute()
                 setKey((key) => key+1)
+              } else if(selection === 'View Profile') {
+                const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
+                var member;
+                if(is2PersonChat) {
+                  const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
+                  userData.setProfileView(member.members[0].user_id)
+                  navigation.navigate('ProfileView')
+                }
+                else if (channel.type === 'team') {
+                  Alert.alert('Create a group page and navigate to that here')
+                }
+                
+
               }
               else if (selection ==='Unmute'){
                 await channel.unmute()
@@ -286,8 +307,7 @@ export function ChatsScreen(props) {
        return (
           <View style={{}}>
             <TouchableOpacity
-              disallowInterruption={true}
-              style={{}}
+              style={{width:60,height:60}}
               onPress={async () => {
                 if(is2PersonChat) {
                   const member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
@@ -311,29 +331,90 @@ export function ChatsScreen(props) {
   //shows list of chats
   const renderUsers = ({item}) => {
     var isOnline = item.online
+    const channelOptions = ["View Profile", "Block"]
     return (
-      <TouchableOpacity style={styles.chatListItem} onPress={selectItem(item)}>
-        <TouchableOpacity onPress={() => {
-          userData.setProfileView(item.id)
-          setSearchModalVisible(false); 
-          this.floatingAction.animateButton();
-          setUserSearch('')
-          navigation.navigate('ProfileView')
+      <Swipeable
+      overshootLeft={true}
+      overshootRight={true}
+      friction={3.5}
 
-        }}>
-          <ImageBackground
-            style={{width:60,height:60}}
-            imageStyle={{borderRadius:60}}
-            source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
-              {isOnline ? 
-              <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-          </ImageBackground>
-        </TouchableOpacity>
-        <View>
-          <Text style={styles.chatListItemLabel}>{item.name}</Text>
-          <Text style={{fontSize:10,color:'black',marginLeft:'2%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+      renderLeftActions={() => (
+        <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
+         <TouchableOpacity onPress={() => {
+            setSearchModalVisible(false)
+            this.floatingAction.animateButton();
+            if(item.role === 'user'){
+              const channel = chatClient.channel('messaging', {
+                members: [chatClient.user.id, item.id],
+              });
+            
+              setChannel(channel)
+              channel.watch().then(() => {
+                navigation.navigate('DMScreen',{channel:channel})
+              })
+            }
+            else if (item.type === 'team'){
+              this.floatingAction.animateButton();
+              setSearchModalVisible(false)
+              const channel = chatClient.channel('team', item.id, {});
+              channel.addMembers([chatClient.user.id]).then(() => {
+                setChannel(channel)
+                navigation.navigate('DMScreen', {channel:channel});
+              })
+
+            }
+          
+         }}>
+            <Icon containerStyle={{height:60,width:60,alignItems:'center',justifyContent:'center'}} size={50} solid={true} type="entypo" name="reply" color='gray'/>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      )}
+      renderRightActions={() => (
+        <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
+          <SelectDropdown 
+          defaultButtonText="• • •" 
+          rowTextStyle={{fontSize:10}}
+          buttonTextStyle={{backgroundColor:'transparent'}}
+          buttonTextAfterSelection={() =>{return "• • •"}}
+          data={channelOptions}
+          onSelect={(selection) => {
+              if(selection === 'View Profile') {
+                if (item.role ==='user') {
+                  userData.setProfileView(item.id)
+                  setSearchModalVisible(false)
+                  this.floatingAction.animateButton()
+                  navigation.navigate('ProfileView')
+                }
+                else{
+                  Alert.alert('Create a group page and navigate to that here')
+                }
+
+              
+
+            }
+            else if (selection === 'Block'){
+              /*Alert.alert('Message','Sorry, this feature hasn\'t been implemented yet. Try muting and then deleting the chat.')*/
+            }
+          }}
+          buttonStyle={{width:90,height:90,backgroundColor:'transparent'}}>
+          </SelectDropdown>
+        </View>
+      )}
+    >
+          <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
+            <ImageBackground
+              style={{width:60,height:60}}
+              imageStyle={{borderRadius:60}}
+              source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+                {isOnline ? 
+                <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+            </ImageBackground>
+          <View>
+            <Text style={styles.chatListItemLabel}>{item.name}</Text>
+            <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+          </View>
+        </View>
+      </Swipeable>
     );
   };
 
@@ -358,8 +439,13 @@ export function ChatsScreen(props) {
               </View> :
               <View style={{flex:1,height:'100%'}}>
                 <FlatList
-                  style={{flex:1}}
                   data={data}
+                  ItemSeparatorComponent={<View
+                    style={{
+                      backgroundColor: 'black',
+                      height: 1,
+                    }}
+                  />}
                   renderItem={renderUsers}
                   keyExtractor={(item, index) => getKey(item)}
                 />
@@ -423,7 +509,7 @@ export function ChatsScreen(props) {
                   sort={sort}
                   onSelect={(channel) => {
                       setChannel(channel);
-                      navigation.navigate('DMScreen');
+                      navigation.navigate('DMScreen', {channel:channel});
                       
                   }}
                   />

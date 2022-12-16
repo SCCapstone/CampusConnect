@@ -37,23 +37,7 @@ export function DrawerContent(props) {
   const userData = useContext(AppContext);
 
   const navigation = useNavigation()
-
-  const getUserData = () => {
-    firestore()
-      .collection('Users')
-      .doc(auth().currentUser.uid)
-      .get()
-      .then(data => {
-        userData.setName(data.get('name'));
-        userData.setEmail(data.get('email'));
-        userData.setBio(data.get('bio'));
-        userData.setMajor(data.get('major'));
-        userData.setGradYear(data.get('gradYear'));
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  const {chatClientIsReady} =useChatClient();//dont question me
   const DeleteAlert = () => {
     Alert.alert('Delete Photo', 'Do you want to delete your photo?', [
       {text: 'Yes', onPress: () => deletePhoto()},
@@ -82,14 +66,14 @@ export function DrawerContent(props) {
   };
 
   const SignOut = async () => {
-    const chatClient = StreamChat.getInstance(chatApiKey);
-    chatClient.disconnectUser();
+
     auth().signOut();
+
+
   };
 
   useEffect(() => {
-    getUserData();
-    getPhoto();
+
   }, []);
 
   return (

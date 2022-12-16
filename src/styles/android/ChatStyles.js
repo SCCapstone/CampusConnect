@@ -72,7 +72,7 @@ export default StyleSheet.create({
   },
   chatListItemLabel: {
     fontSize: 24,
-    marginLeft:'2%',
+    marginLeft:'10%',
     color: 'black',
   },
   groupContainer: {

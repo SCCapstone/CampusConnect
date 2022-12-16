@@ -41,6 +41,8 @@ import {v4 as uuidv4} from 'uuid';
 import { AnimatedGalleryImage, LoadingIndicator } from 'stream-chat-react-native';
 
 
+
+
 import iosstyles from './styles/ios/PostScreenStyles';
 import iosCommentStyles from './styles/ios/CommentStyles'
 import androidstyles from './styles/android/PostScreenStyles';
@@ -90,6 +92,7 @@ export function PostsScreen({navigation}) {
   var transactionStarted = false;
   var url = '';
 
+
   const headerHeight = useHeaderHeight();
 
   const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
@@ -99,6 +102,8 @@ export function PostsScreen({navigation}) {
   const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
   const postOptions = ["Reply", "Edit","Delete"]
   const postOptions2 = ["Reply"]
+
+
 
   const PostAlert = () => {
     Alert.alert('Post?', 'Are you sure you want to post?', [
@@ -651,7 +656,7 @@ export function PostsScreen({navigation}) {
         containerStyle={{backgroundColor:'#73000a'}} 
         inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
         onChangeText={setSearch} 
-        placeholder="Search a post by the author\'s name"
+        placeholder="Search a post by the author's name"
         value={search}>
       </SearchBar>
       {(posts.length == 0) &&

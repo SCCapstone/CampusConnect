@@ -70,6 +70,7 @@ export const ChatNavigator = () => {
   const {key,setKey} = useChatContext()
   const [initialChannelId, setInitialChannelId] = useState('')
   const chatClient = StreamChat.getInstance(chatApiKey);
+  //const [channelId,setInitialChannelId] = useState('');
 
   useEffect(() => {
     const unsubscribeOnNotificationOpen = messaging().onNotificationOpenedApp((remoteMessage) => {
@@ -77,8 +78,7 @@ export const ChatNavigator = () => {
       const channelId = remoteMessage.data?.channel_id;
       // The navigation logic, to navigate to relevant channel screen.
       if (channelId) {
-        console.log(channelId)
-        //navigation.navigate('DMScreen', { channelId });
+        //navigation.navigate('DMScreen', { channelID:channelId });
       }
     });
 
@@ -87,7 +87,6 @@ export const ChatNavigator = () => {
         // Notification caused app to open from quit state on Android
         const channelId = initialNotification.notification.data?.channel_id;
         // Start the app with the relevant channel screen.
-        console.log(channelId)
         setInitialChannelId(channelId)
       }
     });
@@ -98,7 +97,6 @@ export const ChatNavigator = () => {
         if (remoteMessage) {
           // Notification caused app to open from quit state on iOS
           const channelId = remoteMessage.data?.channel_id;
-          console.log(channelId)
           // Start the app with the relevant channel screen.
           setInitialChannelId(channelId)
         }
@@ -140,7 +138,7 @@ export const ChatNavigator = () => {
       // The navigation logic, to navigate to relevant channel screen.
       if (channelId) {
         console.log(channelId)
-        //navigationContainerRef.current?.navigate('DMScreen', { channelId });
+        //navigation.navigate('DMScreen', { channelID:channelId });
       }
     }
   });
@@ -149,16 +147,12 @@ export const ChatNavigator = () => {
       // user press on notification detected while app was on background on Android
       const channelId = detail.notification?.data?.channel_id;
       if (channelId) {
-        //navigationContainerRef.current?.navigate('DMScreen', { channelId });
+        //navigation.navigate('DMScreen', { channelID:channelId });
       }
       await Promise.resolve();
     }
   });
 
-  const clearBadge = async () => {
-    await notifee.setBadgeCount(0);
-  };
-  clearBadge();
 
     return () => {
       unsubscribeOnNotificationOpen();
@@ -180,17 +174,23 @@ export const ChatNavigator = () => {
 
     <ChatProvider>
       <Chat client={chatClient}>
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator id='ChatNavigator' screenOptions={screenOptions}>
           <Stack.Screen name="ChatsHome" component={ChatsScreen} options={{headerShown:true, headerLeft: () => (
         <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.goBack()} />
       ),}}/>
           <Stack.Screen name="ChatSearch" component={ChatSearch} options={{headerShown: true}}/>
           <Stack.Screen name="CreateGroup" component={CreateGroup} options={{headerShown: true}}/>
-          <Stack.Screen name="DMScreen" component={DMScreen} initialParams={initialChannelId ? { channelId: initialChannelId } : undefined} options={{headerShown: true}}/>
+          <Stack.Screen name="DMScreen" 
+          
+          component={DMScreen} options={{ presentation:'modal',
+          headerShown:true,headerLeft: () => (
+        <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.navigate('ChatsHome')} />
+      ),}}/>
           <Stack.Screen name="ThreadScreen" component={ThreadScreen} options={{headerShown: true}}/>
         </Stack.Navigator>
       </Chat>
-    </ChatProvider>
+      </ChatProvider>
+
 
   );
 };
