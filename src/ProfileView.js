@@ -1,18 +1,21 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, View ,Image} from 'react-native';
 import { Avatar,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
+import { useChatContext } from './ChatContext';
 
 import firestore from '@react-native-firebase/firestore';
 import AppContext from './AppContext';
 import FastImage from 'react-native-fast-image';
+import { Button } from '@rneui/base';
 
 export function ProfileView({navigation}) {
     const userData = useContext(AppContext);
     const [loading, setLoading] = useState(true);
     const [profileData, setProfileData] = useState('');
+    const { setChannel} = useChatContext();
 
     const getProfile = async () => {
        const ref = firestore().collection('Users').doc(userData.profileView);
@@ -49,7 +52,7 @@ export function ProfileView({navigation}) {
 
     if(loading){
         return(
-            <ActivityIndicator color={'#73000a'}></ActivityIndicator>
+            <ActivityIndicator style={{flex:1}} color={'#73000a'}></ActivityIndicator>
         )
     }
 
@@ -57,15 +60,19 @@ export function ProfileView({navigation}) {
     return (
         <SafeAreaView style={{backgroundColor:'#73000a',flex:1}}>
             <View style={{alignItems:'center',marginTop:'10%'}}>
-                <FastImage style={{width:175,height:175,borderRadius:90}}
-                    source={{uri:profileData.pfp}}>
-                </FastImage>
+                <Image defaultSource={require('./assets/blank2.jpeg')} style={{width:175,height:175,borderRadius:90}}
+                    source={profileData.pfp ? {uri:profileData.pfp} : require('./assets/blank2.jpeg')}>
+                </Image>
             </View>
             <View style={{alignItems:'center',marginTop:'5%'}}>
-                <Text style={{fontWeight: '300', fontSize:40,color:'white'}}>{profileData.name}</Text>
-                <Text style={{fontWeight: '300', fontSize:28,color:'white'}}>{profileData.gradYear}</Text>
-                <Text style={{fontWeight: '300', fontSize:28,color:'white'}}>{profileData.major}</Text>
-                <Text style={{fontWeight: '300', fontSize:23,color:'white',marginTop:100}}>{profileData.bio}</Text>
+                <Text style={{fontWeight: '300', fontSize:40,color:'white',textAlign:'center'}}>{profileData.name}</Text>
+                <Text style={{fontWeight: '300', fontSize:28,color:'white',textAlign:'center'}}>{profileData.gradYear}</Text>
+                <Text style={{fontWeight: '300', fontSize:28,color:'white',textAlign:'center'}}>{profileData.major}</Text>
+                <Button onPress={() => {
+
+                }}
+                size='lg' title={'Message'} titleStyle={{color:'white'}} color={'#a8a1a6'} containerStyle={{width:200,marginTop:50,borderRadius:10}} style={{}}></Button>
+                <Text style={{fontWeight: '300', fontSize:23,color:'white',marginTop:50,textAlign:'center'}}>{profileData.bio}</Text>
             </View>
 
         </SafeAreaView>
