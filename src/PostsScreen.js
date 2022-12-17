@@ -99,7 +99,7 @@ export function PostsScreen({navigation}) {
 
   const headerHeight = useHeaderHeight();
 
-  const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? -25 : -300 //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
   const list = useRef(FlashList);
@@ -524,6 +524,78 @@ export function PostsScreen({navigation}) {
 
   };
 
+  const MakeReply = async ({item}) => {
+    if (
+      postText &&
+      postText.length < 1000 &&
+      postText.split(/\r\n|\r|\n/).length <=
+        25 /*this last one checks that there are not too many lines */
+    ) {
+      if(true){
+        firestore()
+          .collection('Posts')
+          .doc()
+          .set({
+            author: userData.name,
+            authorGradYear: userData.gradYear,
+            authorMajor: userData.major,
+            body: postText,
+            replyCount: 0,
+            upvoteCount: 1,
+            date: firestore.FieldValue.serverTimestamp(),
+            pfp: userData.pfp,
+            replies: [],
+            user: '/Users/' + auth().currentUser.uid,
+            extraData: {url} ? url : '',
+            upvoters: {[auth().currentUser.uid]: true},
+            downvoters: new Map(),
+            searchAuthor:userData.name.toUpperCase(),
+            edited:false
+          })
+          .then(() => {
+
+
+          })
+          .catch(error => {
+            console.log(error.code);
+          });
+        }
+      else if (postIsAnonymous) {
+        firestore()
+        .collection('Posts')
+        .doc()
+        .set({
+          author: 'Anonymous',
+          authorGradYear: '',
+          authorMajor: '',
+          body: postText,
+          replyCount: 0,
+          upvoteCount: 1,
+          date: firestore.FieldValue.serverTimestamp(),
+          pfp: '',
+          replies: [],
+          user: '/Users/' + auth().currentUser.uid,
+          extraData: {url} ? url : '',
+          upvoters: {[auth().currentUser.uid]: true},
+          downvoters: new Map(),
+          searchAuthor:'ANONYMOUS',
+          edited:false
+        })
+        .then(() => {
+
+
+
+        })
+        .catch(error => {
+          console.log(error.code);
+        });
+      }
+    } else {
+      PostError();
+    }
+
+  }
+
   const uploadPic = async () => {
     const reference = storage().ref('/Posts/' +uuidv4());
     if (image) {
@@ -751,93 +823,103 @@ export function PostsScreen({navigation}) {
       Kind of empty in here....
       </Text>}
       <Modal
-        style={styles.modal}
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           this.floatingAction
         }}>
-        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeightPadding} behavior="padding">
+        <SafeAreaView style={{flex:1,justifyContent:'center',alignContent:'center'}}>
+          <KeyboardAvoidingView style={{justifyContent:'center'}} keyboardVerticalOffset={offsetHeight} behavior="padding">
           <View style={styles.postView}>
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                onPress={() => closeModal()}
-                style={styles.cancelButton}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if(post){
-                    EditPost();
-                  }
-                  else{
-                    PostAlert()
-                  }
-                }}
-                style={styles.postButton}>
-                <Text style={styles.postButtonText}>{post ? 'Save' :'Post?'}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.postTextView}>
-              {postUploading ? 
-              <ActivityIndicator></ActivityIndicator>
-              :
-              <TextInput
-                style={styles.postInput}
-                multiline={true}
-                defaultValue={postText}
-                onChangeText={postText => setPostText(postText)}
-                placeholder={post ? '':"Enter your post"}
-                textAlignVertical="top"
-                placeholderTextColor="black"
-                blurOnSubmit={false}
-              />}
-            </View>
-            {!post ? <View style={styles.bottomPostButtonsContainer}>
-              <View style={styles.checkBoxBox}>
-                <BouncyCheckbox
-                  size={20}
-                  
-                  fillColor="#73000a"
-                  disableBuiltInState={true}
-                  style={{alignSelf:'flex-start',marginLeft:20,marginTop:20}}
-                  isChecked={postIsAnonymous}
-                  unfillColor="#FFFFFF"
-                  text="Post Anonymously?"
-                  iconStyle={{ borderColor: "#73000a"}}
-                  innerIconStyle={{ borderWidth: 2 }}
-                  textStyle={{ color:'black' }}
-                  onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
-                />
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={() => closeModal()}
+                  style={styles.cancelButton}>
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if(post){
+                      EditPost();
+                    }
+                    else{
+                      PostAlert()
+                    }
+                  }}
+                  style={styles.postButton}>
+                  <Text style={styles.postButtonText}>{post ? 'Save' :'Post?'}</Text>
+                </TouchableOpacity>
               </View>
-                <Button 
-                  containerStyle={styles.postImageAddButtonContainer}
-                  buttonStyle={styles.postImageButton}
-                  size='lg'
-                  onPress={choosePhotoFromLibrary}
-                  titleStyle={{fontSize:10,fontWeight:'bold'}}
-                  title={image ? 'Image Loaded ✅' : 'Upload a picture'}
+              <View style={styles.postTextView}>
+                {postUploading ? 
+                <ActivityIndicator></ActivityIndicator>
+                :
+                <TextInput
+                  style={styles.postInput}
+                  multiline={true}
+                  defaultValue={postText}
+                  onChangeText={postText => setPostText(postText)}
+                  placeholder={post ? '':"Enter your post"}
+                  textAlignVertical="top"
+                  placeholderTextColor="black"
+                  blurOnSubmit={false}
+                />}
+              </View>
+              {!post ? <View style={styles.bottomPostButtonsContainer}>
+                <View style={styles.checkBoxBox}>
+                  <BouncyCheckbox
+                    size={20}
+                    
+                    fillColor="#73000a"
+                    disableBuiltInState={true}
+                    style={{alignSelf:'flex-start',marginLeft:20,marginTop:17}}
+                    isChecked={postIsAnonymous}
+                    unfillColor="#FFFFFF"
+                    text="Post Anonymously?"
+                    iconStyle={{ borderColor: "#73000a"}}
+                    innerIconStyle={{ borderWidth: 2 }}
+                    textStyle={{ color:'black' }}
+                    onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
                   />
+                </View>
+                  <Button 
+                    containerStyle={styles.postImageAddButtonContainer}
+                    buttonStyle={styles.postImageButton}
+                    size='lg'
+                    onPress={choosePhotoFromLibrary}
+                    titleStyle={{fontSize:10,fontWeight:'bold'}}
+                    title={image ? 'Image Loaded ✅' : 'Upload a picture'}
+                    />
 
-            </View>: null}
+              </View>: null}
           </View>
         </KeyboardAvoidingView>
+        </SafeAreaView>
       </Modal>
       <Modal
 
         animationType="slide"
         transparent={true}
         visible={replyModalVisible}>
-          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:headerHeight-3}}>
-          <Button 
-            buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
-            size='lg'
-            onPress={() =>{setReplyModalVisible(false);setPostReplies([])
-            setReplyItem(null)}}
-            titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
-            title={'Cancel'}
-          />
+          <SafeAreaView style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+              <Button 
+                buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',marginBottom:20,marginLeft:10}}
+                size='lg'
+                onPress={() =>{setReplyModalVisible(false);setPostReplies([])
+                setReplyItem(null)}}
+                titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
+                title={'Close'}
+              />
+              <Button 
+                buttonStyle={{backgroundColor:'white',marginBottom:20,marginRight:10}}
+                size='lg'
+                onPress={() =>{}}
+                titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
+                title={'Reply'}
+              />
+            </View>
           <View style={{flex:1}}>
             {repliesLoading? <ActivityIndicator size={'large'} style={{flex:1}}></ActivityIndicator>:
               <FlatList
@@ -847,19 +929,23 @@ export function PostsScreen({navigation}) {
               >
               </FlatList>}
           </View>
-            
-            <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
+          
+        </SafeAreaView>
+        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,justifyContent:'flex-end'}}>
+          <View style={{flexDirection:'row'}}>
               <Input 
-                style={{alignSelf:'flex-end',alignItems:'flex-end'}}
-                placeholder="Comment"
-                leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                onChangeText={setReply}>
-              </Input>
+                  style={{alignSelf:'flex-end',alignItems:'flex-end'}}
+                  placeholder="Comment"
+                  leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                  rightIcon={() => { return(<TouchableOpacity>
+                    <Icon type='ionicons' name='send'></Icon>
+                  </TouchableOpacity>)}}
+                  onChangeText={setReply}>
+                </Input>
 
-            </KeyboardAvoidingView>
+            </View>
+        </KeyboardAvoidingView>
           
-          
-        </View>
 
       </Modal>
 

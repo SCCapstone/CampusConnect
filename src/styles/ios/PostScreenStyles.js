@@ -74,13 +74,12 @@ export default StyleSheet.create({
 
   },
   postView: {
-    height: '50%',
-    width: '90%',
     backgroundColor: 'white',
     alignSelf: 'center',
-    marginVertical: '50%',
     borderRadius: 20,
     justifyContent: 'center',
+    marginVertical:'5%'
+
     
   },
   postTextView: {
@@ -88,7 +87,7 @@ export default StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     marginTop: '5%',
-    marginHorizontal: '10%',
+    marginHorizontal: '7%',
     backgroundColor: '#f2f2f2',
   },
   postInput: {
@@ -233,13 +232,13 @@ export default StyleSheet.create({
     height:40,
     backgroundColor:'#73000a',
     borderRadius:20,
-    marginTop:12,
+    marginTop:5,
     marginHorizontal:20
 
   },
   postImageButton : {
     width:120,
-    height:120,
+    height:60,
     backgroundColor:'#73000a',
     justifyContent:'center',
     alignItems:'center',
