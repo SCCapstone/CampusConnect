@@ -182,7 +182,7 @@ export const ChatNavigator = () => {
           <Stack.Screen name="CreateGroup" component={CreateGroup} options={{headerShown: true}}/>
           <Stack.Screen name="DMScreen" 
           
-          component={DMScreen} options={{ presentation:'modal',
+          component={DMScreen} options={{ presentation:'card', animationTypeForReplace:'pop',
           headerShown:true,headerLeft: () => (
         <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.navigate('ChatsHome')} />
       ),}}/>

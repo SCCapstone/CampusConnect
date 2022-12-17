@@ -553,7 +553,7 @@ export function PostsScreen({navigation}) {
                   else if(option === 'Edit') {
                     setPost(item.key);
                     setPostText(item.body)
-                    this.floatingAction.animateButton()
+                    //this.floatingAction.animateButton()
                     setModalVisible(true);
                   }
                   else if (option === 'Delete') {
@@ -628,7 +628,8 @@ export function PostsScreen({navigation}) {
 
 
   const closeModal = () => {
-    this.floatingAction.animateButton();
+    if(!post)
+      this.floatingAction.animateButton();
     setPostUploading(false)
     setPost('')
     setImage('')
@@ -796,8 +797,9 @@ export function PostsScreen({navigation}) {
           this.floatingAction = ref;
         }}
         onPressMain={() => {
-          setModalVisible(!modalVisible);
+          setModalVisible(true);
         }}
+
       />
       <ImageView
         images={images}
