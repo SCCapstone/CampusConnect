@@ -29,12 +29,13 @@ import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { useHeaderHeight } from '@react-navigation/elements';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {FlatList, TouchableHighlight,RectButton} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
-import { SearchBar, Button, ListItem, Avatar ,Input} from '@rneui/themed';
+import { SearchBar, Button, ListItem, Avatar ,Input,Icon} from '@rneui/themed';
 import ImagePicker from 'react-native-image-crop-picker';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -89,6 +90,9 @@ export function PostsScreen({navigation}) {
   const [reply, setReply] = React.useState('');
   const [replyItem,setReplyItem] = React.useState(new Map())
   const [post,setPost] = useState();
+  const [postReplySubscriber,setPostReplySubscriber] = useState();
+  const [postReplies, setPostReplies] = useState([])
+  const [repliesLoading,setRepliesLoading] = useState(false)
   var transactionStarted = false;
   var url = '';
 
@@ -119,6 +123,27 @@ export function PostsScreen({navigation}) {
       ]);
     }
   };
+
+  const getReplies = (item) => {
+    setRepliesLoading(true)
+    const postReplies= [];
+    var postsRef = firestore().collection('Posts').doc(item.key)
+    //gets posts asynchronously in the background
+    postsRef.get().then(doc => {
+      const replies = doc.get('replies');
+      replies.forEach(reply => {
+        var replyRef = firestore().collection('Replies').doc(reply)
+        replyRef.get().then(reply => {
+          console.log(reply.id)
+          postReplies.push({...reply.data(),key:reply.id})
+        }).then(()=>{
+          setPostReplies(postReplies)
+          setRepliesLoading(false)
+        })
+      })
+    })
+
+  }
 
   const getPosts = () => {
     setRefresh(true)
@@ -508,11 +533,7 @@ export function PostsScreen({navigation}) {
       url = await reference.getDownloadURL();
     }
   };
-  const PostReply = ({item, index}) => {
-    return (
-      <View></View>
-    );
-  };
+
 
 
   const Post = ({item, index}) => {
@@ -539,7 +560,11 @@ export function PostsScreen({navigation}) {
               }></Image>
           </TouchableOpacity>
         </View>
-        <View style={styles.post}>
+        <Pressable delayLongPress={200} onLongPress={() => {
+          setReplyItem(item)
+          setReplyModalVisible(true)
+          getReplies(item);
+        }} style={styles.post}>
           <View style={styles.editedAndOptionsBox}>
               <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
               <SelectDropdown
@@ -549,6 +574,7 @@ export function PostsScreen({navigation}) {
                   if(option === 'Reply') {
                     setReplyItem(item)
                     setReplyModalVisible(true)
+                    getReplies(item);
                   }
                   else if(option === 'Edit') {
                     setPost(item.key);
@@ -617,11 +643,11 @@ export function PostsScreen({navigation}) {
             </Text>
             <View style={styles.replyCountBox}>
               <Text style={styles.replies}>Replies: </Text>
-              <Text style={styles.date}>{item.replyCount}</Text>
+              <Text style={styles.replies}>{item.replyCount}</Text>
             </View>
           </View>
           
-        </View>
+        </Pressable>
       </View>
     );
   };
@@ -640,6 +666,60 @@ export function PostsScreen({navigation}) {
   };
 
   const renderPost = ({item, index}) => <Post item={item} index={index} />;
+  const renderReplies = ({item, index}) => {
+
+
+    return(
+      <Swipeable
+      overshootLeft={true}
+      ref={ref => {
+        this.swipeable = ref;
+      }}
+      overshootRight={true}
+      leftThreshold={125}
+      rightThreshold={100}
+      onSwipeableOpen={(direction) => {
+        if(direction === 'left'){
+          Alert.alert('This feature is not currently implemented yet.')
+          this.swipeable.close()
+        }
+      }}
+      friction={3}
+      renderLeftActions={() => (
+        <View style={{}}>
+         <TouchableOpacity>
+            <Icon containerStyle={{height:60,width:60,alignItems:'center',justifyContent:'center'}} size={50} solid={true} type="entypo" name="reply" color='gray'/>
+          </TouchableOpacity>
+        </View>
+      )}
+      renderRightActions={() => (
+        <View style={{justifyContent:'center',marginRight:15}}>
+          <TouchableOpacity
+          >
+            <Icon containerStyle={{alignItems:'center',justifyContent:'center'}} size={40} solid={true} type="foundation" name="arrow-up" color='black'/>
+          </TouchableOpacity>
+          <TouchableOpacity
+          >
+            <Icon containerStyle={{alignItems:'center',justifyContent:'center'}}  size={40} solid={true} type="foundation" name="arrow-down" color='black'/>
+          </TouchableOpacity>
+        </View>
+      )}
+    >
+        <View style={{height:80,width:'100%',marginLeft:0,flexDirection:'row'}}>
+          <View>
+            <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{alignSelf:'center',height:60,width:60,borderRadius:40,marginLeft:15}} source={item.pfp ? {uri:item.pfp}: require('./assets/blank2.jpeg')}></FastImage>
+            <Text style={{marginLeft:15}}>{item.author}</Text>
+          </View>
+            <View style={{backgroundColor:'#a8a1a6', flex:1,padding:10,marginLeft:5,marginRight:'5%',borderRadius:10}}>
+              <View style={styles.postReplyView}>
+                <Text style={styles.replyBody}>{item.body}</Text>
+              </View>
+            </View>
+        </View>
+      </Swipeable>
+
+    )
+  }
 
   if (loading) {
     return (
@@ -751,16 +831,22 @@ export function PostsScreen({navigation}) {
         visible={replyModalVisible}>
           <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:headerHeight-3}}>
           <Button 
-                  buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
-                  size='lg'
-                  onPress={() =>{setReplyModalVisible(false);
-                  setReplyItem(null)}}
-                  titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
-                  title={'Cancel'}
-                  />
-            <PostReply item={replyItem}>
-                  
-            </PostReply>
+            buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
+            size='lg'
+            onPress={() =>{setReplyModalVisible(false);setPostReplies([])
+            setReplyItem(null)}}
+            titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
+            title={'Cancel'}
+          />
+          <View style={{flex:1}}>
+            {repliesLoading? <ActivityIndicator size={'large'} style={{flex:1}}></ActivityIndicator>:
+              <FlatList
+                data={postReplies}
+                renderItem={renderReplies}
+                keyExtractor={item => item.key}
+              >
+              </FlatList>}
+          </View>
             
             <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
               <Input 

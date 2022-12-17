@@ -63,7 +63,6 @@ export function Search({navigation}) {
 
 
     const renderUser = ({item}) => {
-        console.log(item.joined)
 
         return(
         <View style={{height:100,flexDirection:'row',backgroundColor:'white'}}>

@@ -193,15 +193,17 @@ export default StyleSheet.create({
     color: 'black',
   },
   date: {
-    fontSize: 10,
+    fontSize: 12,
     marginTop: 20,
     color: 'black',
+    fontWeight:'bold',
     fontStyle: 'italic',
   },
   replies: {
-    fontSize: 10,
+    fontSize: 15,
     marginTop: 20,
     color: 'black',
+    fontWeight:'bold',
     fontStyle: 'italic',
   },
   name: {
