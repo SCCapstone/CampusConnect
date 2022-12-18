@@ -7,6 +7,7 @@ import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js';
 import {RegistrationScreen} from './RegistrationScreen.js';
 import {HomeScreen} from './HomeScreen.js';
 import {ProfileView} from './ProfileView.js'
+import {CalendarPage} from './CalendarPage'
 import AppContext from './AppContext';
 import { vw } from 'stream-chat-react-native';
 
@@ -130,6 +131,13 @@ export default function App() {
                     headerStyle:{backgroundColor:'#73000a'},
                     headerTitleStyle:{color:'white'},
                   })}
+                />
+                <Stack.Screen
+                  name="CalendarPage"
+                  component={CalendarPage}
+                  options={{headerShown: true, headerTintColor:'#ffffff', headerStyle:{backgroundColor:'#73000a'}, headerTitleStyle:{color:'white',
+      
+                  }, title:'Calendar'}}
                 />
               </Stack.Navigator>
             </NavigationContainer>

@@ -151,7 +151,9 @@ export function PostsScreen({navigation}) {
           tempReply.postIsYours = tempReply.user === '/Users/' + auth().currentUser.uid
           postReplies.push(tempReply);
         })}
-        setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
+        //The first one will sort by upvote count,then date.
+        //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
+        setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
         setRepliesLoading(false)
 
 
@@ -1015,7 +1017,7 @@ export function PostsScreen({navigation}) {
               </FlatList>
           </View>
           
-
+        </SafeAreaView>
         <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',height:22,justifyContent:'flex-end'}}>
           <View style={{flexDirection:'row',backgroundColor:'white'}}>
               <Input 
@@ -1031,7 +1033,6 @@ export function PostsScreen({navigation}) {
 
             </View>
         </KeyboardAvoidingView>
-        </SafeAreaView>
           
 
       </Modal>

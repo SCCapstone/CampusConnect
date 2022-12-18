@@ -32,6 +32,7 @@ if (Platform.OS === 'ios') {
 
 import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
+import { Icon } from '@rneui/themed';
 
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
@@ -113,13 +114,7 @@ export function DrawerContent(props) {
             </View>
           </View>
           <View style={styles.userInfoBox}>
-            <View style={styles.majorTextBox}>
-              <Text style={styles.majorText}>Major: </Text>
-              <Text style={styles.userMajorText}>{userData.major}</Text>
-            </View>
-            <View style={styles.classBox}>
-              <Text style={styles.userClassText}>{userData.gradYear}</Text>
-            </View>
+            <Icon onPress={()=> {navigation.navigate('CalendarPage')}} type='font-awesome-5' name='calendar-alt' size={80}></Icon>
           </View>
         </ImageBackground>
         <View style={styles.drawerItemsList}>
