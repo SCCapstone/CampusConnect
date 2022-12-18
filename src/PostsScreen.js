@@ -32,7 +32,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 
-import {FlatList, TouchableHighlight,RectButton} from 'react-native-gesture-handler';
+import {FlatList, TouchableHighlight,RectButton, gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
 import { SearchBar, Button, ListItem, Avatar ,Input,Icon} from '@rneui/themed';
@@ -610,117 +610,145 @@ export function PostsScreen({navigation}) {
 
   const Post = ({item, index}) => {
     return (
-      <View style={styles.postContainer}>
-        <View style={styles.upvoteBox}>
-          <TouchableOpacity onPress={() => UpvotePost({item})}>
-            <Image
-              style={styles.voteButtons}
-              source={
-                item.isUpVoted
-                  ? require('./assets/upvote_highlighted.png')
-                  : require('./assets/upvote.png')
-              }></Image>
-          </TouchableOpacity>
-          <Text style={styles.upvote}>{item.upvoteCount}</Text>
-          <TouchableOpacity onPress={() => DownvotePost({item})}>
-            <Image
-              style={styles.voteButtons}
-              source={
-                item.isDownVoted
-                  ? require('./assets/downvote_highlighted.png')
-                  : require('./assets/downvote.png')
-              }></Image>
-          </TouchableOpacity>
-        </View>
-        <Pressable delayLongPress={200} onLongPress={() => {
+      <Swipeable
+      overshootLeft={true}
+      ref={ref => {
+        this.swipeable2 = ref;
+      }}
+      onSwipeableOpen={(direction) => {
+        if(direction ==='right'){
           setReplyItem(item)
           setReplyModalVisible(true)
           getReplies(item);
-        }} style={styles.post}>
-          <View style={styles.editedAndOptionsBox}>
-              <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
-              <SelectDropdown
-                data={item.postIsYours ? postOptions : postOptions2}
-                buttonTextAfterSelection={() => {return '• • •'}}
-                onSelect={(option) => {
-                  if(option === 'Reply') {
-                    setReplyItem(item)
-                    setReplyModalVisible(true)
-                    getReplies(item);
-                  }
-                  else if(option === 'Edit') {
-                    setPost(item.key);
-                    setPostText(item.body)
-                    //this.floatingAction.animateButton()
-                    setModalVisible(true);
-                  }
-                  else if (option === 'Delete') {
-                    DeletePostAlert({item});
-                  }
-                }}
-                
-                defaultButtonText='• • •'
-                buttonTextStyle={{color:'white',fontSize:20}}
-                buttonStyle={styles.postDropdownButton}
-                
-              
-              />
-            </View>
-          <View style={styles.postUserImageAndInfoBox}>
-            <Pressable onPress={() => {
-              if(item.author !== 'Anonymous'){
-                userData.setProfileView(item.user.replace('/Users/',''))
-                navigation.navigate('ProfileView')
-              }
-              else if (item.author === 'Anonymous') {
-                Alert.alert('This user wishes to remain anonymous.')
-              }
-            }}>
-              <FastImage
-                defaultSource={require('./assets/blank2.jpeg')}
+          this.swipeable2.close()
+        }
+      }}
+      overshootRight={true}
+      leftThreshold={75}
+      rightThreshold={100}
+      friction={3}
+      renderLeftActions={() => (
+        <View style={styles.upvoteBox}>
+            <TouchableOpacity onPress={() => UpvotePost({item})}>
+              <Image
+                style={styles.voteButtons}
                 source={
-                  item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
-                }
-                style={styles.postPfp}
-              />
-            </Pressable>
-            {item.author !== 'Anonymous' ? (
-                <View style={styles.postUserInfo}>
-                  <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
-                  <Text style={styles.majorText}>
-                    {item.authorMajor} | {item.authorGradYear}
-                  </Text>
-                </View>
-            ) : (
-                <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
-  
-            )}
+                  item.isUpVoted
+                    ? require('./assets/upvote_highlighted.png')
+                    : require('./assets/upvote.png')
+                }></Image>
+            </TouchableOpacity>
+            <Text style={styles.upvote}>{item.upvoteCount}</Text>
+            <TouchableOpacity onPress={() => DownvotePost({item})}>
+              <Image
+                style={styles.voteButtons}
+                source={
+                  item.isDownVoted
+                    ? require('./assets/downvote_highlighted.png')
+                    : require('./assets/downvote.png')
+                }></Image>
+            </TouchableOpacity>
           </View>
-          <View style={styles.postImageView}>
-            <Text style={styles.body}>{item.body}</Text>
-            {item.extraData ? (
-              <TouchableOpacity onPress={() => {OpenImage({index})}}>
-                <FastImage
-                  source={{uri: item.extraData}}
-                  style={styles.postImage}
+      )}
+      renderRightActions={() => (
+        <View style={{justifyContent:'center'}}>
+         <TouchableOpacity>
+            <Icon containerStyle={{height:60,width:60,alignItems:'center',justifyContent:'center'}} size={50} solid={true} type="entypo" name="reply" color='black'/>
+          </TouchableOpacity>
+        </View>
+      )}
+    >
+        <View style={styles.postContainer}>
+          <Pressable delayLongPress={150} onLongPress={() => {
+            setReplyItem(item)
+            setReplyModalVisible(true)
+            getReplies(item);
+          }} style={styles.post}>
+            <View style={styles.editedAndOptionsBox}>
+                <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
+                <SelectDropdown
+                  data={item.postIsYours ? postOptions : postOptions2}
+                  buttonTextAfterSelection={() => {return '• • •'}}
+                  onSelect={(option) => {
+                    if(option === 'Reply') {
+                      setReplyItem(item)
+                      setReplyModalVisible(true)
+                      getReplies(item);
+                    }
+                    else if(option === 'Edit') {
+                      setPost(item.key);
+                      setPostText(item.body)
+                      //this.floatingAction.animateButton()
+                      setModalVisible(true);
+                    }
+                    else if (option === 'Delete') {
+                      DeletePostAlert({item});
+                    }
+                  }}
+                  
+                  defaultButtonText='• • •'
+                  buttonTextStyle={{color:'white',fontSize:20}}
+                  buttonStyle={styles.postDropdownButton}
+                  
+                
                 />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View style={styles.dateAndReplyBox}>
-            <Text style={styles.date}>
-              {moment(new Date(item.date.toDate())).format(
-                'MMMM Do YYYY, h:mm:ss a',
+              </View>
+            <View style={styles.postUserImageAndInfoBox}>
+              <Pressable onPress={() => {
+                if(item.author !== 'Anonymous'){
+                  userData.setProfileView(item.user.replace('/Users/',''))
+                  navigation.navigate('ProfileView')
+                }
+                else if (item.author === 'Anonymous') {
+                  Alert.alert('This user wishes to remain anonymous.')
+                }
+              }}>
+                <FastImage
+                  defaultSource={require('./assets/blank2.jpeg')}
+                  source={
+                    item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
+                  }
+                  style={styles.postPfp}
+                />
+              </Pressable>
+              {item.author !== 'Anonymous' ? (
+                  <View style={styles.postUserInfo}>
+                    <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+                    <Text style={styles.majorText}>
+                      {item.authorMajor} | {item.authorGradYear}
+                    </Text>
+                  </View>
+              ) : (
+                  <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+    
               )}
-            </Text>
-            <View style={styles.replyCountBox}>
-              <Text style={styles.replies}>Replies: </Text>
-              <Text style={styles.replies}>{item.replyCount}</Text>
             </View>
-          </View>
-          
-        </Pressable>
-      </View>
+            <View style={styles.postImageView}>
+              <Text style={styles.body}>{item.body}</Text>
+              {item.extraData ? (
+                <TouchableOpacity onPress={() => {OpenImage({index})}}>
+                  <FastImage
+                    source={{uri: item.extraData}}
+                    style={styles.postImage}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+            <View style={styles.dateAndReplyBox}>
+              <Text style={styles.date}>
+                {moment(new Date(item.date.toDate())).format(
+                  'MMMM Do YYYY, h:mm:ss a',
+                )}
+              </Text>
+              <View style={styles.replyCountBox}>
+                <Text style={styles.replies}>Replies: </Text>
+                <Text style={styles.replies}>{item.replyCount}</Text>
+              </View>
+            </View>
+            
+          </Pressable>
+        </View>
+      </Swipeable>
     );
   };
 
@@ -738,12 +766,14 @@ export function PostsScreen({navigation}) {
   };
 
   const renderPost = ({item, index}) => <Post item={item} index={index} />;
-  const renderReplies = ({item, index}) => {
+  const renderReplies = gestureHandlerRootHOC(({item, index}) => {
 
 
     return(
       <Swipeable
       overshootLeft={true}
+      containerStyle={{overflow:'hidden'}}
+      overshootFriction={8}
       ref={ref => {
         this.swipeable = ref;
       }}
@@ -791,7 +821,7 @@ export function PostsScreen({navigation}) {
       </Swipeable>
 
     )
-  }
+  })
 
   if (loading) {
     return (

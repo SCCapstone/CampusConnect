@@ -24,8 +24,8 @@ export default StyleSheet.create({
     alignSelf: 'center',
 
     borderRadius: 10,
-    height: 200,
-    width: 290,
+    height:250,
+    width:330,
     overlayColor: '#a8a1a6',
   },
   postReplyImage: {
@@ -61,7 +61,6 @@ export default StyleSheet.create({
   postPfp: {height: 60, width: 60, borderRadius: 40},
 
   postContainer: {
-    flexDirection: 'row',
     flex: 1,
   },
 
@@ -78,7 +77,8 @@ export default StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 20,
     justifyContent: 'center',
-    marginVertical:'5%'
+    marginVertical:'5%',
+    marginHorizontal:'4%'
 
     
   },
@@ -127,7 +127,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     marginVertical: 8,
-    marginRight: '3%',
+    marginHorizontal: '2%',
     alignSelf: 'flex-end',
     flex: 1,
     flexGrow:1
