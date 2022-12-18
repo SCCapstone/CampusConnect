@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image,FlatList} from 'react-native';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity} from 'react-native';
 import { Avatar,Icon,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
@@ -97,7 +97,15 @@ export function CalendarPage({navigation}) {
 
     useEffect(() => {
 
+        navigation.setOptions({
 
+            headerRight:() =>(
+                //right here, navigate to the events page, but pass it props to indicate the user wants to view events on the current day
+                <TouchableOpacity onPress={() => navigation.navigate('Events')}>
+                    <Text style={{color:'white',fontSize:15}}>View Events</Text>
+                </TouchableOpacity>
+            )
+        });
       }, []); //I guess this tells react to update when these variables change?
 
 
