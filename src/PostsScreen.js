@@ -108,7 +108,7 @@ export function PostsScreen({navigation}) {
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
   const list = useRef(FlashList);
-  const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
+  const sortingOptions = ["Best", "Worst", "New", "Anonymous", "Most Commented"]
   const postOptions = ["Reply", "Edit","Delete"]
   const postOptions2 = ["Reply"]
 
@@ -191,6 +191,11 @@ export function PostsScreen({navigation}) {
       .where('author','==', 'Anonymous')
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
+      .limit(5) 
+    }
+    else if (sortMode === 'Most Commented') {
+      query = postsRef
+      .orderBy('replyCount', 'desc')
       .limit(5) 
     }
     query.get().then(snapShot => {
@@ -386,6 +391,10 @@ export function PostsScreen({navigation}) {
       .where('author','==', 'Anonymous')
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
+      .limit(postCount) 
+    } else if (sortMode === 'Most Commented') {
+      query = postsRef
+      .orderBy('replyCount', 'desc')
       .limit(postCount) 
     }
     //gets posts asynchronously in the background
