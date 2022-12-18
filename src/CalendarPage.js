@@ -1,26 +1,38 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity} from 'react-native';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal} from 'react-native';
 import { Avatar,Icon,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
 
 import CalendarStrip from 'react-native-calendar-strip';
-import { Agenda } from 'react-native-calendars';
 import moment from 'moment';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MapView, { Marker } from 'react-native-maps'
 
 import AppContext from './AppContext';
 import FastImage from 'react-native-fast-image';
 import { Button } from '@rneui/base';
 import { Swipeable} from 'react-native-gesture-handler';
 import { FloatingAction } from 'react-native-floating-action';
+import {decode} from "@mapbox/polyline";
+import MapViewDirections from 'react-native-maps-directions';
+import GetLocation from 'react-native-get-location'
+import {locations} from './consts/locations'
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
     const [key,setKey] = useState(moment().day())
     const [selectedDate, setSelectedDate] = useState(moment());
+    const [mapVisible,setMapVisible] = useState(false)
+    const [coords, setCoords] = useState([]);
+    const[origin,setOrigin] = useState({latitude: 33.990890860794124, longitude: -81.02403298291603})
+
+    const[destination,setDestination] = useState(locations.colonial_life_arena)
+    
+
+    const GOOGLE_MAPS_APIKEY = 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
 
 
 
@@ -86,14 +98,17 @@ export function CalendarPage({navigation}) {
                 </View>
             )}
             >
-            <View style={{backgroundColor:'#a8a1a6',flex:1,padding:10,borderRadius:10,margin:15}}>
-                <Text style={{color:'black',fontWeight:'bold',fontSize:16}}>{item.name + "\n"+ item.professor}</Text>
-                <Text style={{color:'black',fontWeight:'bold'}}>{item.location + ' '+ item.room}</Text>
-                <Text style={{color:'black',fontWeight:'bold'}}>{item.time}</Text>
-            </View>
+            <TouchableOpacity onPress={() =>{getDirections()}}>
+                <View style={{backgroundColor:'#a8a1a6',flex:1,padding:10,borderRadius:10,margin:15}}>
+                    <Text style={{color:'black',fontWeight:'bold',fontSize:16}}>{item.name + "\n"+ item.professor}</Text>
+                    <Text style={{color:'black',fontWeight:'bold'}}>{item.location + ' '+ item.room}</Text>
+                    <Text style={{color:'black',fontWeight:'bold'}}>{item.time}</Text>
+                </View>
+                </TouchableOpacity>
         </Swipeable>
         );
     }
+  
 
     useEffect(() => {
 
@@ -106,12 +121,66 @@ export function CalendarPage({navigation}) {
                 </TouchableOpacity>
             )
         });
-      }, []); //I guess this tells react to update when these variables change?
+      }, []); 
+
+    const getDirections = () => {
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 15000,
+        })
+        .then(location => {
+            setOrigin(location)
+            setMapVisible(true)
+        })
+        .catch(error => {
+            const { code, message } = error;
+            console.warn(code, message);
+        })
+        
+    } 
+
 
 
 
     return (
         <View style={{backgroundColor:'#73000a',flex:1}}>
+            <Modal visible={mapVisible}>
+                <View style={{flex:1,backgroundColor:'white'}}>
+                    <Button 
+                    containerStyle={{backgroundColor:'#73000a'}}
+                    buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%'}}
+                    size='lg'
+                    onPress={() => setMapVisible(false)}
+                    titleStyle={{fontSize:10,fontWeight:'bold'}}
+                    title={'Close'}
+                    />
+                    <MapView style={{flex:1}} 
+                    zoomControlEnabled={true}
+                    showsUserLocation={true}
+                    followsUserLocation={true}
+                    
+                    initialRegion=
+                        {{latitude:origin.latitude, 
+                        longitude:origin.longitude,
+                        latitudeDelta:.01,
+                        longitudeDelta:.01}}
+                    >
+                    <Marker title='Capstone Building' coordinate={destination}></Marker>
+                        <MapViewDirections
+                            
+                            origin={origin}
+                            mode='WALKING'
+                            
+                            destination={destination}
+                            apikey={GOOGLE_MAPS_APIKEY}
+                            strokeColor='#73000a'
+                            strokeWidth={15}
+                        />
+                    </MapView>
+                        
+                    
+                </View>
+            </Modal>
             <CalendarStrip
                 style={{height:150, paddingTop: 20, paddingBottom: 10}}
                 calendarColor={'#73000a'}
@@ -140,7 +209,7 @@ export function CalendarPage({navigation}) {
                 >
                     
                 </FlatList>: 
-                <Text style={{color:'black',textAlign:'center',fontSize:24}}>Nothing to do? How about join a club!</Text>}
+                <Text style={{color:'black',textAlign:'center',fontSize:24}}>Nothing to do? Join a club!</Text>}
                 <FloatingAction
                 color='#73000a'
                 >

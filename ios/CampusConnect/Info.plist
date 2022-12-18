@@ -37,6 +37,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We use your location to provide guidance on where your classes are.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app uses your photo library to upload a profile pic.</string>
 	<key>UIAppFonts</key>

@@ -20,6 +20,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
 import type { DeepPartial, Theme } from 'stream-chat-react-native';
 import { TouchableOpacity,Text } from 'react-native';
+import {enableLatestRenderer} from 'react-native-maps';
+
+enableLatestRenderer();
 
 const Stack = createNativeStackNavigator();
 const maxWidth = (vw(100) - 72)-120;

@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
         <queries>
       <intent>
@@ -22,6 +23,9 @@
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs"/>
       
       <activity
         android:name=".MainActivity"
