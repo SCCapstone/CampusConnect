@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image} from 'react-native';
-import { Avatar,Text } from '@rneui/themed';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList} from 'react-native';
+import { Avatar,Icon,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
 
@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from './AppContext';
 import FastImage from 'react-native-fast-image';
 import { Button } from '@rneui/base';
-import { FlatList } from 'react-native-gesture-handler';
+import { Swipeable} from 'react-native-gesture-handler';
 import { FloatingAction } from 'react-native-floating-action';
 
 export function CalendarPage({navigation}) {
@@ -65,11 +65,33 @@ export function CalendarPage({navigation}) {
 
     const renderClasses = ({item,index}) => {
         return(
+            <Swipeable
+            overshootLeft={true}
+            ref={ref => {
+              this.swipeable = ref;
+            }}
+            overshootRight={true}
+            leftThreshold={105}
+            containerStyle={{backgroundColor:'white'}}
+            rightThreshold={105}
+            friction={2.5}
+            renderLeftActions={() => (
+                <View style={{justifyContent:'center',marginLeft:15}}>
+                    <Icon type='entypo' name='edit' size={30} color='black'></Icon>
+                </View>
+            )}
+            renderRightActions={() => (
+                <View style={{justifyContent:'center',marginRight:15}}>
+                    <Icon type='MaterialIcons' name='delete' color={'red'} size={30}></Icon>
+                </View>
+            )}
+            >
             <View style={{backgroundColor:'#a8a1a6',flex:1,padding:10,borderRadius:10,margin:15}}>
                 <Text style={{color:'black',fontWeight:'bold',fontSize:16}}>{item.name + "\n"+ item.professor}</Text>
                 <Text style={{color:'black',fontWeight:'bold'}}>{item.location + ' '+ item.room}</Text>
                 <Text style={{color:'black',fontWeight:'bold'}}>{item.time}</Text>
             </View>
+        </Swipeable>
         );
     }
 
