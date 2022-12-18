@@ -134,11 +134,11 @@ export function PostsScreen({navigation}) {
     const postReplies= [];
     var postsRef = firestore().collection('Posts').doc(item.key)
     //gets posts asynchronously in the background
-    postsRef.get().then(doc => {
+    postsRef.get().then(async doc => {
       const replies = doc.get('replies');
-      replies.forEach(reply => {
-        var replyRef = firestore().collection('Replies').doc(reply)
-        replyRef.get().then(reply => {
+      for(firebaseReply of replies){
+        var replyRef = firestore().collection('Replies').doc(firebaseReply)
+        await replyRef.get().then(reply => {
           const tempReply = {
             ...reply.data(),
             key:reply.id,
@@ -150,14 +150,14 @@ export function PostsScreen({navigation}) {
           tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
           tempReply.postIsYours = tempReply.user === '/Users/' + auth().currentUser.uid
           postReplies.push(tempReply);
-        }).then(()=>{
-          //This sorts by upvote count, and then by date as a fallback
-          setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
-          setRepliesLoading(false)
-        })
-      })
+        })}
+        setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
+        setRepliesLoading(false)
+
+
     })
 
+  
   }
 
   const getPosts = () => {
@@ -638,7 +638,7 @@ export function PostsScreen({navigation}) {
       }}
       overshootRight={true}
       leftThreshold={75}
-      rightThreshold={125}
+      rightThreshold={105}
       friction={3}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
@@ -826,7 +826,7 @@ export function PostsScreen({navigation}) {
           >
             <Icon containerStyle={{alignItems:'center',justifyContent:'center'}} size={20} solid={true} type="antdesign" name="caretup" color= {item.isUpVoted ? 'red': 'black'}/>
           </TouchableOpacity>
-          <Text>{item.upvoteCount}</Text>
+          <Text style={{color:'black'}}>{item.upvoteCount}</Text>
           <TouchableOpacity onPress={async () => {DownvotePost({item}).then(() =>{getReplies(replyItem)})}}
           >
             <Icon containerStyle={{alignItems:'center',justifyContent:'center'}}  size={20} solid={true} type="antdesign" name="caretdown" color= {item.isDownVoted ? 'blue': 'black'}/>
@@ -842,17 +842,17 @@ export function PostsScreen({navigation}) {
         </RectButton>: null
       )}
     >
-        <View style={{height:80,width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
-          <View style={{width:70,flex:.4}}>
+        <View style={{width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
+          <View style={{width:70,flex:.4,justifyContent:'center'}}>
             <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{alignSelf:'center',height:50,width:50,borderRadius:40,marginLeft:15}} source={item.pfp ? {uri:item.pfp}: require('./assets/blank2.jpeg')}></FastImage>
-            <Text style={{marginLeft:15,textAlign:'center',fontSize:12,fontWeight:'bold'}}>{item.postIsYours ? item.author + ' (You)': item.author}</Text>
+            <Text style={{marginLeft:15,textAlign:'center',fontSize:12,fontWeight:'bold',color:'black'}}>{item.postIsYours ? item.author + ' (You)': item.author}</Text>
           </View>
-            <View style={{backgroundColor:'#a8a1a6', flex:1,padding:10,marginLeft:5,marginRight:'5%',borderRadius:10,flexGrow:1}}>
-              <View style={styles.postReplyView}>
+            <View style={{backgroundColor:'#a8a1a6', flex:1,padding:10,marginLeft:5,marginRight:'5%',borderRadius:10}}>
+              <View style={{marginBottom:5}}>
                 <Text style={styles.replyBody}>{item.body}</Text>
               </View>
-              <View style={{flex:1,height:'10%' ,marginTop:4,justifyContent:'flex-end'}}>
-                <Text style={{fontStyle:'italic',fontWeight:'bold',fontSize:12}}>{moment(item.date.toDate()).fromNow()}</Text>
+              <View style={{flex:1,height:'10%' ,marginTop:0,justifyContent:'flex-end'}}>
+                <Text style={{fontStyle:'italic',fontWeight:'bold',fontSize:12,color:'black'}}>{moment(item.date.toDate()).fromNow()}</Text>
               </View>
             </View>
         </View>
@@ -1066,6 +1066,6 @@ const PostError = () => {
   Alert.alert(
     'Post is invalid',
     'Make sure post is not empty or shorten your post to less than 1000 characters and 25 or less lines',
-    [{text: 'Okay.'}],
+    [{text: 'Okay'}],
   );
 };
