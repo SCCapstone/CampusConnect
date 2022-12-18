@@ -19,6 +19,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
 import type { DeepPartial, Theme } from 'stream-chat-react-native';
+import { TouchableOpacity,Text } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const maxWidth = (vw(100) - 72)-120;
@@ -137,7 +138,11 @@ export default function App() {
                   component={CalendarPage}
                   options={{headerShown: true, headerTintColor:'#ffffff', headerStyle:{backgroundColor:'#73000a'}, headerTitleStyle:{color:'white',
       
-                  }, title:'Calendar'}}
+                  }, title:'Calendar', headerRight: () => (
+                    <TouchableOpacity>
+                      <Text style={{color:'white',fontSize:15}}>View Events</Text>
+                    </TouchableOpacity>
+                ),}}
                 />
               </Stack.Navigator>
             </NavigationContainer>
