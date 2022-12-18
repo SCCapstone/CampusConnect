@@ -1,4 +1,3 @@
-//THIS PAGE WILL BE VIRTUALLY IDENTICAL TO THE OTHER POSTS SCREEN 
 import React from 'react';
 import {useState, useEffect, useContext, useRef} from 'react';
 import {
@@ -14,6 +13,7 @@ import {
   Modal,
   Image,
   Platform,
+  FlatList,
   LayoutAnimation,
   UIManager,
 } from 'react-native';
@@ -30,12 +30,17 @@ import FastImage from 'react-native-fast-image';
 import {FlashList} from '@shopify/flash-list';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { useHeaderHeight } from '@react-navigation/elements';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {
+Delete,
+useTheme,
+} from 'stream-chat-react-native';
 
 
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import { TouchableHighlight,RectButton, gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SelectDropdown from 'react-native-select-dropdown'
-import { SearchBar, Button, ListItem, Avatar ,Input} from '@rneui/themed';
+import { SearchBar, Button, ListItem, Avatar ,Input,Icon} from '@rneui/themed';
 import ImagePicker from 'react-native-image-crop-picker';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -50,7 +55,7 @@ import androidstyles from './styles/android/PostScreenStyles';
 import androidCommentStyles from './styles/android/CommentStyles'
 
 var styles;
-var commentStyles
+var commentStylesl
 
 if (Platform.OS === 'ios') {
   styles = iosstyles;
@@ -88,19 +93,22 @@ export function AlumniPostsScreen({navigation}) {
   const [image, setImage] = React.useState('');
   const [postUploading, setPostUploading] = useState(false);
   const [reply, setReply] = React.useState('');
-  const [replyItem,setReplyItem] = React.useState(new Map())
+  const [replyItem,setReplyItem] = React.useState()
   const [post,setPost] = useState();
+  const [postReplySubscriber,setPostReplySubscriber] = useState();
+  const [postReplies, setPostReplies] = useState([])
+  const [repliesLoading,setRepliesLoading] = useState(false)
   var transactionStarted = false;
   var url = '';
 
 
   const headerHeight = useHeaderHeight();
 
-  const offsetHeight = Platform.OS === 'ios' ? 70 : -300 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? -25 : -300 //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
   const list = useRef(FlashList);
-  const sortingOptions = ["Best", "Worst", "New", "Anonymous"]
+  const sortingOptions = ["Best", "Worst", "New", "Anonymous", "Most Commented"]
   const postOptions = ["Reply", "Edit","Delete"]
   const postOptions2 = ["Reply"]
 
@@ -114,16 +122,48 @@ export function AlumniPostsScreen({navigation}) {
   };
   const DeletePostAlert = ({item}) => {
     if ('/Users/' + auth().currentUser.uid === item.user) {
-      Alert.alert('Delete Post?', 'Are you sure you want to delete?', [
+      Alert.alert(item.isReply?'Delete Reply':'Delete Post?', 'Are you sure you want to delete?', [
         {text: 'Yes', onPress: () => DeletePost({item})},
         {text: 'No'},
       ]);
     }
   };
 
+  const getReplies = (item) => {
+    setRepliesLoading(true)
+    const postReplies= [];
+    var postsRef = firestore().collection('AlumniPosts').doc(item.key)
+    //gets posts asynchronously in the background
+    postsRef.get().then(async doc => {
+      const replies = doc.get('replies');
+      for(firebaseReply of replies){
+        var replyRef = firestore().collection('Replies').doc(firebaseReply)
+        await replyRef.get().then(reply => {
+          const tempReply = {
+            ...reply.data(),
+            key:reply.id,
+            isUpVoted: false,
+            isDownVoted: false,
+            postIsYours:false
+          }
+          tempReply.isUpVoted = tempReply.upvoters[auth().currentUser.uid];
+          tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
+          tempReply.postIsYours = tempReply.user === '/Users/' + auth().currentUser.uid
+          postReplies.push(tempReply);
+        })}
+        //The first one will sort by upvote count,then date.
+        //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
+        setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
+        setRepliesLoading(false)
+
+
+    })
+
+  
+  }
+
   const getPosts = () => {
     setRefresh(true)
-    console.log(search)
     var postsRef = firestore().collection('AlumniPosts')
     var query; 
     if(search) {
@@ -153,6 +193,11 @@ export function AlumniPostsScreen({navigation}) {
       .where('author','==', 'Anonymous')
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
+      .limit(5) 
+    }
+    else if (sortMode === 'Most Commented') {
+      query = postsRef
+      .orderBy('replyCount', 'desc')
       .limit(5) 
     }
     query.get().then(snapShot => {
@@ -194,14 +239,13 @@ export function AlumniPostsScreen({navigation}) {
     ){
       setPostUploading(true)
       firestore()
-        .collection('Posts')
+        .collection('AlumniPosts')
         .doc(post)
         .update({
           body: postText,
           edited:true
           })
           .then(() => {
-            closeModal();
             navigation.reset({
               index: 0,
               routes: [{name: 'Alumni'}],
@@ -284,6 +328,7 @@ export function AlumniPostsScreen({navigation}) {
             routes: [{name: 'Alumni'}],
           });
 
+
         })
         .catch(error => {
           console.log(error.code);
@@ -349,6 +394,10 @@ export function AlumniPostsScreen({navigation}) {
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
       .limit(postCount) 
+    } else if (sortMode === 'Most Commented') {
+      query = postsRef
+      .orderBy('replyCount', 'desc')
+      .limit(postCount) 
     }
     //gets posts asynchronously in the background
     const subscriber = query.onSnapshot(querySnapshot => {
@@ -396,7 +445,15 @@ export function AlumniPostsScreen({navigation}) {
   }, [navigation,sortMode,postCount,search]);
 
   const DeletePost = ({item}) => {
-    firestore().collection('AlumniPosts').doc(item.key).delete();
+    if(item.isReply){
+      firestore().collection('Replies').doc(item.key).delete();
+      firestore().collection('AlumniPosts').doc(item.post).update({
+        replies:firebase.firestore.FieldValue.arrayRemove(item.key),
+        replyCount:firebase.firestore.FieldValue.increment(-1)
+      }).then(() => {getReplies(replyItem);}).catch(()=>{})
+    }
+    else
+      firestore().collection('AlumniPosts').doc(item.key).delete();
   };
   const OpenImage = ({index}) => {
     setImageIndex(imageMap.get(index));
@@ -407,7 +464,11 @@ export function AlumniPostsScreen({navigation}) {
   const UpvotePost = async ({item}) => {
     if (!transactionStarted) {
       transactionStarted = true;
-      const postRef = firestore().collection('AlumniPosts').doc(item.key);
+      var postRef;
+      if (item.isReply)
+        postRef = firestore().collection('Replies').doc(item.key);
+      else
+        postRef = firestore().collection('AlumniPosts').doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -448,7 +509,11 @@ export function AlumniPostsScreen({navigation}) {
   const DownvotePost = async ({item}) => {
     if (!transactionStarted) {
       transactionStarted = true;
-      const postRef = firestore().collection('AlumniPosts').doc(item.key);
+      var postRef;
+      if (item.isReply)
+        postRef = firestore().collection('Replies').doc(item.key);
+      else
+        postRef = firestore().collection('AlumniPosts').doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -500,6 +565,61 @@ export function AlumniPostsScreen({navigation}) {
 
   };
 
+  const MakeReply = (item) => {
+    if (
+      reply &&
+      reply.length < 500 &&
+      reply.split(/\r\n|\r|\n/).length <=
+        10 /*this last one checks that there are not too many lines */
+    ) {
+      if(!postIsAnonymous){
+        const replyRef = firestore().collection('Replies').doc();
+        replyRef
+          .set({
+            author: userData.name,
+            body: reply,
+            upvoteCount: 1,
+            date: firestore.FieldValue.serverTimestamp(),
+            pfp: userData.pfp,
+            user: '/Users/' + auth().currentUser.uid,
+            extraData: '',
+            upvoters: {[auth().currentUser.uid]: true},
+            downvoters: new Map(),
+            isReply:true,
+            post: item.key
+          }).catch(()=> {})
+          firestore().collection('AlumniPosts').doc(item.key).update({
+            replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
+            replyCount:firebase.firestore.FieldValue.increment(1)
+          }).then(() => {getReplies(item);setReply('')}).catch(()=>{})
+        }
+      else if (postIsAnonymous) {
+        const replyRef = firestore().collection('Replies').doc();
+        replyRef
+          .set({
+            author: 'Anonymous',
+            body: reply,
+            upvoteCount: 1,
+            date: firestore.FieldValue.serverTimestamp(),
+            pfp: '',
+            user: '/Users/' + auth().currentUser.uid,
+            extraData: '',
+            upvoters: {[auth().currentUser.uid]: true},
+            downvoters: new Map(),
+            isReply:true,
+            post: item.key
+          }).catch(()=> {})
+          firestore().collection('AlumniPosts').doc(item.key).update({
+            replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
+            replyCount:firebase.firestore.FieldValue.increment(1)
+          }).then(() => {getReplies(item);setReply('');setPostIsAnonymous(false)}).catch(()=>{})
+      }
+    } else {
+      PostError();
+    }
+
+  }
+
   const uploadPic = async () => {
     const reference = storage().ref('/AlumniPosts/' +uuidv4());
     if (image) {
@@ -509,127 +629,182 @@ export function AlumniPostsScreen({navigation}) {
       url = await reference.getDownloadURL();
     }
   };
-  const PostReply = ({item, index}) => {
-    return (
-      <View></View>
-    );
-  };
+
 
 
   const Post = ({item, index}) => {
     return (
-      <View style={styles.postContainer}>
+      <Swipeable
+      overshootLeft={true}
+      ref={ref => {
+        this.swipeable2 = ref;
+      }}
+      onSwipeableOpen={(direction) => {
+        if(direction ==='right'){
+          setReplyItem(item)
+          setReplyModalVisible(true)
+          getReplies(item);
+          this.swipeable2.close()
+        }
+      }}
+      overshootRight={true}
+      leftThreshold={75}
+      rightThreshold={105}
+      friction={3}
+      renderLeftActions={() => (
         <View style={styles.upvoteBox}>
-          <TouchableOpacity onPress={() => UpvotePost({item})}>
-            <Image
-              style={styles.voteButtons}
-              source={
-                item.isUpVoted
-                  ? require('./assets/upvote_highlighted.png')
-                  : require('./assets/upvote.png')
-              }></Image>
-          </TouchableOpacity>
-          <Text style={styles.upvote}>{item.upvoteCount}</Text>
-          <TouchableOpacity onPress={() => DownvotePost({item})}>
-            <Image
-              style={styles.voteButtons}
-              source={
-                item.isDownVoted
-                  ? require('./assets/downvote_highlighted.png')
-                  : require('./assets/downvote.png')
-              }></Image>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.post}>
-          <View style={styles.editedAndOptionsBox}>
-              <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
-              <SelectDropdown
-                data={item.postIsYours ? postOptions : postOptions2}
-                buttonTextAfterSelection={() => {return '• • •'}}
-                onSelect={(option) => {
-                  if(option === 'Reply') {
-                    setReplyItem(item)
-                    setReplyModalVisible(true)
-                  }
-                  else if(option === 'Edit') {
-                    setPost(item.key);
-                    setPostText(item.body)
-                    this.floatingAction.animateButton()
-                    setModalVisible(true);
-                  }
-                  else if (option === 'Delete') {
-                    DeletePostAlert({item});
-                  }
-                }}
-                
-                defaultButtonText='• • •'
-                buttonTextStyle={{color:'white',fontSize:20}}
-                buttonStyle={styles.postDropdownButton}
-                
-              
-              />
-            </View>
-          <View style={styles.postUserImageAndInfoBox}>
-            <Pressable onPress={() => {
-              if(item.author !== 'Anonymous'){
-                userData.setProfileView(item.user.replace('/Users/',''))
-                navigation.navigate('ProfileView')
-              }
-              else if (item.author === 'Anonymous') {
-                Alert.alert('This user wishes to remain anonymous.')
-              }
-            }}>
-              <FastImage
-                defaultSource={require('./assets/blank2.jpeg')}
+            <TouchableOpacity onPress={() => UpvotePost({item})}>
+              <Image
+                style={styles.voteButtons}
                 source={
-                  item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
-                }
-                style={styles.postPfp}
-              />
-            </Pressable>
-            {item.author !== 'Anonymous' ? (
-                <View style={styles.postUserInfo}>
-                  <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
-                  <Text style={styles.majorText}>
-                    {item.authorMajor} | {item.authorGradYear}
-                  </Text>
-                </View>
-            ) : (
-                <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
-  
-            )}
+                  item.isUpVoted
+                    ? require('./assets/upvote_highlighted.png')
+                    : require('./assets/upvote.png')
+                }></Image>
+            </TouchableOpacity>
+            <Text style={styles.upvote}>{item.upvoteCount}</Text>
+            <TouchableOpacity onPress={() => DownvotePost({item})}>
+              <Image
+                style={styles.voteButtons}
+                source={
+                  item.isDownVoted
+                    ? require('./assets/downvote_highlighted.png')
+                    : require('./assets/downvote.png')
+                }></Image>
+            </TouchableOpacity>
           </View>
-          <View style={styles.postImageView}>
-            <Text style={styles.body}>{item.body}</Text>
-            {item.extraData ? (
-              <TouchableOpacity onPress={() => {OpenImage({index})}}>
-                <FastImage
-                  source={{uri: item.extraData}}
-                  style={styles.postImage}
-                />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View style={styles.dateAndReplyBox}>
-            <Text style={styles.date}>
-              {moment(new Date(item.date.toDate())).format(
-                'MMMM Do YYYY, h:mm:ss a',
-              )}
-            </Text>
-            <View style={styles.replyCountBox}>
-              <Text style={styles.replies}>Replies: </Text>
-              <Text style={styles.date}>{item.replyCount}</Text>
-            </View>
-          </View>
-          
+      )}
+      renderRightActions={() => (
+        <View style={{justifyContent:'center'}}>
+         <TouchableOpacity>
+            <Icon containerStyle={{height:60,width:60,alignItems:'center',justifyContent:'center'}} size={50} solid={true} type="entypo" name="reply" color='black'/>
+          </TouchableOpacity>
         </View>
-      </View>
+      )}
+    >
+        <View style={styles.postContainer}>
+          <Pressable delayLongPress={150} onLongPress={() => {
+            setReplyItem(item)
+            setReplyModalVisible(true)
+            getReplies(item);
+          }} style={styles.post}>
+            {item.edited?<View style={styles.editedAndOptionsBox}>
+                <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
+                <SelectDropdown
+                  data={item.postIsYours ? postOptions : postOptions2}
+                  buttonTextAfterSelection={() => {return '• • •'}}
+                  onSelect={(option) => {
+                    if(option === 'Reply') {
+                      setReplyItem(item)
+                      setReplyModalVisible(true)
+                      getReplies(item);
+                    }
+                    else if(option === 'Edit') {
+                      setPost(item.key);
+                      setPostText(item.body)
+                      //this.floatingAction.animateButton()
+                      setModalVisible(true);
+                    }
+                    else if (option === 'Delete') {
+                      DeletePostAlert({item});
+                    }
+                  }}
+                  
+                  defaultButtonText='• • •'
+                  buttonTextStyle={{color:'white',fontSize:20}}
+                  buttonStyle={styles.postDropdownButton}
+                  
+                
+                />
+              </View>:null}
+            <View style={styles.postUserImageAndInfoBox}>
+              <Pressable onPress={() => {
+                if(item.author !== 'Anonymous'){
+                  userData.setProfileView(item.user.replace('/Users/',''))
+                  navigation.navigate('ProfileView')
+                }
+                else if (item.author === 'Anonymous') {
+                  Alert.alert('This user wishes to remain anonymous.')
+                }
+              }}>
+                <FastImage
+                  defaultSource={require('./assets/blank2.jpeg')}
+                  source={
+                    item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')
+                  }
+                  style={styles.postPfp}
+                />
+              </Pressable>
+              {item.author !== 'Anonymous' ? (
+                  <View style={styles.postUserInfo}>
+                    <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+                    <Text style={styles.majorText}>
+                      {item.authorMajor} | {item.authorGradYear}
+                    </Text>
+                  </View>
+              ) : (
+                  <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+    
+              )}
+                  {(!item.edited)?<SelectDropdown
+                  data={item.postIsYours ? postOptions : postOptions2}
+                  buttonTextAfterSelection={() => {return '• • •'}}
+                  onSelect={(option) => {
+                    if(option === 'Reply') {
+                      setReplyItem(item)
+                      setReplyModalVisible(true)
+                      getReplies(item);
+                    }
+                    else if(option === 'Edit') {
+                      setPost(item.key);
+                      setPostText(item.body)
+                      //this.floatingAction.animateButton()
+                      setModalVisible(true);
+                    }
+                    else if (option === 'Delete') {
+                      DeletePostAlert({item});
+                    }
+                  }}
+                  defaultButtonText='• • •'
+                  buttonTextStyle={{color:'white',fontSize:20}}
+                  buttonStyle={styles.postDropdownButton}
+                  
+                
+                />:null}
+            </View>
+            <View style={styles.postImageView}>
+              <Text style={styles.body}>{item.body}</Text>
+              {item.extraData ? (
+                <TouchableOpacity onPress={() => {OpenImage({index})}}>
+                  <FastImage
+                    source={{uri: item.extraData}}
+                    style={styles.postImage}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+            <View style={styles.dateAndReplyBox}>
+              <Text style={styles.date}>
+                {moment(new Date(item.date.toDate())).format(
+                  'MMMM Do YYYY, h:mm:ss a',
+                )}
+              </Text>
+              <View style={styles.replyCountBox}>
+                <Text style={styles.replies}>Replies: </Text>
+                <Text style={styles.replies}>{item.replyCount}</Text>
+              </View>
+            </View>
+            
+          </Pressable>
+        </View>
+      </Swipeable>
     );
   };
 
 
   const closeModal = () => {
-    this.floatingAction.animateButton();
+    if(!post)
+      this.floatingAction.animateButton();
     setPostUploading(false)
     setPost('')
     setImage('')
@@ -640,6 +815,62 @@ export function AlumniPostsScreen({navigation}) {
   };
 
   const renderPost = ({item, index}) => <Post item={item} index={index} />;
+  const renderReplies = gestureHandlerRootHOC(({item, index}) => {
+
+    return(
+      <Swipeable
+      overshootLeft={true}
+      containerStyle={{overflow:'hidden',marginBottom:25}}
+      overshootFriction={8}
+      ref={ref => {
+        this.swipeable = ref;
+      }}
+      overshootRight={true}
+      leftThreshold={50}
+      rightThreshold={75}
+      onSwipeableOpen={(direction) => {
+      }}
+      friction={2}
+      renderLeftActions={() => (
+        <View style={{justifyContent:'center',alignItems:'center',marginLeft:15}}>
+          <TouchableOpacity onPress={async () => {await UpvotePost({item}).then(() =>{getReplies(replyItem)})}}
+          >
+            <Icon containerStyle={{alignItems:'center',justifyContent:'center'}} size={20} solid={true} type="antdesign" name="caretup" color= {item.isUpVoted ? 'red': 'black'}/>
+          </TouchableOpacity>
+          <Text style={{color:'black'}}>{item.upvoteCount}</Text>
+          <TouchableOpacity onPress={async () => {DownvotePost({item}).then(() =>{getReplies(replyItem)})}}
+          >
+            <Icon containerStyle={{alignItems:'center',justifyContent:'center'}}  size={20} solid={true} type="antdesign" name="caretdown" color= {item.isDownVoted ? 'blue': 'black'}/>
+          </TouchableOpacity>
+        </View>
+      )}
+      renderRightActions={() => (
+        item.postIsYours ?
+        <RectButton
+        onPress={() => DeletePostAlert({item})}
+        style={{justifyContent:'center',marginRight:20}}>
+          <Icon type='MaterialIcons' name='delete' color={'red'} size={45}></Icon>
+        </RectButton>: null
+      )}
+    >
+        <View style={{width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
+          <View style={{width:70,flex:.4,justifyContent:'center'}}>
+            <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{alignSelf:'center',height:50,width:50,borderRadius:40,marginLeft:15}} source={item.pfp ? {uri:item.pfp}: require('./assets/blank2.jpeg')}></FastImage>
+            <Text style={{marginLeft:15,textAlign:'center',fontSize:12,fontWeight:'bold',color:'black'}}>{item.postIsYours ? item.author + ' (You)': item.author}</Text>
+          </View>
+            <View style={{backgroundColor:'#a8a1a6', flex:1,padding:10,marginLeft:5,marginRight:'5%',borderRadius:10}}>
+              <View style={{marginBottom:5}}>
+                <Text style={styles.replyBody}>{item.body}</Text>
+              </View>
+              <View style={{flex:1,height:'10%' ,marginTop:0,justifyContent:'flex-end'}}>
+                <Text style={{fontStyle:'italic',fontWeight:'bold',fontSize:12,color:'black'}}>{moment(item.date.toDate()).fromNow()}</Text>
+              </View>
+            </View>
+        </View>
+      </Swipeable>
+
+    )
+  })
 
   if (loading) {
     return (
@@ -668,112 +899,141 @@ export function AlumniPostsScreen({navigation}) {
         alignSelf: 'center',
         marginVertical: '75%',
       }}>
-      (Alumni Post here please.)
+      Welcome Alumni!
       </Text>}
       <Modal
-        style={styles.modal}
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           this.floatingAction
         }}>
-        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeightPadding} behavior="padding">
+        <SafeAreaView style={{flex:1,justifyContent:'center',alignContent:'center'}}>
+          <KeyboardAvoidingView style={{justifyContent:'center'}} keyboardVerticalOffset={offsetHeight} behavior="padding">
           <View style={styles.postView}>
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                onPress={() => closeModal()}
-                style={styles.cancelButton}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if(post){
-                    EditPost();
-                  }
-                  else{
-                    PostAlert()
-                  }
-                }}
-                style={styles.postButton}>
-                <Text style={styles.postButtonText}>{post ? 'Save' :'Post?'}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.postTextView}>
-              {postUploading ? 
-              <ActivityIndicator></ActivityIndicator>
-              :
-              <TextInput
-                style={styles.postInput}
-                multiline={true}
-                defaultValue={postText}
-                onChangeText={postText => setPostText(postText)}
-                placeholder={post ? '':"Enter your post"}
-                textAlignVertical="top"
-                placeholderTextColor="black"
-                blurOnSubmit={false}
-              />}
-            </View>
-            {!post ? <View style={styles.bottomPostButtonsContainer}>
-              <View style={styles.checkBoxBox}>
-                <BouncyCheckbox
-                  size={20}
-                  
-                  fillColor="#73000a"
-                  disableBuiltInState={true}
-                  style={{alignSelf:'flex-start',marginLeft:20,marginTop:20}}
-                  isChecked={postIsAnonymous}
-                  unfillColor="#FFFFFF"
-                  text="Post Anonymously?"
-                  iconStyle={{ borderColor: "#73000a"}}
-                  innerIconStyle={{ borderWidth: 2 }}
-                  textStyle={{ color:'black' }}
-                  onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
-                />
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={() => closeModal()}
+                  style={styles.cancelButton}>
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if(post){
+                      EditPost();
+                    }
+                    else{
+                      PostAlert()
+                    }
+                  }}
+                  style={styles.postButton}>
+                  <Text style={styles.postButtonText}>{post ? 'Save' :'Post?'}</Text>
+                </TouchableOpacity>
               </View>
-                <Button 
-                  containerStyle={styles.postImageAddButtonContainer}
-                  buttonStyle={styles.postImageButton}
-                  size='lg'
-                  onPress={choosePhotoFromLibrary}
-                  titleStyle={{fontSize:10,fontWeight:'bold'}}
-                  title={image ? 'Image Loaded ✅' : 'Upload a picture'}
+              <View style={styles.postTextView}>
+                {postUploading ? 
+                <ActivityIndicator></ActivityIndicator>
+                :
+                <TextInput
+                  style={styles.postInput}
+                  multiline={true}
+                  defaultValue={postText}
+                  onChangeText={postText => setPostText(postText)}
+                  placeholder={post ? '':"Enter your post"}
+                  textAlignVertical="top"
+                  placeholderTextColor="black"
+                  blurOnSubmit={false}
+                />}
+              </View>
+              {!post ? <View style={styles.bottomPostButtonsContainer}>
+                <View style={styles.checkBoxBox}>
+                  <BouncyCheckbox
+                    size={20}
+                    
+                    fillColor="#73000a"
+                    disableBuiltInState={true}
+                    style={{alignSelf:'flex-start',marginLeft:20,marginTop:17}}
+                    isChecked={postIsAnonymous}
+                    unfillColor="#FFFFFF"
+                    text="Post Anonymously?"
+                    iconStyle={{ borderColor: "#73000a"}}
+                    innerIconStyle={{ borderWidth: 2 }}
+                    textStyle={{ color:'black' }}
+                    onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
                   />
+                </View>
+                  <Button 
+                    containerStyle={styles.postImageAddButtonContainer}
+                    buttonStyle={styles.postImageButton}
+                    size='lg'
+                    onPress={choosePhotoFromLibrary}
+                    titleStyle={{fontSize:10,fontWeight:'bold'}}
+                    title={image ? 'Image Loaded ✅' : 'Upload a picture'}
+                    />
 
-            </View>: null}
+              </View>: null}
           </View>
         </KeyboardAvoidingView>
+        </SafeAreaView>
       </Modal>
       <Modal
 
         animationType="slide"
         transparent={true}
         visible={replyModalVisible}>
-          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:headerHeight-3}}>
-          <Button 
-                  buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',width:100}}
-                  size='lg'
-                  onPress={() =>{setReplyModalVisible(false);
-                  setReplyItem(null)}}
-                  titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
-                  title={'Cancel'}
-                  />
-            <PostReply item={replyItem}>
-                  
-            </PostReply>
-            
-            <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',flex:1,marginTop:"0%",justifyContent:'flex-end'}}>
+          <SafeAreaView style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+              <Button 
+                buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',marginBottom:20,marginLeft:10}}
+                size='lg'
+                onPress={() =>{setReplyModalVisible(false);setPostReplies([])
+                setReplyItem(null)}}
+                titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
+                title={'Close'}
+              />
+              <BouncyCheckbox
+                size={20}
+                
+                fillColor="#73000a"
+                disableBuiltInState={true}
+                style={{alignSelf:'flex-start',marginRight:10,marginTop:12}}
+                isChecked={postIsAnonymous}
+                unfillColor="#FFFFFF"
+                text="Anonymous?"
+                iconStyle={{ borderColor: "#73000a"}}
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ color:'black' }}
+                onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
+              />
+            </View>
+          <View style={{flex:1}}>
+              <FlatList
+                data={postReplies}
+                renderItem={renderReplies}
+                keyExtractor={item => item.key}
+                refreshing={repliesLoading}
+                onRefresh={() => {getReplies(replyItem)}}
+              >
+              </FlatList>
+          </View>
+          
+        </SafeAreaView>
+        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',height:22,justifyContent:'flex-end'}}>
+          <View style={{flexDirection:'row',backgroundColor:'white'}}>
               <Input 
-                style={{alignSelf:'flex-end',alignItems:'flex-end'}}
-                placeholder="Comment"
-                leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                onChangeText={setReply}>
-              </Input>
+                  style={{alignSelf:'flex-end',alignItems:'flex-end'}}
+                  placeholder="Comment"
+                  defaultValue={reply}
+                  leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                  rightIcon={() => { return(<TouchableOpacity onPress={() => {MakeReply(replyItem)}}>
+                    <Icon type='ionicons' name='send'></Icon>
+                  </TouchableOpacity>)}}
+                  onChangeText={setReply}>
+                </Input>
 
-            </KeyboardAvoidingView>
+            </View>
+        </KeyboardAvoidingView>
           
-          
-        </View>
 
       </Modal>
 
@@ -797,8 +1057,9 @@ export function AlumniPostsScreen({navigation}) {
           this.floatingAction = ref;
         }}
         onPressMain={() => {
-          setModalVisible(!modalVisible);
+          setModalVisible(true);
         }}
+
       />
       <ImageView
         images={images}
@@ -815,6 +1076,6 @@ const PostError = () => {
   Alert.alert(
     'Post is invalid',
     'Make sure post is not empty or shorten your post to less than 1000 characters and 25 or less lines',
-    [{text: 'Okay.'}],
+    [{text: 'Okay'}],
   );
 };

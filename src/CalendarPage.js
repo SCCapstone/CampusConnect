@@ -19,7 +19,7 @@ import { FloatingAction } from 'react-native-floating-action';
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
-    const [key,setKey] = useState('')
+    const [key,setKey] = useState(moment().day())
     const [selectedDate, setSelectedDate] = useState(moment());
 
 
@@ -100,16 +100,17 @@ export function CalendarPage({navigation}) {
                 numDaysInWeek={7}
                 selectedDate ={selectedDate}
                 minDate={moment().startOf('isoWeek')}
-                maxDate={moment().startOf('isoWeek').add(7,'day')}
+                maxDate={moment().startOf('isoWeek').add(6,'day')}
             />
-            <View style={{backgroundColor:'white',flex:1}}>
-                <FlatList
+            <View style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>
+                {classes[key].length !==0?<FlatList
                     data={classes[key]}
                     renderItem={renderClasses}
                     key={item => item.name}
                 >
                     
-                </FlatList>
+                </FlatList>: 
+                <Text style={{color:'black',textAlign:'center',fontSize:24}}>Nothing to do? How about join a club!</Text>}
                 <FloatingAction
                 color='#73000a'
                 >
