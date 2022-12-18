@@ -25,7 +25,7 @@ export default StyleSheet.create({
 
     borderRadius: 10,
     height:250,
-    width:330,
+    width:320,
     overlayColor: '#a8a1a6',
   },
   postReplyImage: {
