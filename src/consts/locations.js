@@ -73,9 +73,11 @@ export const class_locations = [
     {label:'Drayton Hall (DRAYT)',value:locations.drayton_hall},
     {label:'Gambrell (GAMBRL)',value:locations.gambrell},
     {label:'Graduate Science Research Building',value:locations.graduate_science_research},
+    {label:'Hamilton (HAMLTN)',value:locations.hamilton},
     {label:'Henderson',value:locations.henderson},
     {label:'Honor\'s Residence',value:locations.honors_residence},
     {label:'Horizon',value:locations.horizon},
+    {label:'Humanities Classroom Building (HUMCB)',value:locations.humanities_classroom},
     {label:'IBM Building',value:locations.ibm},
     {label:'James F. Byrnes Building (BYRNES)', value:locations.james_f_byrnes_building},
     {label:'Jones Science Building',value:locations.jones_science},
@@ -90,11 +92,9 @@ export const class_locations = [
     {label:'Science and Technology Building (1112GR)', value:locations.science_and_technology_building},
     {label:'Sloan (SLOAN)',value:locations.sloan},
     {label:'Strom',value:locations.strom},
-    {label:'Hamilton (HAMLTN)',value:locations.hamilton},
     {label:'Sumwalt College (SMWALT)', value:locations.sumwalt},
     {label:'Swearingen Engineering Center (SWGN)', value:location.swearingen},
     {label:'Thomas Cooper Library',value:locations.thomas_cooper},
-    {labe:'Humanities Classroom Building (HUMCB)',value:locations.humanities_classroom},
     {label:'Welsh Humanities Building (HUMOB)',value:locations.welsh_humanities},
 
 ]
