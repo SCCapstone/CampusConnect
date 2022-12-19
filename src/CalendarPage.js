@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform} from 'react-native';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform,Pressable,KeyboardAvoidingView} from 'react-native';
 import { Avatar,Icon,Input,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
@@ -20,8 +20,10 @@ import {decode} from "@mapbox/polyline";
 import MapViewDirections from 'react-native-maps-directions';
 import GetLocation from 'react-native-get-location'
 import DropDownPicker from 'react-native-dropdown-picker';
-import {DateTimePicker,DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {class_locations,locations} from './consts/locations'
+import { start } from 'repl';
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
@@ -31,13 +33,16 @@ export function CalendarPage({navigation}) {
     const [coords, setCoords] = useState([]);
     const[origin,setOrigin] = useState({latitude: 33.990890860794124, longitude: -81.02403298291603})
     const [addClassVisible,setAddClassVisible] = useState(false)
-    const [value,setValue] = useState(new Date())
-    const [value2,setValue2] = useState(new Date())
     const [startTime,setStartTime] = useState();
     const [endTime,setEndTime] = useState();
-    const[destination,setDestination] = useState(locations.colonial_life_arena)
+    const[destination,setDestination] = useState(locations.carolina_coliseum)
     const [dropDownOpen,setDropDownOpen] = useState(false)
     const [selectedClassLocation,setSelectedClassLocation] = useState();
+    const [className,setClassName] = useState('')
+    const [roomNumber,setRoomNumber] = useState('')
+    const [professorName,setProfessorName] = useState('')
+    const [value,setValue] = useState(new Date())
+    const [value2,setValue2] = useState(new Date())
     
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
@@ -46,30 +51,21 @@ export function CalendarPage({navigation}) {
 
     const [classes,setClasses] = useState({
         1:[ //Monday
-            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+
         ],
         2:[ //Tuesday
-            {name: 'CSCE 492 - Capstone Senior Project', time:'All Day', professor:'Dr. Jose Vidal', location:'Online',room:'',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'CSCE 498 - Independent Research', time:'10:00AM - 12:00PM', professor:'Dr. Vignesh Naranyan', location:'USC AI-Institute',room:'5400',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+
 
         ],
         3:[ //Wednesday
-            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+
         ],
         4:[ //Thursday
-            {name: 'CSCE 492 - Capstone Senior Project', time:'All Day', professor:'Dr. Jose Vidal', location:'Online',room:''},
-            {name: 'CSCE 498 - Independent Research', time:'10:00AM - 12:00PM', professor:'Dr. Vignesh Naranyan', location:'USC AI-Institute',room:'5400',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'El Kappa Psi Meeting', time:'6:00PM - 8:00PM', professor:'', location:'Greek Village',room:'101',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+
 
         ],
         5:[ //Friday
-            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
-            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+
         ],
         6:[ //Saturday
 
@@ -106,62 +102,65 @@ export function CalendarPage({navigation}) {
                 </View>
             )}
             >
-            <TouchableOpacity onPress={() =>{getDirections()}}>
+            <Pressable onPress={() =>{setDestination(item.coordinates);getDirections();}}>
                 <View style={{backgroundColor:'#a8a1a6',flex:1,padding:10,borderRadius:10,margin:15}}>
                     <Text style={{color:'black',fontWeight:'bold',fontSize:16}}>{item.name + "\n"+ item.professor}</Text>
                     <Text style={{color:'black',fontWeight:'bold'}}>{item.location + ' '+ item.room}</Text>
                     <Text style={{color:'black',fontWeight:'bold'}}>{item.time}</Text>
                 </View>
-                </TouchableOpacity>
+            </Pressable>
         </Swipeable>
         );
     }
     const showTimePicker = () => {
-        console.log('hola')
         DateTimePickerAndroid.open({
-          value: value,
-          onChange: setTime,
+          value: new Date(),
+          onChange: setStartTime,
           mode: 'time',
           is24Hour: false,
         });
       };
       const showTimePicker2 = () => {
         DateTimePickerAndroid.open({
-          value: value2,
-          onChange: setTime2,
+          value: new Date(),
+          onChange: setEndTime,
           mode: 'time',
           is24Hour: false,
         });
       };
-
       const setTime = (event, date) => {
-        if(event === 'dismissed') {
-            setStartTime(date.getTime())
-        }
+            setStartTime(event)
+            setValue(date)
+            
       };
       const setTime2 = (event, date) => {
-        if(event === 'dismissed') {
-            setEndTime(date.getTime())
-        }
+            setValue2(date)
+            setEndTime(event)
       };
-  
 
     useEffect(() => {
+        const getClasses = async () => {
+            try {
+              const value = await AsyncStorage.getItem('@users_classes')
+              if(value !== null) {
+                setClasses(JSON.parse(value))
+              }
+            } catch(e) {
+              // error reading value
+            }
+          }
+        getClasses();
 
-        console.log(selectedClassLocation)
-
-    navigation.setOptions({
-
-
-        headerRight:() =>(
-            //right here, navigate to the events page, but pass it props to indicate the user wants to view events on the current day
-            <TouchableOpacity onPress={() => navigation.navigate('Events')}>
-                <Text style={{color:'white',fontSize:15}}>View Events</Text>
-            </TouchableOpacity>
-        )
-    });
+        navigation.setOptions({
+            headerRight:() =>(
+                //right here, navigate to the events page, but pass it props to indicate the user wants to view events on the current day
+                <TouchableOpacity onPress={() => navigation.navigate('Events')}>
+                    <Text style={{color:'white',fontSize:15}}>View Events</Text>
+                </TouchableOpacity>
+            )
+        });
         
-      }, [selectedClassLocation]); 
+      }, []); 
 
     const getDirections = () => {
         GetLocation.getCurrentPosition({
@@ -179,83 +178,42 @@ export function CalendarPage({navigation}) {
         
     }
 
-    const ClassInput = () => {
-        return(
-            <SafeAreaView style={{flex:1,justifyContent:'center'}}>
-                    <View style={{backgroundColor:'#a8a1a6',height:50,justifyContent:'center'}}>
-                        <Text style={{color:'black',textAlign:'center',fontWeight:'bold',fontSize:25}}>{'Entering a class for: ' + selectedDate.format('dddd')}</Text>
-                    </View>
-                    <View style={{backgroundColor:'white'}}>
-                        <Text style={{color:'black'}}>Enter The Class Name</Text>
-                        <Input></Input>
-                        <Text style={{color:'black'}}>Enter The Professor's Name</Text>
-                        <Input></Input>
-                        <DropDownPicker 
-                            placeholder="Select Class Location"
-                            open={dropDownOpen}
-                            value={selectedClassLocation}
-                            items={class_locations}
-                            dropDownDirection="TOP"
-                            itemKey='label'
-                            setOpen={setDropDownOpen}
-                            setValue={setSelectedClassLocation}
-                            listMode="SCROLLVIEW"
-                        />
-                        <Text style={{color:'black'}}>Enter The Room Number</Text>
-                        <Input></Input>
-                        <Text style={{color:'black'}}>Select Start And End Times</Text>
-                        {Platform.OS === 'android'  ?  
-                        <Button onPress={() => {showTimePicker()}} title='Set Start Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>:  
+    const saveClasses = async () => {
+        var tempClasses =classes;
+        var tempClass = {name:'',professorName:'',location:'',roomNumber:'',time:'',coordinates:{}}
+        if(professorName.trim() && className.trim() && roomNumber.trim() && selectedClassLocation && startTime && endTime) {
+            startTimeString = moment(startTime.nativeEvent.timestamp).format("hh:mm A")
+            endTimeString = moment(startTime.nativeEvent.timestamp).format("hh:mm A")
+            console.log(selectedClassLocation)
+        }
 
-                        <DateTimePicker
-                        testID="dateTimePicker"
-                        value={value}
-                        mode='time'
-                        style={{alignSelf:'center',margin:10}}
-                        is24Hour={false}
-                        onChange={setTime}
-                        />
-                                
-                        }
-                        {Platform.OS === 'android'  ?  
-                        <Button onPress={() => {showTimePicker2()}} title='Set End Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>:
-                        <DateTimePicker
-                        testID="dateTimePicker"
-                        value={value2}
-                        mode='time'
-                        style={{alignSelf:'center',margin:10}}
-                        is24Hour={false}
-                        onChange={setTime2}
-                        />                        
-                        }
-                    <View style={{flexDirection:'row'}}>
-                        <Button 
-                            containerStyle={{backgroundColor:'#73000a',flex:1}}
-                            buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
-                            size='lg'
-                            onPress={() => {
-                                this.floatingAction.animateButton();
-                            }}
-                            titleStyle={{fontSize:10,fontWeight:'bold'}}
-                            title={'Close'}
-                        />
-                        <Button 
-                            containerStyle={{backgroundColor:'#73000a',flex:1}}
-                            buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
-                            size='lg'
-                            onPress={() => {
-                                this.floatingAction.animateButton();
-                            }}
-                            titleStyle={{fontSize:10,fontWeight:'bold'}}
-                            title={'Save'}
-                        />
-                    </View>
-
-                    </View>
-
-            </SafeAreaView>
-        )
+        try {
+            //await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
+            setProfessorName('')
+            setClassName('')
+            setStartTime(null)
+            setEndTime(null)
+            setRoomNumber('')
+            setSelectedClassLocation(null)
+          } catch (e) {
+            
+          }
     }
+
+    const removeClass = async () => {
+        var tempClasses =classes;
+        if(true) {
+
+        }
+
+        try {
+            //await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
+
+          } catch (e) {
+            
+          }
+    }
+
 
 
 
@@ -263,7 +221,84 @@ export function CalendarPage({navigation}) {
     return (
         <View style={{backgroundColor:'#73000a',flex:1}}>
             <Modal transparent={true} visible={addClassVisible}>
-                <ClassInput></ClassInput>
+                <SafeAreaView style={{flex:1,justifyContent:'center'}}>
+                        <View style={{backgroundColor:'#a8a1a6',height:50,justifyContent:'center'}}>
+                            <Text style={{color:'black',textAlign:'center',fontWeight:'bold',fontSize:25}}>{'Entering a class for: ' + selectedDate.format('dddd')}</Text>
+                        </View>
+                        <View style={{backgroundColor:'white'}}>
+                            <Text style={{color:'black'}}>Enter The Class Name</Text>
+                            <Input value={className} defaultValue={className} onChangeText={setClassName}></Input>
+                            <Text style={{color:'black'}}>Enter The Professor's Name</Text>
+                            <Input value={professorName} defaultValue={professorName} onChangeText={setProfessorName}></Input>
+                            <DropDownPicker 
+                                placeholder="Select Class Location"
+                                open={dropDownOpen}
+                                value={selectedClassLocation}
+                                items={class_locations}
+                                dropDownDirection="TOP"
+                                itemKey='label'
+                                setOpen={setDropDownOpen}
+                                setValue={setSelectedClassLocation}
+                                listMode="SCROLLVIEW"
+                            />
+                            <Text style={{color:'black'}}>Enter The Room Number</Text>
+                            <Input value={roomNumber} defaultValue={roomNumber} onChangeText={setRoomNumber}></Input>
+                            <Text style={{color:'black'}}>Select Start And End Times</Text>
+                            {Platform.OS === 'android'  && 
+                            <Button onPress={() => {showTimePicker()}} title='Set Start Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>}
+                            {true && (
+                                <DateTimePicker
+                                style={{alignSelf:'center'}}
+                                testID="dateTimePicker"
+                                mode={'time'}
+                                value={value}
+                                is24Hour={true}
+                                onChange={setTime}
+                                />)}
+                                    
+                            
+                            {startTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center'}}>{moment(startTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
+                            {Platform.OS === 'android' &&  
+                            <Button onPress={() => {showTimePicker2()}} title='Set End Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>}
+                            {true && (
+                                <DateTimePicker
+                                style={{alignSelf:'center'}}
+                                testID=""
+                                mode={'time'}
+                                value={value2}
+                                is24Hour={true}
+                                onChange={setTime2}       
+                                />)}
+
+                            
+                            {endTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center'}}>{moment(endTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
+                        <View style={{flexDirection:'row'}}>
+                            <Button 
+                                containerStyle={{backgroundColor:'#73000a',flex:1}}
+                                buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
+                                size='lg'
+                                onPress={() => {
+                                    this.floatingAction.animateButton();
+                                }}
+                                titleStyle={{fontSize:10,fontWeight:'bold'}}
+                                title={'Close'}
+                            />
+                            <Button 
+                                containerStyle={{backgroundColor:'#73000a',flex:1}}
+                                buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
+                                size='lg'
+                                onPress={() => {
+                                    saveClasses()
+                                    this.floatingAction.animateButton();
+                                }}
+                                titleStyle={{fontSize:10,fontWeight:'bold'}}
+                                title={'Save'}
+                            />
+                        </View>
+
+                        </View>
+
+                </SafeAreaView>
             </Modal>
             <Modal visible={mapVisible} transparent={true}>
                 <View style={{flex:1,backgroundColor:'white'}}>
@@ -326,7 +361,6 @@ export function CalendarPage({navigation}) {
                     renderItem={renderClasses}
                     key={item => item.name}
                 >
-                    
                 </FlatList>: 
                 <Text style={{color:'black',textAlign:'center',fontSize:24}}>Nothing to do? Join a club!</Text>}
 
