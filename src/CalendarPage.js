@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform,Pressable,KeyboardAvoidingView, Keyboard} from 'react-native';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform,Pressable,KeyboardAvoidingView, Keyboard, Alert} from 'react-native';
 import { Avatar,Icon,Input,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
@@ -24,6 +24,7 @@ import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {class_locations,locations} from './consts/locations'
 import { start } from 'repl';
+import { removeReservedFields } from 'stream-chat-react-native';
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
@@ -202,20 +203,28 @@ export function CalendarPage({navigation}) {
             classes[key].push(tempClass);
             classes[key].sort(function(a,b) {return a.startTime - b.startTime})
 
+            try {
+                await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
+                setProfessorName('')
+                setClassName('')
+                setStartTime({"nativeEvent": {"timestamp": 1671469200000}})
+                setEndTime({"nativeEvent": {"timestamp": 1671469200000}})
+                setRoomNumber('')
+                setValue(new Date(1671469200000))
+                setValue2(new Date(1671469200000))
+                setSelectedClassLocation(null)
+                setSelectedClassLocationName('')
+                this.floatingAction.animateButton();
+              } catch (e) {
+                
+              }
+
+        }
+        else {
+            Alert.alert('Please fill out all the required fields.');
         }
 
-        try {
-            await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
-            setProfessorName('')
-            setClassName('')
-            setStartTime({"nativeEvent": {"timestamp": 1671469200000}})
-            setEndTime({"nativeEvent": {"timestamp": 1671469200000}})
-            setRoomNumber('')
-            setSelectedClassLocation(null)
-            setSelectedClassLocationName('')
-          } catch (e) {
-            
-          }
+
     }
 
     const removeClass = async (index) => {
@@ -318,7 +327,7 @@ export function CalendarPage({navigation}) {
                                 size='lg'
                                 onPress={() => {
                                     saveClasses()
-                                    this.floatingAction.animateButton();
+
                                 }}
                                 titleStyle={{fontSize:10,fontWeight:'bold'}}
                                 title={'Save'}
