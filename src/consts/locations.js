@@ -47,3 +47,18 @@ export const locations = {
     six_fifty_lincoln:{latitude:33.99238763673875, longitude:-81.03474321971518},
     currell:{latitude:33.9977483329284,longitude: -81.02713633124041}
 }
+export const class_locations = [
+    {label:'Leconte',value:locations.leconte},
+    {label:'Swearingen',value:locations.swearingen},
+    {label:'300 Main',value:locations.three_hundred_main},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+    {label:'Leconte',value:locations.leconte},
+
+
+]

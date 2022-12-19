@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal} from 'react-native';
-import { Avatar,Icon,Text } from '@rneui/themed';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform} from 'react-native';
+import { Avatar,Icon,Input,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
 
@@ -20,6 +20,8 @@ import {decode} from "@mapbox/polyline";
 import MapViewDirections from 'react-native-maps-directions';
 import GetLocation from 'react-native-get-location'
 import {locations} from './consts/locations'
+import DropDownPicker from 'react-native-dropdown-picker';
+import {DateTimePicker,DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
@@ -28,7 +30,11 @@ export function CalendarPage({navigation}) {
     const [mapVisible,setMapVisible] = useState(false)
     const [coords, setCoords] = useState([]);
     const[origin,setOrigin] = useState({latitude: 33.990890860794124, longitude: -81.02403298291603})
-
+    const [addClassVisible,setAddClassVisible] = useState(false)
+    const [value,setValue] = useState(new Date())
+    const [value2,setValue2] = useState(new Date())
+    const [startTime,setStartTime] = useState();
+    const [endTime,setEndTime] = useState();
     const[destination,setDestination] = useState(locations.colonial_life_arena)
     
 
@@ -108,6 +114,34 @@ export function CalendarPage({navigation}) {
         </Swipeable>
         );
     }
+    const showTimePicker = () => {
+        console.log('hola')
+        DateTimePickerAndroid.open({
+          value: value,
+          onChange: setTime,
+          mode: 'time',
+          is24Hour: false,
+        });
+      };
+      const showTimePicker2 = () => {
+        DateTimePickerAndroid.open({
+          value: value2,
+          onChange: setTime2,
+          mode: 'time',
+          is24Hour: false,
+        });
+      };
+
+      const setTime = (event, date) => {
+        if(event === 'dismissed') {
+            setStartTime(date.getTime())
+        }
+      };
+      const setTime2 = (event, date) => {
+        if(event === 'dismissed') {
+            setEndTime(date.getTime())
+        }
+      };
   
 
     useEffect(() => {
@@ -138,13 +172,85 @@ export function CalendarPage({navigation}) {
             console.warn(code, message);
         })
         
-    } 
+    }
+
+    const ClassInput = () => {
+        return(
+            <SafeAreaView style={{flex:1,justifyContent:'center'}}>
+                    <View style={{backgroundColor:'#a8a1a6',height:50,justifyContent:'center'}}>
+                        <Text style={{color:'black',textAlign:'center',fontWeight:'bold',fontSize:25}}>{'Entering a class for: ' + selectedDate.format('dddd')}</Text>
+                    </View>
+                    <View style={{backgroundColor:'white'}}>
+                        <Text style={{color:'black'}}>Enter The Class Name</Text>
+                        <Input></Input>
+                        <Text style={{color:'black'}}>Enter The Professor's Name</Text>
+                        <Input></Input>
+                        <Text style={{color:'black'}}>Select The Class Location</Text>
+                        <Input></Input>
+                        <Text style={{color:'black'}}>Enter The Room Number</Text>
+                        <Input></Input>
+                        <Text style={{color:'black'}}>Select Start And End Times</Text>
+                        {Platform.OS === 'android'  ?  
+                        <Button onPress={() => {showTimePicker()}} title='Set Start Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>:  
+
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        value={value}
+                        mode='time'
+                        style={{alignSelf:'center',margin:10}}
+                        is24Hour={false}
+                        onChange={setTime}
+                        />
+                                
+                        }
+                        {Platform.OS === 'android'  ?  
+                        <Button onPress={() => {showTimePicker2()}} title='Set End Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>:
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        value={value2}
+                        mode='time'
+                        style={{alignSelf:'center',margin:10}}
+                        is24Hour={false}
+                        onChange={setTime2}
+                        />                        
+                        }
+                    <View style={{flexDirection:'row'}}>
+                        <Button 
+                            containerStyle={{backgroundColor:'#73000a',flex:1}}
+                            buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
+                            size='lg'
+                            onPress={() => {
+                                this.floatingAction.animateButton();
+                            }}
+                            titleStyle={{fontSize:10,fontWeight:'bold'}}
+                            title={'Close'}
+                        />
+                        <Button 
+                            containerStyle={{backgroundColor:'#73000a',flex:1}}
+                            buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
+                            size='lg'
+                            onPress={() => {
+                                this.floatingAction.animateButton();
+                            }}
+                            titleStyle={{fontSize:10,fontWeight:'bold'}}
+                            title={'Save'}
+                        />
+                    </View>
+
+                    </View>
+
+            </SafeAreaView>
+        )
+    }
 
 
 
 
     return (
         <View style={{backgroundColor:'#73000a',flex:1}}>
+            <Modal transparent={true} visible={addClassVisible}>
+                <ClassInput></ClassInput>
+            </Modal>
             <Modal visible={mapVisible} transparent={true}>
                 <View style={{flex:1,backgroundColor:'white'}}>
                     <Button 
@@ -210,12 +316,17 @@ export function CalendarPage({navigation}) {
                     
                 </FlatList>: 
                 <Text style={{color:'black',textAlign:'center',fontSize:24}}>Nothing to do? Join a club!</Text>}
-                <FloatingAction
+
+            </View>
+            <FloatingAction
+                onPressMain={()=>{setAddClassVisible(!addClassVisible)}}
                 color='#73000a'
+                ref={ref => {
+                    this.floatingAction = ref;
+                  }}
                 >
 
-                </FloatingAction>
-            </View>
+            </FloatingAction>
                 
 
         </View>
