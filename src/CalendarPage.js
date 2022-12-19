@@ -268,7 +268,7 @@ export function CalendarPage({navigation}) {
             <Modal visible={mapVisible} transparent={true}>
                 <View style={{flex:1,backgroundColor:'white'}}>
                     <Button 
-                    buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%',marginTop:50}}
+                    buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%',marginTop:0}}
                     size='lg'
                     onPress={() => setMapVisible(false)}
                     titleStyle={{fontSize:10,fontWeight:'bold'}}
