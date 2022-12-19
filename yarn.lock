@@ -7014,9 +7014,8 @@
     "lodash.isequal" "^4.5.0"
     "prop-types" "^15.6.0"
 
-"react-native-maps@^1.3.2":
-  "integrity" "sha512-NB7HGRZOgxxXCWzrhIVucx/bsrEWANvk3DLci1ov4P9MQnEVQYQCCkTxsnaEvO191GeBOCRDyYn6jckqbfMtmg=="
-  "resolved" "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.3.2.tgz"
+"react-native-maps@github:infoSamyak/react-native-maps":
+  "resolved" "git+ssh://git@github.com/infoSamyak/react-native-maps.git#6ff226bd6e2ac19e80bf45f9922fd23ac8a340f0"
   "version" "1.3.2"
   dependencies:
     "@types/geojson" "^7946.0.8"

@@ -112,15 +112,16 @@ export function CalendarPage({navigation}) {
 
     useEffect(() => {
 
-        navigation.setOptions({
 
-            headerRight:() =>(
-                //right here, navigate to the events page, but pass it props to indicate the user wants to view events on the current day
-                <TouchableOpacity onPress={() => navigation.navigate('Events')}>
-                    <Text style={{color:'white',fontSize:15}}>View Events</Text>
-                </TouchableOpacity>
-            )
-        });
+    navigation.setOptions({
+        headerRight:() =>(
+            //right here, navigate to the events page, but pass it props to indicate the user wants to view events on the current day
+            <TouchableOpacity onPress={() => navigation.navigate('Events')}>
+                <Text style={{color:'white',fontSize:15}}>View Events</Text>
+            </TouchableOpacity>
+        )
+    });
+        
       }, []); 
 
     const getDirections = () => {
@@ -144,11 +145,11 @@ export function CalendarPage({navigation}) {
 
     return (
         <View style={{backgroundColor:'#73000a',flex:1}}>
-            <Modal visible={mapVisible}>
+            <Modal visible={mapVisible} transparent={true}>
                 <View style={{flex:1,backgroundColor:'white'}}>
                     <Button 
                     containerStyle={{backgroundColor:'#73000a'}}
-                    buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%'}}
+                    buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%',marginTop:50}}
                     size='lg'
                     onPress={() => setMapVisible(false)}
                     titleStyle={{fontSize:10,fontWeight:'bold'}}
@@ -158,7 +159,6 @@ export function CalendarPage({navigation}) {
                     zoomControlEnabled={true}
                     showsUserLocation={true}
                     followsUserLocation={true}
-                    
                     initialRegion=
                         {{latitude:origin.latitude, 
                         longitude:origin.longitude,
