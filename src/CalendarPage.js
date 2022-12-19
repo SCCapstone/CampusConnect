@@ -23,8 +23,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {class_locations,locations} from './consts/locations'
-import { start } from 'repl';
-import { removeReservedFields } from 'stream-chat-react-native';
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
