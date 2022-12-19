@@ -33,16 +33,18 @@ export function CalendarPage({navigation}) {
     const [coords, setCoords] = useState([]);
     const[origin,setOrigin] = useState({latitude: 33.990890860794124, longitude: -81.02403298291603})
     const [addClassVisible,setAddClassVisible] = useState(false)
-    const [startTime,setStartTime] = useState();
-    const [endTime,setEndTime] = useState();
+    const [startTime,setStartTime] = useState({"nativeEvent": {"timestamp": 1671469200000}});
+    const [endTime,setEndTime] = useState({"nativeEvent": {"timestamp": 1671469200000}});
     const[destination,setDestination] = useState(locations.carolina_coliseum)
     const [dropDownOpen,setDropDownOpen] = useState(false)
     const [selectedClassLocation,setSelectedClassLocation] = useState();
+    const [selectedClassLocationName,setSelectedClassLocationName] = useState('');
     const [className,setClassName] = useState('')
     const [roomNumber,setRoomNumber] = useState('')
     const [professorName,setProfessorName] = useState('')
-    const [value,setValue] = useState(new Date())
-    const [value2,setValue2] = useState(new Date())
+    const [value,setValue] = useState(new Date(1671469200000))
+    const [value2,setValue2] = useState(new Date(1671469200000))
+    const [reRender,setReRender] = useState(false)
     
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
@@ -97,9 +99,9 @@ export function CalendarPage({navigation}) {
                 </View>
             )}
             renderRightActions={() => (
-                <View style={{justifyContent:'center',marginRight:15}}>
+                <TouchableOpacity onPress={() => {removeClass(index)}} style={{justifyContent:'center',marginRight:15}}>
                     <Icon type='MaterialIcons' name='delete' color={'red'} size={30}></Icon>
-                </View>
+                </TouchableOpacity>
             )}
             >
             <Pressable onPress={() =>{setDestination(item.coordinates);getDirections();}}>
@@ -136,6 +138,7 @@ export function CalendarPage({navigation}) {
       const setTime2 = (event, date) => {
             setValue2(date)
             setEndTime(event)
+            console.log(event)
       };
 
     useEffect(() => {
@@ -179,35 +182,47 @@ export function CalendarPage({navigation}) {
     }
 
     const saveClasses = async () => {
-        var tempClasses =classes;
-        var tempClass = {name:'',professorName:'',location:'',roomNumber:'',time:'',coordinates:{}}
+        var tempClass = {name:'',professorName:'',location:'',roomNumber:'',time:'',coordinates:{},startTime:{},endTime:{}}
         if(professorName.trim() && className.trim() && roomNumber.trim() && selectedClassLocation && startTime && endTime) {
             startTimeString = moment(startTime.nativeEvent.timestamp).format("hh:mm A")
-            endTimeString = moment(startTime.nativeEvent.timestamp).format("hh:mm A")
-            console.log(selectedClassLocation)
+            endTimeString = moment(endTime.nativeEvent.timestamp).format("hh:mm A")
+            tempClass.name = className
+            tempClass.professor = professorName
+            tempClass.location= selectedClassLocationName
+            tempClass.coordinates = selectedClassLocation
+            tempClass.room = roomNumber
+            tempClass.time = startTimeString + ' - ' + endTimeString;
+            tempClass.startTime = startTime.nativeEvent.timestamp
+            tempClass.endTime = endTime.nativeEvent.timestamp
+
+            classes[key].push(tempClass);
+            classes[key].sort(function(a,b) {return a.startTime - b.startTime})
+
         }
 
         try {
-            //await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
+            await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
             setProfessorName('')
             setClassName('')
-            setStartTime(null)
-            setEndTime(null)
+            setStartTime({"nativeEvent": {"timestamp": 1671469200000}})
+            setEndTime({"nativeEvent": {"timestamp": 1671469200000}})
             setRoomNumber('')
             setSelectedClassLocation(null)
+            setSelectedClassLocationName('')
           } catch (e) {
             
           }
     }
 
-    const removeClass = async () => {
-        var tempClasses =classes;
-        if(true) {
-
-        }
-
+    const removeClass = async (index) => {
+            classes[key].splice(index,1)
+            classes[key].sort(function(a,b) {return a.startTime - b.startTime})
+            setClasses(classes)
+            setReRender(!reRender);
+            
+        
         try {
-            //await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
+            await AsyncStorage.setItem('@users_classes', JSON.stringify(classes))
 
           } catch (e) {
             
@@ -238,7 +253,7 @@ export function CalendarPage({navigation}) {
                                 dropDownDirection="TOP"
                                 itemKey='label'
                                 setOpen={setDropDownOpen}
-                                setValue={setSelectedClassLocation}
+                                onSelectItem={(item) => {setSelectedClassLocationName(item.label);setSelectedClassLocation(item.value)}}
                                 listMode="SCROLLVIEW"
                             />
                             <Text style={{color:'black'}}>Enter The Room Number</Text>
@@ -302,13 +317,19 @@ export function CalendarPage({navigation}) {
             </Modal>
             <Modal visible={mapVisible} transparent={true}>
                 <View style={{flex:1,backgroundColor:'white'}}>
-                    <Button 
+                   {Platform.OS === 'ios'? <Button 
+                    buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%',marginTop:50}}
+                    size='lg'
+                    onPress={() => setMapVisible(false)}
+                    titleStyle={{fontSize:10,fontWeight:'bold'}}
+                    title={'Close'}
+                    />: <Button 
                     buttonStyle={{backgroundColor:'#73000a',height:50,width:'100%',marginTop:0}}
                     size='lg'
                     onPress={() => setMapVisible(false)}
                     titleStyle={{fontSize:10,fontWeight:'bold'}}
                     title={'Close'}
-                    />
+                    />}
                     <MapView style={{flex:1}} 
                     zoomControlEnabled={true}
                     showsUserLocation={true}
@@ -356,7 +377,8 @@ export function CalendarPage({navigation}) {
                 maxDate={moment().startOf('isoWeek').add(6,'day')}
             />
             <View style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>
-                {classes[key].length !==0?<FlatList
+                {classes[key].length !== 0?<FlatList
+                    extraData={reRender}
                     data={classes[key]}
                     renderItem={renderClasses}
                     key={item => item.name}
