@@ -82,7 +82,7 @@ export const class_locations = [
     {label:'James F. Byrnes Building (BYRNES)', value:locations.james_f_byrnes_building},
     {label:'Jones Science Building',value:locations.jones_science},
     {label:'Koger Center',value:locations.koger_center_for_the_arts},
-    {label:'McKissick Museum (MCKSK)', value:location.mckissick},
+    {label:'McKissick Museum (MCKSK)', value:locations.mckissick},
     {label:'McMaster',value:locations.mcmaster},
     {label:'Online',value:locations.thomas_cooper},
     {label:'Petigru (PETIGR)',value:locations.petigru},
@@ -93,7 +93,7 @@ export const class_locations = [
     {label:'Sloan (SLOAN)',value:locations.sloan},
     {label:'Strom',value:locations.strom},
     {label:'Sumwalt College (SMWALT)', value:locations.sumwalt},
-    {label:'Swearingen Engineering Center (SWGN)', value:location.swearingen},
+    {label:'Swearingen Engineering Center (SWGN)', value:locations.swearingen},
     {label:'Thomas Cooper Library',value:locations.thomas_cooper},
     {label:'Welsh Humanities Building (HUMOB)',value:locations.welsh_humanities},
 

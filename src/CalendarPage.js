@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from 'react'
 
-import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform,Pressable,KeyboardAvoidingView} from 'react-native';
+import { ActivityIndicator, SafeAreaView, View ,Image,FlatList,TouchableOpacity, Modal, Platform,Pressable,KeyboardAvoidingView, Keyboard} from 'react-native';
 import { Avatar,Icon,Input,Text } from '@rneui/themed';
 
 import { HeaderBackButton } from 'react-navigation-stack';
@@ -45,6 +45,7 @@ export function CalendarPage({navigation}) {
     const [value,setValue] = useState(new Date(1671469200000))
     const [value2,setValue2] = useState(new Date(1671469200000))
     const [reRender,setReRender] = useState(false)
+    var transactionStarted = false;
     
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
@@ -104,7 +105,7 @@ export function CalendarPage({navigation}) {
                 </TouchableOpacity>
             )}
             >
-            <Pressable onPress={() =>{setDestination(item.coordinates);getDirections();}}>
+            <Pressable onPress={() =>{setDestination(item.coordinates);if(!transactionStarted){getDirections()};setSelectedClassLocationName(item.location)}}>
                 <View style={{backgroundColor:'#a8a1a6',flex:1,padding:10,borderRadius:10,margin:15}}>
                     <Text style={{color:'black',fontWeight:'bold',fontSize:16}}>{item.name + "\n"+ item.professor}</Text>
                     <Text style={{color:'black',fontWeight:'bold'}}>{item.location + ' '+ item.room}</Text>
@@ -116,7 +117,7 @@ export function CalendarPage({navigation}) {
     }
     const showTimePicker = () => {
         DateTimePickerAndroid.open({
-          value: new Date(),
+          value: value,
           onChange: setStartTime,
           mode: 'time',
           is24Hour: false,
@@ -124,7 +125,7 @@ export function CalendarPage({navigation}) {
       };
       const showTimePicker2 = () => {
         DateTimePickerAndroid.open({
-          value: new Date(),
+          value: value2,
           onChange: setEndTime,
           mode: 'time',
           is24Hour: false,
@@ -166,6 +167,7 @@ export function CalendarPage({navigation}) {
       }, []); 
 
     const getDirections = () => {
+        transactionStarted = true
         GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
             timeout: 15000,
@@ -173,10 +175,12 @@ export function CalendarPage({navigation}) {
         .then(location => {
             setOrigin(location)
             setMapVisible(true)
+            transactionStarted = false
         })
         .catch(error => {
             const { code, message } = error;
             console.warn(code, message);
+            transactionStarted = false
         })
         
     }
@@ -236,60 +240,70 @@ export function CalendarPage({navigation}) {
     return (
         <View style={{backgroundColor:'#73000a',flex:1}}>
             <Modal transparent={true} visible={addClassVisible}>
-                <SafeAreaView style={{flex:1,justifyContent:'center'}}>
-                        <View style={{backgroundColor:'#a8a1a6',height:50,justifyContent:'center'}}>
-                            <Text style={{color:'black',textAlign:'center',fontWeight:'bold',fontSize:25}}>{'Entering a class for: ' + selectedDate.format('dddd')}</Text>
+                <SafeAreaView style={{flex:1,justifyContent:'center',marginHorizontal:10}}>
+                        <View style={{backgroundColor:'#73000a',height:50,justifyContent:'center'}}>
+                            <Text style={{color:'white',textAlign:'center',fontWeight:'bold',fontSize:25}}>{'Entering a class for: ' + selectedDate.format('dddd')}</Text>
                         </View>
-                        <View style={{backgroundColor:'white'}}>
-                            <Text style={{color:'black'}}>Enter The Class Name</Text>
-                            <Input value={className} defaultValue={className} onChangeText={setClassName}></Input>
-                            <Text style={{color:'black'}}>Enter The Professor's Name</Text>
-                            <Input value={professorName} defaultValue={professorName} onChangeText={setProfessorName}></Input>
+                        <View style={{backgroundColor:'white',padding:15}}>
+                            <Text style={{color:'black',fontWeight:'bold'}}>Enter The Class Name</Text>
+                            <Input value={className} placeholder='Class Name' defaultValue={className} onChangeText={setClassName}></Input>
+                            <Text style={{color:'black',fontWeight:'bold'}}>Enter The Professor's Name</Text>
+                            <Input placeholder="Professor's Name" value={professorName} defaultValue={professorName} onChangeText={setProfessorName}></Input>
                             <DropDownPicker 
                                 placeholder="Select Class Location"
+                                style={{marginBottom:20}}
                                 open={dropDownOpen}
                                 value={selectedClassLocation}
                                 items={class_locations}
                                 dropDownDirection="TOP"
                                 itemKey='label'
-                                setOpen={setDropDownOpen}
+                                onClose={() => {setDropDownOpen(false)}}
+                                setOpen={() =>{Keyboard.dismiss(),setDropDownOpen(true)}}
                                 onSelectItem={(item) => {setSelectedClassLocationName(item.label);setSelectedClassLocation(item.value)}}
                                 listMode="SCROLLVIEW"
                             />
-                            <Text style={{color:'black'}}>Enter The Room Number</Text>
-                            <Input value={roomNumber} defaultValue={roomNumber} onChangeText={setRoomNumber}></Input>
-                            <Text style={{color:'black'}}>Select Start And End Times</Text>
-                            {Platform.OS === 'android'  && 
-                            <Button onPress={() => {showTimePicker()}} title='Set Start Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>}
-                            {true && (
-                                <DateTimePicker
-                                style={{alignSelf:'center'}}
-                                testID="dateTimePicker"
-                                mode={'time'}
-                                value={value}
-                                is24Hour={true}
-                                onChange={setTime}
-                                />)}
-                                    
-                            
-                            {startTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center'}}>{moment(startTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
-                            {Platform.OS === 'android' &&  
-                            <Button onPress={() => {showTimePicker2()}} title='Set End Time' buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'40%',alignSelf:'center',margin:10}}></Button>}
-                            {true && (
-                                <DateTimePicker
-                                style={{alignSelf:'center'}}
-                                testID=""
-                                mode={'time'}
-                                value={value2}
-                                is24Hour={true}
-                                onChange={setTime2}       
-                                />)}
-
-                            
-                            {endTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center'}}>{moment(endTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
+                            <Text style={{color:'black',fontWeight:'bold'}}>Enter The Room Number</Text>
+                            <Input placeholder='Room Number' value={roomNumber} defaultValue={roomNumber} onChangeText={setRoomNumber}></Input>
+                            <Text style={{color:'black',fontWeight:'bold'}}>Select Start And End Times</Text>
+                            <View style={{flexDirection:'row',justifyContent:'space-evenly'}}>
+                                {Platform.OS === 'android'  && 
+                                <View style={{justifyContent:'center'}}>
+                                    <Button onPress={() => {showTimePicker()}} title='Start Time' titleStyle={{fontSize:10}} buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'70%',alignSelf:'center',margin:10}}></Button>
+                                    {startTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center',alignSelf:'center'}}>{moment(startTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
+                                </View>
+                                }
+                                {Platform.OS === 'ios' && (
+                                    <DateTimePicker
+                                    style={{alignSelf:'center',margin:10}}
+                                    testID="dateTimePicker"
+                                    mode={'time'}
+                                    value={value}
+                                    is24Hour={true}
+                                    onChange={setTime}
+                                    />)}
+                                        
+                                
+                      
+                                {Platform.OS === 'android' &&  
+                                <View style={{justifyContent:'center'}}>
+                                <Button onPress={() => {showTimePicker2()}} title='Start Time' titleStyle={{fontSize:10}} buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'70%',alignSelf:'center',margin:10}}></Button>
+                                {endTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center',alignSelf:'center'}}>{moment(endTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
+                                
+                            </View>}
+                                {Platform.OS ==='ios' && (
+                                    <DateTimePicker
+                                    style={{alignSelf:'center',margin:10}}
+                                    testID=""
+                                    mode={'time'}
+                                    value={value2}
+                                    is24Hour={true}
+                                    onChange={setTime2}       
+                                    />)}          
+                          
+                            </View>
                         <View style={{flexDirection:'row'}}>
                             <Button 
-                                containerStyle={{backgroundColor:'#73000a',flex:1}}
+                                containerStyle={{backgroundColor:'#73000a',flex:1,margin:10,borderRadius:10}}
                                 buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
                                 size='lg'
                                 onPress={() => {
@@ -299,8 +313,8 @@ export function CalendarPage({navigation}) {
                                 title={'Close'}
                             />
                             <Button 
-                                containerStyle={{backgroundColor:'#73000a',flex:1}}
-                                buttonStyle={{backgroundColor:'#73000a',height:50,marginTop:0}}
+                                containerStyle={{backgroundColor:'#73000a',flex:1,margin:10,borderRadius:10}}
+                                buttonStyle={{backgroundColor:'#73000a',height:50}}
                                 size='lg'
                                 onPress={() => {
                                     saveClasses()
@@ -340,7 +354,7 @@ export function CalendarPage({navigation}) {
                         latitudeDelta:.01,
                         longitudeDelta:.01}}
                     >
-                    <Marker title='Capstone Building' coordinate={destination}></Marker>
+                    <Marker title={selectedClassLocationName} coordinate={destination}></Marker>
                         <MapViewDirections
                             
                             origin={origin}
