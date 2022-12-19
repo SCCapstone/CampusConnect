@@ -46,30 +46,30 @@ export function CalendarPage({navigation}) {
 
     const [classes,setClasses] = useState({
         1:[ //Monday
-            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A'},
-            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510'},
-            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A'},
+            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
         ],
         2:[ //Tuesday
-            {name: 'CSCE 492 - Capstone Senior Project', time:'All Day', professor:'Dr. Jose Vidal', location:'Online',room:''},
-            {name: 'CSCE 498 - Independent Research', time:'10:00AM - 12:00PM', professor:'Dr. Vignesh Naranyan', location:'USC AI-Institute',room:'5400'},
+            {name: 'CSCE 492 - Capstone Senior Project', time:'All Day', professor:'Dr. Jose Vidal', location:'Online',room:'',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'CSCE 498 - Independent Research', time:'10:00AM - 12:00PM', professor:'Dr. Vignesh Naranyan', location:'USC AI-Institute',room:'5400',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
 
         ],
         3:[ //Wednesday
-            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A'},
-            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510'},
-            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A'},
+            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
         ],
         4:[ //Thursday
             {name: 'CSCE 492 - Capstone Senior Project', time:'All Day', professor:'Dr. Jose Vidal', location:'Online',room:''},
-            {name: 'CSCE 498 - Independent Research', time:'10:00AM - 12:00PM', professor:'Dr. Vignesh Naranyan', location:'USC AI-Institute',room:'5400'},
-            {name: 'El Kappa Psi Meeting', time:'6:00PM - 8:00PM', professor:'', location:'Greek Village',room:'101'},
+            {name: 'CSCE 498 - Independent Research', time:'10:00AM - 12:00PM', professor:'Dr. Vignesh Naranyan', location:'USC AI-Institute',room:'5400',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'El Kappa Psi Meeting', time:'6:00PM - 8:00PM', professor:'', location:'Greek Village',room:'101',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
 
         ],
         5:[ //Friday
-            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A'},
-            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510'},
-            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A'},
+            {name: 'CSCE 355 - Foundations of Computation', time:'3:55PM - 5:10PM', professor:'Dr. Stephen Fenner', location:'350 Main',room:'415 A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'CSCE 580 - Artificial Intelligence', time:'10:15AM - 12:00PM', professor:'Dr. Forest Agostinelli', location:'Horizon Parking Garage',room:'510',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
+            {name: 'PSYCH 415 - Introduction to Personality', time:'8:15AM - 10:00AM', professor:'Dr. Sue Wiezchowitz', location:'Close-Hipp', room: '220A',coordinates:{latitude: 33.990890860794124, longitude: -81.02403298291603}},
         ],
         6:[ //Saturday
 
