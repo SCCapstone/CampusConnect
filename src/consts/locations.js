@@ -82,6 +82,7 @@ export const class_locations = [
     {label:'James F. Byrnes Building (BYRNES)', value:locations.james_f_byrnes_building},
     {label:'Jones Science Building',value:locations.jones_science},
     {label:'Koger Center',value:locations.koger_center_for_the_arts},
+    {label:'Leconte College',value:locations.leconte},
     {label:'McKissick Museum (MCKSK)', value:locations.mckissick},
     {label:'McMaster',value:locations.mcmaster},
     {label:'Online',value:locations.thomas_cooper},
