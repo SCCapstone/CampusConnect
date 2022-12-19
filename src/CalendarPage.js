@@ -19,9 +19,9 @@ import { FloatingAction } from 'react-native-floating-action';
 import {decode} from "@mapbox/polyline";
 import MapViewDirections from 'react-native-maps-directions';
 import GetLocation from 'react-native-get-location'
-import {locations} from './consts/locations'
 import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePicker,DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import {class_locations,locations} from './consts/locations'
 
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
@@ -36,6 +36,8 @@ export function CalendarPage({navigation}) {
     const [startTime,setStartTime] = useState();
     const [endTime,setEndTime] = useState();
     const[destination,setDestination] = useState(locations.colonial_life_arena)
+    const [dropDownOpen,setDropDownOpen] = useState(false)
+    const [selectedClassLocation,setSelectedClassLocation] = useState();
     
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
@@ -146,8 +148,11 @@ export function CalendarPage({navigation}) {
 
     useEffect(() => {
 
+        console.log(selectedClassLocation)
 
     navigation.setOptions({
+
+
         headerRight:() =>(
             //right here, navigate to the events page, but pass it props to indicate the user wants to view events on the current day
             <TouchableOpacity onPress={() => navigation.navigate('Events')}>
@@ -156,7 +161,7 @@ export function CalendarPage({navigation}) {
         )
     });
         
-      }, []); 
+      }, [selectedClassLocation]); 
 
     const getDirections = () => {
         GetLocation.getCurrentPosition({
@@ -185,8 +190,17 @@ export function CalendarPage({navigation}) {
                         <Input></Input>
                         <Text style={{color:'black'}}>Enter The Professor's Name</Text>
                         <Input></Input>
-                        <Text style={{color:'black'}}>Select The Class Location</Text>
-                        <Input></Input>
+                        <DropDownPicker 
+                            placeholder="Select Class Location"
+                            open={dropDownOpen}
+                            value={selectedClassLocation}
+                            items={class_locations}
+                            dropDownDirection="TOP"
+                            itemKey='label'
+                            setOpen={setDropDownOpen}
+                            setValue={setSelectedClassLocation}
+                            listMode="SCROLLVIEW"
+                        />
                         <Text style={{color:'black'}}>Enter The Room Number</Text>
                         <Input></Input>
                         <Text style={{color:'black'}}>Select Start And End Times</Text>
