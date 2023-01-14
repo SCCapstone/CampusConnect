@@ -20,10 +20,11 @@ Please install these:
 # Setup and Running 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
-3. Install Dependencies<pre><code>npm install</code></pre>
+3. Install Dependencies<pre><code>npm install [^1]</code></pre>
 4. Run the code<pre><code>npx react-native run-android</code></pre>
 
 All the source files for the project are in the "src" folder
+
 
 # Coding
 Create separate ".js" files for each screen. Screens can be added to the HomeScreen drawer when they are done. Messing with other parts of the app can be dangerous. Styles should go into the styles folder. 
@@ -44,3 +45,6 @@ Coby - cobya@email.sc.edu
 Neekon - nsarmadi@email.sc.edu  
 Timothy - tkranz@email.sc.edu  
 Chase - chasema@email.sc.edu  
+
+
+[^1]: It is now recommended to run npm install instead of npm update as running an update could break the project this late in the game.
