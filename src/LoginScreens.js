@@ -31,14 +31,7 @@ import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import AppContext from './AppContext';
 
-export function checkInput({email,password,password2}) {
-      return (email &&
-      password &&
-      password === password2 &&
-      email.split('@').length > 1 &&
-      email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu')
-}
+
 
 export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
@@ -234,7 +227,13 @@ export function RegisterScreen({navigation}) {
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
   const register = () => {
-    if (checkInput(email,password,password2)) {
+    if (
+      /*email &&
+      password &&
+      password === password2 &&
+      email.split('@').length > 1 &&
+      email.split('@')[1].includes('sc.edu') &&
+      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'*/true) {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
@@ -404,5 +403,3 @@ const CometChatError = () => {
     [{text: 'OK'}],
   );
 };
-
-//module.exports = checkInput;
