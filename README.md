@@ -37,7 +37,9 @@ We will publish an apk/ipa onto github.
 # Testing
 
 ## Testing Technology
+We are using jest and (detox?) to test our software. Several unit tests, as well as functional tests will be available for code review.
 ## Running Tests
+Run ```npm test``` from the root directory.
 
 # Authors  
 Erik - erikc@email.sc.edu  
