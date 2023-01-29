@@ -7,6 +7,7 @@ buildscript {
         compileSdkVersion = 33
         targetSdkVersion = 31
         ndkVersion = "21.4.7075529"
+        kotlinVersion = '1.6.10'
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64
             ndkVersion = "24.0.8215888"
@@ -23,11 +24,21 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.2.2")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:5.0.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion") // (3)
         classpath 'com.google.gms:google-services:4.3.13'
     }
 }
 
 allprojects {
+    afterEvaluate {
+        if (it.hasProperty('android')){
+            android {
+                defaultConfig {
+                    minSdkVersion 24 // Replace '21' with whatever suites your case
+                }
+            }
+        }
+    }
     repositories {
         maven { url "https://dl.cloudsmith.io/public/cometchat/cometchat-pro-android/maven/" }
         maven { url 'https://maven.google.com' }
@@ -46,6 +57,10 @@ allprojects {
             }
         }
         google()
+        maven { // (4)
+            url("$rootDir/../node_modules/detox/Detox-android")
+        }
+
         maven { url 'https://www.jitpack.io' }
     }
 }
