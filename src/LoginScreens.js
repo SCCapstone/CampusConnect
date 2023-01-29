@@ -113,15 +113,15 @@ export function WelcomeScreen({navigation}) {
         style={styles.imageLarge}
         source={require('./assets/logo.png')}
       />
-      <Text style={styles.title}>Campus Connect</Text>
+      <Text testID='title' style={styles.title}>Campus Connect</Text>
 
-      <TouchableOpacity
+      <TouchableOpacity testID='registerbtn'
         onPress={() => navigation.navigate('RegisterScreen')}
         style={styles.loginBtn}>
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
+      <TouchableOpacity 
         onPress={() => navigation.navigate('LoginScreen')}
         style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
@@ -287,7 +287,7 @@ export function RegisterScreen({navigation}) {
       />
       <Text style={styles.title}>Campus Connect</Text>
       <View style={styles.inputView}>
-        <TextInput
+        <TextInput testID='emailinput'
           style={styles.TextInput}
           placeholder="USC Email"
           textContentType="username"
@@ -301,6 +301,7 @@ export function RegisterScreen({navigation}) {
 
       <View style={styles.inputView}>
         <TextInput
+          testID='passinput'
           style={styles.TextInput}
           placeholder="Password"
           textContentType={'newPassword'}
@@ -313,6 +314,7 @@ export function RegisterScreen({navigation}) {
 
       <View style={styles.inputView}>
         <TextInput
+        testID='passinput2'
           style={styles.TextInput}
           placeholder="Confirm Password"
           textContentType={'newPassword'}
@@ -323,10 +325,11 @@ export function RegisterScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        testID='registerbtn'
         onPress={() => register(email, password)}
         style={styles.loginBtn}>
         <Text style={styles.loginText}>REGISTER</Text>

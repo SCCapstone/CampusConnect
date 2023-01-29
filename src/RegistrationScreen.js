@@ -273,7 +273,7 @@ const RegisterError = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
+          <TouchableOpacity testID='image' onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
             <ImageBackground
               source={require('./assets/blank2.jpeg')}
               imageStyle={styles.blankImageStyle}
@@ -288,6 +288,7 @@ const RegisterError = () => {
           <KeyboardAvoidingView enabled>
             <View style={styles.SectionStyle}>
               <TextInput
+                testID='firstname'
                 style={styles.inputStyle}
                 onChangeText={FirstName => setFirstName(FirstName)}
                 defaultValue={
@@ -302,6 +303,7 @@ const RegisterError = () => {
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
+                testID='lastname'
                 style={styles.inputStyle}
                 onChangeText={LastName => setLastName(LastName)}
                 defaultValue={
@@ -316,6 +318,7 @@ const RegisterError = () => {
             </View>
             <View style={styles.SectionStyle}>
               <DropDownPicker
+                testID='class'
                 style={styles.inputStyle}
                 placeholder="Select Class"
                 open={open2}
@@ -330,6 +333,7 @@ const RegisterError = () => {
             </View>
             <View style={styles.SectionStyle}>
               <DropDownPicker
+                testID='major'
                 style={styles.inputStyle}
                 placeholder="Select Major"
                 open={open}
@@ -353,13 +357,14 @@ const RegisterError = () => {
               />
             </View>
             <TouchableOpacity
+              testID='registerbtn'
               style={styles.buttonStyle}
               onPress={writeUserData}>
               <Text style={styles.buttonTextStyle}>REGISTER</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
 
-          <Text style={styles.emailText}>NOTE: Your spam filter may be blocking our emails. Please login to your USC email and click the link below to release the email from the Campus Connect Team</Text>
+          {/*<Text style={styles.emailText}>NOTE: Your spam filter may be blocking our emails. Please login to your USC email and click the link below to release the email from the Campus Connect Team</Text>*/}
           <Text style={styles.linkText}
           onPress={() => Linking.openURL('https://security.microsoft.com/quarantine')}>
           Microsoft Quarantine

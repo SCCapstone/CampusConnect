@@ -23,6 +23,7 @@
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      android:networkSecurityConfig="@xml/network_security_config">
       <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs"/>

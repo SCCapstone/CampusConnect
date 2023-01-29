@@ -143,6 +143,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.1"
+        testBuildType System.getProperty('testBuildType', 'debug')
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -231,6 +233,7 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
     }
 
@@ -266,6 +269,8 @@ dependencies {
   // For WebP support, including animated WebP
   implementation 'com.facebook.fresco:animated-webp:2.6.0'
   implementation 'com.facebook.fresco:webpsupport:2.6.0'
+  androidTestImplementation('com.wix:detox:+')
+  implementation 'androidx.appcompat:appcompat:1.1.0'
 
 
   // Provide the Android support library (you might already have this or a similar dependency)
