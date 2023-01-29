@@ -254,7 +254,7 @@ const RegisterError = () => {
           }}
         />
         <Text style={styles.textStyle}>Registration Successful</Text>
-        <TouchableOpacity style={styles.buttonStyle} onPress={() => reset()}>
+        <TouchableOpacity testID='finishbtn' style={styles.buttonStyle} onPress={() => reset()}>
           <Text style={styles.buttonTextStyle}>Finish</Text>
         </TouchableOpacity>
       </View>
@@ -270,10 +270,10 @@ const RegisterError = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView testID='regview' style={styles.container}>
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
-          <TouchableOpacity testID='image' onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
+          <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
             <ImageBackground
               source={require('./assets/blank2.jpeg')}
               imageStyle={styles.blankImageStyle}
