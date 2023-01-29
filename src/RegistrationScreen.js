@@ -254,7 +254,7 @@ const RegisterError = () => {
           }}
         />
         <Text style={styles.textStyle}>Registration Successful</Text>
-        <TouchableOpacity style={styles.buttonStyle} onPress={() => reset()}>
+        <TouchableOpacity testID='finishbtn' style={styles.buttonStyle} onPress={() => reset()}>
           <Text style={styles.buttonTextStyle}>Finish</Text>
         </TouchableOpacity>
       </View>

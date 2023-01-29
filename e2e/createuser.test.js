@@ -26,10 +26,14 @@ describe('CreateNewUser', () => {
   it('should enter account details', async () => {
     await element(by.id('firstname')).typeText('John');
     await element(by.id('lastname')).typeText('Cena');
-    await element(by.id('major')).tap();
-    await element(by.text('Freshman')).tap()
     await element(by.id('class')).tap();
-    await element(by.text('Anthropology')).tap()
+    await element(by.id('class')).tap();
+    await waitFor(element(by.text('Freshman'))).toBeVisible().withTimeout(5000)
+    await element(by.text('Freshman')).tap();
+    await element(by.id('major')).tap();
+    await waitFor(element(by.text('Anthropology'))).toBeVisible().withTimeout(5000)
+    await element(by.text('Anthropology')).tap();
     await element(by.id('registerbtn')).tap();
+    await element(by.id('finishbtn')).tap();
   });
 });
