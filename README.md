@@ -42,10 +42,10 @@ We are using jest and detox to test our software. Several unit tests, as well as
 Jest unit tests are located in ```__tests__``` and behavioral tests are located in ```e2e```
 ## Running Tests
 ### Unit Tests
-Run ```npm test``` from the root directory to run the unit test.
+Run ```npm test``` from the root directory to run the unit tests.
 
 ### Behavioural Tests
-Detox behavioral tests can be run by doing the following steps:
+Detox behavioral tests can be run by performing the following steps:
 1. Run  ```npm start``` in a separate terminal from the working directory.
 2. Compile the debug binary with ```detox build --configuration android.emu.debug``` [^2]
 3. Run the tests with ```detox test --configuration android.emu.debug```
