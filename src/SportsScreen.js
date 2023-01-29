@@ -15,14 +15,22 @@ import { SearchBar } from '@rneui/themed';
 import { ScrapeSportData } from './SportScraper';
 
 export function SportsScreen({navigation}) {
-const cheerio = require('react-native-cheerio');
-const url = "https://gamecocksonline.com/all-sports-schedule/";
-const DATA = new Array();
 
-ScrapeSportData();
-
-  const [search, setSearch] = useState("");
+var DATA = new Array();
+const [search, setSearch] = useState("");
   
+async function UseSportScraper() {
+  var events = await ScrapeSportData();
+  console.log(events);
+}
+
+UseSportScraper();
+
+/*
+ sport scraper now displays data in the data log, but i need to find a way to use data
+ within the async function with the rest of the app, including making a nice interface
+ everything. this will be the focus of the jan 30 - feb 5 week.
+ */
 
   const actions = [
     {
@@ -40,8 +48,7 @@ ScrapeSportData();
 
   const Item = ({item, onPress}) => (
     <TouchableOpacity onPress={onPress} style={styles.item}>
-      <Image style={styles.groupImg} source={{uri: item.img}} />
-      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.title}>{item.sport + "\n" + item.opponent + "\n" + item.date + "\n" + item.time}</Text>
     </TouchableOpacity>
   );
 
@@ -50,6 +57,8 @@ ScrapeSportData();
     return <Item item={item} onPress={() => CreateAlert()} />;
   };
 
+
+  
 return (
         <SafeAreaView style={styles.container}>
            <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
@@ -110,5 +119,4 @@ const styles = StyleSheet.create({
       borderRadius: 100,
       color: '#73000a',     
   }
-
 });
