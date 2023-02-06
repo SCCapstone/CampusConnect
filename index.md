@@ -7,13 +7,16 @@ Students can use this social media application to stay in touch with and get inv
 
 # How to use Campus Connect!
 Using Campus Connect is a breeze! Simply create an account using your UofSC email (it must end in @email.sc.edu) and you'll be sent an email to confirm your registration. Then, you're ready to start taking advantage of all the great features our app has to offer - like creating group chats, making posts, and much more! So what are you waiting for? Get started today with Campus Connect!
+<br/><br/>
 
-<include screenshots>
+<img width="240" alt="Screenshot 2022-11-09 at 11 08 38 AM" src="https://user-images.githubusercontent.com/13265359/200881610-5a6748e1-6307-42f0-a9f6-27d897be052b.png"><img width="240" alt="Screenshot 2022-11-09 at 11 08 38 AM" src="https://user-images.githubusercontent.com/13265359/200881610-5a6748e1-6307-42f0-a9f6-27d897be052b.png"><img width="240" alt="Screenshot 2022-11-09 at 11 08 38 AM" src="https://user-images.githubusercontent.com/13265359/200881610-5a6748e1-6307-42f0-a9f6-27d897be052b.png">
+  
   
 # Contact us!
 If you have any questions please contact us at demboyz.sc@gmail.com
-  
-<another link to github repo>
-  
-### Check out our repo!
-  [Link to our Git Repo](https://github.com/SCCapstone/DemBoyz)
+
+<br/><br/>
+
+### [About us!](./about.md)
+
+### [Check out our repo!](https://github.com/SCCapstone/DemBoyz)
