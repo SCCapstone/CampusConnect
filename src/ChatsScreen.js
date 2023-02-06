@@ -84,7 +84,7 @@ export function ChatsScreen(props) {
 
       const {
         theme: {
-          colors: { accent_red, white_smoke },
+          colors: { accent_red, white_smoke,white },
         },
       } = useTheme();
 
@@ -334,41 +334,9 @@ export function ChatsScreen(props) {
     const channelOptions = ["View Profile", "Block"]
     return (
       <Swipeable
-      overshootLeft={true}
+      overshootLeft={false}
       overshootRight={true}
-      friction={3}
-
-      renderLeftActions={() => (
-        <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
-         <TouchableOpacity onPress={() => {
-            setSearchModalVisible(false)
-            this.floatingAction.animateButton();
-            if(item.role === 'user'){
-              const channel = chatClient.channel('messaging', {
-                members: [chatClient.user.id, item.id],
-              });
-            
-              setChannel(channel)
-              channel.watch().then(() => {
-                navigation.navigate('DMScreen',{channel:channel})
-              })
-            }
-            else if (item.type === 'team'){
-              this.floatingAction.animateButton();
-              setSearchModalVisible(false)
-              const channel = chatClient.channel('team', item.id, {});
-              channel.addMembers([chatClient.user.id]).then(() => {
-                setChannel(channel)
-                navigation.navigate('DMScreen', {channel:channel});
-              })
-
-            }
-          
-         }}>
-            <Icon containerStyle={{height:60,width:60,alignItems:'center',justifyContent:'center'}} size={50} solid={true} type="entypo" name="reply" color='gray'/>
-          </TouchableOpacity>
-        </View>
-      )}
+      friction={2.5}
       renderRightActions={() => (
         <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
           <SelectDropdown 
@@ -401,25 +369,50 @@ export function ChatsScreen(props) {
         </View>
       )}
     >
-          <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
-            <TouchableOpacity onPress={() => {
-              userData.setProfileView(item.id)
-              this.floatingAction.animateButton();
-              navigation.navigate('ProfileView')
-            }}>
-              <ImageBackground
-                style={{width:60,height:60}}
-                imageStyle={{borderRadius:60}}
-                source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
-                  {isOnline ? 
-                  <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-              </ImageBackground>
-            </TouchableOpacity>
-          <View>
-            <Text style={styles.chatListItemLabel}>{item.name}</Text>
-            <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+        <TouchableOpacity onPress={() => {
+          setSearchModalVisible(false)
+          this.floatingAction.animateButton();
+          if(item.role === 'user'){
+            const channel = chatClient.channel('messaging', {
+              members: [chatClient.user.id, item.id],
+            });
+          
+            setChannel(channel)
+            channel.watch().then(() => {
+              navigation.navigate('DMScreen',{channel:channel})
+            })
+          }
+          else if (item.type === 'team'){
+            this.floatingAction.animateButton();
+            setSearchModalVisible(false)
+            const channel = chatClient.channel('team', item.id, {});
+            channel.addMembers([chatClient.user.id]).then(() => {
+              setChannel(channel)
+              navigation.navigate('DMScreen', {channel:channel});
+            })
+
+          }
+        }}>
+            <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
+              <TouchableOpacity onPress={() => {
+                userData.setProfileView(item.id)
+                this.floatingAction.animateButton();
+                navigation.navigate('ProfileView')
+              }}>
+                <ImageBackground
+                  style={{width:60,height:60}}
+                  imageStyle={{borderRadius:60}}
+                  source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+                    {isOnline ? 
+                    <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+                </ImageBackground>
+              </TouchableOpacity>
+            <View>
+              <Text style={styles.chatListItemLabel}>{item.name}</Text>
+              <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </Swipeable>
     );
   });
