@@ -332,6 +332,11 @@ export function ChatsScreen(props) {
   const renderUsers = gestureHandlerRootHOC(({item}) => {
     var isOnline = item.online
     const channelOptions = ["View Profile", "Block"]
+
+    //If for some reason the user does not have a name on stream chat, don't display them
+    if (!item.name)
+      return null
+    
     return (
       <Swipeable
       overshootLeft={false}
