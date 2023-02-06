@@ -17,6 +17,6 @@ If you have any questions please contact us at demboyz.sc@gmail.com
 
 <br/><br/>
 
-### [About us!](./about.md)
+### [About us!](./about.html)
 
 ### [Check out our repo!](https://github.com/SCCapstone/DemBoyz)
