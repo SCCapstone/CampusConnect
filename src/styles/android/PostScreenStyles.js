@@ -24,8 +24,9 @@ export default StyleSheet.create({
     alignSelf: 'center',
 
     borderRadius: 10,
-    height:250,
-    width:330,
+    height:'90%',
+    minHeight:250,
+    width:'100%',
     overlayColor: '#a8a1a6',
   },
   postReplyImage: {
