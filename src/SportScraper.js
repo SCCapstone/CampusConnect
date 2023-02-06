@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 
 const axios = require("axios");
-const cheerio = require('react-native-cheerio');
+const cheerio = require("react-native-cheerio");
 const url = "https://gamecocksonline.com/all-sports-schedule/";
 
 export async function ScrapeSportData() {

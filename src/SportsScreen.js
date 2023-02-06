@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   View,
   FlatList,
   Text,
@@ -11,27 +12,31 @@ import {
   Alert,
 } from 'react-native';
 import {FloatingAction} from 'react-native-floating-action';
-import { SearchBar } from '@rneui/themed';
+import uuid from 'react-native-uuid';
 import { ScrapeSportData } from './SportScraper';
+import { SearchBar } from '@rneui/themed';
+
+const Item = ({item, onPress}) => (
+  <Text style={styles.title}>{item.sport + "\n" + item.opponent + "\n" + item.date + "\n" + item.time}</Text>
+);
 
 export function SportsScreen({navigation}) {
+const defaultItemCount = 10;
 
-var DATA = new Array();
-const [search, setSearch] = useState("");
-  
-async function UseSportScraper() {
-  var events = await ScrapeSportData();
-  console.log(events);
+var DATA = [{sport: "", opponent: "", date: "", time: "", id: ""}];
+
+for (let i = 0; i < defaultItemCount; i++) {
+  var dataPusher = {sport: "", opponent: "", date: "", time: "", id: "", backgroundColor: "", textColor: ""}; 
+  dataPusher.sport = sportArray[i];
+  dataPusher.opponent = opponentArray[i];
+  dataPusher.date = dateArray[i];
+  dataPusher.time = timeArray[i];
+  dataPusher.id = uuid.v4();
+  DATA.push(dataPusher);
 }
 
-UseSportScraper();
-
-/*
- sport scraper now displays data in the data log, but i need to find a way to use data
- within the async function with the rest of the app, including making a nice interface
- everything. this will be the focus of the jan 30 - feb 5 week.
- */
-
+const [search, setSearch] = useState("");
+  
   const actions = [
     {
         text: "Search for a team or game",
@@ -42,34 +47,46 @@ UseSportScraper();
     }
 ];
 
-  const CreateAlert = () => {
-    Alert.alert('This will take you to this button\'s sport\'s page');
-  }
+const [selectedBackgroundColor, setSelectedBackgroundColor] = useState();
+const [selectedTextColor, setSelectedTextColor] = useState();
 
-  const Item = ({item, onPress}) => (
-    <TouchableOpacity onPress={onPress} style={styles.item}>
-      <Text style={styles.title}>{item.sport + "\n" + item.opponent + "\n" + item.date + "\n" + item.time}</Text>
-    </TouchableOpacity>
+const renderItem = ({item}) => {
+  const backgroundColor = item.backgroundColor === selectedBackgroundColor ? '#ffffff' : '#white';
+  const textColor = item.backgroundColor === selectedTextColor ? 'white' : 'black';
+
+  return (
+    <Item
+      item={item}
+      onPress={() => setSelectedId(item.id)}
+      backgroundColor={backgroundColor}
+      textColor={textColor}
+    />
   );
-
-  const [selectedId, setSelectedId] = useState(null);
-  const renderItem = ({item}) => {
-    return <Item item={item} onPress={() => CreateAlert()} />;
-  };
-
+};
 
   
-return (
-        <SafeAreaView style={styles.container}>
-           <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
-            <FlatList
-            data={DATA}
-            renderItem={renderItem}
-            >
-            </FlatList>
-            <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
-        </SafeAreaView>
-    );
+
+if (!DATA) {
+  return (
+    <View>
+      <ActivityIndicator size="large" color="#00ff00"></ActivityIndicator>
+    </View>
+  )
+} else {
+  console.log(DATA)
+  return (
+          <SafeAreaView style={styles.container}>
+             <SearchBar inputContainerStyle={{borderRadius:20,backgroundColor:'white'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
+              <FlatList
+                data={DATA}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+              >
+              </FlatList>
+              <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
+          </SafeAreaView>
+      );
+  }
 }
 
 const styles = StyleSheet.create({
