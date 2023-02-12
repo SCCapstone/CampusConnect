@@ -129,16 +129,19 @@ export function PostsScreen({navigation}) {
     }
   };
 
-  const getReplies = (item) => {
+  const getReplies =  (item) => {
     setRepliesLoading(true)
     const postReplies= [];
     var postsRef = firestore().collection('Posts').doc(item.key)
+    promises = []
     //gets posts asynchronously in the background
-    postsRef.get().then(async doc => {
+    postsRef.get().then( doc => {
       const replies = doc.get('replies');
       for(firebaseReply of replies){
         var replyRef = firestore().collection('Replies').doc(firebaseReply)
-        await replyRef.get().then(reply => {
+
+        //Create a promise for each request and put it into a promise array. This allows us to load asynchronously
+        promise = replyRef.get().then(reply => {
           const tempReply = {
             ...reply.data(),
             key:reply.id,
@@ -150,14 +153,22 @@ export function PostsScreen({navigation}) {
           tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
           tempReply.postIsYours = tempReply.user === '/Users/' + auth().currentUser.uid
           postReplies.push(tempReply);
+
         })}
+        promises.push(promise)
+
+        //Wait for all the replies to load
+        Promise.all(promises).then(() => {
         //The first one will sort by upvote count,then date.
         //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
         setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
         setRepliesLoading(false)
+        })
+
 
 
     })
+
 
   
   }
@@ -408,6 +419,7 @@ export function PostsScreen({navigation}) {
           const posts = [];
           const images = [];
           querySnapshot.forEach(documentSnapshot => {
+            
             //Determine whether the user has upvoted or downvoted the post yet
             const post = {
               ...documentSnapshot.data(),
