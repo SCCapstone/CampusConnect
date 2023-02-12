@@ -33,7 +33,6 @@ if (Platform.OS === 'ios') {
 import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
 import { Icon } from '@rneui/themed';
-import { get } from 'https';
 
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
