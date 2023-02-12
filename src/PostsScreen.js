@@ -661,7 +661,7 @@ export function PostsScreen({navigation}) {
       }}
       overshootRight={true}
       leftThreshold={75}
-      rightThreshold={105}
+      rightThreshold={95}
       friction={3}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
