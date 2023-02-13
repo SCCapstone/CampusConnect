@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import uuid from 'react-native-uuid';
 
 const axios = require("axios");
 const cheerio = require("react-native-cheerio");
@@ -22,12 +23,14 @@ const LoadSportEvents = async() => {
     sportList = $(".schedule-list__category");
     opponentList = $(".schedule-list__opponent");
     scheduleList = $(".schedule-list__top");
+    imageList = $(".schedule-list__image");
 
 
     sportArray = new Array();
     opponentArray = new Array();
     dateArray = new Array();
     timeArray = new Array();
+    imageArray = new Array();
 
     sportList.each((i, el) => {
       sportArray.push(($(el).text().trim()));
@@ -42,16 +45,21 @@ const LoadSportEvents = async() => {
       timeArray.push($(el).children("time").text().split("\n      ")[1]);
     })
 
-    const attributes = 4;
+    imageList.each((i, el) => {
+      imageArray.push($(el).children("img").attr("src").text());
+    })
+
+    const attributes = 6;
     const results = 10;
     let arr = Array(results).fill().map(() => Array(attributes));
-
 
     for (let i = 0; i < defaultItemCount; i++) {
         arr[i][0] = sportArray[i];
         arr[i][1] = opponentArray[i];
         arr[i][2] = dateArray[i];
         arr[i][3] = timeArray[i];
+        arr[i][4] = imageArray[i];
+        arr[i][5] = uuid.v4();
       }
     
       return arr;
