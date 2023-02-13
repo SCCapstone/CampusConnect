@@ -12,28 +12,24 @@ import {
   Alert,
 } from 'react-native';
 import {FloatingAction} from 'react-native-floating-action';
-import uuid from 'react-native-uuid';
 import { ScrapeSportData } from './SportScraper';
 import { SearchBar } from '@rneui/themed';
-
-const Item = ({item, onPress}) => (
-  <Text style={styles.title}>{item.sport + "\n" + item.opponent + "\n" + item.date + "\n" + item.time}</Text>
-);
 
 export function SportsScreen({navigation}) {
 const defaultItemCount = 10;
 
-var DATA = [{sport: "", opponent: "", date: "", time: "", id: ""}];
+const [DATA, setDATA] = useState({items: [] });
 
-for (let i = 0; i < defaultItemCount; i++) {
-  var dataPusher = {sport: "", opponent: "", date: "", time: "", id: "", backgroundColor: "", textColor: ""}; 
-  dataPusher.sport = sportArray[i];
-  dataPusher.opponent = opponentArray[i];
-  dataPusher.date = dateArray[i];
-  dataPusher.time = timeArray[i];
-  dataPusher.id = uuid.v4();
-  DATA.push(dataPusher);
-}
+useEffect(() => {
+  const fetchData = async () => {
+    const ret = await ScrapeSportData();
+    setDATA(ret);
+    }
+  fetchData();
+  console.log(DATA)
+}, []);
+
+
 
 const [search, setSearch] = useState("");
   
@@ -50,39 +46,39 @@ const [search, setSearch] = useState("");
 const [selectedBackgroundColor, setSelectedBackgroundColor] = useState();
 const [selectedTextColor, setSelectedTextColor] = useState();
 
-const renderItem = ({item}) => {
-  const backgroundColor = item.backgroundColor === selectedBackgroundColor ? '#ffffff' : '#white';
-  const textColor = item.backgroundColor === selectedTextColor ? 'white' : 'black';
 
-  return (
-    <Item
-      item={item}
-      onPress={() => setSelectedId(item.id)}
-      backgroundColor={backgroundColor}
-      textColor={textColor}
-    />
-  );
-};
 
   
 
-if (!DATA) {
+if (DATA == []) {
   return (
     <View>
       <ActivityIndicator size="large" color="#00ff00"></ActivityIndicator>
     </View>
   )
 } else {
-  console.log(DATA)
   return (
           <SafeAreaView style={styles.container}>
              <SearchBar inputContainerStyle={{borderRadius:20,backgroundColor:'white'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
               <FlatList
                 data={DATA}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-              >
-              </FlatList>
+                renderItem={({ item }) => {
+                  return <View style={styles.item}>
+                    <Image
+                      source={{uri: item[4]}}
+                      style={styles.image}>
+                    </Image>
+                    <View>
+                      <Text style={styles.opponentText}>vs. {item[1]}</Text>
+                      <Text style={styles.sportText}>{item[0]}</Text>
+                      <Text style={styles.dateText}>{item[2]}</Text> 
+                      <Text style={styles.timeText}>{item[3]}</Text>
+                    </View>
+                  </View>
+                  
+                  
+                }}
+              />
               <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
           </SafeAreaView>
       );
@@ -96,22 +92,29 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: "row",
-    padding: 20,
+    padding: 40,
     marginVertical: 8,
     borderRadius:20,
     marginHorizontal: 16,
     backgroundColor: '#a8a1a6',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10
+    },
+    shadowOpacity: .3,
+    shadowRadius: 20
   },
   title: {
     flex: 2,
     fontSize: 28,
     color: 'black',
   },
-  groupImg: {
-      marginTop: 10,
-      marginRight: 20,
-      width: 50,
-      height: 50,
+  image: {
+      marginTop: 30,
+      marginRight: 30,
+      width: 70,
+      height: 70,
   },
   button: {
       width: 400,
@@ -135,5 +138,21 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 100,
       color: '#73000a',     
-  }
+  },
+  dateText: {
+      fontSize: 20,
+      color: 'black',
+  },
+  timeText: {
+      fontSize: 20,
+      color: 'black',
+  },
+  sportText: {
+      fontSize: 20,
+      color: 'black',
+  },
+  opponentText: {
+      fontSize: 30,
+      color: 'black',
+  },
 });
