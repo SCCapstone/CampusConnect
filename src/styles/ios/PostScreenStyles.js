@@ -79,7 +79,8 @@ export default StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     marginVertical:'5%',
-    marginHorizontal:'4%'
+    marginHorizontal:'4%',
+    minWidth:300
 
     
   },

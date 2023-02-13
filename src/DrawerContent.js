@@ -47,7 +47,7 @@ export function DrawerContent(props) {
   };
   const getPhoto = () => {
     storage()
-      .ref(auth().currentUser.uid) //name in storage in firebase console
+      .ref('/Profile Pictures/' +auth().currentUser.uid) //name in storage in firebase console
       .getDownloadURL()
       .then(url => {
         userData.setProfilePic(url);
@@ -59,7 +59,7 @@ export function DrawerContent(props) {
   };
 
   const deletePhoto = async () => {
-    await storage().ref(auth().currentUser.uid).delete();
+    await storage().ref('/Profile Pictures/'+auth().currentUser.uid).delete();
     firestore().collection('Users').doc(auth().currentUser.uid).update({
       pfp: '',
     });
@@ -74,7 +74,7 @@ export function DrawerContent(props) {
   };
 
   useEffect(() => {
-
+    getPhoto()
   }, []);
 
   return (

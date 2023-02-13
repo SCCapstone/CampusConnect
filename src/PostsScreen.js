@@ -98,6 +98,7 @@ export function PostsScreen({navigation}) {
   const [postReplySubscriber,setPostReplySubscriber] = useState();
   const [postReplies, setPostReplies] = useState([])
   const [repliesLoading,setRepliesLoading] = useState(false)
+  const [refresh, setRefreshList] = useState(false)
   var transactionStarted = false;
   var url = '';
 
@@ -121,7 +122,7 @@ export function PostsScreen({navigation}) {
     ]);
   };
   const DeletePostAlert = ({item}) => {
-    if ('/Users/' + auth().currentUser.uid === item.user) {
+    if (auth().currentUser.uid === item.user) {
       Alert.alert(item.isReply?'Delete Reply':'Delete Post?', 'Are you sure you want to delete?', [
         {text: 'Yes', onPress: () => DeletePost({item})},
         {text: 'No'},
@@ -129,16 +130,19 @@ export function PostsScreen({navigation}) {
     }
   };
 
-  const getReplies = (item) => {
+  const getReplies =  (item) => {
     setRepliesLoading(true)
     const postReplies= [];
     var postsRef = firestore().collection('Posts').doc(item.key)
+    promises = []
     //gets posts asynchronously in the background
-    postsRef.get().then(async doc => {
+    postsRef.get().then( doc => {
       const replies = doc.get('replies');
       for(firebaseReply of replies){
         var replyRef = firestore().collection('Replies').doc(firebaseReply)
-        await replyRef.get().then(reply => {
+
+        //Create a promise for each request and put it into a promise array. This allows us to load asynchronously
+        promise = replyRef.get().then(reply => {
           const tempReply = {
             ...reply.data(),
             key:reply.id,
@@ -148,16 +152,25 @@ export function PostsScreen({navigation}) {
           }
           tempReply.isUpVoted = tempReply.upvoters[auth().currentUser.uid];
           tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
-          tempReply.postIsYours = tempReply.user === '/Users/' + auth().currentUser.uid
+          tempReply.postIsYours = tempReply.user === auth().currentUser.uid
           postReplies.push(tempReply);
+
         })}
+        promises.push(promise)
+
+        //Wait for all the replies to load
+        Promise.all(promises).then(() => {
         //The first one will sort by upvote count,then date.
         //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
         setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
         setRepliesLoading(false)
+        setRefreshList(!refresh)
+        })
+
 
 
     })
+
 
   
   }
@@ -206,25 +219,44 @@ export function PostsScreen({navigation}) {
         var imageIndex = 0;
         const posts = [];
         const images = [];
+        const promises = [];
         snapShot.forEach(documentSnapshot => {
-          const post = {
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          }
-          posts.push(post);
-          if (post.extraData){
-            images.push({
-              uri: post.extraData,
-              key: documentSnapshot.id
-            })
-            setImageMap(imageMap.set(postIndex,imageIndex))
-            imageIndex++;
-          }
-          postIndex++;
+          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
+            const post =({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+              author: data.get('name'),
+              authorGradYear: data.get('gradYear'),
+              authorMajor: data.get('major'),
+              pfp: data.get('pfp'),
+              isUpVoted: false,
+              isDownVoted: false,
+              postIsYours:false
+            });
+              //Determine whether the user has upvoted or downvoted the post yet
+              post.isUpVoted = post.upvoters[auth().currentUser.uid];
+              post.isDownVoted = post.downvoters[auth().currentUser.uid];
+              post.postIsYours = post.user === auth().currentUser.uid
+
+              posts.push(post);
+              if (post.extraData) {
+                images.push({
+                  uri: post.extraData,
+                  key: documentSnapshot.id,
+                });
+                setImageMap(imageMap.set(postIndex, imageIndex));
+                imageIndex++;
+              }
+              postIndex++;
+          })
+          promises.push(promise)
         });
-        setPosts(posts);
-        setImages(images);
-        setLoading(false);
+        Promise.all(promises).then(() => {
+          setPosts(posts);
+          setImages(images);
+          setLoading(false);
+        })
+
       }
       setRefresh(false)
     });
@@ -281,7 +313,7 @@ export function PostsScreen({navigation}) {
             date: firestore.FieldValue.serverTimestamp(),
             pfp: userData.pfp,
             replies: [],
-            user: '/Users/' + auth().currentUser.uid,
+            user: auth().currentUser.uid,
             extraData: {url} ? url : '',
             upvoters: {[auth().currentUser.uid]: true},
             downvoters: new Map(),
@@ -314,7 +346,7 @@ export function PostsScreen({navigation}) {
           date: firestore.FieldValue.serverTimestamp(),
           pfp: '',
           replies: [],
-          user: '/Users/' + auth().currentUser.uid,
+          user: auth().currentUser.uid,
           extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
@@ -407,38 +439,47 @@ export function PostsScreen({navigation}) {
           var imageIndex = 0;
           const posts = [];
           const images = [];
+          const promises = [];
           querySnapshot.forEach(documentSnapshot => {
-            //Determine whether the user has upvoted or downvoted the post yet
-            const post = {
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-              isUpVoted: false,
-              isDownVoted: false,
-              postIsYours:false
-            };
-            post.isUpVoted = post.upvoters[auth().currentUser.uid];
-            post.isDownVoted = post.downvoters[auth().currentUser.uid];
-            post.postIsYours = post.user === '/Users/' + auth().currentUser.uid
-
-            posts.push(post);
-            if (post.extraData) {
-              images.push({
-                uri: post.extraData,
+            promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
+              const post =({
+                ...documentSnapshot.data(),
                 key: documentSnapshot.id,
+                author: data.get('name'),
+                authorGradYear: data.get('gradYear'),
+                authorMajor: data.get('major'),
+                pfp: data.get('pfp'),
+                isUpVoted: false,
+                isDownVoted: false,
+                postIsYours:false
               });
-              setImageMap(imageMap.set(postIndex, imageIndex));
-              imageIndex++;
-            }
-            postIndex++;
-          });
+                //Determine whether the user has upvoted or downvoted the post yet
+                post.isUpVoted = post.upvoters[auth().currentUser.uid];
+                post.isDownVoted = post.downvoters[auth().currentUser.uid];
+                post.postIsYours = post.user === auth().currentUser.uid
 
-            setPosts(posts);
-            setImages(images);
-            setLoading(false);
+                posts.push(post);
+                if (post.extraData) {
+                  images.push({
+                    uri: post.extraData,
+                    key: documentSnapshot.id,
+                  });
+                  setImageMap(imageMap.set(postIndex, imageIndex));
+                  imageIndex++;
+                }
+                postIndex++;
+            })
+            promises.push(promise)
+
+          });
+            Promise.all(promises).then(() => {
+              setPosts(posts);
+              setImages(images);
+              setLoading(false);
+            })
 
           }
         });
-    
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -581,7 +622,7 @@ export function PostsScreen({navigation}) {
             upvoteCount: 1,
             date: firestore.FieldValue.serverTimestamp(),
             pfp: userData.pfp,
-            user: '/Users/' + auth().currentUser.uid,
+            user: auth().currentUser.uid,
             extraData: '',
             upvoters: {[auth().currentUser.uid]: true},
             downvoters: new Map(),
@@ -602,7 +643,7 @@ export function PostsScreen({navigation}) {
             upvoteCount: 1,
             date: firestore.FieldValue.serverTimestamp(),
             pfp: '',
-            user: '/Users/' + auth().currentUser.uid,
+            user: auth().currentUser.uid,
             extraData: '',
             upvoters: {[auth().currentUser.uid]: true},
             downvoters: new Map(),
@@ -649,7 +690,7 @@ export function PostsScreen({navigation}) {
       }}
       overshootRight={true}
       leftThreshold={75}
-      rightThreshold={105}
+      rightThreshold={95}
       friction={3}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
@@ -1046,6 +1087,7 @@ export function PostsScreen({navigation}) {
         onEndReachedThreshold={.77}
         data={posts}
         ref={list}
+        key={refresh}
         renderItem={renderPost}
         keyExtractor={item => item.key}
         refreshing={refreshing}
