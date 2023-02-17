@@ -778,7 +778,7 @@ export function PostsScreen({navigation}) {
               </Pressable>
               {item.author !== 'Anonymous' ? (
                   <View style={styles.postUserInfo}>
-                    <Text style={styles.name}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+                    <Text style={styles.name}>{item.postIsYours ? item.author : item.author}</Text>
                     <Text style={styles.majorText}>
                       {item.authorMajor} | {item.authorGradYear}
                     </Text>
