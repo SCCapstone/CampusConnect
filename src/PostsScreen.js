@@ -203,7 +203,7 @@ export function PostsScreen({navigation}) {
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
-      .where('author','==', 'Anonymous')
+      .where('author','==', 'USC Student')
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
       .limit(5) 
@@ -237,6 +237,10 @@ export function PostsScreen({navigation}) {
               post.isUpVoted = post.upvoters[auth().currentUser.uid];
               post.isDownVoted = post.downvoters[auth().currentUser.uid];
               post.postIsYours = post.user === auth().currentUser.uid
+              if (documentSnapshot.data().author === 'USC Student') {
+                post.author = 'USC Student'
+                post.pfp = ''
+              }
 
               posts.push(post);
               if (post.extraData) {
@@ -333,11 +337,12 @@ export function PostsScreen({navigation}) {
           });
         }
       else if (postIsAnonymous) {
+        console.log('test')
         firestore()
         .collection('Posts')
         .doc()
         .set({
-          author: 'Anonymous',
+          author: 'USC Student',
           authorGradYear: '',
           authorMajor: '',
           body: postText,
@@ -350,7 +355,7 @@ export function PostsScreen({navigation}) {
           extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
-          searchAuthor:'ANONYMOUS',
+          searchAuthor:'USC STUDENT',
           edited:false
         })
         .then(() => {
@@ -422,7 +427,7 @@ export function PostsScreen({navigation}) {
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
-      .where('author','==', 'Anonymous')
+      .where('author','==', 'USC Student')
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
       .limit(postCount) 
@@ -457,6 +462,10 @@ export function PostsScreen({navigation}) {
                 post.isUpVoted = post.upvoters[auth().currentUser.uid];
                 post.isDownVoted = post.downvoters[auth().currentUser.uid];
                 post.postIsYours = post.user === auth().currentUser.uid
+                if (documentSnapshot.data().author === 'USC Student') {
+                  post.author = 'USC Student'
+                  post.pfp = ''
+                }
 
                 posts.push(post);
                 if (post.extraData) {
@@ -635,10 +644,11 @@ export function PostsScreen({navigation}) {
           }).then(() => {getReplies(item);setReply('')}).catch(()=>{})
         }
       else if (postIsAnonymous) {
+
         const replyRef = firestore().collection('Replies').doc();
         replyRef
           .set({
-            author: 'Anonymous',
+            author: 'USC Student',
             body: reply,
             upvoteCount: 1,
             date: firestore.FieldValue.serverTimestamp(),
@@ -760,11 +770,11 @@ export function PostsScreen({navigation}) {
               </View>:null}
             <View style={styles.postUserImageAndInfoBox}>
               <Pressable onPress={() => {
-                if(item.author !== 'Anonymous'){
+                if(item.author !== 'USC Student'){
                   userData.setProfileView(item.user.replace('/Users/',''))
                   navigation.navigate('ProfileView')
                 }
-                else if (item.author === 'Anonymous') {
+                else if (item.author === 'USC Student') {
                   Alert.alert('This user wishes to remain anonymous.')
                 }
               }}>
@@ -776,15 +786,15 @@ export function PostsScreen({navigation}) {
                   style={styles.postPfp}
                 />
               </Pressable>
-              {item.author !== 'Anonymous' ? (
+              {item.author !== 'USC Student' ? (
                   <View style={styles.postUserInfo}>
-                    <Text style={styles.name}>{item.postIsYours ? item.author : item.author}</Text>
+                    <Text style={item.postIsYours ? [styles.name,{fontWeight: 'bold'}] : styles.name}>{item.author}</Text>
                     <Text style={styles.majorText}>
                       {item.authorMajor} | {item.authorGradYear}
                     </Text>
                   </View>
               ) : (
-                  <Text style={styles.anonymousAuthorText}>{item.postIsYours ? item.author + ' (You)' : item.author}</Text>
+                  <Text style={item.postIsYours? [styles.anonymousAuthorText,{fontWeight:'bold'}]:styles.anonymousAuthorText}>{item.author}</Text>
     
               )}
                   {(!item.edited)?<SelectDropdown
@@ -897,7 +907,7 @@ export function PostsScreen({navigation}) {
         <View style={{width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
           <View style={{width:70,flex:.4,justifyContent:'center'}}>
             <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{alignSelf:'center',height:50,width:50,borderRadius:40,marginLeft:15}} source={item.pfp ? {uri:item.pfp}: require('./assets/blank2.jpeg')}></FastImage>
-            <Text style={{marginLeft:15,textAlign:'center',fontSize:12,fontWeight:'bold',color:'black'}}>{item.postIsYours ? item.author + ' (You)': item.author}</Text>
+            <Text style={item.postIsYours? {marginLeft:15,textAlign:'center',fontSize:12,fontWeight:'bold',color:'black'} : {marginLeft:15,textAlign:'center',fontSize:12,color:'black'}}>{item.author}</Text>
           </View>
             <View style={{backgroundColor:'#a8a1a6', flex:1,padding:10,marginLeft:5,marginRight:'5%',borderRadius:10}}>
               <View style={{marginBottom:5}}>

@@ -325,7 +325,6 @@ export function CalendarPage({navigation}) {
                                 size='lg'
                                 onPress={() => {
                                     saveClasses()
-
                                 }}
                                 titleStyle={{fontSize:10,fontWeight:'bold'}}
                                 title={'Save'}
