@@ -370,7 +370,7 @@ export function CalendarPage({navigation}) {
                             destination={destination}
                             apikey={GOOGLE_MAPS_APIKEY}
                             strokeColor='#73000a'
-                            strokeWidth={15}
+                            strokeWidth={7}
                         />
                     </MapView>
                         
