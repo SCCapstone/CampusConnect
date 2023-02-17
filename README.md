@@ -1,5 +1,5 @@
 # What is Campus Connect?
-Campus Connect is a cross-platform chat and social media app developed by USC students, for USC students. 
+Campus Connect is a cross-platform chat and social media app developed by USC students, for USC students. Join your friends. Talk about classes. And just have a good time in general!
 
 # Hardware Requirements
 This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a 4 or more core processor from the past few years. 
