@@ -337,7 +337,6 @@ export function PostsScreen({navigation}) {
           });
         }
       else if (postIsAnonymous) {
-        console.log('test')
         firestore()
         .collection('Posts')
         .doc()
