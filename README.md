@@ -32,7 +32,6 @@ Create separate ".js" files for each screen. Screens can be added to the HomeScr
 # Pictures
 <p float="left">
 <img width="189" alt="Screenshot_20230217_120551_50" src="https://user-images.githubusercontent.com/13265359/219555233-07702c84-05c2-4efd-a82a-11e2ecf69777.png">
-<img width="193" alt="Screenshot_20230217_123055_50" src="https://user-images.githubusercontent.com/13265359/219557510-0fc6fc42-1cf9-4299-9dfb-37c21b404d08.png">
 <img width="194" alt="Screenshot_20230217_120634_50" src="https://user-images.githubusercontent.com/13265359/219555234-ce4f516d-0cf4-42c6-9a9b-087842b91018.png">
 <img width="193" alt="Screenshot_20230217_120645_50" src="https://user-images.githubusercontent.com/13265359/219555237-69f2c3e0-2734-4add-91b2-b269de5bcf28.png">
 <img width="194" alt="Screenshot_20230217_120709_50" src="https://user-images.githubusercontent.com/13265359/219555239-135df328-1383-4cd1-89c7-3539f0d72c8a.png">
