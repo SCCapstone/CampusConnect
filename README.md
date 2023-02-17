@@ -30,7 +30,20 @@ All the source files for the project are in the "src" folder
 Create separate ".js" files for each screen. Screens can be added to the HomeScreen drawer when they are done. Messing with other parts of the app can be dangerous. Styles should go into the styles folder. 
 
 # Pictures
-<img width="308" alt="Screenshot 2022-10-13 030609" src="https://user-images.githubusercontent.com/13265359/195525883-f8516174-19ba-4d06-b23e-0d691c276bfb.png"><img width="240" alt="Screenshot 2022-11-09 at 11 08 38 AM" src="https://user-images.githubusercontent.com/13265359/200881610-5a6748e1-6307-42f0-a9f6-27d897be052b.png">
+<p float="left">
+<img width="189" alt="Screenshot_20230217_120551_50" src="https://user-images.githubusercontent.com/13265359/219555233-07702c84-05c2-4efd-a82a-11e2ecf69777.png">
+<img width="188" alt="Screenshot_2023-02-17_000625_50" src="https://user-images.githubusercontent.com/13265359/219555231-c59c4014-e7c7-4526-84fc-74999433a0bc.png">
+<img width="194" alt="Screenshot_20230217_120634_50" src="https://user-images.githubusercontent.com/13265359/219555234-ce4f516d-0cf4-42c6-9a9b-087842b91018.png">
+<img width="193" alt="Screenshot_20230217_120645_50" src="https://user-images.githubusercontent.com/13265359/219555237-69f2c3e0-2734-4add-91b2-b269de5bcf28.png">
+<img width="194" alt="Screenshot_20230217_120709_50" src="https://user-images.githubusercontent.com/13265359/219555239-135df328-1383-4cd1-89c7-3539f0d72c8a.png">
+<img width="192" alt="Screenshot_20230217_120722_50" src="https://user-images.githubusercontent.com/13265359/219555242-42ec37e0-04e7-4d24-87bc-be1527894e90.png">
+<img width="194" alt="Screenshot_20230217_120957_50" src="https://user-images.githubusercontent.com/13265359/219555244-16127b83-a5ca-4d8f-800f-bd61513c521d.png">
+<img width="192" alt="Screenshot_20230217_121638_50" src="https://user-images.githubusercontent.com/13265359/219555509-0b5c117d-8337-4c37-8d38-dc762c80dca6.png">
+
+And Much More!
+
+</p>
+
 
 # Deployment
 We will publish an apk/ipa onto github.
