@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { err } from 'react-native-svg/lib/typescript/xml';
 import uuid from 'react-native-uuid';
-import { isJSDocCommentContainingNode } from 'typescript';
 
 const axios = require("axios");
 const cheerio = require("react-native-cheerio");
