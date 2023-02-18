@@ -325,7 +325,6 @@ export function CalendarPage({navigation}) {
                                 size='lg'
                                 onPress={() => {
                                     saveClasses()
-
                                 }}
                                 titleStyle={{fontSize:10,fontWeight:'bold'}}
                                 title={'Save'}
@@ -370,7 +369,7 @@ export function CalendarPage({navigation}) {
                             destination={destination}
                             apikey={GOOGLE_MAPS_APIKEY}
                             strokeColor='#73000a'
-                            strokeWidth={15}
+                            strokeWidth={7}
                         />
                     </MapView>
                         
