@@ -58,8 +58,6 @@ const LoadSportEvents = async() => {
     const attributes = 6;
     const results = 10;
     let arr = Array(results).fill().map(() => Array(attributes));
-
-    console.log("Creation of arr works!");
     for (let i = 0; i < defaultItemCount; i++) {
         arr[i][0] = sportArray[i];
         arr[i][1] = opponentArray[i];
