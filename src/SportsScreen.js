@@ -18,7 +18,7 @@ import { SearchBar } from '@rneui/themed';
 export function SportsScreen({navigation}) {
 const defaultItemCount = 10;
 
-const [DATA, setDATA] = useState({items: [] });
+const [DATA, setDATA] = useState();
 
 useEffect(() => {
   const fetchData = async () => {
@@ -26,7 +26,6 @@ useEffect(() => {
     setDATA(ret);
     }
   fetchData();
-  console.log(DATA)
 }, []);
 
 
@@ -43,23 +42,16 @@ const [search, setSearch] = useState("");
     }
 ];
 
-const [selectedBackgroundColor, setSelectedBackgroundColor] = useState();
-const [selectedTextColor, setSelectedTextColor] = useState();
-
-
-
-  
-
-if (DATA == []) {
+if (!DATA) {
   return (
     <View>
-      <ActivityIndicator size="large" color="#00ff00"></ActivityIndicator>
+      <ActivityIndicator size="large"></ActivityIndicator>
     </View>
   )
 } else {
   return (
           <SafeAreaView style={styles.container}>
-             <SearchBar inputContainerStyle={{borderRadius:20,backgroundColor:'white'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
+             <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}></SearchBar>
               <FlatList
                 data={DATA}
                 renderItem={({ item }) => {
@@ -82,7 +74,7 @@ if (DATA == []) {
               <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
           </SafeAreaView>
       );
-  }
+ }
 }
 
 const styles = StyleSheet.create({
