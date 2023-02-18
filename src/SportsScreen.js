@@ -43,13 +43,6 @@ const [search, setSearch] = useState("");
     }
 ];
 
-const [selectedBackgroundColor, setSelectedBackgroundColor] = useState();
-const [selectedTextColor, setSelectedTextColor] = useState();
-
-
-
-  
-
 if (DATA == []) {
   return (
     <View>
@@ -82,7 +75,7 @@ if (DATA == []) {
               <FloatingAction color='#73000a' actions={actions} onPress={ () => CreateAlert()} />
           </SafeAreaView>
       );
-  }
+ }
 }
 
 const styles = StyleSheet.create({
