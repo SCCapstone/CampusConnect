@@ -1,40 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { useState } from 'react';
+import uuid from 'react-native-uuid';
 
-const App = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+const axios = require("axios");
+const cheerio = require("react-native-cheerio");
+const url = "https://sc.edu/about/offices_and_divisions/russell_house/upcoming-events/index.php";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const targetUrl = 'https://sc.edu/about/offices_and_divisions/russell_house/upcoming-events/index.php';
-      const response = await fetch(targetUrl);
-      const html = await response.text();
-
-      const information = extractInformation(html);
-
-      setData(information);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-      <View>
-        <ActivityIndicator />
-      </View>
-    );
+export async function ScrapeEventData() {
+  try {
+  return await LoadEvents();
   }
+  catch (error) {
+    console.log("error");
+  }
+}
 
-  return (
-    <View>
-      {data && data.map(item => (
-        <Text key={item.id}>{item.title}</Text>
-      ))}
-    </View>
-  );
-};
 
-export default App;
+const LoadEvents = async() => {
+    const defaultItemCount = 10;
+    events = new Array();
+    const response = await fetch(url);   // fetch page
+    const htmlString = await response.text();  // get response text
+    const $ = cheerio.load(htmlString); // parse HTML string
+    
+    
+    listItems = $(".schedule-list__category");
+    titleList = $(".schedule-list__category");
+    locationList = $(".schedule-list__location");
+    scheduleList = $(".schedule-list__top");
+    
+
+    titleArray = new Array();
+    locationArray = new Array();
+    dateArray = new Array();
+    timeArray = new Array();
+  
+
+    titleList.each((i, el) => {
+      sportArray.push(($(el).text().trim()));
+    })
+    
+    locationList.each((i, el) => {
+      locationArray.push($(el).children("strong").text());
+    })
+
+    scheduleList.each((i, el) => {
+      dateArray.push($(el).children("time").text().split("\n      ")[0]);
+      timeArray.push($(el).children("time").text().split("\n      ")[1]);
+    })
+
+
+    const attributes = 5;
+    const results = 10;
+    let arr = Array(results).fill().map(() => Array(attributes));
+    for (let i = 0; i < defaultItemCount; i++) {
+        arr[i][0] = titleArray[i];
+        arr[i][1] = locationArray[i];
+        arr[i][2] = dateArray[i];
+        arr[i][3] = timeArray[i];
+        arr[i][4] = uuid.v4();
+      }
+
+      return arr;
+   
+}
