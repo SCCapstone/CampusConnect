@@ -155,8 +155,10 @@ export function PostsScreen({navigation}) {
           tempReply.postIsYours = tempReply.user === auth().currentUser.uid
           postReplies.push(tempReply);
 
-        })}
+        })
         promises.push(promise)
+      }
+        
 
         //Wait for all the replies to load
         Promise.all(promises).then(() => {
