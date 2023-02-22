@@ -9,14 +9,15 @@ import {
   TextInput,
   Pressable,
   TouchableOpacity,
+  ScrollView,
   ActivityIndicator,
   Modal,
   Image,
   Platform,
-  FlatList,
   LayoutAnimation,
   UIManager,
 } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import auth, {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -105,7 +106,7 @@ export function PostsScreen({navigation}) {
 
   const headerHeight = useHeaderHeight();
 
-  const offsetHeight = Platform.OS === 'ios' ? -25 : -300 //keyboard view doesnt work on ios without this
+  const offsetHeight = Platform.OS === 'ios' ? -25 : -1000 //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS ==='ios' ? 0 : -64
 
   const list = useRef(FlashList);
@@ -136,41 +137,52 @@ export function PostsScreen({navigation}) {
     var postsRef = firestore().collection('Posts').doc(item.key)
     promises = []
     //gets posts asynchronously in the background
-    postsRef.get().then( doc => {
+    promise3 = postsRef.get().then( doc => {
       const replies = doc.get('replies');
       for(firebaseReply of replies){
         var replyRef = firestore().collection('Replies').doc(firebaseReply)
 
         //Create a promise for each request and put it into a promise array. This allows us to load asynchronously
         promise = replyRef.get().then(reply => {
-          const tempReply = {
-            ...reply.data(),
-            key:reply.id,
-            isUpVoted: false,
-            isDownVoted: false,
-            postIsYours:false
-          }
-          tempReply.isUpVoted = tempReply.upvoters[auth().currentUser.uid];
-          tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
-          tempReply.postIsYours = tempReply.user === auth().currentUser.uid
-          postReplies.push(tempReply);
-
+          promise2 = firestore().collection('Users').doc(reply.get('user')).get().then( data => {
+            user = ({...data.data()})
+            const tempReply = {
+              ...reply.data(),
+              key:reply.id,
+              isUpVoted: false,
+              isDownVoted: false,
+              postIsYours:false
+            }
+            tempReply.pfp = user.pfp
+            tempReply.author = user.name
+            if (reply.data().author === 'USC Student') {
+              tempReply.author = 'USC Student'
+              tempReply.pfp = ''
+            }
+            tempReply.isUpVoted = tempReply.upvoters[auth().currentUser.uid];
+            tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
+            tempReply.postIsYours = tempReply.user === auth().currentUser.uid
+            postReplies.push(tempReply);
         })
+
+          promises.push(promise2)
+        });
         promises.push(promise)
+
       }
-        
-
-        //Wait for all the replies to load
-        Promise.all(promises).then(() => {
-        //The first one will sort by upvote count,then date.
-        //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
-        setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
-        setRepliesLoading(false)
-        setRefreshList(!refresh)
-        })
 
 
 
+    })
+    promises.push(promise3)
+    //Wait for all the replies to load
+    Promise.all(promises).then(() => {
+      console.log(121212)
+      //The first one will sort by upvote count,then date.
+      //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
+      setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
+      setRepliesLoading(false)
+      setRefreshList(!refresh)
     })
 
 
@@ -467,17 +479,21 @@ export function PostsScreen({navigation}) {
                   post.author = 'USC Student'
                   post.pfp = ''
                 }
+                if (sortMode !=='Anonymous' && post.author === 'USC Student') {} //This makes sure that anonymous posts are only 
+                //shown if the user has selected the anonymous filter
+                else {
+                  posts.push(post);
+                  if (post.extraData) {
+                    images.push({
+                      uri: post.extraData,
+                      key: documentSnapshot.id,
+                    });
+                    setImageMap(imageMap.set(postIndex, imageIndex));
+                    imageIndex++;
+                  }
 
-                posts.push(post);
-                if (post.extraData) {
-                  images.push({
-                    uri: post.extraData,
-                    key: documentSnapshot.id,
-                  });
-                  setImageMap(imageMap.set(postIndex, imageIndex));
-                  imageIndex++;
+                  postIndex++;
                 }
-                postIndex++;
             })
             promises.push(promise)
 
@@ -624,47 +640,52 @@ export function PostsScreen({navigation}) {
         10 /*this last one checks that there are not too many lines */
     ) {
       if(!postIsAnonymous){
-        const replyRef = firestore().collection('Replies').doc();
-        replyRef
-          .set({
-            author: userData.name,
-            body: reply,
-            upvoteCount: 1,
-            date: firestore.FieldValue.serverTimestamp(),
-            pfp: userData.pfp,
-            user: auth().currentUser.uid,
-            extraData: '',
-            upvoters: {[auth().currentUser.uid]: true},
-            downvoters: new Map(),
-            isReply:true,
-            post: item.key
-          }).catch(()=> {})
-          firestore().collection('Posts').doc(item.key).update({
-            replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
-            replyCount:firebase.firestore.FieldValue.increment(1)
-          }).then(() => {getReplies(item);setReply('')}).catch(()=>{})
+          const replyRef = firestore().collection('Replies').doc();
+          replyRef
+            .set({
+              author: userData.name,
+              body: reply,
+              upvoteCount: 1,
+              date: firestore.FieldValue.serverTimestamp(),
+              pfp: userData.pfp,
+              user: auth().currentUser.uid,
+              extraData: '',
+              upvoters: {[auth().currentUser.uid]: true},
+              downvoters: new Map(),
+              isReply:true,
+              post: item.key
+            }).catch(()=> {})
+            firestore().collection('Posts').doc(item.key).update({
+              replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
+              replyCount:firebase.firestore.FieldValue.increment(1)
+            }).then(() => {getReplies(item);setReply('')}).catch(()=>{})
         }
       else if (postIsAnonymous) {
+        if(item.author === 'USC Student'){
 
-        const replyRef = firestore().collection('Replies').doc();
-        replyRef
-          .set({
-            author: 'USC Student',
-            body: reply,
-            upvoteCount: 1,
-            date: firestore.FieldValue.serverTimestamp(),
-            pfp: '',
-            user: auth().currentUser.uid,
-            extraData: '',
-            upvoters: {[auth().currentUser.uid]: true},
-            downvoters: new Map(),
-            isReply:true,
-            post: item.key
-          }).catch(()=> {})
-          firestore().collection('Posts').doc(item.key).update({
-            replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
-            replyCount:firebase.firestore.FieldValue.increment(1)
-          }).then(() => {getReplies(item);setReply('');setPostIsAnonymous(false)}).catch(()=>{})
+          const replyRef = firestore().collection('Replies').doc();
+          replyRef
+            .set({
+              author: 'USC Student',
+              body: reply,
+              upvoteCount: 1,
+              date: firestore.FieldValue.serverTimestamp(),
+              pfp: '',
+              user: auth().currentUser.uid,
+              extraData: '',
+              upvoters: {[auth().currentUser.uid]: true},
+              downvoters: new Map(),
+              isReply:true,
+              post: item.key
+            }).catch(()=> {})
+            firestore().collection('Posts').doc(item.key).update({
+              replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
+              replyCount:firebase.firestore.FieldValue.increment(1)
+            }).then(() => {getReplies(item);setReply('');setPostIsAnonymous(false)}).catch(()=>{})
+        }
+        else {
+          Alert.alert('Note','You cannot make anonymous comments on a user\'s post unless the post is anonymous too.')
+        }
       }
     } else {
       PostError();
@@ -738,7 +759,9 @@ export function PostsScreen({navigation}) {
           <Pressable delayLongPress={150} onLongPress={() => {
             setReplyItem(item)
             setReplyModalVisible(true)
+            setPostReplies([])
             getReplies(item);
+            
           }} style={styles.post}>
             {item.edited?<View style={styles.editedAndOptionsBox}>
                 <Text style={{color:'black'}}>{item.edited ? 'EDITED' : ''}</Text>
@@ -907,7 +930,19 @@ export function PostsScreen({navigation}) {
     >
         <View style={{width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
           <View style={{width:70,flex:.4,justifyContent:'center'}}>
-            <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{alignSelf:'center',height:50,width:50,borderRadius:40,marginLeft:15}} source={item.pfp ? {uri:item.pfp}: require('./assets/blank2.jpeg')}></FastImage>
+            <Pressable onPress={() => {
+              if(item.author !== 'USC Student'){
+                userData.setProfileView(item.user.replace('/Users/',''))
+                navigation.navigate('ProfileView')
+                setReplyModalVisible(false)
+                setPostReplies([])
+              }
+              else if (item.author === 'USC Student') {
+                Alert.alert('This user wishes to remain anonymous.')
+              }
+            }}>
+              <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{alignSelf:'center',height:50,width:50,borderRadius:40,marginLeft:15}} source={item.pfp ? {uri:item.pfp}: require('./assets/blank2.jpeg')}></FastImage>
+            </Pressable>
             <Text style={item.postIsYours? {marginLeft:15,textAlign:'center',fontSize:12,fontWeight:'bold',color:'black'} : {marginLeft:15,textAlign:'center',fontSize:12,color:'black'}}>{item.author}</Text>
           </View>
             <View style={{backgroundColor:'#a8a1a6', flex:1,padding:10,marginLeft:5,marginRight:'5%',borderRadius:10}}>
@@ -1029,10 +1064,10 @@ export function PostsScreen({navigation}) {
         </SafeAreaView>
       </Modal>
       <Modal
-
         animationType="slide"
         transparent={true}
         visible={replyModalVisible}>
+        
           <SafeAreaView style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
               <Button 
@@ -1058,19 +1093,22 @@ export function PostsScreen({navigation}) {
                 onPress={() => {setPostIsAnonymous(!postIsAnonymous)}}
               />
             </View>
-          <View style={{flex:1}}>
-              <FlatList
-                data={postReplies}
-                renderItem={renderReplies}
-                keyExtractor={item => item.key}
-                refreshing={repliesLoading}
-                onRefresh={() => {getReplies(replyItem)}}
-              >
-              </FlatList>
-          </View>
+          {!repliesLoading ? 
+            <View style={{flex:1}}>
+                <FlatList
+                  data={postReplies}
+                  contentContainerStyle={{flexGrow:1}}
+                  renderItem={renderReplies}
+                  keyExtractor={item => item.key}
+                  refreshing={repliesLoading}
+                  onRefresh={() => {getReplies(replyItem)}}
+                >
+                </FlatList>
+            </View>
+            : <ActivityIndicator style={{flex:1}} color='#73000a' size={'large'}></ActivityIndicator>}
           
         </SafeAreaView>
-        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',height:22,justifyContent:'flex-end'}}>
+        <KeyboardAvoidingView keyboardVerticalOffset={offsetHeight} behavior='position' style={{backgroundColor:'white',flexDirection:'column',justifyContent:'flex-end'}}>
           <View style={{flexDirection:'row',backgroundColor:'white'}}>
               <Input 
                   style={{alignSelf:'flex-end',alignItems:'flex-end'}}
