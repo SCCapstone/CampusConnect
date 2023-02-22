@@ -145,7 +145,7 @@ export function PostsScreen({navigation}) {
 
         //Create a promise for each request and put it into a promise array. This allows us to load asynchronously
         promise = replyRef.get().then(async reply => {
-          await firestore().collection('Users').doc(reply.get('user')).get().then( data => {
+          return firestore().collection('Users').doc(reply.get('user')).get().then( data => {
             user = ({...data.data()})
             const tempReply = {
               ...reply.data(),
