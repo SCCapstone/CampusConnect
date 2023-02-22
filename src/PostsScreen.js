@@ -131,20 +131,21 @@ export function PostsScreen({navigation}) {
     }
   };
 
-  const getReplies =  (item) => {
+  const getReplies = async (item) => {
     setRepliesLoading(true)
     const postReplies= [];
     var postsRef = firestore().collection('Posts').doc(item.key)
     promises = []
     //gets posts asynchronously in the background
-    promise3 = postsRef.get().then( doc => {
+    postsRef.get().then( doc => {
       const replies = doc.get('replies');
       for(firebaseReply of replies){
         var replyRef = firestore().collection('Replies').doc(firebaseReply)
+        promises2 = []
 
         //Create a promise for each request and put it into a promise array. This allows us to load asynchronously
-        promise = replyRef.get().then(reply => {
-          promise2 = firestore().collection('Users').doc(reply.get('user')).get().then( data => {
+        promise = replyRef.get().then(async reply => {
+          await firestore().collection('Users').doc(reply.get('user')).get().then( data => {
             user = ({...data.data()})
             const tempReply = {
               ...reply.data(),
@@ -163,27 +164,30 @@ export function PostsScreen({navigation}) {
             tempReply.isDownVoted = tempReply.downvoters[auth().currentUser.uid];
             tempReply.postIsYours = tempReply.user === auth().currentUser.uid
             postReplies.push(tempReply);
-        })
 
-          promises.push(promise2)
+          })
+
         });
         promises.push(promise)
 
       }
-
+      Promise.all(promises).then(() => {
+        setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
+        setRepliesLoading(false)
+        setRefreshList(!refresh)
+      })
 
 
     })
-    promises.push(promise3)
+
     //Wait for all the replies to load
-    Promise.all(promises).then(() => {
-      console.log(121212)
+    /*Promise.all(promises).then(() => {
       //The first one will sort by upvote count,then date.
       //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
       setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
       setRepliesLoading(false)
       setRefreshList(!refresh)
-    })
+    })*/
 
 
   
