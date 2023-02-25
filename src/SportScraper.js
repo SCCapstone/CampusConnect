@@ -5,6 +5,8 @@ import uuid from 'react-native-uuid';
 const axios = require("axios");
 const cheerio = require("react-native-cheerio");
 const url = "https://gamecocksonline.com/all-sports-schedule/";
+const DEFAULTGAMECOCKLOGOURL1 = "https://gamecocksonline.com/imgproxy/VExob3ytGj5BNypACaYPkvTj1hVPGnHWGjUKiE5kZyY/fit/100/100/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAyMi8wNS8yYjlkMWU4Ny1zb3V0aF9jYXJvbGluYV9nYW1lY29ja3NfbG9nb19wcmltYXJ5LnBuZw.png";
+const DEFAULTGAMECOCKLOGOURL2 = "https://gamecocksonline.com/imgproxy/T5189nCorf3M6wYfR1fANLkiT4Dn31rTEbUh6hXtvAU/fit/150/150/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAyMi8xMS9iOGI1MWI3ZC1zY19nYW1lY29ja3NfYmFzZWJhbGxfc29mdGJhbGxfaW50ZXJsb2NrX2xvZ28ucG5n.png";
 
 export async function ScrapeSportData() {
   try {
@@ -29,6 +31,7 @@ const LoadSportEvents = async() => {
     opponentList = $(".schedule-list__opponent");
     scheduleList = $(".schedule-list__top");
     imageList = $(".schedule-list__image");
+    locationList = $(".schedule-list__location");
     
 
     sportArray = new Array();
@@ -36,6 +39,8 @@ const LoadSportEvents = async() => {
     dateArray = new Array();
     timeArray = new Array();
     imageArray = new Array();
+    locationArray = new Array();
+    homeStatusArray = new Array();
     
 
     sportList.each((i, el) => {
@@ -52,14 +57,21 @@ const LoadSportEvents = async() => {
     })
 
     imageList.each((i, el) => {
-      imageArray.push($(el).children("img").attr("src"));
+      img = ($(el).children("img").attr("src"));
+      // Ensures that Gamecock logo isn't used for opponent logo
+      if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2)
+        imageArray.push(img)
     })
 
-    const attributes = 6;
+    locationList.each((i, el) => {
+      locationArray.push($(el).children("strong").text());
+      homeStatusArray.push($(el).children("span").text());
+    })
+
+    const attributes = 8;
     const results = 10;
     let arr = Array(results).fill().map(() => Array(attributes));
 
-    console.log("Creation of arr works!");
     for (let i = 0; i < defaultItemCount; i++) {
         arr[i][0] = sportArray[i];
         arr[i][1] = opponentArray[i];
@@ -67,8 +79,11 @@ const LoadSportEvents = async() => {
         arr[i][3] = timeArray[i];
         arr[i][4] = imageArray[i];
         arr[i][5] = uuid.v4();
+        arr[i][6] = locationArray[i];
+        arr[i][7] = homeStatusArray[i];
       }
 
+      console.log(arr)
       return arr;
    
 }
