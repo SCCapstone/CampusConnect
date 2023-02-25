@@ -14,7 +14,6 @@ import {
 import {FloatingAction} from 'react-native-floating-action';
 import { ScrapeSportData } from './SportScraper';
 import { SearchBar } from '@rneui/themed';
-import { isMessageWithStylesReadByAndDateSeparator } from 'stream-chat-react-native';
 
 export function SportsScreen({navigation}) {
 const defaultItemCount = 10;

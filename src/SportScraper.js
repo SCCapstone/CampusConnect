@@ -81,8 +81,6 @@ const LoadSportEvents = async() => {
         arr[i][6] = locationArray[i];
         arr[i][7] = homeStatusArray[i];
       }
-
-      console.log(arr)
       return arr;
    
 }
