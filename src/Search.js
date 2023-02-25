@@ -77,7 +77,7 @@ export function Search({navigation}) {
                 <Text style={{marginLeft:'5%',fontSize:24,fontWeight:'bold',color:'black'}}>{item.name}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:14,fontWeight:'bold',color:'black',flexWrap:'wrap'}}>{item.major}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:14,fontWeight:'bold',color:'black'}}>{'('+item.gradYear+')'}</Text>
-                <Text style={{marginLeft:'5.5%',fontSize:10,fontWeight:'bold',fontStyle:'italic',color:'black',marginTop:'5%'}}>{'Joined: '+moment(item.joined.toDate()).format("MMM Do YYYY, h:mm:ss a").toString()}</Text>
+                <Text style={{marginLeft:'5.5%',fontSize:10,fontWeight:'bold',fontStyle:'italic',color:'black',marginTop:'5%'}}>{item.joined ? 'Joined: '+moment(item.joined.toDate()).format("MMM Do YYYY, h:mm:ss a").toString(): null}</Text>
             </View>
         </View>)
 
