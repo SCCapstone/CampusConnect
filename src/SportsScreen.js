@@ -60,7 +60,7 @@ if (!DATA) {
                       source={{uri: item[4]}}
                       style={styles.image}>
                     </Image>
-                    <View>
+                    <View style={{flex:1}}>
                       <Text style={styles.opponentText}>vs. {item[1]}</Text>
                       <Text style={styles.sportText}>{item[0]}</Text>
                       <Text style={styles.dateText}>{item[2]}</Text> 
@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
   },
   opponentText: {
       fontSize: 30,
+      fontWeight:'bold',
       color: 'black',
   },
 });
