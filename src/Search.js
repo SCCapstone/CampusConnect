@@ -83,7 +83,7 @@ export function Search({navigation}) {
 
     };
     return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#73000a'}}>
+    <View style={{flex:1,backgroundColor:'#73000a'}}>
       <SearchBar 
         containerStyle={{backgroundColor:'#73000a'}} 
         inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
@@ -104,6 +104,6 @@ export function Search({navigation}) {
             keyExtractor={item => item.key}
             />
         </View>
-    </SafeAreaView>
+    </View>
     );
 }
