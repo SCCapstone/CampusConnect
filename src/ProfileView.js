@@ -92,7 +92,7 @@ export function ProfileView({navigation}) {
         source={{
           uri: 'https://i.pinimg.com/originals/35/d3/62/35d36295a6fab00525850c454d9e215d.jpg',
         }}>
-        <Image
+        <FastImage
           defaultSource={require('./assets/blank2.jpeg')}
           style={styles.viewProfileImg}
           source={
