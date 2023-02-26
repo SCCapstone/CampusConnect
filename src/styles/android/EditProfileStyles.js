@@ -98,7 +98,7 @@ export default StyleSheet.create({
   },
 
   textStyle: {
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
     fontSize: 24,
     padding: 20,
