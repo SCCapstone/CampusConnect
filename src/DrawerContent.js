@@ -38,7 +38,6 @@ export function DrawerContent(props) {
   const userData = useContext(AppContext);
 
   const navigation = useNavigation()
-  const {chatClientIsReady} =useChatClient();//dont question me
   const DeleteAlert = () => {
     Alert.alert('Delete Photo', 'Do you want to delete your photo?', [
       {text: 'Yes', onPress: () => deletePhoto()},
@@ -69,6 +68,7 @@ export function DrawerContent(props) {
   const SignOut = async () => {
 
     auth().signOut();
+    StreamChat.getInstance(chatApiKey).disconnectUser();
 
 
   };

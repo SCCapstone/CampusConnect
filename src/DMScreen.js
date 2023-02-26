@@ -1,4 +1,4 @@
-import {View,Text} from 'react-native'
+import {View,Text, ActivityIndicator} from 'react-native'
 import {
     Channel,
     MessageList,
@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react';
     const navigation = useNavigation();   
     const headerHeight = useHeaderHeight();
     const chatClient = StreamChat.getInstance(chatApiKey);
+    const [loading,setLoading] = useState(true)
     const {channelID} = props.route.params
     const [channel,setChannel] = useState(props.route.params.channel)
 
@@ -31,6 +32,8 @@ import { useEffect, useState } from 'react';
         response.map(async (channelResponse) => {
           await channelResponse.watch();
           setChannel(channelResponse)
+
+        
         })
       })}
 
@@ -43,11 +46,35 @@ import { useEffect, useState } from 'react';
 
     },[channelID])
 
+    useEffect(() => {
+      /* Query the channel members*/
+      if(channel) {
+        if(channel.type === 'messaging'){
 
-
+          channel.queryMembers({user_id: {$ne:chatClient.user.id}}).then((members) => {
+            if (members.members.length > 0) {
+              navigation.setOptions({
+                headerTitle: 'Chatting with: ' + members.members[0].user.name,
+              });
+              setLoading(false)
+            }
+          });
+        }
+        else if (channel.type === 'team') {
+          navigation.setOptions({
+            headerTitle: channel.data.name,
+          });
+          setLoading(false)
+        }
+      }
+    },[channel])
+          
 
     if (!channel) {
       return null
+    }
+    if (loading) {
+      return <View style={{flex:1,justifyContent:'center'}}><ActivityIndicator size={'large'}></ActivityIndicator></View>
     }
   
     //These props allow us to display the user's name with their

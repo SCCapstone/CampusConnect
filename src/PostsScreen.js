@@ -965,7 +965,7 @@ export function PostsScreen({navigation}) {
 
   if (loading) {
     return (
-      <View style={styles.activityIndicator}>
+      <View style={{flex:1,justifyContent:'center'}}>
         <ActivityIndicator size="large" />
       </View>
     );
