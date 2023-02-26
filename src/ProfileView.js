@@ -66,9 +66,9 @@ export function ProfileView({navigation}) {
     return (
         <SafeAreaView style={{backgroundColor:'#73000a',flex:1}}>
             <View style={{alignItems:'center',marginTop:'10%'}}>
-                <Image defaultSource={require('./assets/blank2.jpeg')} style={{width:175,height:175,borderRadius:90}}
+                <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{width:175,height:175,borderRadius:90}}
                     source={profileData.pfp ? {uri:profileData.pfp} : require('./assets/blank2.jpeg')}>
-                </Image>
+                </FastImage>
             </View>
             <View style={{alignItems:'center',marginTop:'5%'}}>
                 <Text style={{fontWeight: '300', fontSize:40,color:'white',textAlign:'center'}}>{profileData.name}</Text>

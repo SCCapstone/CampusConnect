@@ -185,7 +185,7 @@ export const ChatNavigator = () => {
           component={DMScreen} options={{ presentation:'card', animationTypeForReplace:'pop',
           headerShown:true,headerLeft: () => (
         <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.navigate('ChatsHome')} />
-      ),}}/>
+      ), headerTitle: ''}}/>
           <Stack.Screen name="ThreadScreen" component={ThreadScreen} options={{headerShown: true}}/>
         </Stack.Navigator>
       </Chat>
