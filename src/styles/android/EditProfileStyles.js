@@ -47,19 +47,6 @@ export default StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
   },
-  buttonUpdateStyle: {
-    alignItems: 'center',
-    borderRadius: 5,
-    marginLeft: 55,
-    marginRight: 55,
-    marginTop: 30,
-    backgroundColor: 'black',
-    borderRadius: 8,
-    fontSize: 16,
-    marginHorizontal: 24,
-    marginVertical: 8,
-    padding: 8,
-  },
   buttonStyle: {
     alignItems: 'center',
     borderRadius: 5,
@@ -73,7 +60,19 @@ export default StyleSheet.create({
     marginVertical: 8,
     padding: 8,
   },
-
+  buttonUpdateStyle: {
+    alignItems: 'center',
+    borderRadius: 5,
+    marginLeft: 55,
+    marginRight: 55,
+    marginTop: 30,
+    backgroundColor: 'black',
+    borderRadius: 8,
+    fontSize: 16,
+    marginHorizontal: 24,
+    marginVertical: 8,
+    padding: 8,
+  },
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
@@ -102,7 +101,7 @@ export default StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontSize: 24,
-    padding: 50,
+    padding: 20,
     marginBottom:10
 
   },
@@ -237,7 +236,7 @@ export default StyleSheet.create({
   blankImageBackgroundStyle: {
     height: 100,
     width: 100,
-    marginTop:10,
+    marginTop:40,
     justifyContent:'center',
     alignItems:'center',
     alignContent:'center'

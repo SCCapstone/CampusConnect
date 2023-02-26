@@ -101,7 +101,7 @@ export default StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontSize: 24,
-    padding: 50,
+    padding: 20,
     marginBottom:10
 
   },
@@ -236,7 +236,7 @@ export default StyleSheet.create({
   blankImageBackgroundStyle: {
     height: 100,
     width: 100,
-    marginTop:10,
+    marginTop:40,
     justifyContent:'center',
     alignItems:'center',
     alignContent:'center'

@@ -22,6 +22,7 @@ import auth from '@react-native-firebase/auth';
 
 import {StreamChat} from 'stream-chat';
 import {chatApiKey} from '../chatConfig';
+import { useChatClient } from './useChatClient';
 
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
@@ -38,6 +39,7 @@ export function ProfileView({navigation}) {
   const userData = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState('');
+  const {clientIsReady} = useChatClient();
   const {setChannel} = useChatContext();
   const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -109,16 +111,21 @@ export function ProfileView({navigation}) {
         {!(auth().currentUser.uid === userData.profileView) ? (
           <Button
             onPress={async () => {
-              const channel = chatClient.channel('messaging', {
-                members: [chatClient.user.id, userData.profileView],
-              });
+              if(clientIsReady){
+                const channel = chatClient.channel('messaging', {
+                  members: [chatClient.user.id, userData.profileView],
+                });
 
-              await channel.watch();
-              navigation.navigate('Chats', {
-                screen: 'DMScreen',
-                initial: false,
-                params: {channel: channel},
-              });
+                await channel.watch();
+                navigation.navigate('Chats', {
+                  screen: 'DMScreen',
+                  initial: false,
+                  params: {channel: channel},
+                });
+              }
+              else {
+                Alert.alert('Whoops','There was an issue with the chat service. Please try again later.');
+              }
             }}
             size="lg"
             title={'Message'}
