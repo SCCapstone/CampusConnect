@@ -71,7 +71,8 @@ export default StyleSheet.create({
     marginRight: 16,
   },
   chatListItemLabel: {
-    fontSize: 24,
+    fontSize: 22,
+    fontWeight:'bold',
     marginLeft:'10%',
     color: 'black',
   },

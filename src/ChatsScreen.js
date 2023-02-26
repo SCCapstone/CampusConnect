@@ -301,21 +301,21 @@ export function ChatsScreen(props) {
             if (is2PersonChat) {
               member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
               setIsOnline(member.members[0].user.online)
-              if(!member.members[0].user.image) {
+              /*if(!member.members[0].user.image) {
                 setImage(await storage().ref('Profile Pictures/'+member.members[0].user_id).getDownloadURL().catch(() =>{}))
-              }
-              else{
+              }*/
+              //else{
                 setImage(member.members[0].user.image)
-              }
+              //}
             }
             else {
               setImage(channel.data.image)
             }
             
           }
-          if (!image){
-            getPhotos();
-          }
+
+          getPhotos();
+          
         },[]);
 
        return (
@@ -414,7 +414,8 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             <View>
               <Text style={styles.chatListItemLabel}>{item.name}</Text>
-              <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+              {item.role === 'user' && item.last_active ? <Text style={{fontSize:12,fontWeight:'400',color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text> :
+              <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%',fontWeight:'400'}}>{'Created: ' +moment(item.created_at).format('MMMM Do YYYY')}</Text>}
             </View>
           </View>
         </TouchableOpacity>

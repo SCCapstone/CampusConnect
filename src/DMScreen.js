@@ -32,6 +32,7 @@ import { useEffect, useState } from 'react';
         response.map(async (channelResponse) => {
           await channelResponse.watch();
           setChannel(channelResponse)
+
         
         })
       })}

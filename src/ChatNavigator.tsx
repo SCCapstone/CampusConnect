@@ -64,12 +64,13 @@ darkMode = false;
 
 
 
-
 export const ChatNavigator = () => {
   const navigation = useNavigation();
   const {key,setKey} = useChatContext()
   const [initialChannelId, setInitialChannelId] = useState('')
+  const {clientIsReady} =useChatClient();//dont question me
   const chatClient = StreamChat.getInstance(chatApiKey);
+
   //const [channelId,setInitialChannelId] = useState('');
 
   useEffect(() => {
@@ -160,9 +161,9 @@ export const ChatNavigator = () => {
   }, []);
 
 
-  /*if (!clientIsReady) {
+  if (!clientIsReady) {
     return <Text style={darkMode ? {color:'white',textAlign:'center',marginTop:150}:{color:'black',textAlign:'center',marginTop:150}}>Loading chat ...</Text>
-  }*/
+  }
 
 
 
@@ -194,5 +195,4 @@ export const ChatNavigator = () => {
 
   );
 };
-
 
