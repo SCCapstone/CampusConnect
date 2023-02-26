@@ -48,21 +48,35 @@ export default StyleSheet.create({
     textTransform: 'uppercase',
   },
   buttonStyle: {
-    backgroundColor: 'black',
-    color: '#FFFFFF',
-    borderColor: 'black',
-    height: 50,
     alignItems: 'center',
     borderRadius: 5,
     marginLeft: 55,
     marginRight: 55,
     marginTop: 30,
+    backgroundColor: '#73000a',
+    borderRadius: 8,
+    fontSize: 16,
+    marginHorizontal: 24,
+    marginVertical: 8,
+    padding: 8,
   },
-
+  buttonUpdateStyle: {
+    alignItems: 'center',
+    borderRadius: 5,
+    marginLeft: 55,
+    marginRight: 55,
+    marginTop: 30,
+    backgroundColor: 'black',
+    borderRadius: 8,
+    fontSize: 16,
+    marginHorizontal: 24,
+    marginVertical: 8,
+    padding: 8,
+  },
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
-    fontSize: 16,
+    fontSize: 25,
   },
 
   inputStyle: {
@@ -84,11 +98,11 @@ export default StyleSheet.create({
   },
 
   textStyle: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     fontSize: 24,
-    padding: 5,
-    marginBottom:80
+    padding: 50,
+    marginBottom:10
 
   },
   textGroupStyle: {
