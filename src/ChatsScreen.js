@@ -1,6 +1,6 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform} from "react-native";
+import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableWithoutFeedback} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton,FlatList, gestureHandlerRootHOC,TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -399,19 +399,19 @@ export function ChatsScreen(props) {
           }
         }}>
             <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
-              <TouchableOpacity onPress={() => {
-                userData.setProfileView(item.id)
-                this.floatingAction.animateButton();
-                navigation.navigate('ProfileView')
-              }}>
-                <ImageBackground
-                  style={{width:60,height:60}}
-                  imageStyle={{borderRadius:60}}
-                  source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
-                    {isOnline ? 
-                    <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-                </ImageBackground>
-              </TouchableOpacity>
+                <Pressable /*onPress={() => {
+                  userData.setProfileView(item.id)
+                  this.floatingAction.animateButton();
+                  navigation.navigate('ProfileView')
+                }*/>
+                  <ImageBackground
+                    style={{width:60,height:60}}
+                    imageStyle={{borderRadius:60}}
+                    source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+                      {isOnline ? 
+                      <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+                  </ImageBackground>
+                </Pressable>
             <View>
               <Text style={styles.chatListItemLabel}>{item.name}</Text>
               {item.role === 'user' && item.last_active ? <Text style={{fontSize:12,fontWeight:'400',color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text> :

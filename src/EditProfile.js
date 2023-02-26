@@ -287,7 +287,7 @@ export function EditProfileScreen({navigation}) {
                 dropDownDirection="TOP"
                 setOpen={setOpen}
                 setValue={setMajor}
-                listMode="SCROLLVIEW"
+                listMode="MODAL" 
               />
             </View>
             <View style={styles.bioSectionStyle}>
@@ -303,7 +303,7 @@ export function EditProfileScreen({navigation}) {
             <TouchableOpacity
               style={styles.buttonStyle}
               onPress={writeUserData}>
-              <Text style={styles.buttonTextStyle}>UPDATE</Text>
+              <Text style={styles.buttonTextStyle}>{!image ? 'UPDATE' : 'Press to update ✅'}</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
           <View style={styles.bottomContainer}>
