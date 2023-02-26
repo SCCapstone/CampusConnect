@@ -25,9 +25,9 @@ const LoadEvents = async() => {
     
     
     listItems = $(".schedule-list__category");
-    titleList = $(".schedule-list__category");
-    locationList = $(".schedule-list__location");
-    scheduleList = $(".schedule-list__top");
+    titleList = $(".twDescription");
+    locationList = $("td.twLocation");
+    scheduleList = $("span.twDetailTime");
     
 
     titleArray = new Array();
@@ -37,16 +37,16 @@ const LoadEvents = async() => {
   
 
     titleList.each((i, el) => {
-      sportArray.push(($(el).text().trim()));
+      titleArray.push(($(el).children("a").text().trim()));
     })
     
     locationList.each((i, el) => {
-      locationArray.push($(el).children("strong").text());
+      locationArray.push($(el).children("td").text());
     })
 
     scheduleList.each((i, el) => {
-      dateArray.push($(el).children("time").text().split("\n      ")[0]);
-      timeArray.push($(el).children("time").text().split("\n      ")[1]);
+      dateArray.push($(el).children("span").text().split("\n      ")[0]);
+      timeArray.push($(el).children("span").text().split("\n      ")[1]);
     })
 
 

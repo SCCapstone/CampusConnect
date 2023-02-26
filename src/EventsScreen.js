@@ -26,7 +26,7 @@ import FastImage from 'react-native-fast-image';
 import { SearchBar } from '@rneui/themed';
 
 var styles;
-
+ 
 if (Platform.OS === 'ios') {
   styles = iosstyles; // do dark mode in here as well
 } else if (Platform.OS === 'android') {
@@ -88,14 +88,17 @@ const [search, setSearch] = useState("");
       );
 
       return (
-        <SafeAreaView style={styles.container}>
-          <FlatList
-            data={DATA}
-            renderItem={renderEvent}
-            keyExtractor={item => item.id}
-          />
-        </SafeAreaView>
-      );
+       <SafeAreaView style={styles.container}>
+    <FlatList
+      data={DATA}
+      renderItem={renderEvent}
+      keyExtractor={item => item.id}
+    />
+    <View style={{marginTop: 20}}>
+      <Text>{JSON.stringify(DATA)}</Text>
+    </View>
+  </SafeAreaView>
+);
 }
 
 const CreateAlertupVote = () => {
