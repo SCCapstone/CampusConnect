@@ -87,6 +87,10 @@ const [search, setSearch] = useState("");
         <Event item={item} />
       );
 
+    if(!DATA) {
+      return (<View style={{flex:1,justifyContent:'center'}}><ActivityIndicator></ActivityIndicator></View>)
+    }
+
       return (
        <SafeAreaView style={styles.container}>
     <FlatList
