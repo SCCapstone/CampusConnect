@@ -96,7 +96,7 @@ const [search, setSearch] = useState("");
     <FlatList
       data={DATA}
       renderItem={renderEvent}
-      keyExtractor={item => item.id}
+      /*keyExtractor={item => item.id}*/ //This is possibly not needed since there is a key already?
     />
     {/* <View style={{marginTop: 20}}>
       <Text>{JSON.stringify(DATA)}</Text>

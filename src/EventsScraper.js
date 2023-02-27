@@ -63,9 +63,6 @@ const LoadEvents = async() => {
         arr[i][2] = dateArray[i];
         arr[i][3] = timeArray[i];
         arr[i][4] = uuid.v4();
-        console.log(titleArray);
-        console.log(dateArray);
-        console.log(locationArray);
       }
 
       return arr;
