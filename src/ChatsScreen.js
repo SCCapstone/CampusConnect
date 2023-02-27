@@ -320,7 +320,7 @@ export function ChatsScreen(props) {
 
        return (
           <View style={{}}>
-              <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+              <ImageBackground defaultSource={require('./assets/blank2.jpeg')} style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
                 {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
               </ImageBackground>
           </View>

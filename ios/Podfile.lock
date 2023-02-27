@@ -1121,8 +1121,8 @@ PODS:
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
-    - SDWebImage (~> 5.14.3)
-    - SDWebImageWebPCoder (~> 0.8.4)
+    - SDWebImage (~> 5.15.4)
+    - SDWebImageWebPCoder (~> 0.10.1)
   - RNFBApp (16.7.0):
     - Firebase/CoreOnly (= 10.3.0)
     - React-Core
@@ -1210,12 +1210,12 @@ PODS:
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
-  - SDWebImage (5.14.3):
-    - SDWebImage/Core (= 5.14.3)
-  - SDWebImage/Core (5.14.3)
-  - SDWebImageWebPCoder (0.8.5):
+  - SDWebImage (5.15.4):
+    - SDWebImage/Core (= 5.15.4)
+  - SDWebImage/Core (5.15.4)
+  - SDWebImageWebPCoder (0.10.1):
     - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.10)
+    - SDWebImage/Core (~> 5.15)
   - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
 
@@ -1538,7 +1538,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNDateTimePicker: 00247f26c34683c80be94207f488f6f13448586e
-  RNFastImage: 8c1b576a014ab4a22769222522a1e398f888b8f8
+  RNFastImage: 44b0274ad92c811bccb86366fd8da9853756d201
   RNFBApp: 1ee535dcb7773ca612d3a2e53a1f78f8f2fb6abf
   RNFBAuth: 58ab8f774f9ff45707f2bfbf4fd74e8f7b4220b9
   RNFBDatabase: 97c0b0cba59534afed4cd9c0dc3c0d84dda16e73
@@ -1557,8 +1557,8 @@ SPEC CHECKSUMS:
   RNShare: 48b3113cd089a2be8ff0515c3ae7a46a4db8a76b
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
-  SDWebImage: 9c36e66c8ce4620b41a7407698dda44211a96764
-  SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
+  SDWebImage: 1c39de67663e5eebb2f41324d5d580eeea12dd4c
+  SDWebImageWebPCoder: 4851414d9f8894e328e8b97c93ea4f4f4e4418ae
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
 
