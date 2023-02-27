@@ -4,7 +4,7 @@ import uuid from 'react-native-uuid';
 
 const axios = require("axios");
 const cheerio = require("react-native-cheerio");
-const url = "https://sc.edu/about/offices_and_divisions/russell_house/upcoming-events/index.php";
+const url = "https://www.eventbrite.com/o/university-of-south-carolina-alumni-association-18391111883";
 
 export async function ScrapeEventData() {
   try {
@@ -22,11 +22,11 @@ const LoadEvents = async() => {
     const response = await fetch(url);   // fetch page
     const htmlString = await response.text();  // get response text
     const $ = cheerio.load(htmlString); // parse HTML string
-    
+    //console.log(htmlString)
     
     //listItems = $(".schedule-list__category");
-    titleList = $(".twDescription");
-    locationList = $(".twLocation");
+    titleList = $(".eds-event-card-content__primary-content");
+    locationList = $("td.twLocation");
     scheduleList = $(".twDetailTime");
     
 
@@ -41,7 +41,7 @@ const LoadEvents = async() => {
     })
     
     locationList.each((i, el) => {
-      locationArray.push($(el).children("td").text());
+      locationArray.push($(el).children("span").text());
     })
 
     scheduleList.each((i, el) => {

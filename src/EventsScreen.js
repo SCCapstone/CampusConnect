@@ -94,9 +94,9 @@ const [search, setSearch] = useState("");
       renderItem={renderEvent}
       keyExtractor={item => item.id}
     />
-    <View style={{marginTop: 20}}>
+    {/* <View style={{marginTop: 20}}>
       <Text>{JSON.stringify(DATA)}</Text>
-    </View>
+    </View> */}
   </SafeAreaView>
 );
 }
