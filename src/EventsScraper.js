@@ -27,7 +27,7 @@ const LoadEvents = async() => {
     //listItems = $(".schedule-list__category");
     titleList = $(".eds-event-card-content__primary-content");
     locationList = $("td.twLocation");
-    scheduleList = $(".twDetailTime");
+    scheduleList = $(".eds-event-card-content__primary-content");
     
 
     titleArray = new Array();
@@ -37,7 +37,10 @@ const LoadEvents = async() => {
   
 
     titleList.each((i, el) => {
-      titleArray.push(($(el).children("a").text().trim()));
+      const title = $(el).children("a").text().trim();
+      const halfway = Math.floor(title.length / 2);
+      const firstHalf = title.slice(0, halfway);
+      titleArray.push(firstHalf);
     })
     
     locationList.each((i, el) => {
@@ -45,8 +48,9 @@ const LoadEvents = async() => {
     })
 
     scheduleList.each((i, el) => {
-      dateArray.push($(el).children("span").text().split("\n      ")[0]);
-      timeArray.push($(el).children("span").text().split("\n      ")[1]);
+      dateArray.push($(el).text().split("\n      ")[0]);
+      $('a').empty();
+      //timeArray.push($(el).children("span").text().split("\n      ")[1]);
     })
     
 

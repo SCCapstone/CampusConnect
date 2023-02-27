@@ -52,14 +52,14 @@ const [search, setSearch] = useState("");
     const Event = ({item}) => (
       
       <View style={styles.eventContainer}>
-      <View style={styles.upvoteBox}>
+      {/* <View style={styles.upvoteBox}>
         <TouchableOpacity onPress={() => CreateAlertupVote()}>
           <Image
             style={styles.voteButtons}
             source={
               item.isUpVoted
-                ? require('./assets/upvote_highlighted.png')
-                : require('./assets/upvote.png')
+             //   ? require('./assets/upvote_highlighted.png')
+             //   : require('./assets/upvote.png')
             }></Image>
         </TouchableOpacity>
         <Text style={styles.upvote}>{item.upvoteCount}</Text>
@@ -68,11 +68,11 @@ const [search, setSearch] = useState("");
             style={styles.voteButtons}
             source={
               item.isDownVoted
-                ? require('./assets/downvote_highlighted.png')
-                : require('./assets/downvote.png')
+              //  ? require('./assets/downvote_highlighted.png')
+              //  : require('./assets/downvote.png')
             }></Image>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <TouchableOpacity onPress={() => CreateAlertevent()} style ={styles.event}>
       <FastImage source={{uri: item.imageUrl}}
              style={styles.canvas}/>
