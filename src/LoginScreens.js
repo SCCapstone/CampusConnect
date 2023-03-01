@@ -1,3 +1,6 @@
+//This code was modeled from this page https://code.tutsplus.com/tutorials/common-react-native-app-layouts-login-page--cms-27639
+//Everything else in this app is original.
+
 import {Modal, StatusBar, SafeAreaView, Platform} from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import {
