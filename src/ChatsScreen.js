@@ -3,6 +3,17 @@ import {useContext, useRef, useState, useEffect} from 'react'
 import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableWithoutFeedback} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton,FlatList, gestureHandlerRootHOC,TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 
 import { LogBox } from 'react-native';
 
@@ -325,9 +336,9 @@ export function ChatsScreen(props) {
       if(loading) {
         return(
         <View style={{width:60,height:60, justifyContent:'center', alignContent:'center'}}>
-          <ActivityIndicator>
+          <WaveIndicator count={15} color="rgb(115,0,10)" size={32} waveFactor={.5}>
 
-          </ActivityIndicator>
+          </WaveIndicator>
         </View>
         )
       }
