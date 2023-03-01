@@ -295,21 +295,25 @@ export function ChatsScreen(props) {
         const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
         var member;
         const [isOnline, setIsOnline] = useState(false)
+        const [loading, setLoading] = useState(true)
         const [image,setImage] = useState('')
         useEffect(() =>{
           getPhotos = async () =>{
             if (is2PersonChat) {
               member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
               setIsOnline(member.members[0].user.online)
-              /*if(!member.members[0].user.image) {
+              if(!member.members[0].user.image) {
                 setImage(await storage().ref('Profile Pictures/'+member.members[0].user_id).getDownloadURL().catch(() =>{}))
-              }*/
-              //else{
+                setLoading(false)
+              }
+              else{
                 setImage(member.members[0].user.image)
-              //}
+                setLoading(false)
+              }
             }
             else {
               setImage(channel.data.image)
+              setLoading(false)
             }
             
           }
@@ -318,12 +322,21 @@ export function ChatsScreen(props) {
           
         },[]);
 
+      if(loading) {
+        return(
+        <View style={{width:60,height:60, justifyContent:'center', alignContent:'center'}}>
+          <ActivityIndicator>
+
+          </ActivityIndicator>
+        </View>
+        )
+      }
        return (
           <View style={{}}>
             {Platform.OS === 'ios' ? 
-              <ImageBackground defaultSource={require('./assets/blank2.jpeg')} style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+              <ImageBackground defaultSource={require('./assets/blank2.jpeg')} style={{width:60,height:60}} imageStyle={{borderRadius:120}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
                 {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-              </ImageBackground> : <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+              </ImageBackground> : <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:120}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
                 {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
               </ImageBackground>}
           </View>
