@@ -74,7 +74,7 @@ export function ChatsScreen(props) {
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
-    const [key,setKey] = useState(0)
+    //const [key,setKey] = useState(0)
     const [userSearch,setUserSearch] = useState('')
     const [searchModalVisible,setSearchModalVisible] = useState(false)
     const [data, setData] = useState([]);
@@ -88,9 +88,9 @@ export function ChatsScreen(props) {
         },
       } = useTheme();
 
-    const ReloadList = () => {
+    /*const ReloadList = () => {
       setKey((key) => key+1)
-    }
+    }*/
 
     const DMFilter = {
       $and: [
@@ -124,9 +124,9 @@ export function ChatsScreen(props) {
 
 
 
-    useEffect(() => {
+    /*useEffect(() => {
       const myListener = chatClient.on('message.new',ReloadList)
-    },[])
+    },[])*/
     useEffect(() => {
       if (selectedType === 0) {
         searchUsers();
@@ -207,7 +207,7 @@ export function ChatsScreen(props) {
       const { unread } = props;
       const { channel } = props;
       const [muteStatus, setMuteStatus] = useState(channel.muteStatus().muted)
-      const { channels, reloadList } = useContext(ChannelsContext);
+      //const { channels, reloadList } = useContext(ChannelsContext);
       const backgroundColor = unread ? '#c6edff' : '#fff';
 
       const channelOptions = ["View Profile","Mute", "Block"]
@@ -509,8 +509,15 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
-                key={key}
+                //key={key}
                 Preview={CustomListItem}
+                channelRenderFilterFn={(channels) => {
+                  if (selectedType === 0) {
+                    return channels.filter((channel) => channel.type === 'messaging');
+                  } else if (selectedType === 1) {
+                    return channels.filter((channel) => channel.type === 'team');
+                  }
+                }}
                 PreviewAvatar={CustomAvatar}
                   filters={filter} 
                   options={options}
