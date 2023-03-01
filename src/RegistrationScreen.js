@@ -107,12 +107,7 @@ const RegisterError = () => {
     /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
       emailVerified = true;
     }).catch((error) => {console.log(error)})*/
-    if(email &&
-      password &&
-      password === password2 &&
-      email.split('@').length > 1 &&
-      email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'){
+    if(true){
       //Parse.User.logOut();
       if (
         nameValid &&

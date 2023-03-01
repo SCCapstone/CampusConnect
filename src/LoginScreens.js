@@ -228,12 +228,12 @@ export function RegisterScreen({navigation}) {
   const [password2, setPassword2] = React.useState('');
   const register = () => {
     if (
-      /*email &&
+      email &&
       password &&
       password === password2 &&
       email.split('@').length > 1 &&
       email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'*/true) {
+      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu') {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
