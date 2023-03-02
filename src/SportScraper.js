@@ -7,7 +7,7 @@ const cheerio = require("react-native-cheerio");
 const url = "https://gamecocksonline.com/all-sports-schedule/";
 const DEFAULTGAMECOCKLOGOURL1 = "https://gamecocksonline.com/imgproxy/VExob3ytGj5BNypACaYPkvTj1hVPGnHWGjUKiE5kZyY/fit/100/100/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAyMi8wNS8yYjlkMWU4Ny1zb3V0aF9jYXJvbGluYV9nYW1lY29ja3NfbG9nb19wcmltYXJ5LnBuZw.png";
 const DEFAULTGAMECOCKLOGOURL2 = "https://gamecocksonline.com/imgproxy/T5189nCorf3M6wYfR1fANLkiT4Dn31rTEbUh6hXtvAU/fit/150/150/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAyMi8xMS9iOGI1MWI3ZC1zY19nYW1lY29ja3NfYmFzZWJhbGxfc29mdGJhbGxfaW50ZXJsb2NrX2xvZ28ucG5n.png";
-
+const DEFAULTSECLOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Southeastern_Conference_logo.svg/1200px-Southeastern_Conference_logo.svg.png"
 export async function ScrapeSportData() {
   try {
   return await LoadSportEvents();
@@ -59,8 +59,11 @@ const LoadSportEvents = async() => {
     imageList.each((i, el) => {
       img = ($(el).children("img").attr("src"));
       // Ensures that Gamecock logo isn't used for opponent logo
+      if (img == null) {
+        imageArray.push(DEFAULTSECLOGO); // Use SEC logo if there's no opponent logo
+      }
       if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2)
-        imageArray.push(img)
+        imageArray.push(img);
     })
 
     locationList.each((i, el) => {
