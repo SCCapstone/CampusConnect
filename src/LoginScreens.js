@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import Parse from 'parse/react-native';
+//import Parse from 'parse/react-native';
 import { useChatClient } from './useChatClient';
 
 
