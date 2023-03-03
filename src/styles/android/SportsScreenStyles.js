@@ -20,6 +20,13 @@ export default StyleSheet.create({
         color: 'white',
         top: 0
       },
+      loadingText: {
+        alignSelf: 'center',
+        marginBottom: 5,
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold',
+      },
       flexboxContainer: {
         flex: 1,
         flexDirection: 'row',

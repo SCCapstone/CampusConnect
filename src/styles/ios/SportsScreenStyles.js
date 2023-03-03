@@ -20,6 +20,11 @@ export default StyleSheet.create({
         color: 'white',
         top: 0
       },
+      loadingText: {
+        flex: 1,
+        alignSelf: 'center',
+
+      },
       flexboxContainer: {
         flex: 1,
         flexDirection: 'row',
