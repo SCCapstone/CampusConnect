@@ -27,9 +27,7 @@ if (Platform.OS === 'ios') {
 
 export function SportsScreen({navigation}) {
 const defaultItemCount = 10;
-
 const [DATA, setDATA] = useState();
-
 useEffect(() => {
   const fetchData = async () => {
     const ret = await ScrapeSportData();
@@ -41,7 +39,7 @@ useEffect(() => {
 
 
 const [search, setSearch] = useState("");
-  
+
   const actions = [
     {
         text: "Search for a team or game",
