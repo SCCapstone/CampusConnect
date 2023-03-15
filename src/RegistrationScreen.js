@@ -19,7 +19,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import Parse from 'parse/react-native';
+//import Parse from 'parse/react-native';
 import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/RegistrationScreenStyles';

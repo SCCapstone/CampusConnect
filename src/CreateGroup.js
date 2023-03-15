@@ -90,7 +90,7 @@ export function CreateGroup(props) {
       await channel.watch();
       setChannel(channel)
       await channel.addMembers([chatClient.user.id]);
-      navigation.navigate('DMScreen')
+      navigation.navigate('DMScreen', {channel:channel})
 
       
     } else if (isGroupValid(groupName) && !image) {
@@ -103,7 +103,7 @@ export function CreateGroup(props) {
       await channel.watch();
       await channel.addMembers([chatClient.user.id]);
       setChannel(channel)
-      navigation.navigate('DMScreen')
+      navigation.navigate('DMScreen', {channel:channel})
     }
   };
 

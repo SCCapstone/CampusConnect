@@ -218,7 +218,7 @@ export function EditProfileScreen({navigation}) {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#a9a9a9',
+          backgroundColor: 'white',
           justifyContent: 'center',
         }}>
         <Image
@@ -229,7 +229,7 @@ export function EditProfileScreen({navigation}) {
             alignSelf: 'center',
           }}
         />
-        <Text style={styles.textStyle}>Registration Successful</Text>
+        <Text style={styles.textStyle}>Your Profile Has Been Updated!</Text>
         <TouchableOpacity style={styles.buttonStyle} onPress={() => reset()}>
           <Text style={styles.buttonTextStyle}>Finish</Text>
         </TouchableOpacity>
@@ -287,7 +287,7 @@ export function EditProfileScreen({navigation}) {
                 dropDownDirection="TOP"
                 setOpen={setOpen}
                 setValue={setMajor}
-                listMode="SCROLLVIEW"
+                listMode="MODAL" 
               />
             </View>
             <View style={styles.bioSectionStyle}>
@@ -301,9 +301,9 @@ export function EditProfileScreen({navigation}) {
               />
             </View>
             <TouchableOpacity
-              style={styles.buttonStyle}
+              style={styles.buttonUpdateStyle}
               onPress={writeUserData}>
-              <Text style={styles.buttonTextStyle}>UPDATE</Text>
+              <Text style={styles.buttonTextStyle}>{!image ? 'UPDATE' : 'Press to update ✅'}</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
           <View style={styles.bottomContainer}>
