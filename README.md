@@ -20,7 +20,7 @@ Please install these:
 # Setup and Running 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
-3. Install Dependencies<pre><code>npm install [^1]</code></pre>
+3. Install Dependencies<pre><code>npm update</code></pre>
 4. Run the code<pre><code>npx react-native run-android</code></pre>
 
 All the source files for the project are in the "src" folder
@@ -76,5 +76,5 @@ Timothy - tkranz@email.sc.edu
 Chase - chasema@email.sc.edu  
 
 
-[^1]: It is now recommended to run npm install instead of npm update as running an update could break the project this late in the game.
+
 [^2]: This command does not work on Mac OS at the moment. You will have to compile manually if you know how.
