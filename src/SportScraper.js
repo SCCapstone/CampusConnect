@@ -9,40 +9,37 @@ const url = "https://gamecocksonline.com/all-sports-schedule/";
 const DEFAULTGAMECOCKLOGOURL1 = "https://gamecocksonline.com/imgproxy/VExob3ytGj5BNypACaYPkvTj1hVPGnHWGjUKiE5kZyY/fit/100/100/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAyMi8wNS8yYjlkMWU4Ny1zb3V0aF9jYXJvbGluYV9nYW1lY29ja3NfbG9nb19wcmltYXJ5LnBuZw.png";
 const DEFAULTGAMECOCKLOGOURL2 = "https://gamecocksonline.com/imgproxy/T5189nCorf3M6wYfR1fANLkiT4Dn31rTEbUh6hXtvAU/fit/150/150/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAyMi8xMS9iOGI1MWI3ZC1zY19nYW1lY29ja3NfYmFzZWJhbGxfc29mdGJhbGxfaW50ZXJsb2NrX2xvZ28ucG5n.png";
 const DEFAULTSECLOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Southeastern_Conference_logo.svg/1200px-Southeastern_Conference_logo.svg.png"
+const BEACHVOLLEYBALLLOGO = "https://gamecocksonline.com/imgproxy/hS1VvuQwMq70zW6pa9zdKvEEtN7B-FeUkPjM3TFz1Zc/fit/150/150/ce/0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2dhbWVjb2Nrc29ubGluZS1jb20vMjAxOC8wMy9iYjE2MDQ5Yi1zY2FyLWJlYWNoLXZvbGxleWJhbGwtbG9nby5qcGc.png"
 const Nightmare = require('nightmare');
 
 
-export async function ScrapeSportData() {
+export async function ScrapeSportData(pageNum, events) {
   try {
-  return await LoadSportEvents();
+  return await LoadSportEvents(pageNum, events);
   }
   catch (error) {
     console.log("Load error");
   }
 }
 
-export async function ScrapeMoreSportData() {
-  try {
-    return await LoadMoreSportEvents();
-  } catch (error) {
-    console.log('Load More error');
-  }
-}
+// export async function ScrapeMoreSportData() {
+//   try {
+//     return await LoadMoreSportEvents();
+//   } catch (error) {
+//     console.log('Load More error');
+//   }
+// }
 
 
-const LoadSportEvents = async() => {
-    defaultItemCount = 10;
-    events = new Array();
-    const response = await fetch(url);   // fetch page
-    const htmlString = await response.text();  // get response text
-    const $ = cheerio.load(htmlString); // parse HTML string
-    
-    // within class container, count # of items in ul tag
-    // eventList = $(".event_list");
-    // eventsList.each((i, el) => {
+const LoadSportEvents = async(pageNum, events) => {
+    if (events == null)
+      events = new Array();
       
-    // })
-    // console.log("itemCount: " + itemCount);
+    const response = await fetch('https://gamecocksonline.com/wp-json/v1/all_sports_schedule?offset='+pageNum+'&game_status=');  // fetch page
+    const htmlString = await response.json();  // get response text
+    const $ = cheerio.load(htmlString.data); // parse HTML string
+    thisEventCount = htmlString.count;
+    isFull = htmlString.is_full_list;
     
     listItems = $(".schedule-list__category");
     sportList = $(".schedule-list__category");
@@ -51,7 +48,6 @@ const LoadSportEvents = async() => {
     imageList = $(".schedule-list__image");
     locationList = $(".schedule-list__location");
     
-
     sportArray = new Array();
     opponentArray = new Array();
     dateArray = new Array();
@@ -77,7 +73,7 @@ const LoadSportEvents = async() => {
       img = ($(el).children("img").attr("src"));
       if (img === undefined) 
         imageArray.push(DEFAULTSECLOGO); // Use SEC logo if there's no opponent logo
-      else if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2) // Ensures that Gamecock logo isn't used for opponent logo
+      else if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2 && img != BEACHVOLLEYBALLLOGO) // Ensures that Gamecock logo isn't used for opponent logo
         imageArray.push(img);
     })
 
@@ -86,10 +82,10 @@ const LoadSportEvents = async() => {
       homeStatusArray.push($(el).children("span").text());
     })
 
+
     const attributes = 8;
-    const results = 10;
-    let arr = Array(results).fill().map(() => Array(attributes));
-    for (let i = 0; i < results; i++) {
+    let arr = Array(thisEventCount).fill().map(() => Array(attributes));
+    for (let i = 0; i < thisEventCount; i++) {
         arr[i][0] = sportArray[i];
         arr[i][1] = opponentArray[i];
         arr[i][2] = dateArray[i];
@@ -99,11 +95,10 @@ const LoadSportEvents = async() => {
         arr[i][6] = locationArray[i];
         arr[i][7] = homeStatusArray[i];
       }
-      
-      console.log(arr)
-      return arr;
+      events.push(arr);
+      return events;
 }
 
-const LoadMoreSportEvents = async() => {
-  console.log("test!");
-}
+// const LoadMoreSportEvents = async() => {
+//   console.log("test!");
+// }
