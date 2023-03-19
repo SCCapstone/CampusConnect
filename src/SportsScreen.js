@@ -89,9 +89,9 @@ if (!DATA) {
                   </View>
                 }}
                 onEndReachedThreshold={0.05}
-                onEndReached={() => {
+                /*onEndReached={() => {
                   ScrapeMoreSportData();
-                }}
+                }}*/
               />
           </SafeAreaView>
       );
