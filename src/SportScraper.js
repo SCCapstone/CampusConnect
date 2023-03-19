@@ -75,6 +75,8 @@ const LoadSportEvents = async(pageNum, events) => {
         imageArray.push(DEFAULTSECLOGO); // Use SEC logo if there's no opponent logo
       else if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2 && img != BEACHVOLLEYBALLLOGO) // Ensures that Gamecock logo isn't used for opponent logo
         imageArray.push(img);
+      else
+        imageArray.push(DEFAULTSECLOGO); // Use SEC logo if there's no opponent logo
     })
 
     locationList.each((i, el) => {
