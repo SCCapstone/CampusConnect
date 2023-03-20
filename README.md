@@ -25,10 +25,6 @@ Please install these:
 
 All the source files for the project are in the "src" folder
 
-
-# Coding
-Create separate ".js" files for each screen. Screens can be added to the HomeScreen drawer when they are done. Messing with other parts of the app can be dangerous. Styles should go into the styles folder. 
-
 # Pictures
 <p float="left">
 <img width="189" alt="Screenshot_20230217_120551_50" src="https://user-images.githubusercontent.com/13265359/219555233-07702c84-05c2-4efd-a82a-11e2ecf69777.png">
