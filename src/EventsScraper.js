@@ -28,8 +28,9 @@ const LoadEvents = async() => {
     titleList = $(".eds-event-card-content__primary-content");
     locationList = $("td.twLocation");
     scheduleList = $(".eds-event-card-content__primary-content");
+    descriptionList = $("");
     
-
+    descriptionArray = new Array();
     titleArray = new Array();
     locationArray = new Array();
     dateArray = new Array();

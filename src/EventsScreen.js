@@ -52,11 +52,20 @@ export function EventsScreen({ navigation }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const Event = ({ item }) => (
-    <View style={styles.event}>
+    <View style={{ height: 150,
+      backgroundColor: '#a8a1a6',
+      shadowColor: 'black',
+      borderRadius: 10,
+      padding: 20,
+      marginVertical: 8,
+      marginRight: '3%',
+      flex: 1,
+      marginHorizontal: '3%',
+      }}>
       <TouchableOpacity onPress={() => { setSelectedEvent(item); setModalVisible(true); }}>
         <FastImage source={{ uri: item.imageUrl }} style={styles.canvas} />
-        <Text style={styles.body}>{item[0]}</Text>
-        <Text style={styles.date}>{item[2]}</Text>
+        <Text style={{fontSize: 18, color: 'black', marginTop: '5%', justifyContent: 'center',}}>{item[0]}</Text>
+        <Text style={{fontSize: 13, marginTop: 20, color: 'black', fontStyle: 'italic',}}>{item[2]}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -72,7 +81,7 @@ export function EventsScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#73000a'}}>
       <FlatList
         data={DATA}
         renderItem={renderEvent}
@@ -80,13 +89,13 @@ export function EventsScreen({ navigation }) {
       />
       <Modal visible={isModalVisible} onRequestClose={() => setModalVisible(false)}>
         {selectedEvent && (
-          <View style={styles.modal}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>{selectedEvent[0]}</Text>
+          <View style={{flex: 1, backgroundColor: '#73000a',}}>
+            <View style={{flex: 1, backgroundColor: '#FFFFFF', margin: 16, borderRadius: 10, padding: 20,}}>
+              <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#000000',}}>{selectedEvent[0]}</Text>
               <FastImage source={{ uri: selectedEvent.imageUrl }} style={styles.modalImage} />
               <Text style={styles.modalDescription}>{selectedEvent[1]}</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={styles.modalCloseButton}>Close</Text>
+                <Text style={{  fontSize: 18, fontWeight: 'bold', color: '#000000', marginTop: 16,}}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
