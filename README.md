@@ -53,8 +53,6 @@ Detox behavioral tests can be run by performing the following steps:
 2. Compile the debug binary with ```detox build --configuration android.emu.debug``` [^2]
 3. Run the tests with ```detox test --configuration android.emu.debug```
 
-Note: If it crashes or doesn't work, just repeat the steps a few million times, because react native just "works" that way.
-
 # Authors  
 Erik - erikc@email.sc.edu  
 Coby - cobya@email.sc.edu  
