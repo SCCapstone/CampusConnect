@@ -8,15 +8,6 @@ iOS Development requires a Macintosh Computer.
 
 We recommend a beefy desktop computer for Android Development and an M1 Mac for iOS development. 
 
-# External Requirements  
-
-Please install these:  
-
-* [Chocolatey](https://chocolatey.org/)
-* [Android Studio](https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds)
-* [JDK](https://www.oracle.com/java/technologies/downloads/)
-* [Node.js](https://nodejs.org/en/)
-
 # Setup and Running 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
