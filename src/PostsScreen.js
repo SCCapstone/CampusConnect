@@ -32,6 +32,7 @@ import {FlashList} from '@shopify/flash-list';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { useHeaderHeight } from '@react-navigation/elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { LinkPreview } from '@flyerhq/react-native-link-preview'
 import {
 Delete,
 useTheme,
@@ -201,35 +202,35 @@ export function PostsScreen({navigation}) {
       query = postsRef
       .where('searchAuthor', '>=', search.toUpperCase())
       .where('searchAuthor', '<=', search.toUpperCase()+ '\uf8ff')
-      .limit(15)
+      //.limit(15)
     }
     else if(sortMode === 'Best') {
       query = postsRef
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
-      .limit(5)
+      //.limit(5)
     } else if (sortMode === 'Worst') {
       query = postsRef
       .orderBy('upvoteCount', 'asc')
       .orderBy('date', 'desc')
-      .limit(5) 
+     // .limit(5) 
 
     } else if (sortMode === 'New') {
       query = postsRef
       .orderBy('date', 'desc')
-      .limit(5) 
+     // .limit(5) 
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
       .where('author','==', 'USC Student')
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
-      .limit(5) 
+      //.limit(5) 
     }
     else if (sortMode === 'Most Commented') {
       query = postsRef
       .orderBy('replyCount', 'desc')
-      .limit(5) 
+      //.limit(5) 
     }
     query.get().then(snapShot => {
       if(!snapShot.metadata.hasPendingWrites) {
@@ -259,7 +260,6 @@ export function PostsScreen({navigation}) {
                 post.author = 'USC Student'
                 post.pfp = ''
               }
-
               posts.push(post);
               if (post.extraData) {
                 images.push({
@@ -424,7 +424,7 @@ export function PostsScreen({navigation}) {
       query = postsRef
       .where('searchAuthor', '>=', search.toUpperCase())
       .where('searchAuthor', '<=', search.toUpperCase()+ '\uf8ff')
-      .limit(15)
+      //.limit(15)
     }
     else if(sortMode === 'Best') {
       query = postsRef
@@ -435,12 +435,12 @@ export function PostsScreen({navigation}) {
       query = postsRef
       .orderBy('upvoteCount', 'asc')
       .orderBy('date', 'desc')
-      .limit(postCount) 
+    //  .limit(postCount) 
 
     } else if (sortMode === 'New') {
       query = postsRef
       .orderBy('date', 'desc')
-      .limit(postCount) 
+     // .limit(postCount) 
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
@@ -451,7 +451,7 @@ export function PostsScreen({navigation}) {
     } else if (sortMode === 'Most Commented') {
       query = postsRef
       .orderBy('replyCount', 'desc')
-      .limit(postCount) 
+     // .limit(postCount) 
     }
     //gets posts asynchronously in the background
     const subscriber = query.onSnapshot(querySnapshot => {
@@ -852,8 +852,9 @@ export function PostsScreen({navigation}) {
                 />:null}
             </View>
             <View style={styles.postImageView}>
-              <Text style={styles.body}>{item.body}</Text>
-              {item.extraData ? (
+              <Text style={styles.body}>{item.body.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')}</Text>
+              <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderText={(() => {return ''})} header='' text={item.body} />
+              {(item.extraData && !item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '')) > 0 ? (
                 <TouchableOpacity onPress={() => {OpenImage({index})}}>
                   <FastImage
                     source={{uri: item.extraData}}
@@ -1134,10 +1135,10 @@ export function PostsScreen({navigation}) {
 
       <FlashList
        onRefresh={() => {getPosts}}
-        onEndReached={() => {
-          setPostCount(postCount+6)
-        }}
-        onEndReachedThreshold={.77}
+        //onEndReached={() => {
+         // setPostCount(postCount+6)
+        //}}
+        //onEndReachedThreshold={.77}
         data={posts}
         ref={list}
         key={refresh}
