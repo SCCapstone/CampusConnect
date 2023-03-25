@@ -13,9 +13,9 @@ const BEACHVOLLEYBALLLOGO = "https://gamecocksonline.com/imgproxy/hS1VvuQwMq70zW
 const Nightmare = require('nightmare');
 
 
-export async function ScrapeSportData(pageNum, events) {
+export async function ScrapeSportData() {
   try {
-  return await LoadSportEvents(pageNum, events);
+  return await LoadSportEvents();
   }
   catch (error) {
     console.log("Load error");
@@ -31,15 +31,16 @@ export async function ScrapeSportData(pageNum, events) {
 // }
 
 
-const LoadSportEvents = async(pageNum, events) => {
-    if (events == null)
-      events = new Array();
-      
-    const response = await fetch('https://gamecocksonline.com/wp-json/v1/all_sports_schedule?offset='+pageNum+'&game_status=');  // fetch page
-    const htmlString = await response.json();  // get response text
-    const $ = cheerio.load(htmlString.data); // parse HTML string
-    thisEventCount = htmlString.count;
-    isFull = htmlString.is_full_list;
+const LoadSportEvents = async() => {
+    // if (events == null)
+    //   events = new Array();
+    events = new Array();
+    const response = await fetch(url);
+    // response = await fetch('https://gamecocksonline.com/wp-json/v1/all_sports_schedule?offset='+pageNum+'&game_status=');  // fetch page
+    const htmlString = await response.text();  // get response text
+    const $ = cheerio.load(htmlString); // parse HTML string
+    // thisEventCount = htmlString.count;
+    // isFull = htmlString.is_full_list;
     
     listItems = $(".schedule-list__category");
     sportList = $(".schedule-list__category");
@@ -71,6 +72,7 @@ const LoadSportEvents = async(pageNum, events) => {
 
     imageList.each((i, el) => {
       img = ($(el).children("img").attr("src"));
+      console.log("IMG: " + img);
       if (img === undefined) 
         imageArray.push(DEFAULTSECLOGO); // Use SEC logo if there's no opponent logo
       if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2 && img != BEACHVOLLEYBALLLOGO) // Ensures that Gamecock logo isn't used for opponent logo
@@ -84,8 +86,8 @@ const LoadSportEvents = async(pageNum, events) => {
 
 
     const attributes = 8;
-    let arr = Array(thisEventCount).fill().map(() => Array(attributes));
-    for (let i = 0; i < thisEventCount; i++) {
+    let arr = Array(10).fill().map(() => Array(attributes));
+    for (let i = 0; i < 10; i++) {
         arr[i][0] = sportArray[i];
         arr[i][1] = opponentArray[i];
         arr[i][2] = dateArray[i];
