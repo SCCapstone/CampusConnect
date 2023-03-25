@@ -8,15 +8,6 @@ iOS Development requires a Macintosh Computer.
 
 We recommend a beefy desktop computer for Android Development and an M1 Mac for iOS development. 
 
-# External Requirements  
-
-Please install these:  
-
-* [Chocolatey](https://chocolatey.org/)
-* [Android Studio](https://developer.android.com/studio/?gclid=Cj0KCQjw48OaBhDWARIsAMd966BoOMVQjUYhO10I007JqCvPPxr56bouBmRMC7uWc9cM0kiCxhZh8_4aAuHkEALw_wcB&gclsrc=aw.ds)
-* [JDK](https://www.oracle.com/java/technologies/downloads/)
-* [Node.js](https://nodejs.org/en/)
-
 # Setup and Running 
 1. Clone Repo
 2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
@@ -24,10 +15,6 @@ Please install these:
 4. Run the code<pre><code>npx react-native run-android</code></pre>
 
 All the source files for the project are in the "src" folder
-
-
-# Coding
-Create separate ".js" files for each screen. Screens can be added to the HomeScreen drawer when they are done. Messing with other parts of the app can be dangerous. Styles should go into the styles folder. 
 
 # Pictures
 <p float="left">
@@ -65,8 +52,6 @@ Detox behavioral tests can be run by performing the following steps:
 1. Run  ```npm start``` in a separate terminal window.
 2. Compile the debug binary with ```detox build --configuration android.emu.debug``` [^2]
 3. Run the tests with ```detox test --configuration android.emu.debug```
-
-Note: If it crashes or doesn't work, just repeat the steps a few million times, because react native just "works" that way.
 
 # Authors  
 Erik - erikc@email.sc.edu  
