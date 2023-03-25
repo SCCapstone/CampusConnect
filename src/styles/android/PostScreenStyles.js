@@ -41,13 +41,13 @@ export default StyleSheet.create({
   cancelButtonText: {
     fontWeight: 'bold',
     fontSize: 14,
-    textAlign: 'left',
+    textAlign: 'center',
     color: 'black',
   },
   postButtonText: {
     fontWeight: 'bold',
     fontSize: 14,
-    justifyContent: 'flex-end',
+    textAlign: 'center',
     color: 'black',
   },
   majorText: {
@@ -62,7 +62,8 @@ export default StyleSheet.create({
 
   postContainer: {
     flex: 1,
-    backgroundColor:'#73000a'
+    backgroundColor:'#73000a',
+
   },
 
   postReplyContainer: {
@@ -102,11 +103,19 @@ export default StyleSheet.create({
   },
   postButton: {
     position:'absolute',
+    height:20,
+    width:50,
+    borderRadius:20,
+    backgroundColor:'#a8a1a6',
     right:20,
     top:-15,
   },
   cancelButton: {
     position:'absolute',
+    height:20,
+    width:50,
+    borderRadius:20,
+    backgroundColor:'#a8a1a6',
     left:20,
     top:-15,
   },

@@ -75,7 +75,7 @@ const LoadSportEvents = async() => {
       console.log("IMG: " + img);
       if (img === undefined) 
         imageArray.push(DEFAULTSECLOGO); // Use SEC logo if there's no opponent logo
-      else if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2 && img != BEACHVOLLEYBALLLOGO) // Ensures that Gamecock logo isn't used for opponent logo
+      if (img != DEFAULTGAMECOCKLOGOURL1 && img != DEFAULTGAMECOCKLOGOURL2 && img != BEACHVOLLEYBALLLOGO) // Ensures that Gamecock logo isn't used for opponent logo
         imageArray.push(img);
     })
 
@@ -97,7 +97,7 @@ const LoadSportEvents = async() => {
         arr[i][6] = locationArray[i];
         arr[i][7] = homeStatusArray[i];
       }
-      // events.push(arr);
+      //events.push(arr);
       return arr;
 }
 
