@@ -64,6 +64,7 @@
     "react-native-image-viewer": "^0.0.3",
     "react-native-image-viewing": "^0.2.2",
     "react-native-indicators": "^0.17.0",
+    "react-native-linear-gradient": "^2.6.2",
     "react-native-maps": "^1.4.0",
     "react-native-maps-directions": "^1.9.0",
     "react-native-material-dropdown": "^0.11.1",

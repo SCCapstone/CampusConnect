@@ -25,6 +25,7 @@ import {FloatingAction} from 'react-native-floating-action';
 import ImageView from 'react-native-image-viewing';
 import moment from 'moment';
 import AppContext from './AppContext';
+import LinearGradient from 'react-native-linear-gradient';
 import {color, sub, ZoomIn} from 'react-native-reanimated';
 import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';

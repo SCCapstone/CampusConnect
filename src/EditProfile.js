@@ -23,6 +23,7 @@ import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/EditProfileStyles';
 import androidstyles from './styles/android/EditProfileStyles';
+import LinearGradient from 'react-native-linear-gradient';
 
 var styles;
 
@@ -246,9 +247,10 @@ export function EditProfileScreen({navigation}) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView nestedScrollEnabled={true}>
-        <View style={styles.container}>
+    <LinearGradient
+    colors={['#73000a', '#73000a' ,'white']}
+    style={styles.container}
+  >
         <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
             {userData.pfp? <Image style={styles.blankImageStyle} source={{uri: userData.pfp}}></Image> :<ImageBackground
               source={require('./assets/blank2.jpeg')}
@@ -309,9 +311,7 @@ export function EditProfileScreen({navigation}) {
           <View style={styles.bottomContainer}>
             <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      </LinearGradient>
   );
 }
 
