@@ -63,7 +63,7 @@ export function EventsScreen({ navigation }) {
       marginHorizontal: '3%',
       }}>
       <TouchableOpacity onPress={() => { setSelectedEvent(item); setModalVisible(true); }}>
-        <FastImage source={{ uri: item.imageUrl }} style={styles.canvas} />
+        <Image source={{ uri: item[5] }} style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, borderRadius:10,}} />
         <Text style={{fontSize: 18, color: 'black', marginTop: '5%', justifyContent: 'center',}}>{item[0]}</Text>
         <Text style={{fontSize: 13, marginTop: 20, color: 'black', fontStyle: 'italic',}}>{item[2]}</Text>
       </TouchableOpacity>
