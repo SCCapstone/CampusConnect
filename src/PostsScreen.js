@@ -49,7 +49,7 @@ import {v4 as uuidv4} from 'uuid';
 import { AnimatedGalleryImage, LoadingIndicator } from 'stream-chat-react-native';
 
 
-
+import { Freeze } from "react-freeze";
 
 import iosstyles from './styles/ios/PostScreenStyles';
 import iosCommentStyles from './styles/ios/CommentStyles'
@@ -962,7 +962,7 @@ export function PostsScreen({navigation}) {
       </Swipeable>
 
     )
-  })
+  });
 
   if (loading) {
     return (
@@ -1132,21 +1132,23 @@ export function PostsScreen({navigation}) {
 
       </Modal>
 
-
-      <FlashList
-       onRefresh={() => {getPosts}}
-        //onEndReached={() => {
-       //   setPostCount(postCount+6)
-       // }}
-      //  onEndReachedThreshold={.9}
-        data={posts}
-        ref={list}
-        key={refresh}
-        renderItem={renderPost}
-        keyExtractor={item => item.key}
-        refreshing={refreshing}
-        estimatedItemSize={100}
-      />
+      <Freeze freeze={modalVisible}>
+        <FlatList
+        //onRefresh={() => {getPosts}}
+          //onEndReached={() => {
+        //   setPostCount(postCount+6)
+        // }}
+        //  onEndReachedThreshold={.9}
+          data={posts}
+          ref={list}
+          key={refresh}
+          renderItem={renderPost}
+          keyExtractor={item => item.key}
+          refreshing={refreshing}
+          initialNumToRender={100}
+          
+        />
+      </Freeze>
       <FloatingAction
         color="#73000a"
         ref={ref => {
