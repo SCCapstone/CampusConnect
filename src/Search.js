@@ -41,7 +41,7 @@ export function Search({navigation}) {
         const query = postsRef
         .where('searchName', '>=', userSearch.toUpperCase())
         .where('searchName', '<=', userSearch.toUpperCase()+ '\uf8ff')
-        .limit(15)
+        .limit(50)
 
         query.get().then(snapShot => {
             if(!snapShot.metadata.hasPendingWrites) {

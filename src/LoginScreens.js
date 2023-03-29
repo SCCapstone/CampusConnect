@@ -205,7 +205,7 @@ export function LoginScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {auth().sendPasswordResetEmail(email),Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
@@ -338,7 +338,7 @@ export function RegisterScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity testID='forgotpassword'>
+      <TouchableOpacity onPress={() => {auth().sendPasswordResetEmail(email),Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity
