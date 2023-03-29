@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#73000a',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -71,12 +70,11 @@ export default StyleSheet.create({
     fontSize: 16,
     marginHorizontal: 24,
     marginVertical: 8,
-    padding: 8,
   },
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
-    fontSize: 25,
+    fontSize: 20,
   },
 
   inputStyle: {

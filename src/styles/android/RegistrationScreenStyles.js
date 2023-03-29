@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#73000a',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -14,6 +13,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
+  },
+  gradient: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   SectionStyle: {
     flexDirection: 'row',
@@ -58,7 +62,15 @@ export default StyleSheet.create({
     marginRight: 55,
     marginTop: 30,
   },
-
+  buttonStyle2:{
+    width: '80%',
+    borderRadius: 4,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    backgroundColor: 'black',
+  },
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
