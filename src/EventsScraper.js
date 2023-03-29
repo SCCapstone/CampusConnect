@@ -45,12 +45,13 @@ const LoadEvents = async() => {
       titleArray.push(firstHalf);
     })
     
-    imageList.each((i,el) => {
-      img = ($(el).children("img").attr("src"));
-      if (img === undefined)
+    imageList.each((i, el) => {
+      img = ($(el).find("img").attr("src"));
+      if (img === undefined) {
         imageArray.push(DEFAULTEVENTLOGO);
-      else
+      } else {
         imageArray.push(img);
+      }
     })
 
     locationList.each((i, el) => {
