@@ -11,6 +11,8 @@ export default StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'center',
     borderRadius: 5,
+    marginTop:35,
+    marginLeft:20,
     height: '6%',
     width: '10%',
   },
