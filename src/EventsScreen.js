@@ -56,16 +56,15 @@ export function EventsScreen({ navigation }) {
       backgroundColor: '#a8a1a6',
       shadowColor: 'black',
       borderRadius: 10,
-      padding: 20,
       marginVertical: 8,
       marginRight: '3%',
       flex: 1,
       marginHorizontal: '3%',
       }}>
-      <TouchableOpacity onPress={() => { setSelectedEvent(item); setModalVisible(true); }}>
-        <Image source={{ uri: item[5] }} style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, borderRadius:10,}} />
-        <Text style={{fontSize: 18, color: 'black', marginTop: '5%', justifyContent: 'center',}}>{item[0]}</Text>
-        <Text style={{fontSize: 13, marginTop: 20, color: 'black', fontStyle: 'italic',}}>{item[2]}</Text>
+      <TouchableOpacity  style ={{flex: 1 }} onPress={() => { setSelectedEvent(item); setModalVisible(true); }}>
+        <Image source={{ uri: item[5] }} style={{ position: 'absolute', width:'100%', height: '100%', borderRadius: 10,}} />
+        <Text style={{marginHorizontal: '7%', fontSize: 22, color: 'black', marginTop: '5%', justifyContent: 'center', fontWeight: 'bold',}}>{item[0]}</Text>
+        <Text style={{ marginHorizontal: '7%', fontSize: 15, marginTop: 20, color: 'black', fontStyle: 'italic',}}>{item[2]}</Text>
       </TouchableOpacity>
     </View>
   );
