@@ -5,7 +5,7 @@ import uuid from 'react-native-uuid';
 const axios = require("axios");
 const cheerio = require("react-native-cheerio");
 const url = "https://www.eventbrite.com/o/university-of-south-carolina-alumni-association-18391111883";
-
+const DEFAULTEVENTLOGO = "https://abcnews4.com/resources/media/f4369747-6ca4-496c-9243-5e9e9a0f3089-large16x9_UniversityofSouthCarolinaFormalLogo16x9.jpg?1599583281911";
 export async function ScrapeEventData() {
   try {
   return await LoadEvents();
@@ -29,13 +29,14 @@ const LoadEvents = async() => {
     locationList = $("td.twLocation");
     scheduleList = $(".eds-event-card-content__primary-content");
     descriptionList = $("");
+    imageList = $("aside.eds-event-card-content__image-container");
     
     descriptionArray = new Array();
     titleArray = new Array();
     locationArray = new Array();
     dateArray = new Array();
     timeArray = new Array();
-  
+    imageArray = new Array();
 
     titleList.each((i, el) => {
       const title = $(el).children("a").text().trim();
@@ -44,6 +45,14 @@ const LoadEvents = async() => {
       titleArray.push(firstHalf);
     })
     
+    imageList.each((i,el) => {
+      img = ($(el).children("img").attr("src"));
+      if (img === undefined)
+        imageArray.push(DEFAULTEVENTLOGO);
+      else
+        imageArray.push(img);
+    })
+
     locationList.each((i, el) => {
       locationArray.push($(el).children("span").text());
     })
@@ -64,6 +73,7 @@ const LoadEvents = async() => {
         arr[i][2] = dateArray[i];
         arr[i][3] = timeArray[i];
         arr[i][4] = uuid.v4();
+        arr[i][5] = imageArray[i];
       }
 
       return arr;
