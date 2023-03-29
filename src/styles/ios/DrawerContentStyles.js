@@ -21,6 +21,10 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
+    margin:7
+  },
+  gradient: {
+    flex: 1
   },
   userWelcomeBox: {
     marginHorizontal: 20,

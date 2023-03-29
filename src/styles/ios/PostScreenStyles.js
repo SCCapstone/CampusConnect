@@ -80,7 +80,7 @@ export default StyleSheet.create({
 
   postContainer: {
     flex: 1,
-    backgroundColor:'#73000a'
+    color: '#73000a'
   },
 
   postReplyContainer: {

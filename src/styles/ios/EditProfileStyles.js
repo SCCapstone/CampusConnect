@@ -76,7 +76,7 @@ export default StyleSheet.create({
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
-    fontSize: 25,
+    fontSize: 20,
   },
 
   inputStyle: {
