@@ -115,12 +115,13 @@ export function DrawerContent(props) {
             </View>
           </View>
           <View style={styles.userInfoBox}>
-          <Image 
-          source={require('./assets/cal.png')} 
-          onPress={() => {navigation.navigate('CalendarPage')}}
-          style={{ width: 80, height: 80 , marginLeft: 150,
-        }} 
-        />          
+          <TouchableOpacity onPress={() => {navigation.navigate('CalendarPage')}}>
+            <Image 
+            source={require('./assets/cal.png')} 
+            style={{ width: 80, height: 80 , marginLeft: 150,
+            }} 
+            />
+          </TouchableOpacity> 
         </View>
         </ImageBackground>
         <View style={styles.drawerItemsList}>
