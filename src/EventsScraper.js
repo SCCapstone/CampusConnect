@@ -28,7 +28,7 @@ const LoadEvents = async() => {
     titleList = $(".eds-event-card-content__primary-content");
     locationList = $("td.twLocation");
     scheduleList = $(".eds-event-card-content__primary-content");
-    descriptionList = $("");
+    descriptionList = $(".event-details__main-inner");
     imageList = $("aside.eds-event-card-content__image-container");
     
     descriptionArray = new Array();
@@ -37,6 +37,9 @@ const LoadEvents = async() => {
     dateArray = new Array();
     timeArray = new Array();
     imageArray = new Array();
+
+
+   
 
     titleList.each((i, el) => {
       const title = $(el).children("a").text().trim();
@@ -63,7 +66,15 @@ const LoadEvents = async() => {
       $('a').empty();
       //timeArray.push($(el).children("span").text().split("\n      ")[1]);
     })
+
+    for (let i = 0; i < defaultItemCount; i++) {
+      const eventLink = $(titleList[i]).children("a").attr("href");
+      const eventHtml = await axios.get(eventLink);
+      const event$ = cheerio.load(eventHtml.data);
+      const description = event$(".event-details__main-inner").children('p').text();
+      descriptionArray.push(description);
     
+    }
 
     const attributes = 5;
     const results = 10;
@@ -75,6 +86,8 @@ const LoadEvents = async() => {
         arr[i][3] = timeArray[i];
         arr[i][4] = uuid.v4();
         arr[i][5] = imageArray[i];
+        arr[i][6] = descriptionArray[i];
+        //console.log(descriptionArray);
       }
 
       return arr;
