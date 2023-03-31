@@ -38,9 +38,6 @@ const LoadEvents = async() => {
     timeArray = new Array();
     imageArray = new Array();
 
-
-   
-
     titleList.each((i, el) => {
       const title = $(el).children("a").text().trim();
       const halfway = Math.floor(title.length / 2);
@@ -67,13 +64,13 @@ const LoadEvents = async() => {
       //timeArray.push($(el).children("span").text().split("\n      ")[1]);
     })
 
+//Iterate over each event and follow the link embedded in the title, then scrape the description found on that URL.
     for (let i = 0; i < defaultItemCount; i++) {
       const eventLink = $(titleList[i]).children("a").attr("href");
       const eventHtml = await axios.get(eventLink);
       const event$ = cheerio.load(eventHtml.data);
       const description = event$(".event-details__main-inner").children('p').text();
       descriptionArray.push(description);
-    
     }
 
     const attributes = 5;
