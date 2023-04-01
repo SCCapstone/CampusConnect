@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   Pressable,
+  FlatList,
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
@@ -17,7 +18,6 @@ import {
   LayoutAnimation,
   UIManager,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import auth, {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -25,6 +25,7 @@ import {FloatingAction} from 'react-native-floating-action';
 import ImageView from 'react-native-image-viewing';
 import moment from 'moment';
 import AppContext from './AppContext';
+import LinearGradient from 'react-native-linear-gradient';
 import {color, sub, ZoomIn} from 'react-native-reanimated';
 import {pure} from 'recompose';
 import FastImage from 'react-native-fast-image';
@@ -49,7 +50,7 @@ import {v4 as uuidv4} from 'uuid';
 import { AnimatedGalleryImage, LoadingIndicator } from 'stream-chat-react-native';
 
 
-
+import { Freeze } from "react-freeze";
 
 import iosstyles from './styles/ios/PostScreenStyles';
 import iosCommentStyles from './styles/ios/CommentStyles'
@@ -87,6 +88,7 @@ export function PostsScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible,setEditModalVisile] = useState(false)
   const [replyModalVisible, setReplyModalVisible] = useState(false);
+  const [freeze, setFreeze] = useState(false);
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
   const [sortMode, setSortMode] = useState('Best')
@@ -195,7 +197,7 @@ export function PostsScreen({navigation}) {
   }
 
   const getPosts = () => {
-    setRefresh(true)
+    setRefresh(true);
     var postsRef = firestore().collection('Posts')
     var query; 
     if(search) {
@@ -274,6 +276,7 @@ export function PostsScreen({navigation}) {
           promises.push(promise)
         });
         Promise.all(promises).then(() => {
+          //setRefreshList(!refresh) 
           setPosts(posts);
           setImages(images);
           setLoading(false);
@@ -505,7 +508,9 @@ export function PostsScreen({navigation}) {
             Promise.all(promises).then(() => {
               setPosts(posts);
               setImages(images);
+              //setRefreshList(!refresh)
               setLoading(false);
+
             })
 
           }
@@ -709,7 +714,7 @@ export function PostsScreen({navigation}) {
 
 
 
-  const Post = ({item, index}) => {
+  const Post = React.memo(({item, index}) => {
     return (
       <Swipeable
       overshootLeft={true}
@@ -718,6 +723,7 @@ export function PostsScreen({navigation}) {
       }}
       onSwipeableOpen={(direction) => {
         if(direction ==='right'){
+          setFreeze(true)
           setReplyItem(item)
           setReplyModalVisible(true)
           getReplies(item);
@@ -761,6 +767,7 @@ export function PostsScreen({navigation}) {
     >
         <View style={styles.postContainer}>
           <Pressable delayLongPress={150} onLongPress={() => {
+            setFreeze(true)
             setReplyItem(item)
             setReplyModalVisible(true)
             setPostReplies([])
@@ -774,11 +781,13 @@ export function PostsScreen({navigation}) {
                   buttonTextAfterSelection={() => {return '• • •'}}
                   onSelect={(option) => {
                     if(option === 'Reply') {
+                      setFreeze(true)
                       setReplyItem(item)
                       setReplyModalVisible(true)
                       getReplies(item);
                     }
                     else if(option === 'Edit') {
+                      setFreeze(true)
                       setPost(item.key);
                       setPostText(item.body)
                       //this.floatingAction.animateButton()
@@ -830,11 +839,13 @@ export function PostsScreen({navigation}) {
                   buttonTextAfterSelection={() => {return '• • •'}}
                   onSelect={(option) => {
                     if(option === 'Reply') {
+                      setFreeze(true)
                       setReplyItem(item)
                       setReplyModalVisible(true)
                       getReplies(item);
                     }
                     else if(option === 'Edit') {
+                      setFreeze(true)
                       setPost(item.key);
                       setPostText(item.body)
                       //this.floatingAction.animateButton()
@@ -854,7 +865,7 @@ export function PostsScreen({navigation}) {
             <View style={styles.postImageView}>
               <Text style={styles.body}>{item.body.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')}</Text>
               {item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') > 0 ? <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderDescription={((string) => {return (<Text style={{color:'black',fontSize:10}}>{string}</Text>)})} renderTitle={((string) => {return (<Text style={{color:'black',fontWeight:'bold'}}>{string}</Text>)})} renderText={(() => {return ''})} header='' text={item.body} />: null}
-              {(item.extraData && !item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '')) > 0 ? (
+              {(item.extraData && item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') < 1) ? (
                 <TouchableOpacity onPress={() => {OpenImage({index})}}>
                   <FastImage
                     source={{uri: item.extraData}}
@@ -879,7 +890,7 @@ export function PostsScreen({navigation}) {
         </View>
       </Swipeable>
     );
-  };
+  });
 
 
   const closeModal = () => {
@@ -892,6 +903,7 @@ export function PostsScreen({navigation}) {
     setPostIsAnonymous(false)
     setModalVisible(false)
     setPostText('');
+    setFreeze(false)
   };
 
   const renderPost = ({item, index}) => <Post item={item} index={index} />;
@@ -940,6 +952,7 @@ export function PostsScreen({navigation}) {
                 userData.setProfileView(item.user.replace('/Users/',''))
                 navigation.navigate('ProfileView')
                 setReplyModalVisible(false)
+                setFreeze(false)
                 setPostReplies([])
               }
               else if (item.author === 'USC Student') {
@@ -962,7 +975,7 @@ export function PostsScreen({navigation}) {
       </Swipeable>
 
     )
-  })
+  });
 
   if (loading) {
     return (
@@ -1079,7 +1092,7 @@ export function PostsScreen({navigation}) {
                 buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',marginBottom:20,marginLeft:10}}
                 size='lg'
                 onPress={() =>{setReplyModalVisible(false);setPostReplies([])
-                setReplyItem(null)}}
+                setReplyItem(null);setFreeze(false);}}
                 titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
                 title={'Close'}
               />
@@ -1092,6 +1105,7 @@ export function PostsScreen({navigation}) {
                 isChecked={postIsAnonymous}
                 unfillColor="#FFFFFF"
                 text="Anonymous?"
+      
                 iconStyle={{ borderColor: "#73000a"}}
                 innerIconStyle={{ borderWidth: 2 }}
                 textStyle={{ color:'black' }}
@@ -1132,27 +1146,30 @@ export function PostsScreen({navigation}) {
 
       </Modal>
 
-
-      <FlashList
-       onRefresh={() => {getPosts}}
-        //onEndReached={() => {
-       //   setPostCount(postCount+6)
-       // }}
-      //  onEndReachedThreshold={.9}
-        data={posts}
-        ref={list}
-        key={refresh}
-        renderItem={renderPost}
-        keyExtractor={item => item.key}
-        refreshing={refreshing}
-        estimatedItemSize={100}
-      />
+      <Freeze freeze={freeze}>
+        <FlatList
+        onRefresh={() => {getPosts}}
+          //onEndReached={() => {
+        //   setPostCount(postCount+6)
+        // }}
+        //  onEndReachedThreshold={.9}
+          data={posts}
+          ref={list}
+          key={refresh}
+          renderItem={renderPost}
+          keyExtractor={item => item.key}
+          refreshing={refreshing}
+          initialNumToRender={100}
+          
+        />
+      </Freeze>
       <FloatingAction
         color="#73000a"
         ref={ref => {
           this.floatingAction = ref;
         }}
         onPressMain={() => {
+          setFreeze(true)
           setModalVisible(true);
         }}
 
