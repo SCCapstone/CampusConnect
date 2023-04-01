@@ -52,7 +52,7 @@ export function EventsScreen({ navigation }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const Event = ({ item }) => (
-    <View style={{ height: 150,
+    <View style={{ height: '15%',
       backgroundColor: '#a8a1a6',
       shadowColor: 'black',
       borderRadius: 10,
@@ -62,9 +62,9 @@ export function EventsScreen({ navigation }) {
       marginHorizontal: '3%',
       }}>
       <TouchableOpacity  style ={{flex: 1 }} onPress={() => { setSelectedEvent(item); setModalVisible(true); }}>
-        <Image source={{ uri: item[5] }} style={{ position: 'absolute', width:'100%', height: '100%', borderRadius: 10,}} />
-        <Text style={{backgroundColor: '#f2f2f2', borderRadius: 12, marginHorizontal: '7%', fontSize: 22, color: 'black', marginTop: '5%', justifyContent: 'center', fontWeight: 'bold', textShadowColor: 'black', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 5, shadowOpacity: 1,}}>{item[0]}</Text>
-        <Text style={{backgroundColor: '#f2f2f2', borderRadius: 12, marginHorizontal: '7%', fontSize: 15, marginTop: 20, color: 'black', fontStyle: 'italic', textShadowColor: 'black', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 10, shadowOpacity: 1,}}>{item[2]}</Text>
+        <Image source={{ uri: item[5] }} style={{ position: 'absolute', width:'100%', height: '55%', borderTopRightRadius: 10, borderTopLeftRadius: 10,}} />
+        <Text style={{ adjustsFontSizeToFit: true, marginHorizontal: '7%', fontSize: 22, color: 'white', marginTop: '25%', justifyContent: 'center', fontWeight: 'bold', textShadowColor: 'black', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 5, shadowOpacity: 1,}}>{item[0]}</Text>
+        <Text style={{ adjustsFontSizeToFit: true, marginHorizontal: '7%', fontSize: 15, marginTop: 2, marginBottom: '2%', color: 'black', fontStyle: 'italic', textShadowColor: 'black', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 10, shadowOpacity: 1,}}>{item[2]}</Text>
       </TouchableOpacity>
     </View>
   );
