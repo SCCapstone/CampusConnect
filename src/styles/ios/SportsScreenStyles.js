@@ -1,14 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-    container: {
-        backgroundColor: '#73000a',
-      },
+      container: {
+          flex: 1,
+          backgroundColor: '#73000a',
+        },
       loadingContainer: {
         flex: 1,
         backgroundColor: '#73000a',
         alignItems:'center',
-        justifyContent:'center',
         marginTop: -50,
       },
       loadingSymbol: {
@@ -18,12 +18,30 @@ export default StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         color: 'white',
-        top: 0
+        marginTop: 350,
+        top: 0,
       },
-      loadingText: {
-        flex: 1,
-        alignSelf: 'center',
-
+      errorText: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        fontSize: 20,
+        marginTop: 275,
+        textAlign: 'center',
+        color: 'white',
+      },
+      reloadButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+      },
+      reloadButtonText: {
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "black",
       },
       flexboxContainer: {
         flex: 1,
@@ -113,4 +131,9 @@ export default StyleSheet.create({
         flexWrap: 'wrap',
         flexShrink: 1,
       },
+      footer: {
+        color: 'white',
+        textAlign: 'center',
+        marginBottom: 10,
+      }
 });
