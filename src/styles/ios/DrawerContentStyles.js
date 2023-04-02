@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   pfpStyle: {height: 80, width: 80, borderRadius: 40},
-  imageBackgroundView: {padding: 30},
+  imageBackgroundView: {resizeMode:'contain' },
   pressableImageView: {
     height: 80,
     width: 80,
@@ -21,6 +21,10 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
+    margin: 7,
+  },
+  gradient: {
+    flex: 1
   },
   userWelcomeBox: {
     marginHorizontal: 20,
@@ -54,8 +58,6 @@ export default StyleSheet.create({
   majorTextBox: {flexDirection: 'column', alignSelf: 'center'},
   userInfoBox: {
     marginTop: 15,
-    alignSelf: 'center',
-    backgroundColor: '#e2e2e2',
     borderRadius: 10,
   },
   drawerItemsList: {

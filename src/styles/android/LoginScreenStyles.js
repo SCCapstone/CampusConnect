@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#73000a',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -11,9 +10,7 @@ export default StyleSheet.create({
   backButtonContainer: {
     alignSelf: 'flex-start',
     justifyContent: 'center',
-    backgroundColor: 'white',
     borderRadius: 5,
-    marginLeft: '5%',
     height: '6%',
     width: '10%',
   },
@@ -24,7 +21,11 @@ export default StyleSheet.create({
     width: '100%',
     height: '86%',
   },
-
+  gradient: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   imageLarge: {
     marginBottom: 0,
     marginTop: 0,

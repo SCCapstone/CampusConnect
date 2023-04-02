@@ -24,6 +24,8 @@ import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {class_locations,locations} from './consts/locations'
 
+const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios' ? 'AIzaSyARf2igtbS8271pg878R9U9Pvq5iUy4zSc' : 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
+
 export function CalendarPage({navigation}) {
     const userData = useContext(AppContext);
     const [key,setKey] = useState(moment().day())
@@ -46,8 +48,8 @@ export function CalendarPage({navigation}) {
     const [reRender,setReRender] = useState(false)
     var transactionStarted = false;
     
+    
 
-    const GOOGLE_MAPS_APIKEY = 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
 
 
 
@@ -353,7 +355,7 @@ export function CalendarPage({navigation}) {
                     <MapView style={{flex:1}} 
                     zoomControlEnabled={true}
                     showsUserLocation={true}
-                    followsUserLocation={true}
+                    followsUserLocation={false}
                     initialRegion=
                         {{latitude:origin.latitude, 
                         longitude:origin.longitude,

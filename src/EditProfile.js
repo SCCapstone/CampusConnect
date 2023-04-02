@@ -23,6 +23,7 @@ import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/EditProfileStyles';
 import androidstyles from './styles/android/EditProfileStyles';
+import LinearGradient from 'react-native-linear-gradient';
 
 var styles;
 
@@ -218,7 +219,7 @@ export function EditProfileScreen({navigation}) {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#a9a9a9',
+          backgroundColor: 'white',
           justifyContent: 'center',
         }}>
         <Image
@@ -229,7 +230,7 @@ export function EditProfileScreen({navigation}) {
             alignSelf: 'center',
           }}
         />
-        <Text style={styles.textStyle}>Registration Successful</Text>
+        <Text style={styles.textStyle}>Your Profile Has Been Updated!</Text>
         <TouchableOpacity style={styles.buttonStyle} onPress={() => reset()}>
           <Text style={styles.buttonTextStyle}>Finish</Text>
         </TouchableOpacity>
@@ -246,9 +247,10 @@ export function EditProfileScreen({navigation}) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView nestedScrollEnabled={true}>
-        <View style={styles.container}>
+    <LinearGradient
+    colors={['#73000a', '#73000a' ,'white']}
+    style={styles.container}
+  >
         <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
             {userData.pfp? <Image style={styles.blankImageStyle} source={{uri: userData.pfp}}></Image> :<ImageBackground
               source={require('./assets/blank2.jpeg')}
@@ -287,7 +289,7 @@ export function EditProfileScreen({navigation}) {
                 dropDownDirection="TOP"
                 setOpen={setOpen}
                 setValue={setMajor}
-                listMode="SCROLLVIEW"
+                listMode="MODAL" 
               />
             </View>
             <View style={styles.bioSectionStyle}>
@@ -301,17 +303,15 @@ export function EditProfileScreen({navigation}) {
               />
             </View>
             <TouchableOpacity
-              style={styles.buttonStyle}
+              style={styles.buttonUpdateStyle}
               onPress={writeUserData}>
-              <Text style={styles.buttonTextStyle}>UPDATE</Text>
+              <Text style={styles.buttonTextStyle}>{!image ? 'UPDATE' : 'Press to update ✅'}</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
           <View style={styles.bottomContainer}>
             <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      </LinearGradient>
   );
 }
 

@@ -41,7 +41,7 @@ export function Search({navigation}) {
         const query = postsRef
         .where('searchName', '>=', userSearch.toUpperCase())
         .where('searchName', '<=', userSearch.toUpperCase()+ '\uf8ff')
-        .limit(15)
+        .limit(50)
 
         query.get().then(snapShot => {
             if(!snapShot.metadata.hasPendingWrites) {
@@ -77,13 +77,13 @@ export function Search({navigation}) {
                 <Text style={{marginLeft:'5%',fontSize:24,fontWeight:'bold',color:'black'}}>{item.name}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:14,fontWeight:'bold',color:'black',flexWrap:'wrap'}}>{item.major}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:14,fontWeight:'bold',color:'black'}}>{'('+item.gradYear+')'}</Text>
-                <Text style={{marginLeft:'5.5%',fontSize:10,fontWeight:'bold',fontStyle:'italic',color:'black',marginTop:'5%'}}>{'Joined: '+moment(item.joined.toDate()).format("MMM Do YYYY, h:mm:ss a").toString()}</Text>
+                <Text style={{marginLeft:'5.5%',fontSize:10,fontWeight:'bold',fontStyle:'italic',color:'black',marginTop:'5%'}}>{item.joined ? 'Joined: '+moment(item.joined.toDate()).format("MMM Do YYYY, h:mm:ss a").toString(): null}</Text>
             </View>
         </View>)
 
     };
     return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#73000a'}}>
+    <View style={{flex:1,backgroundColor:'#73000a'}}>
       <SearchBar 
         containerStyle={{backgroundColor:'#73000a'}} 
         inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
@@ -104,6 +104,6 @@ export function Search({navigation}) {
             keyExtractor={item => item.key}
             />
         </View>
-    </SafeAreaView>
+    </View>
     );
 }

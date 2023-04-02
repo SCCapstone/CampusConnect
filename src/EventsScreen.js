@@ -1,203 +1,105 @@
-import React from 'react';
-import {Alert, SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Image, Pressable, TouchableOpacity } from 'react-native';
-
-import iosstyles from './styles/ios/EventsScreenStyles';
-import androidstyles from './styles/android/EventsScreenStyles';
+import React, { useEffect, useState } from 'react';
+import {
+  Platform,
+  Alert,
+  SafeAreaView,
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  StatusBar,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  ActivityIndicator,
+  Modal,
+} from 'react-native';
+import { ScrapeEventData } from './EventsScraper';
+import { FloatingAction } from 'react-native-floating-action';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import storage from "@react-native-firebase/storage";
-
-import ImageView from "react-native-image-viewing";
+import storage from '@react-native-firebase/storage';
+import ImageView from 'react-native-image-viewing';
 import FastImage from 'react-native-fast-image';
+import { SearchBar } from '@rneui/themed';
 
+import iosstyles from './styles/ios/EventsScreenStyles';
+import androidstyles from './styles/android/EventsScreenStyles';
 var styles;
-
+ 
 if (Platform.OS === 'ios') {
   styles = iosstyles; // do dark mode in here as well
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
+export function EventsScreen({ navigation }) {
+  const defaultItemCount = 10;
 
+  const [DATA, setDATA] = useState();
 
-export function EventsScreen({navigation}) {
-    const DATA = [
-        {
-          id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-          type:'Other',
-          event: 'Student Protest for Better Campus wi-fi',
-          date: '11/18/22 4:15:00 PM',
-          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/3GsL94dezIWjjuPTFuCFy6nXSXt2?alt=media&token=74158a14-0045-4503-9e9b-0f64ee4f16db',
-          upvoteCount:'100',
-          description:'Test', 
-        },
-        {
-          id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-          type:'Other',
-          event: 'Student group prayer session',
-          date: '11/12/22 1:00:00 PM',
-          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/dM4DrsLJ8GbyJMG4g3p18LFmolj1?alt=media&token=2e847802-258d-4ed6-8135-813ecacf8c2e',
-          upvoteCount:'100',
-          description:'Test', 
-        },
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d72',
-          type:'Other',
-          event: 'Play at the longhorn street theatre',
-          date: '11/11/22 2:00:00 PM',
-          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-          upvoteCount:'100',
-          description:'Test', 
-        },
-        {
-          id: '58694a0f-3da1-471f-bd76-145571e29d72',
-          type:'Academics',
-          event: 'TED Talk: Professor Abdulahabini',
-          date: '11/6/22 12:00:00 PM',
-          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-          upvoteCount:'100',
-          description:'Test', 
-        },
-        {
-          id: '58694a0f-3da1-471f-bd26-145571e29d72',
-          type:'Other',
-          event: 'U of SC Graduation Class of 2023',
-          date: '11/9/22 9:00:00 AM',
-          imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-          upvoteCount:'100',
-          description:'Test', 
-        },
-        {
-            id: '58694a0f-3da1-471f-bd26-145571a29d72',
-            type:'Academics',
-            event: 'VectorCalc StudyJam at Thomas Cooper!',
-            date: '11/18/22 4:15:00 PM',
-            imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-            upvoteCount:'100',
-            description:'Test', 
-          },
-          {
-            id: '58694a0f-3da1-471f-bd26-145571f29d72',
-            type:'Athletics',
-            event: 'Gamecock Volleyball vs. Georgia',
-            date: '11/10/22 3:30:00 PM',
-            imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-            upvoteCount:'100',
-            description:'Test', 
-          },
-          {
-            id: '58694a0f-3da1-471f-bd26-145571e29d52',
-            type:'Athletics',
-            event: 'Student disk golfing event',
-            date: '11/18/22 4:15:00 PM',
-            imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-            upvoteCount:'100',
-            description:'Test', 
-          },
-          {
-            id: '58694a0f-3da1-471f-bd26-145571e29d62',
-            type:'Athletics',
-            event: 'Gamecock Soccer vs. Clemsux',
-            date: '11/11/22 4:30:00 PM',
-            imageUrl:'https://firebasestorage.googleapis.com/v0/b/campusconnect-45088.appspot.com/o/N2OeS2HfAVgLyI40I8yjRoMoGRk1?alt=media&token=22708d94-dec1-40be-9553-a61325e2b9ed',
-            upvoteCount:'100',
-            description:'Test', 
-          },
+  useEffect(() => {
+    const fetchData = async () => {
+      const ret = await ScrapeEventData();
+      setDATA(ret);
+    };
+    fetchData();
+  }, []);
 
-      ];
+  const [search, setSearch] = useState('');
 
-    const Event = ({item}) => (
-      <View style={styles.eventContainer}>
-      <View style={styles.upvoteBox}>
-        <TouchableOpacity onPress={() => CreateAlertupVote()}>
-          <Image
-            style={styles.voteButtons}
-            source={
-              item.isUpVoted
-                ? require('./assets/upvote_highlighted.png')
-                : require('./assets/upvote.png')
-            }></Image>
-        </TouchableOpacity>
-        <Text style={styles.upvote}>{item.upvoteCount}</Text>
-        <TouchableOpacity onPress={() => CreateAlertdownVote()}>
-          <Image
-            style={styles.voteButtons}
-            source={
-              item.isDownVoted
-                ? require('./assets/downvote_highlighted.png')
-                : require('./assets/downvote.png')
-            }></Image>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity onPress={() => CreateAlertevent()} style ={styles.event}>
-      <FastImage source={{uri: item.imageUrl}}
-             style={styles.canvas}/>
-            <Text style={styles.body}>{item.event}</Text>
-            <Text style={styles.date}>{item.date}</Text>
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const Event = ({ item }) => (
+    <View style={{ height: '15%',
+      backgroundColor: '#a8a1a6',
+      shadowColor: 'black',
+      borderRadius: 10,
+      marginVertical: 8,
+      marginRight: '3%',
+      flex: 1,
+      marginHorizontal: '3%',
+      }}>
+      <TouchableOpacity  style ={{flex: 1 }} onPress={() => { setSelectedEvent(item); setModalVisible(true); }}>
+        <Image source={{ uri: item[5] }} style={{ position: 'absolute', width:'100%', height: '55%', borderTopRightRadius: 10, borderTopLeftRadius: 10,}} />
+        <Text style={{ adjustsFontSizeToFit: true, marginHorizontal: '7%', fontSize: 22, color: 'white', marginTop: '25%', justifyContent: 'center', fontWeight: 'bold', textShadowColor: 'black', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 5, shadowOpacity: 1,}}>{item[0]}</Text>
+        <Text style={{ adjustsFontSizeToFit: true, marginHorizontal: '7%', fontSize: 15, marginTop: 2, marginBottom: '2%', color: 'black', fontStyle: 'italic', textShadowColor: 'black', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 10, shadowOpacity: 1,}}>{item[2]}</Text>
       </TouchableOpacity>
     </View>
   );
 
+  const renderEvent = ({ item }) => <Event item={item} />;
 
-      const renderEvent = ({ item }) => (
-        <Event item={item} />
-      );
+  if (!DATA) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
-      return (
-        <SafeAreaView style={styles.container}>
-          <FlatList
-            data={DATA}
-            renderItem={renderEvent}
-            keyExtractor={item => item.id}
-          />
-        </SafeAreaView>
-      );
-
-      useEffect(() => { //gets events asynchronously in the background
-        const subscriber = firestore()
-        .collection('Events').orderBy('upvoteCount', 'desc').orderBy('date','desc') //get the events and order them by their upvote count
-        .onSnapshot(querySnapshot => {
-          if (!querySnapshot.metadata.hasPendingWrites) {  //This will prevent unecessary reads, because the firebase server may be doing something
-            eventIndex = 0;
-            var imageIndex = 0;
-            const events = [];
-            const images = [];
-            querySnapshot.forEach(documentSnapshot => {
-              const event = {
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-              }
-              events.push(event);
-              if (event.extraData){
-                images.push({
-                  uri: event.extraData,
-                  key: documentSnapshot.id
-                })
-                setImageMap(imageMap.set(eventIndex,imageIndex))
-                imageIndex++;
-              }
-              eventIndex++;
-              
-            });
-      
-            setEvents(events);
-            setImages(images);
-            setLoading(false);
-          }
-        });
-            // Unsubscribe from events when no longer in use
-            return () => subscriber();
-      }, []);
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: '#73000a'}}>
+      <FlatList
+        data={DATA}
+        renderItem={renderEvent}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <Modal visible={isModalVisible} onRequestClose={() => setModalVisible(false)}>
+        {selectedEvent && (
+          <SafeAreaView style={{flex: 1, backgroundColor: '#73000a',}}>
+            <View style={{flex: 1, backgroundColor: '#FFFFFF', margin: 16, borderRadius: 10, padding: 20,}}>
+              <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#000000',}}>{selectedEvent[0]}</Text>
+              <Image source={{ uri: selectedEvent[5] }} style={{width: '100%', height: 200, resizeMode: 'cover', borderRadius: 10, marginTop: 16,}} />
+              <Text style={{fontSize: 16, color: 'black', marginTop: 16, lineHeight: 24}}>{selectedEvent[6]}</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={{  fontSize: 18, fontWeight: 'bold', color: '#000000', marginTop: 16,}}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+        )}
+      </Modal>
+    </SafeAreaView>
+  ); 
 }
-
-const CreateAlertupVote = () => {
-  Alert.alert('This will upvote');
-}
-const CreateAlertdownVote = () => {
-  Alert.alert('This will downvote');
-}
-const CreateAlertevent = () => {
-  Alert.alert('This will hold event info');
-}
-     
-    

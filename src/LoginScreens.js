@@ -1,5 +1,9 @@
+//This code was modeled from this page https://code.tutsplus.com/tutorials/common-react-native-app-layouts-login-page--cms-27639
+//Everything else in this app is original.
+
 import {Modal, StatusBar, SafeAreaView, Platform} from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   Text,
   View,
@@ -9,7 +13,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import Parse from 'parse/react-native';
+//import Parse from 'parse/react-native';
 import { useChatClient } from './useChatClient';
 
 
@@ -108,19 +112,22 @@ export function WelcomeScreen({navigation}) {
   if (initializing) return null;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <LinearGradient
+      colors={['#73000a', '#73000a' ,'white']}
+      style={styles.gradient}
+    >
       <Image
         style={styles.imageLarge}
         source={require('./assets/logo.png')}
       />
       <Text testID='title' style={styles.title}>Campus Connect</Text>
-
+  
       <TouchableOpacity testID='registerbtn'
         onPress={() => navigation.navigate('RegisterScreen')}
         style={styles.loginBtn}>
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
-
+  
       <TouchableOpacity 
         onPress={() => navigation.navigate('LoginScreen')}
         style={styles.loginBtn}>
@@ -136,7 +143,7 @@ export function WelcomeScreen({navigation}) {
           Copywright Ⓒ2022 DemBoyz, All rights reserved.
         </Text>
       </View>
-    </SafeAreaView>
+    </LinearGradient>
   );
 }
 
@@ -162,8 +169,11 @@ export function LoginScreen({navigation}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <BackButton />
+    <LinearGradient
+      colors={['#73000a', '#73000a' ,'white']}
+      style={styles.gradient}
+    >      
+    <BackButton />
       <Image
         style={styles.imageSmall}
         source={require('./assets/logo.png')}
@@ -195,7 +205,7 @@ export function LoginScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {auth().sendPasswordResetEmail(email),Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
@@ -215,7 +225,7 @@ export function LoginScreen({navigation}) {
           Copywright Ⓒ2022 DemBoyz, All rights reserved.
         </Text>
       </View>
-    </SafeAreaView>
+    </LinearGradient>
   );
 }
 
@@ -228,12 +238,12 @@ export function RegisterScreen({navigation}) {
   const [password2, setPassword2] = React.useState('');
   const register = () => {
     if (
-      /*email &&
+      email &&
       password &&
       password === password2 &&
       email.split('@').length > 1 &&
       email.split('@')[1].includes('sc.edu') &&
-      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'*/true) {
+      email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu') {
       auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
@@ -279,8 +289,11 @@ export function RegisterScreen({navigation}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <BackButton />
+<LinearGradient
+      colors={['#73000a', '#73000a' ,'white']}
+      style={styles.gradient}
+    >          
+    <BackButton />
       <Image
         style={styles.imageSmall}
         source={require('./assets/logo.png')}
@@ -325,7 +338,7 @@ export function RegisterScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity testID='forgotpassword'>
+      <TouchableOpacity onPress={() => {auth().sendPasswordResetEmail(email),Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -339,7 +352,7 @@ export function RegisterScreen({navigation}) {
           Copywright Ⓒ2022 DemBoyz, All rights reserved.
         </Text>
       </View>
-    </SafeAreaView>
+    </LinearGradient>
   );
 }
 

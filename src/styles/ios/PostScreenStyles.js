@@ -38,16 +38,34 @@ export default StyleSheet.create({
     overlayColor: '#a8a1a6',
     
   },
+  postButton: {
+    position:'absolute',
+    height:20,
+    width:50,
+    borderRadius:20,
+    backgroundColor:'#a8a1a6',
+    right:20,
+    top:-15,
+  },
+  cancelButton: {
+    position:'absolute',
+    height:20,
+    width:50,
+    borderRadius:20,
+    backgroundColor:'#a8a1a6',
+    left:20,
+    top:-15,
+  },
   cancelButtonText: {
     fontWeight: 'bold',
     fontSize: 14,
-    textAlign: 'left',
+    textAlign: 'center',
     color: 'black',
   },
   postButtonText: {
     fontWeight: 'bold',
     fontSize: 14,
-    justifyContent: 'flex-end',
+    textAlign: 'center',
     color: 'black',
   },
   majorText: {
@@ -62,7 +80,7 @@ export default StyleSheet.create({
 
   postContainer: {
     flex: 1,
-    backgroundColor:'#73000a'
+    color: '#73000a'
   },
 
   postReplyContainer: {
@@ -99,16 +117,6 @@ export default StyleSheet.create({
     marginHorizontal: '2%',
     marginVertical: '2%',
     borderRadius: 20,
-  },
-  postButton: {
-    position:'absolute',
-    right:20,
-    top:-15,
-  },
-  cancelButton: {
-    position:'absolute',
-    left:20,
-    top:-15,
   },
   container: {
     flex: 1,

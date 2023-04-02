@@ -1,8 +1,19 @@
 import { ChatProvider } from "./ChatContext";
 import {useContext, useRef, useState, useEffect} from 'react'
-import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform} from "react-native";
+import {SafeAreaView ,View, Text, Pressable, Alert, Image,Animated,StyleSheet, ActivityIndicator,Modal,KeyboardAvoidingView, ImageBackground, Platform, TouchableWithoutFeedback} from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton,FlatList, gestureHandlerRootHOC,TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 
 import { LogBox } from 'react-native';
 
@@ -74,11 +85,11 @@ export function ChatsScreen(props) {
     const [selectedType, setSelectedType] = useState(0);
     const chatClient = StreamChat.getInstance(chatApiKey);
     const [filter, setFilter] = useState('') //We will swap between groups and DMs here
-    const [key,setKey] = useState(0)
+    //const [key,setKey] = useState(0)
     const [userSearch,setUserSearch] = useState('')
     const [searchModalVisible,setSearchModalVisible] = useState(false)
     const [data, setData] = useState([]);
-    const searchLimit = 30;
+    const searchLimit = 50;
     const [addGroupVisible,setAddGroupVisible] = useState(false)
       //Right here, create a query that will only return the private DMs a User is in
 
@@ -88,9 +99,9 @@ export function ChatsScreen(props) {
         },
       } = useTheme();
 
-    const ReloadList = () => {
+    /*const ReloadList = () => {
       setKey((key) => key+1)
-    }
+    }*/
 
     const DMFilter = {
       $and: [
@@ -124,9 +135,9 @@ export function ChatsScreen(props) {
 
 
 
-    useEffect(() => {
+    /*useEffect(() => {
       const myListener = chatClient.on('message.new',ReloadList)
-    },[])
+    },[])*/
     useEffect(() => {
       if (selectedType === 0) {
         searchUsers();
@@ -207,7 +218,7 @@ export function ChatsScreen(props) {
       const { unread } = props;
       const { channel } = props;
       const [muteStatus, setMuteStatus] = useState(channel.muteStatus().muted)
-      const { channels, reloadList } = useContext(ChannelsContext);
+      //const { channels, reloadList } = useContext(ChannelsContext);
       const backgroundColor = unread ? '#c6edff' : '#fff';
 
       const channelOptions = ["View Profile","Mute", "Block"]
@@ -295,6 +306,7 @@ export function ChatsScreen(props) {
         const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
         var member;
         const [isOnline, setIsOnline] = useState(false)
+        const [loading, setLoading] = useState(true)
         const [image,setImage] = useState('')
         useEffect(() =>{
           getPhotos = async () =>{
@@ -303,26 +315,41 @@ export function ChatsScreen(props) {
               setIsOnline(member.members[0].user.online)
               if(!member.members[0].user.image) {
                 setImage(await storage().ref('Profile Pictures/'+member.members[0].user_id).getDownloadURL().catch(() =>{}))
+                setLoading(false)
               }
               else{
                 setImage(member.members[0].user.image)
+                setLoading(false)
               }
             }
             else {
               setImage(channel.data.image)
+              setLoading(false)
             }
             
           }
-          if (!image){
-            getPhotos();
-          }
+
+          getPhotos();
+          
         },[]);
 
+      if(loading) {
+        return(
+        <View style={{width:60,height:60, justifyContent:'center', alignContent:'center'}}>
+          <WaveIndicator count={15} color="rgb(115,0,10)" size={32} waveFactor={.5}>
+
+          </WaveIndicator>
+        </View>
+        )
+      }
        return (
           <View style={{}}>
-              <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:60}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+            {Platform.OS === 'ios' ? 
+              <ImageBackground defaultSource={require('./assets/blank2.jpeg')} style={{width:60,height:60}} imageStyle={{borderRadius:120}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
                 {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-              </ImageBackground>
+              </ImageBackground> : <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:120}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
+                {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+              </ImageBackground>}
           </View>
         )
       }
@@ -399,22 +426,23 @@ export function ChatsScreen(props) {
           }
         }}>
             <View style={{flexDirection:'row',padding:15,backgroundColor:'white'}}>
-              <TouchableOpacity onPress={() => {
-                userData.setProfileView(item.id)
-                this.floatingAction.animateButton();
-                navigation.navigate('ProfileView')
-              }}>
-                <ImageBackground
-                  style={{width:60,height:60}}
-                  imageStyle={{borderRadius:60}}
-                  source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
-                    {isOnline ? 
-                    <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-                </ImageBackground>
-              </TouchableOpacity>
+                <Pressable /*onPress={() => {
+                  userData.setProfileView(item.id)
+                  this.floatingAction.animateButton();
+                  navigation.navigate('ProfileView')
+                }*/>
+                  <ImageBackground
+                    style={{width:60,height:60}}
+                    imageStyle={{borderRadius:60}}
+                    source={item.image ? {uri: item.image} : require('./assets/blank2.jpeg')}>
+                      {isOnline ? 
+                      <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
+                  </ImageBackground>
+                </Pressable>
             <View>
               <Text style={styles.chatListItemLabel}>{item.name}</Text>
-              <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text>
+              {item.role === 'user' && item.last_active ? <Text style={{fontSize:12,fontWeight:'400',color:'black',marginLeft:'12%',marginTop:'5%'}}>{isOnline? 'Last Online: Now': 'Last Online: '+moment(new Date(item.last_active)).fromNow()}</Text> :
+              <Text style={{fontSize:12,color:'black',marginLeft:'12%',marginTop:'5%',fontWeight:'400'}}>{'Created: ' +moment(item.created_at).format('MMMM Do YYYY')}</Text>}
             </View>
           </View>
         </TouchableOpacity>
@@ -505,8 +533,15 @@ export function ChatsScreen(props) {
               </TouchableOpacity>
             </View>
               <ChannelList
-                key={key}
+                //key={key}
                 Preview={CustomListItem}
+                channelRenderFilterFn={(channels) => {
+                  if (selectedType === 0) {
+                    return channels.filter((channel) => channel.type === 'messaging');
+                  } else if (selectedType === 1) {
+                    return channels.filter((channel) => channel.type === 'team');
+                  }
+                }}
                 PreviewAvatar={CustomAvatar}
                   filters={filter} 
                   options={options}

@@ -6,7 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-
+import LinearGradient from 'react-native-linear-gradient';
 import {majors,classes} from './consts/majors'
 
 
@@ -19,7 +19,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import Parse from 'parse/react-native';
+//import Parse from 'parse/react-native';
 import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/RegistrationScreenStyles';
@@ -239,25 +239,22 @@ const RegisterError = () => {
 
   if (registraionSuccess) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#a9a9a9',
-          justifyContent: 'center',
-        }}>
+      <LinearGradient
+      colors={['white', 'white' ,'#73000a']}
+      style={styles.gradient}>
         <Image
           source={require('./assets/checkmark.png')}
           style={{
-            height: 150,
+            height: 250,
             resizeMode: 'contain',
             alignSelf: 'center',
           }}
         />
         <Text style={styles.textStyle}>Registration Successful</Text>
-        <TouchableOpacity testID='finishbtn' style={styles.buttonStyle} onPress={() => reset()}>
+        <TouchableOpacity testID='finishbtn' style={styles.buttonStyle2} onPress={() => reset()}>
           <Text style={styles.buttonTextStyle}>Finish</Text>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
     );
   }
 
@@ -270,7 +267,11 @@ const RegisterError = () => {
   }
 
   return (
-    <SafeAreaView testID='regview' style={styles.container}>
+    <LinearGradient
+      colors={['#73000a', '#73000a' ,'white']}
+      style={styles.gradient}
+      testID='regview'
+    >      
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
           <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
@@ -281,7 +282,7 @@ const RegisterError = () => {
               <Text style={styles.imageTextStyle}>                 
               {image
               ? 'Pic Loaded ✅'
-              : 'Select an image from your library'}</Text>
+              : 'Add photo here'}</Text>
             </ImageBackground>
           </TouchableOpacity>
           <Text style={styles.textStyle}>Now we just need some info</Text>
@@ -379,7 +380,7 @@ const RegisterError = () => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </LinearGradient>
   );
 }
 

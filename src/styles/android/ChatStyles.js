@@ -71,7 +71,8 @@ export default StyleSheet.create({
     marginRight: 16,
   },
   chatListItemLabel: {
-    fontSize: 24,
+    fontSize: 22,
+    fontWeight:'bold',
     marginLeft:'10%',
     color: 'black',
   },
@@ -100,6 +101,37 @@ export default StyleSheet.create({
   btnParentSection: {
     alignItems: 'center',
     marginTop: 30,
+  },
+  viewProfileImg: {
+    width: 200,
+    height: 200,
+    borderRadius: 90,
+  },
+  viewNameText: {
+    fontSize: 40,
+    fontWeight: '600',
+    marginTop: 20,
+    textAlign: 'center',
+    color: '#1a1a1a',
+  },
+  viewMajorText: {
+    fontSize: 25,
+    fontWeight: '400',
+    marginTop: 10,
+    textAlign: 'center',
+    color: '#737373',
+  },
+  viewBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+ viewBioText: {
+    fontSize: 18,
+    marginTop: 20,
+    fontWeight: '400',
+    textAlign: 'center',
+    color: '#737373',
   },
   btnSection: {
     width: 225,

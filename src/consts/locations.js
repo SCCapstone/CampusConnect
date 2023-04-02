@@ -20,7 +20,7 @@ export const locations = {
     sumwalt:{latitude:33.9959030508143, longitude:-81.03034977294449},
     thomas_cooper:{latitude:33.99519144487392, longitude:-81.02820400581858},
     calcott:{latitude:33.99610763643245, longitude:-81.02637473928951},
-    blatt:{latitude:3.99185126479208, longitude:-81.02691654547601},
+    blatt:{latitude:33.99185126479208, longitude:-81.02691654547601},
     drayton_hall:{latitude:33.99706858233153, longitude:-81.0305582536626},
     swearingen:{latitude:33.98983621934417, longitude:-81.0292476560565},
     three_hundred_main:{latitude:33.9900086046365, longitude:-81.02815138508736},

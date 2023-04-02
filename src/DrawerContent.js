@@ -18,7 +18,7 @@ import {useEffect, useContext} from 'react';
 import AppContext from './AppContext';
 import { useChatClient } from './useChatClient';
 import {useNavigation} from '@react-navigation/native';
-
+import { LinearGradient } from 'react-native-svg';
 import iosstyles from './styles/ios/DrawerContentStyles';
 import androidstyles from './styles/android/DrawerContentStyles';
 
@@ -38,7 +38,6 @@ export function DrawerContent(props) {
   const userData = useContext(AppContext);
 
   const navigation = useNavigation()
-  const {chatClientIsReady} =useChatClient();//dont question me
   const DeleteAlert = () => {
     Alert.alert('Delete Photo', 'Do you want to delete your photo?', [
       {text: 'Yes', onPress: () => deletePhoto()},
@@ -69,6 +68,7 @@ export function DrawerContent(props) {
   const SignOut = async () => {
 
     auth().signOut();
+    StreamChat.getInstance(chatApiKey).disconnectUser();
 
 
   };
@@ -78,6 +78,7 @@ export function DrawerContent(props) {
   }, []);
 
   return (
+
     <View style={{flex: 1}}>
       <DrawerContentScrollView
         {...props}
@@ -114,8 +115,14 @@ export function DrawerContent(props) {
             </View>
           </View>
           <View style={styles.userInfoBox}>
-            <Icon onPress={()=> {navigation.navigate('CalendarPage')}} type='font-awesome-5' name='calendar-alt' size={80}></Icon>
-          </View>
+          <TouchableOpacity onPress={() => {navigation.navigate('CalendarPage')}}>
+            <Image 
+            source={require('./assets/cal.png')} 
+            style={{ width: 80, height: 80 , marginLeft: 150,
+            }} 
+            />
+          </TouchableOpacity> 
+        </View>
         </ImageBackground>
         <View style={styles.drawerItemsList}>
           <DrawerItemList {...props} />
@@ -141,6 +148,7 @@ export function DrawerContent(props) {
           </TouchableOpacity>
         </View>
       </View>
+
     </View>
   );
 }
