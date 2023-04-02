@@ -54,7 +54,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
     textAlign: 'auto',
-    marginTop: '4%',
+    marginTop: '2%',
     marginLeft: '5%',
     color: 'black',
   },

@@ -827,7 +827,7 @@ export function PostsScreen({navigation}) {
                   <View style={styles.postUserInfo}>
                     <Text style={item.postIsYours ? [styles.name,{fontWeight: 'bold'}] : styles.name}>{item.author}</Text>
                     <Text style={styles.majorText}>
-                      {item.authorMajor} | {item.authorGradYear}
+                      {item.authorMajor} ({item.authorGradYear})
                     </Text>
                   </View>
               ) : (
