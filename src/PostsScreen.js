@@ -276,7 +276,7 @@ export function PostsScreen({navigation}) {
           promises.push(promise)
         });
         Promise.all(promises).then(() => {
-          //setRefreshList(!refresh) 
+          setRefreshList(!refresh) 
           setPosts(posts);
           setImages(images);
           setLoading(false);
@@ -508,7 +508,7 @@ export function PostsScreen({navigation}) {
             Promise.all(promises).then(() => {
               setPosts(posts);
               setImages(images);
-              //setRefreshList(!refresh)
+              setRefreshList(!refresh)
               setLoading(false);
 
             })
@@ -1146,8 +1146,7 @@ export function PostsScreen({navigation}) {
 
       </Modal>
 
-      <Freeze freeze={freeze}>
-        <FlatList
+        <FlashList
         onRefresh={() => {getPosts}}
           //onEndReached={() => {
         //   setPostCount(postCount+6)
@@ -1156,14 +1155,15 @@ export function PostsScreen({navigation}) {
           data={posts}
           ref={list}
           key={refresh}
+          extraData={refresh}
           renderItem={renderPost}
           keyExtractor={item => item.key}
           refreshing={refreshing}
-          initialNumToRender={100}
+          drawDistance={2000}
+          estimatedItemSize={100}
           
         />
-      </Freeze>
-      <FloatingAction
+        <FloatingAction
         color="#73000a"
         ref={ref => {
           this.floatingAction = ref;

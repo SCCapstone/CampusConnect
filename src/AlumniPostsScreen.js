@@ -276,7 +276,7 @@ export function AlumniPostsScreen({navigation}) {
           promises.push(promise)
         });
         Promise.all(promises).then(() => {
-          //setRefreshList(!refresh) 
+          setRefreshList(!refresh) 
           setPosts(posts);
           setImages(images);
           setLoading(false);
@@ -508,7 +508,7 @@ export function AlumniPostsScreen({navigation}) {
             Promise.all(promises).then(() => {
               setPosts(posts);
               setImages(images);
-              //setRefreshList(!refresh)
+              setRefreshList(!refresh)
               setLoading(false);
 
             })
@@ -827,7 +827,7 @@ export function AlumniPostsScreen({navigation}) {
                   <View style={styles.postUserInfo}>
                     <Text style={item.postIsYours ? [styles.name,{fontWeight: 'bold'}] : styles.name}>{item.author}</Text>
                     <Text style={styles.majorText}>
-                      {item.authorMajor} | {item.authorGradYear}
+                      {item.authorMajor} ({item.authorGradYear})
                     </Text>
                   </View>
               ) : (
@@ -1004,7 +1004,7 @@ export function AlumniPostsScreen({navigation}) {
         alignSelf: 'center',
         marginVertical: '75%',
       }}>
-      Alumni Post Here!
+      Alumni post here!
       </Text>}
       <Modal
         animationType="slide"
@@ -1146,8 +1146,7 @@ export function AlumniPostsScreen({navigation}) {
 
       </Modal>
 
-      <Freeze freeze={freeze}>
-        <FlatList
+        <FlashList
         onRefresh={() => {getPosts}}
           //onEndReached={() => {
         //   setPostCount(postCount+6)
@@ -1156,14 +1155,15 @@ export function AlumniPostsScreen({navigation}) {
           data={posts}
           ref={list}
           key={refresh}
+          extraData={refresh}
           renderItem={renderPost}
           keyExtractor={item => item.key}
           refreshing={refreshing}
-          initialNumToRender={100}
+          drawDistance={2000}
+          estimatedItemSize={100}
           
         />
-      </Freeze>
-      <FloatingAction
+        <FloatingAction
         color="#73000a"
         ref={ref => {
           this.floatingAction = ref;
