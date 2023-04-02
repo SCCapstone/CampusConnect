@@ -65,17 +65,21 @@ const LoadEvents = async() => {
     })
 
 //Iterate over each event and follow the link embedded in the title, then scrape the description found on that URL.
-    for (let i = 0; i < defaultItemCount; i++) {
-      const eventLink = $(titleList[i]).children("a").attr("href");
-      const eventHtml = await axios.get(eventLink);
+promises = [];
+for (let i = 0; i < defaultItemCount; i++) {
+    const eventLink = $(titleList[i]).children("a").attr("href");
+    promise = axios.get(eventLink).then((eventHtml) => {
       const event$ = cheerio.load(eventHtml.data);
       const description = event$(".event-details__main-inner").children('p').text();
       descriptionArray.push(description);
+      });
+      promises.push(promise);
     }
 
     const attributes = 5;
     const results = 10;
     let arr = Array(results).fill().map(() => Array(attributes));
+    await Promise.all(promises).then(() => {
     for (let i = 0; i < defaultItemCount; i++) {
         arr[i][0] = titleArray[i];
         arr[i][1] = locationArray[i];
@@ -86,7 +90,8 @@ const LoadEvents = async() => {
         arr[i][6] = descriptionArray[i];
         //console.log(descriptionArray);
       }
-
-      return arr;
-   
+    }).catch((error) => {
+      console.log(error);
+    });
+    return arr;
 }
