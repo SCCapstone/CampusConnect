@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import uuid from 'react-native-uuid';
 
-const axios = require("axios");
+import axios from 'axios';
 const cheerio = require("react-native-cheerio");
 const url = "https://www.eventbrite.com/o/university-of-south-carolina-alumni-association-18391111883";
 const DEFAULTEVENTLOGO = "https://abcnews4.com/resources/media/f4369747-6ca4-496c-9243-5e9e9a0f3089-large16x9_UniversityofSouthCarolinaFormalLogo16x9.jpg?1599583281911";
@@ -65,18 +65,22 @@ const LoadEvents = async() => {
     })
 
 //Iterate over each event and follow the link embedded in the title, then scrape the description found on that URL.
+    promises = [];
     for (let i = 0; i < defaultItemCount; i++) {
       const eventLink = $(titleList[i]).children("a").attr("href");
-      const eventHtml = await axios.get(eventLink);
-      const event$ = cheerio.load(eventHtml.data);
-      const description = event$(".event-details__main-inner").children('p').text();
-      descriptionArray.push(description);
+      promise = axios.get(eventLink).then((eventHtml) => {
+        const event$ = cheerio.load(eventHtml.data);
+        const description = event$(".event-details__main-inner").children('p').text();
+        descriptionArray.push(description);
+      });
+      promises.push(promise);
     }
 
     const attributes = 5;
     const results = 10;
     let arr = Array(results).fill().map(() => Array(attributes));
-    for (let i = 0; i < defaultItemCount; i++) {
+    await Promise.all(promises).then(() => {
+      for (let i = 0; i < defaultItemCount; i++) {
         arr[i][0] = titleArray[i];
         arr[i][1] = locationArray[i];
         arr[i][2] = dateArray[i];
@@ -84,9 +88,11 @@ const LoadEvents = async() => {
         arr[i][4] = uuid.v4();
         arr[i][5] = imageArray[i];
         arr[i][6] = descriptionArray[i];
-        //console.log(descriptionArray);
       }
-
-      return arr;
+    }).catch((error) => {
+      console.log(error);
+    });
+    return arr
+    
    
 }
