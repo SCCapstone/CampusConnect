@@ -89,7 +89,7 @@ export function ChatsScreen(props) {
     const [userSearch,setUserSearch] = useState('')
     const [searchModalVisible,setSearchModalVisible] = useState(false)
     const [data, setData] = useState([]);
-    const searchLimit = 30;
+    const searchLimit = 50;
     const [addGroupVisible,setAddGroupVisible] = useState(false)
       //Right here, create a query that will only return the private DMs a User is in
 

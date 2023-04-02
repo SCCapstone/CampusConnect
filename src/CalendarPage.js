@@ -355,7 +355,7 @@ export function CalendarPage({navigation}) {
                     <MapView style={{flex:1}} 
                     zoomControlEnabled={true}
                     showsUserLocation={true}
-                    followsUserLocation={true}
+                    followsUserLocation={false}
                     initialRegion=
                         {{latitude:origin.latitude, 
                         longitude:origin.longitude,
