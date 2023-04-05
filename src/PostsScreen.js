@@ -493,7 +493,7 @@ export function PostsScreen({navigation}) {
                   uri: post.extraData,
                   key: documentSnapshot.id,
                 });
-                setImageMap(imageMap.set(postIndex, imageIndex));
+                setImageMap(imageMap.set(post.key, imageIndex));
                 imageIndex++;
               }
               postIndex++;
@@ -526,7 +526,7 @@ export function PostsScreen({navigation}) {
     else
       firestore().collection('Posts').doc(item.key).delete();
   };
-  const OpenImage = ({index}) => {
+  const OpenImage = (index) => {
     setImageIndex(imageMap.get(index));
     setIsVisible(true);
   };
@@ -861,7 +861,7 @@ export function PostsScreen({navigation}) {
               <Text style={styles.body}>{item.body.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')}</Text>
               {item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') > 0 ? <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderDescription={((string) => {return (<Text style={{color:'black',fontSize:10}}>{string}</Text>)})} renderTitle={((string) => {return (<Text style={{color:'black',fontWeight:'bold'}}>{string}</Text>)})} renderText={(() => {return ''})} header='' text={item.body} />: null}
               {(item.extraData && item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') < 1) ? (
-                <TouchableOpacity onPress={() => {OpenImage({index})}}>
+                <TouchableOpacity onPress={() => {OpenImage(item.key)}}>
                   <FastImage
                     source={{uri: item.extraData}}
                     style={styles.postImage}
