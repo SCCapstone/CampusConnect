@@ -399,8 +399,6 @@ export function PostsScreen({navigation}) {
 
   useEffect(() => {
     //Make sure to only set this once next time
-
-
     navigation.setOptions({
       headerRight: () => (
         <SelectDropdown
@@ -458,63 +456,60 @@ export function PostsScreen({navigation}) {
     }
     //gets posts asynchronously in the background
     const subscriber = query.onSnapshot(querySnapshot => {
-        if (!querySnapshot.metadata.hasPendingWrites) {
-          //This will prevent unecessary reads, because the firebase server may be doing something
-          postIndex = 0;
-          var imageIndex = 0;
-          const posts = [];
-          const images = [];
-          const promises = [];
-          querySnapshot.forEach(documentSnapshot => {
-            promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
-              const post =({
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                author: data.get('name'),
-                authorGradYear: data.get('gradYear'),
-                authorMajor: data.get('major'),
-                pfp: data.get('pfp'),
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              });
-                //Determine whether the user has upvoted or downvoted the post yet
-                post.isUpVoted = post.upvoters[auth().currentUser.uid];
-                post.isDownVoted = post.downvoters[auth().currentUser.uid];
-                post.postIsYours = post.user === auth().currentUser.uid
-                if (documentSnapshot.data().author === 'USC Student') {
-                  post.author = 'USC Student'
-                  post.pfp = ''
-                }
-                if (sortMode !=='Anonymous' && post.author === 'USC Student') {} //This makes sure that anonymous posts are only 
-                //shown if the user has selected the anonymous filter
-                else {
-                  posts.push(post);
-                  if (post.extraData) {
-                    images.push({
-                      uri: post.extraData,
-                      key: documentSnapshot.id,
-                    });
-                    setImageMap(imageMap.set(postIndex, imageIndex));
-                    imageIndex++;
-                  }
-
-                  postIndex++;
-                }
-            })
-            promises.push(promise)
-
-          });
-            Promise.all(promises).then(() => {
-              setPosts(posts);
-              setImages(images);
-              setRefreshList(!refresh)
-              setLoading(false);
-
-            })
-
-          }
+      if (!querySnapshot.metadata.hasPendingWrites) {
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = new Array(querySnapshot.size); // Create an array of the same length as the querySnapshot
+        const images = [];
+        const promises = [];
+        querySnapshot.forEach((documentSnapshot, index) => { // Add the index parameter
+          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
+            const post = ({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+              author: data.get('name'),
+              authorGradYear: data.get('gradYear'),
+              authorMajor: data.get('major'),
+              pfp: data.get('pfp'),
+              isUpVoted: false,
+              isDownVoted: false,
+              postIsYours:false
+            });
+            //Determine whether the user has upvoted or downvoted the post yet
+            post.isUpVoted = post.upvoters[auth().currentUser.uid];
+            post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === auth().currentUser.uid
+            if (documentSnapshot.data().author === 'USC Student') {
+              post.author = 'USC Student'
+              post.pfp = ''
+            }
+    
+            if (sortMode !== 'Anonymous' && post.author === 'USC Student') {} //This makes sure that anonymous posts are only 
+            //shown if the user has selected the anonymous filter
+            else {
+              posts[index] = post; // Use the index to insert the post at the correct position
+              if (post.extraData) {
+                images.push({
+                  uri: post.extraData,
+                  key: documentSnapshot.id,
+                });
+                setImageMap(imageMap.set(postIndex, imageIndex));
+                imageIndex++;
+              }
+              postIndex++;
+            }
+          })
+          promises.push(promise);
         });
+    
+        Promise.all(promises).then(() => {
+          setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
+          setImages(images);
+          setRefreshList(!refresh);
+          setLoading(false);
+        });
+      }
+    });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
