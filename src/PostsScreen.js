@@ -134,6 +134,7 @@ export function PostsScreen({navigation}) {
     }
   };
 
+  //Apply the same bug fix with the order of the replies here
   const getReplies = async (item) => {
     setRepliesLoading(true)
     const postReplies= [];
@@ -180,19 +181,7 @@ export function PostsScreen({navigation}) {
         setRefreshList(!refresh)
       })
 
-
     })
-
-    //Wait for all the replies to load
-    /*Promise.all(promises).then(() => {
-      //The first one will sort by upvote count,then date.
-      //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
-      setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
-      setRepliesLoading(false)
-      setRefreshList(!refresh)
-    })*/
-
-
   
   }
 
@@ -235,15 +224,16 @@ export function PostsScreen({navigation}) {
    //   .limit(5) 
     }
     query.get().then(snapShot => {
-      if(!snapShot.metadata.hasPendingWrites) {
+      if (!snapShot.metadata.hasPendingWrites) {
         postIndex = 0;
         var imageIndex = 0;
-        const posts = [];
+        const posts = new Array(snapShot.size); // Create an array of the same length as the snapShot
         const images = [];
         const promises = [];
-        snapShot.forEach(documentSnapshot => {
-          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
-            const post =({
+        const postImageMapping = {}; // Initialize postImageMapping object
+        snapShot.docs.forEach((documentSnapshot, index) => { // Add the index parameter
+          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then(data => {
+            const post = ({
               ...documentSnapshot.data(),
               key: documentSnapshot.id,
               author: data.get('name'),
@@ -254,30 +244,30 @@ export function PostsScreen({navigation}) {
               isDownVoted: false,
               postIsYours:false
             });
-              //Determine whether the user has upvoted or downvoted the post yet
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === auth().currentUser.uid
-              if (documentSnapshot.data().author === 'USC Student') {
-                post.author = 'USC Student'
-                post.pfp = ''
-              }
-              posts.push(post);
+    
+            //Determine whether the user has upvoted or downvoted the post yet
+            post.isUpVoted = post.upvoters[auth().currentUser.uid];
+            post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === auth().currentUser.uid
+    
+            if (sortMode !== 'Anonymous' && post.author === 'USC Student') {return} else {
+              posts[index] = post; // Use the index to insert the post at the correct position
               if (post.extraData) {
                 images.push({
                   uri: post.extraData,
                   key: documentSnapshot.id,
                 });
-                setImageMap(imageMap.set(postIndex, imageIndex));
+                setImageMap(imageMap.set(post.key, imageIndex));
                 imageIndex++;
               }
               postIndex++;
-          })
-          promises.push(promise)
+            }
+          });
+          promises.push(promise);
         });
         Promise.all(promises).then(() => {
           setRefreshList(!refresh) 
-          setPosts(posts);
+          setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
           setImages(images);
           setLoading(false);
         })
