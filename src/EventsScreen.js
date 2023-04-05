@@ -94,7 +94,7 @@ export function EventsScreen({ navigation }) {
               <Image source={{ uri: selectedEvent[5] }} style={{width: '100%', height: 200, resizeMode: 'cover', borderRadius: 10, marginTop: 16,}} />
               <Text style={{fontSize: 16, color: 'black', marginTop: 16, lineHeight: 24}}>{selectedEvent[6]}</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={{  fontSize: 18, fontWeight: 'bold', color: '#000000', marginTop: 16,}}>Close</Text>
+                <Text style={{ backgroundColor: '#a8a1a6', borderRadius: 8, fontSize: 18, fontWeight: 'bold', color: '#000000', marginTop: 16, marginRight: '85%',}}>Close</Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>
