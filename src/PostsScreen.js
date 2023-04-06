@@ -224,7 +224,6 @@ export function PostsScreen({navigation}) {
    //   .limit(5) 
     }
     query.get().then(snapShot => {
-      if (!snapShot.metadata.hasPendingWrites) {
         postIndex = 0;
         var imageIndex = 0;
         const posts = new Array(snapShot.size); // Create an array of the same length as the snapShot
@@ -232,6 +231,7 @@ export function PostsScreen({navigation}) {
         const promises = [];
         const postImageMapping = {}; // Initialize postImageMapping object
         snapShot.docs.forEach((documentSnapshot, index) => { // Add the index parameter
+          if (sortMode !== 'Anonymous' && documentSnapshot.get('author') === 'USC Student') {return}
           promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then(data => {
             const post = ({
               ...documentSnapshot.data(),
@@ -250,29 +250,27 @@ export function PostsScreen({navigation}) {
             post.isDownVoted = post.downvoters[auth().currentUser.uid];
             post.postIsYours = post.user === auth().currentUser.uid
     
-            if (sortMode !== 'Anonymous' && post.author === 'USC Student') {return} else {
-              posts[index] = post; // Use the index to insert the post at the correct position
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(post.key, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
+             
+            posts[index] = post; // Use the index to insert the post at the correct position
+            if (post.extraData) {
+              images.push({
+                uri: post.extraData,
+                key: documentSnapshot.id,
+              });
+              setImageMap(imageMap.set(post.key, imageIndex));
+              imageIndex++;
             }
+            postIndex++;
+            
           });
           promises.push(promise);
         });
         Promise.all(promises).then(() => {
-          setRefreshList(!refresh) 
+          //setRefreshList(!refresh) 
           setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
           setImages(images);
           setLoading(false);
-        })
-
-      }
+        });
       setRefresh(false)
     });
   }
@@ -446,7 +444,6 @@ export function PostsScreen({navigation}) {
     }
     //gets posts asynchronously in the background
     const subscriber = query.onSnapshot(querySnapshot => {
-      if (!querySnapshot.metadata.hasPendingWrites) {
         postIndex = 0;
         var imageIndex = 0;
         const posts = new Array(querySnapshot.size); // Create an array of the same length as the querySnapshot
@@ -498,7 +495,6 @@ export function PostsScreen({navigation}) {
           setRefreshList(!refresh);
           setLoading(false);
         });
-      }
     });
 
     // Unsubscribe from events when no longer in use
@@ -1132,7 +1128,7 @@ export function PostsScreen({navigation}) {
       </Modal>
 
         <FlashList
-        onRefresh={() => {getPosts}}
+        onRefresh={() => getPosts()}
           //onEndReached={() => {
         //   setPostCount(postCount+6)
         // }}
