@@ -307,8 +307,7 @@ export function PostsScreen({navigation}) {
     if (
       (postText &&
       postText.length < 1000 &&
-      postText.split(/\r\n|\r|\n/).length <= 25) || (image && !postText) || (postText.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') > 0 && postText.length < 1000 && postText.split(/\r\n|\r|\n/).length <= 25)
-    ) {
+      postText.split(/\r\n|\r|\n/).length <= 25) || (image && !postText)) {
       setPostUploading(true)
       if (image) {await uploadPic()}
       if(!postIsAnonymous){
@@ -844,7 +843,7 @@ export function PostsScreen({navigation}) {
             </View>
             <View style={styles.postImageView}>
               <Text style={styles.body}>{item.body.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')}</Text>
-              {item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') > 0 ? <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderDescription={((string) => {return (<Text style={{color:'black',fontSize:10}}>{string}</Text>)})} renderTitle={((string) => {return (<Text style={{color:'black',fontWeight:'bold'}}>{string}</Text>)})} renderText={(() => {return ''})} header='' text={item.body} />: null}
+              {item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') >= 0 ? <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderDescription={((string) => {return (<Text style={{color:'black',fontSize:10}}>{string}</Text>)})} renderTitle={((string) => {return (<Text style={{color:'black',fontWeight:'bold'}}>{string}</Text>)})} renderText={(() => {return ''})} header='' text={item.body} />: null}
               {(item.extraData && item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') < 1) ? (
                 <TouchableOpacity onPress={() => {OpenImage(item.key)}}>
                   <FastImage
