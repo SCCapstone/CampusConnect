@@ -305,10 +305,9 @@ export function PostsScreen({navigation}) {
 
   const CreatePost = async () => {
     if (
-      postText &&
+      (postText &&
       postText.length < 1000 &&
-      postText.split(/\r\n|\r|\n/).length <=
-        25 /*this last one checks that there are not too many lines */
+      postText.split(/\r\n|\r|\n/).length <= 25) || (image && !postText) || (postText.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') > 0 && postText.length < 1000 && postText.split(/\r\n|\r|\n/).length <= 25)
     ) {
       setPostUploading(true)
       if (image) {await uploadPic()}
@@ -492,7 +491,7 @@ export function PostsScreen({navigation}) {
         Promise.all(promises).then(() => {
           setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
           setImages(images);
-          setRefreshList(!refresh);
+          //setRefreshList(!refresh);
           setLoading(false);
         });
     });
@@ -1135,8 +1134,6 @@ export function PostsScreen({navigation}) {
         //  onEndReachedThreshold={.9}
           data={posts}
           ref={list}
-          key={refresh}
-          extraData={refresh}
           renderItem={renderPost}
           keyExtractor={item => item.key}
           refreshing={refreshing}
