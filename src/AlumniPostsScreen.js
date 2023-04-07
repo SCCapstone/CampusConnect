@@ -68,12 +68,12 @@ if (Platform.OS === 'ios') {
   commentStyles = androidCommentStyles
 }
 
+
 export function AlumniPostsScreen({navigation}) {
- /* if (Platform.OS === 'android') {
-    if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }*/
+  POST_COLLECTION_NAME = 'AlumniPosts'
+  POST_STORAGE_NAME = '/AlumniPosts/'
+  ANONYMOUS_USER_NAME = 'USC Alum'
+  RESET_PATH = 'Alumni'
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -134,10 +134,11 @@ export function AlumniPostsScreen({navigation}) {
     }
   };
 
+  //Apply the same bug fix with the order of the replies here
   const getReplies = async (item) => {
     setRepliesLoading(true)
     const postReplies= [];
-    var postsRef = firestore().collection('AlumniPosts').doc(item.key)
+    var postsRef = firestore().collection(POST_COLLECTION_NAME).doc(item.key)
     promises = []
     //gets posts asynchronously in the background
     postsRef.get().then( doc => {
@@ -159,8 +160,8 @@ export function AlumniPostsScreen({navigation}) {
             }
             tempReply.pfp = user.pfp
             tempReply.author = user.name
-            if (reply.data().author === 'USC Student') {
-              tempReply.author = 'USC Student'
+            if (reply.data().author === ANONYMOUS_USER_NAME) {
+              tempReply.author = ANONYMOUS_USER_NAME
               tempReply.pfp = ''
             }
             tempReply.isUpVoted = tempReply.upvoters[auth().currentUser.uid];
@@ -180,25 +181,13 @@ export function AlumniPostsScreen({navigation}) {
         setRefreshList(!refresh)
       })
 
-
     })
-
-    //Wait for all the replies to load
-    /*Promise.all(promises).then(() => {
-      //The first one will sort by upvote count,then date.
-      //setPostReplies(postReplies.sort(function(a,b) {return b.upvoteCount - a.upvoteCount || a.date - b.date;}))
-      setPostReplies(postReplies.sort(function(a,b) {return a.date - b.date;}))
-      setRepliesLoading(false)
-      setRefreshList(!refresh)
-    })*/
-
-
   
   }
 
   const getPosts = () => {
     setRefresh(true);
-    var postsRef = firestore().collection('AlumniPosts')
+    var postsRef = firestore().collection(POST_COLLECTION_NAME)
     var query; 
     if(search) {
       query = postsRef
@@ -214,7 +203,7 @@ export function AlumniPostsScreen({navigation}) {
     } else if (sortMode === 'Worst') {
       query = postsRef
       .orderBy('upvoteCount', 'asc')
-      .orderBy('date', 'desc')
+      .orderBy('date', 'asc')
       //.limit(5) 
 
     } else if (sortMode === 'New') {
@@ -224,7 +213,7 @@ export function AlumniPostsScreen({navigation}) {
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
-      .where('author','==', 'USC Student')
+      .where('author','==', ANONYMOUS_USER_NAME)
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
      // .limit(5) 
@@ -235,15 +224,16 @@ export function AlumniPostsScreen({navigation}) {
    //   .limit(5) 
     }
     query.get().then(snapShot => {
-      if(!snapShot.metadata.hasPendingWrites) {
         postIndex = 0;
         var imageIndex = 0;
-        const posts = [];
+        const posts = new Array(snapShot.size); // Create an array of the same length as the snapShot
         const images = [];
         const promises = [];
-        snapShot.forEach(documentSnapshot => {
-          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
-            const post =({
+        const postImageMapping = {}; // Initialize postImageMapping object
+        snapShot.docs.forEach((documentSnapshot, index) => { // Add the index parameter
+          if (sortMode !== 'Anonymous' && documentSnapshot.get('author') === ANONYMOUS_USER_NAME) {return}
+          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then(data => {
+            const post = ({
               ...documentSnapshot.data(),
               key: documentSnapshot.id,
               author: data.get('name'),
@@ -254,35 +244,33 @@ export function AlumniPostsScreen({navigation}) {
               isDownVoted: false,
               postIsYours:false
             });
-              //Determine whether the user has upvoted or downvoted the post yet
-              post.isUpVoted = post.upvoters[auth().currentUser.uid];
-              post.isDownVoted = post.downvoters[auth().currentUser.uid];
-              post.postIsYours = post.user === auth().currentUser.uid
-              if (documentSnapshot.data().author === 'USC Student') {
-                post.author = 'USC Student'
-                post.pfp = ''
-              }
-              posts.push(post);
-              if (post.extraData) {
-                images.push({
-                  uri: post.extraData,
-                  key: documentSnapshot.id,
-                });
-                setImageMap(imageMap.set(postIndex, imageIndex));
-                imageIndex++;
-              }
-              postIndex++;
-          })
-          promises.push(promise)
+    
+            //Determine whether the user has upvoted or downvoted the post yet
+            post.isUpVoted = post.upvoters[auth().currentUser.uid];
+            post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === auth().currentUser.uid
+    
+             
+            posts[index] = post; // Use the index to insert the post at the correct position
+            if (post.extraData) {
+              images.push({
+                uri: post.extraData,
+                key: documentSnapshot.id,
+              });
+              setImageMap(imageMap.set(post.key, imageIndex));
+              imageIndex++;
+            }
+            postIndex++;
+            
+          });
+          promises.push(promise);
         });
         Promise.all(promises).then(() => {
-          setRefreshList(!refresh) 
-          setPosts(posts);
+          //setRefreshList(!refresh) 
+          setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
           setImages(images);
           setLoading(false);
-        })
-
-      }
+        });
       setRefresh(false)
     });
   }
@@ -296,7 +284,7 @@ export function AlumniPostsScreen({navigation}) {
     ){
       setPostUploading(true)
       firestore()
-        .collection('AlumniPosts')
+        .collection(POST_COLLECTION_NAME)
         .doc(post)
         .update({
           body: postText,
@@ -305,7 +293,7 @@ export function AlumniPostsScreen({navigation}) {
           .then(() => {
             navigation.reset({
               index: 0,
-              routes: [{name: 'Alumni'}],
+              routes: [{name: RESET_PATH}],
             });
           })
           .catch(error => {
@@ -317,16 +305,14 @@ export function AlumniPostsScreen({navigation}) {
 
   const CreatePost = async () => {
     if (
-      postText &&
+      (postText &&
       postText.length < 1000 &&
-      postText.split(/\r\n|\r|\n/).length <=
-        25 /*this last one checks that there are not too many lines */
-    ) {
+      postText.split(/\r\n|\r|\n/).length <= 25) || (image && !postText)) {
       setPostUploading(true)
       if (image) {await uploadPic()}
       if(!postIsAnonymous){
         firestore()
-          .collection('AlumniPosts')
+          .collection(POST_COLLECTION_NAME)
           .doc()
           .set({
             author: userData.name,
@@ -349,7 +335,7 @@ export function AlumniPostsScreen({navigation}) {
             closeModal();
             navigation.reset({
               index: 0,
-              routes: [{name: 'Alumni'}],
+              routes: [{name: RESET_PATH}],
             });
 
           })
@@ -359,10 +345,10 @@ export function AlumniPostsScreen({navigation}) {
         }
       else if (postIsAnonymous) {
         firestore()
-        .collection('AlumniPosts')
+        .collection(POST_COLLECTION_NAME)
         .doc()
         .set({
-          author: 'USC Student',
+          author: ANONYMOUS_USER_NAME,
           authorGradYear: '',
           authorMajor: '',
           body: postText,
@@ -375,14 +361,14 @@ export function AlumniPostsScreen({navigation}) {
           extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
-          searchAuthor:'USC STUDENT',
+          searchAuthor: ANONYMOUS_USER_NAME.toUpperCase(),
           edited:false
         })
         .then(() => {
           closeModal();
           navigation.reset({
             index: 0,
-            routes: [{name: 'Alumni'}],
+            routes: [{name: RESET_PATH}],
           });
 
 
@@ -399,8 +385,6 @@ export function AlumniPostsScreen({navigation}) {
 
   useEffect(() => {
     //Make sure to only set this once next time
-
-
     navigation.setOptions({
       headerRight: () => (
         <SelectDropdown
@@ -421,7 +405,7 @@ export function AlumniPostsScreen({navigation}) {
       ),
     });
 
-    var postsRef = firestore().collection('AlumniPosts')
+    var postsRef = firestore().collection(POST_COLLECTION_NAME)
     var query; 
     if(search) {
       query = postsRef
@@ -437,7 +421,7 @@ export function AlumniPostsScreen({navigation}) {
     } else if (sortMode === 'Worst') {
       query = postsRef
       .orderBy('upvoteCount', 'asc')
-      .orderBy('date', 'desc')
+      .orderBy('date', 'asc')
     //  .limit(postCount) 
 
     } else if (sortMode === 'New') {
@@ -447,7 +431,7 @@ export function AlumniPostsScreen({navigation}) {
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
-      .where('author','==', 'USC Student')
+      .where('author','==', ANONYMOUS_USER_NAME)
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
    //   .limit(postCount) 
@@ -458,63 +442,58 @@ export function AlumniPostsScreen({navigation}) {
     }
     //gets posts asynchronously in the background
     const subscriber = query.onSnapshot(querySnapshot => {
-        if (!querySnapshot.metadata.hasPendingWrites) {
-          //This will prevent unecessary reads, because the firebase server may be doing something
-          postIndex = 0;
-          var imageIndex = 0;
-          const posts = [];
-          const images = [];
-          const promises = [];
-          querySnapshot.forEach(documentSnapshot => {
-            promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
-              const post =({
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-                author: data.get('name'),
-                authorGradYear: data.get('gradYear'),
-                authorMajor: data.get('major'),
-                pfp: data.get('pfp'),
-                isUpVoted: false,
-                isDownVoted: false,
-                postIsYours:false
-              });
-                //Determine whether the user has upvoted or downvoted the post yet
-                post.isUpVoted = post.upvoters[auth().currentUser.uid];
-                post.isDownVoted = post.downvoters[auth().currentUser.uid];
-                post.postIsYours = post.user === auth().currentUser.uid
-                if (documentSnapshot.data().author === 'USC Student') {
-                  post.author = 'USC Student'
-                  post.pfp = ''
-                }
-                if (sortMode !=='Anonymous' && post.author === 'USC Student') {} //This makes sure that anonymous posts are only 
-                //shown if the user has selected the anonymous filter
-                else {
-                  posts.push(post);
-                  if (post.extraData) {
-                    images.push({
-                      uri: post.extraData,
-                      key: documentSnapshot.id,
-                    });
-                    setImageMap(imageMap.set(postIndex, imageIndex));
-                    imageIndex++;
-                  }
-
-                  postIndex++;
-                }
-            })
-            promises.push(promise)
-
-          });
-            Promise.all(promises).then(() => {
-              setPosts(posts);
-              setImages(images);
-              setRefreshList(!refresh)
-              setLoading(false);
-
-            })
-
-          }
+        postIndex = 0;
+        var imageIndex = 0;
+        const posts = new Array(querySnapshot.size); // Create an array of the same length as the querySnapshot
+        const images = [];
+        const promises = [];
+        querySnapshot.forEach((documentSnapshot, index) => { // Add the index parameter
+          promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then( data => {
+            const post = ({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+              author: data.get('name'),
+              authorGradYear: data.get('gradYear'),
+              authorMajor: data.get('major'),
+              pfp: data.get('pfp'),
+              isUpVoted: false,
+              isDownVoted: false,
+              postIsYours:false
+            });
+            //Determine whether the user has upvoted or downvoted the post yet
+            post.isUpVoted = post.upvoters[auth().currentUser.uid];
+            post.isDownVoted = post.downvoters[auth().currentUser.uid];
+            post.postIsYours = post.user === auth().currentUser.uid
+            if (documentSnapshot.data().author === ANONYMOUS_USER_NAME) {
+              post.author = ANONYMOUS_USER_NAME
+              post.pfp = ''
+            }
+    
+            if (sortMode !== 'Anonymous' && post.author === ANONYMOUS_USER_NAME) {} //This makes sure that anonymous posts are only 
+            //shown if the user has selected the anonymous filter
+            else {
+              posts[index] = post; // Use the index to insert the post at the correct position
+              if (post.extraData) {
+                images.push({
+                  uri: post.extraData,
+                  key: documentSnapshot.id,
+                });
+                setImageMap(imageMap.set(post.key, imageIndex));
+                imageIndex++;
+              }
+              postIndex++;
+            }
+          })
+          promises.push(promise);
         });
+    
+        Promise.all(promises).then(() => {
+          setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
+          setImages(images);
+          //setRefreshList(!refresh);
+          setLoading(false);
+        });
+    });
 
     // Unsubscribe from events when no longer in use
     return () => subscriber();
@@ -523,15 +502,15 @@ export function AlumniPostsScreen({navigation}) {
   const DeletePost = ({item}) => {
     if(item.isReply){
       firestore().collection('Replies').doc(item.key).delete();
-      firestore().collection('AlumniPosts').doc(item.post).update({
+      firestore().collection(POST_COLLECTION_NAME).doc(item.post).update({
         replies:firebase.firestore.FieldValue.arrayRemove(item.key),
         replyCount:firebase.firestore.FieldValue.increment(-1)
       }).then(() => {getReplies(replyItem);}).catch(()=>{})
     }
     else
-      firestore().collection('AlumniPosts').doc(item.key).delete();
+      firestore().collection(POST_COLLECTION_NAME).doc(item.key).delete();
   };
-  const OpenImage = ({index}) => {
+  const OpenImage = (index) => {
     setImageIndex(imageMap.get(index));
     setIsVisible(true);
   };
@@ -544,7 +523,7 @@ export function AlumniPostsScreen({navigation}) {
       if (item.isReply)
         postRef = firestore().collection('Replies').doc(item.key);
       else
-        postRef = firestore().collection('AlumniPosts').doc(item.key);
+        postRef = firestore().collection(POST_COLLECTION_NAME).doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -589,7 +568,7 @@ export function AlumniPostsScreen({navigation}) {
       if (item.isReply)
         postRef = firestore().collection('Replies').doc(item.key);
       else
-        postRef = firestore().collection('AlumniPosts').doc(item.key);
+        postRef = firestore().collection(POST_COLLECTION_NAME).doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -664,18 +643,18 @@ export function AlumniPostsScreen({navigation}) {
               isReply:true,
               post: item.key
             }).catch(()=> {})
-            firestore().collection('AlumniPosts').doc(item.key).update({
+            firestore().collection(POST_COLLECTION_NAME).doc(item.key).update({
               replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
               replyCount:firebase.firestore.FieldValue.increment(1)
             }).then(() => {getReplies(item);setReply('')}).catch(()=>{})
         }
       else if (postIsAnonymous) {
-        if(item.author === 'USC Student'){
+        if(item.author === ANONYMOUS_USER_NAME){
 
           const replyRef = firestore().collection('Replies').doc();
           replyRef
             .set({
-              author: 'USC Student',
+              author: ANONYMOUS_USER_NAME,
               body: reply,
               upvoteCount: 1,
               date: firestore.FieldValue.serverTimestamp(),
@@ -687,7 +666,7 @@ export function AlumniPostsScreen({navigation}) {
               isReply:true,
               post: item.key
             }).catch(()=> {})
-            firestore().collection('AlumniPosts').doc(item.key).update({
+            firestore().collection(POST_COLLECTION_NAME).doc(item.key).update({
               replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
               replyCount:firebase.firestore.FieldValue.increment(1)
             }).then(() => {getReplies(item);setReply('');setPostIsAnonymous(false)}).catch(()=>{})
@@ -703,7 +682,7 @@ export function AlumniPostsScreen({navigation}) {
   }
 
   const uploadPic = async () => {
-    const reference = storage().ref('/AlumniPosts/' +uuidv4());
+    const reference = storage().ref(POST_STORAGE_NAME +uuidv4());
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
@@ -807,11 +786,11 @@ export function AlumniPostsScreen({navigation}) {
               </View>:null}
             <View style={styles.postUserImageAndInfoBox}>
               <Pressable onPress={() => {
-                if(item.author !== 'USC Student'){
+                if(item.author !== ANONYMOUS_USER_NAME){
                   userData.setProfileView(item.user.replace('/Users/',''))
                   navigation.navigate('ProfileView')
                 }
-                else if (item.author === 'USC Student') {
+                else if (item.author === ANONYMOUS_USER_NAME) {
                   Alert.alert('This user wishes to remain anonymous.')
                 }
               }}>
@@ -823,7 +802,7 @@ export function AlumniPostsScreen({navigation}) {
                   style={styles.postPfp}
                 />
               </Pressable>
-              {item.author !== 'USC Student' ? (
+              {item.author !== ANONYMOUS_USER_NAME ? (
                   <View style={styles.postUserInfo}>
                     <Text style={item.postIsYours ? [styles.name,{fontWeight: 'bold'}] : styles.name}>{item.author}</Text>
                     <Text style={styles.majorText}>
@@ -864,9 +843,9 @@ export function AlumniPostsScreen({navigation}) {
             </View>
             <View style={styles.postImageView}>
               <Text style={styles.body}>{item.body.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')}</Text>
-              {item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') > 0 ? <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderDescription={((string) => {return (<Text style={{color:'black',fontSize:10}}>{string}</Text>)})} renderTitle={((string) => {return (<Text style={{color:'black',fontWeight:'bold'}}>{string}</Text>)})} renderText={(() => {return ''})} header='' text={item.body} />: null}
+              {item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') >= 0 ? <LinkPreview containerStyle={{marginTop:20,backgroundColor:'#E7E2E1',borderRadius:20}} renderDescription={((string) => {return (<Text style={{color:'black',fontSize:10}}>{string}</Text>)})} renderTitle={((string) => {return (<Text style={{color:'black',fontWeight:'bold'}}>{string}</Text>)})} renderText={(() => {return ''})} header='' text={item.body} />: null}
               {(item.extraData && item.body.search(/(?:https?|ftp):\/\/[\n\S]+/g, '') < 1) ? (
-                <TouchableOpacity onPress={() => {OpenImage({index})}}>
+                <TouchableOpacity onPress={() => {OpenImage(item.key)}}>
                   <FastImage
                     source={{uri: item.extraData}}
                     style={styles.postImage}
@@ -948,14 +927,14 @@ export function AlumniPostsScreen({navigation}) {
         <View style={{width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
           <View style={{width:70,flex:.4,justifyContent:'center'}}>
             <Pressable onPress={() => {
-              if(item.author !== 'USC Student'){
+              if(item.author !== ANONYMOUS_USER_NAME){
                 userData.setProfileView(item.user.replace('/Users/',''))
                 navigation.navigate('ProfileView')
                 setReplyModalVisible(false)
                 setFreeze(false)
                 setPostReplies([])
               }
-              else if (item.author === 'USC Student') {
+              else if (item.author === ANONYMOUS_USER_NAME) {
                 Alert.alert('This user wishes to remain anonymous.')
               }
             }}>
@@ -1004,7 +983,7 @@ export function AlumniPostsScreen({navigation}) {
         alignSelf: 'center',
         marginVertical: '75%',
       }}>
-      Alumni post here!
+      Kind of empty in here....
       </Text>}
       <Modal
         animationType="slide"
@@ -1147,15 +1126,13 @@ export function AlumniPostsScreen({navigation}) {
       </Modal>
 
         <FlashList
-        onRefresh={() => {getPosts}}
+        onRefresh={() => getPosts()}
           //onEndReached={() => {
         //   setPostCount(postCount+6)
         // }}
         //  onEndReachedThreshold={.9}
           data={posts}
           ref={list}
-          key={refresh}
-          extraData={refresh}
           renderItem={renderPost}
           keyExtractor={item => item.key}
           refreshing={refreshing}

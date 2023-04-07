@@ -69,11 +69,12 @@ if (Platform.OS === 'ios') {
 }
 
 export function PostsScreen({navigation}) {
- /* if (Platform.OS === 'android') {
-    if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }*/
+
+  POST_COLLECTION_NAME = 'Posts'
+  POST_STORAGE_NAME = '/Posts/'
+  ANONYMOUS_USER_NAME = 'USC Student'
+  RESET_PATH = 'Home'
+
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -138,7 +139,7 @@ export function PostsScreen({navigation}) {
   const getReplies = async (item) => {
     setRepliesLoading(true)
     const postReplies= [];
-    var postsRef = firestore().collection('Posts').doc(item.key)
+    var postsRef = firestore().collection(POST_COLLECTION_NAME).doc(item.key)
     promises = []
     //gets posts asynchronously in the background
     postsRef.get().then( doc => {
@@ -160,8 +161,8 @@ export function PostsScreen({navigation}) {
             }
             tempReply.pfp = user.pfp
             tempReply.author = user.name
-            if (reply.data().author === 'USC Student') {
-              tempReply.author = 'USC Student'
+            if (reply.data().author === ANONYMOUS_USER_NAME) {
+              tempReply.author = ANONYMOUS_USER_NAME
               tempReply.pfp = ''
             }
             tempReply.isUpVoted = tempReply.upvoters[auth().currentUser.uid];
@@ -187,7 +188,7 @@ export function PostsScreen({navigation}) {
 
   const getPosts = () => {
     setRefresh(true);
-    var postsRef = firestore().collection('Posts')
+    var postsRef = firestore().collection(POST_COLLECTION_NAME)
     var query; 
     if(search) {
       query = postsRef
@@ -203,7 +204,7 @@ export function PostsScreen({navigation}) {
     } else if (sortMode === 'Worst') {
       query = postsRef
       .orderBy('upvoteCount', 'asc')
-      .orderBy('date', 'desc')
+      .orderBy('date', 'asc')
       //.limit(5) 
 
     } else if (sortMode === 'New') {
@@ -213,7 +214,7 @@ export function PostsScreen({navigation}) {
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
-      .where('author','==', 'USC Student')
+      .where('author','==', ANONYMOUS_USER_NAME)
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
      // .limit(5) 
@@ -231,7 +232,7 @@ export function PostsScreen({navigation}) {
         const promises = [];
         const postImageMapping = {}; // Initialize postImageMapping object
         snapShot.docs.forEach((documentSnapshot, index) => { // Add the index parameter
-          if (sortMode !== 'Anonymous' && documentSnapshot.get('author') === 'USC Student') {return}
+          if (sortMode !== 'Anonymous' && documentSnapshot.get('author') === ANONYMOUS_USER_NAME) {return}
           promise = firestore().collection('Users').doc(documentSnapshot.get('user')).get().then(data => {
             const post = ({
               ...documentSnapshot.data(),
@@ -284,7 +285,7 @@ export function PostsScreen({navigation}) {
     ){
       setPostUploading(true)
       firestore()
-        .collection('Posts')
+        .collection(POST_COLLECTION_NAME)
         .doc(post)
         .update({
           body: postText,
@@ -293,7 +294,7 @@ export function PostsScreen({navigation}) {
           .then(() => {
             navigation.reset({
               index: 0,
-              routes: [{name: 'Home'}],
+              routes: [{name: RESET_PATH}],
             });
           })
           .catch(error => {
@@ -312,7 +313,7 @@ export function PostsScreen({navigation}) {
       if (image) {await uploadPic()}
       if(!postIsAnonymous){
         firestore()
-          .collection('Posts')
+          .collection(POST_COLLECTION_NAME)
           .doc()
           .set({
             author: userData.name,
@@ -335,7 +336,7 @@ export function PostsScreen({navigation}) {
             closeModal();
             navigation.reset({
               index: 0,
-              routes: [{name: 'Home'}],
+              routes: [{name: RESET_PATH}],
             });
 
           })
@@ -345,10 +346,10 @@ export function PostsScreen({navigation}) {
         }
       else if (postIsAnonymous) {
         firestore()
-        .collection('Posts')
+        .collection(POST_COLLECTION_NAME)
         .doc()
         .set({
-          author: 'USC Student',
+          author: ANONYMOUS_USER_NAME,
           authorGradYear: '',
           authorMajor: '',
           body: postText,
@@ -361,14 +362,14 @@ export function PostsScreen({navigation}) {
           extraData: {url} ? url : '',
           upvoters: {[auth().currentUser.uid]: true},
           downvoters: new Map(),
-          searchAuthor:'USC STUDENT',
+          searchAuthor: ANONYMOUS_USER_NAME.toUpperCase(),
           edited:false
         })
         .then(() => {
           closeModal();
           navigation.reset({
             index: 0,
-            routes: [{name: 'Home'}],
+            routes: [{name: RESET_PATH}],
           });
 
 
@@ -405,7 +406,7 @@ export function PostsScreen({navigation}) {
       ),
     });
 
-    var postsRef = firestore().collection('Posts')
+    var postsRef = firestore().collection(POST_COLLECTION_NAME)
     var query; 
     if(search) {
       query = postsRef
@@ -421,7 +422,7 @@ export function PostsScreen({navigation}) {
     } else if (sortMode === 'Worst') {
       query = postsRef
       .orderBy('upvoteCount', 'asc')
-      .orderBy('date', 'desc')
+      .orderBy('date', 'asc')
     //  .limit(postCount) 
 
     } else if (sortMode === 'New') {
@@ -431,7 +432,7 @@ export function PostsScreen({navigation}) {
 
     } else if (sortMode === 'Anonymous') {
       query = postsRef
-      .where('author','==', 'USC Student')
+      .where('author','==', ANONYMOUS_USER_NAME)
       .orderBy('upvoteCount', 'desc')
       .orderBy('date', 'desc')
    //   .limit(postCount) 
@@ -464,12 +465,12 @@ export function PostsScreen({navigation}) {
             post.isUpVoted = post.upvoters[auth().currentUser.uid];
             post.isDownVoted = post.downvoters[auth().currentUser.uid];
             post.postIsYours = post.user === auth().currentUser.uid
-            if (documentSnapshot.data().author === 'USC Student') {
-              post.author = 'USC Student'
+            if (documentSnapshot.data().author === ANONYMOUS_USER_NAME) {
+              post.author = ANONYMOUS_USER_NAME
               post.pfp = ''
             }
     
-            if (sortMode !== 'Anonymous' && post.author === 'USC Student') {} //This makes sure that anonymous posts are only 
+            if (sortMode !== 'Anonymous' && post.author === ANONYMOUS_USER_NAME) {} //This makes sure that anonymous posts are only 
             //shown if the user has selected the anonymous filter
             else {
               posts[index] = post; // Use the index to insert the post at the correct position
@@ -502,13 +503,13 @@ export function PostsScreen({navigation}) {
   const DeletePost = ({item}) => {
     if(item.isReply){
       firestore().collection('Replies').doc(item.key).delete();
-      firestore().collection('Posts').doc(item.post).update({
+      firestore().collection(POST_COLLECTION_NAME).doc(item.post).update({
         replies:firebase.firestore.FieldValue.arrayRemove(item.key),
         replyCount:firebase.firestore.FieldValue.increment(-1)
       }).then(() => {getReplies(replyItem);}).catch(()=>{})
     }
     else
-      firestore().collection('Posts').doc(item.key).delete();
+      firestore().collection(POST_COLLECTION_NAME).doc(item.key).delete();
   };
   const OpenImage = (index) => {
     setImageIndex(imageMap.get(index));
@@ -523,7 +524,7 @@ export function PostsScreen({navigation}) {
       if (item.isReply)
         postRef = firestore().collection('Replies').doc(item.key);
       else
-        postRef = firestore().collection('Posts').doc(item.key);
+        postRef = firestore().collection(POST_COLLECTION_NAME).doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -568,7 +569,7 @@ export function PostsScreen({navigation}) {
       if (item.isReply)
         postRef = firestore().collection('Replies').doc(item.key);
       else
-        postRef = firestore().collection('Posts').doc(item.key);
+        postRef = firestore().collection(POST_COLLECTION_NAME).doc(item.key);
 
       await firestore()
         .runTransaction(async transaction => {
@@ -643,18 +644,18 @@ export function PostsScreen({navigation}) {
               isReply:true,
               post: item.key
             }).catch(()=> {})
-            firestore().collection('Posts').doc(item.key).update({
+            firestore().collection(POST_COLLECTION_NAME).doc(item.key).update({
               replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
               replyCount:firebase.firestore.FieldValue.increment(1)
             }).then(() => {getReplies(item);setReply('')}).catch(()=>{})
         }
       else if (postIsAnonymous) {
-        if(item.author === 'USC Student'){
+        if(item.author === ANONYMOUS_USER_NAME){
 
           const replyRef = firestore().collection('Replies').doc();
           replyRef
             .set({
-              author: 'USC Student',
+              author: ANONYMOUS_USER_NAME,
               body: reply,
               upvoteCount: 1,
               date: firestore.FieldValue.serverTimestamp(),
@@ -666,7 +667,7 @@ export function PostsScreen({navigation}) {
               isReply:true,
               post: item.key
             }).catch(()=> {})
-            firestore().collection('Posts').doc(item.key).update({
+            firestore().collection(POST_COLLECTION_NAME).doc(item.key).update({
               replies:firebase.firestore.FieldValue.arrayUnion(replyRef.id),
               replyCount:firebase.firestore.FieldValue.increment(1)
             }).then(() => {getReplies(item);setReply('');setPostIsAnonymous(false)}).catch(()=>{})
@@ -682,7 +683,7 @@ export function PostsScreen({navigation}) {
   }
 
   const uploadPic = async () => {
-    const reference = storage().ref('/Posts/' +uuidv4());
+    const reference = storage().ref(POST_STORAGE_NAME +uuidv4());
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
@@ -786,11 +787,11 @@ export function PostsScreen({navigation}) {
               </View>:null}
             <View style={styles.postUserImageAndInfoBox}>
               <Pressable onPress={() => {
-                if(item.author !== 'USC Student'){
+                if(item.author !== ANONYMOUS_USER_NAME){
                   userData.setProfileView(item.user.replace('/Users/',''))
                   navigation.navigate('ProfileView')
                 }
-                else if (item.author === 'USC Student') {
+                else if (item.author === ANONYMOUS_USER_NAME) {
                   Alert.alert('This user wishes to remain anonymous.')
                 }
               }}>
@@ -802,7 +803,7 @@ export function PostsScreen({navigation}) {
                   style={styles.postPfp}
                 />
               </Pressable>
-              {item.author !== 'USC Student' ? (
+              {item.author !== ANONYMOUS_USER_NAME ? (
                   <View style={styles.postUserInfo}>
                     <Text style={item.postIsYours ? [styles.name,{fontWeight: 'bold'}] : styles.name}>{item.author}</Text>
                     <Text style={styles.majorText}>
@@ -927,14 +928,14 @@ export function PostsScreen({navigation}) {
         <View style={{width:'100%',marginLeft:0,flexDirection:'row',backgroundColor:'white'}}>
           <View style={{width:70,flex:.4,justifyContent:'center'}}>
             <Pressable onPress={() => {
-              if(item.author !== 'USC Student'){
+              if(item.author !== ANONYMOUS_USER_NAME){
                 userData.setProfileView(item.user.replace('/Users/',''))
                 navigation.navigate('ProfileView')
                 setReplyModalVisible(false)
                 setFreeze(false)
                 setPostReplies([])
               }
-              else if (item.author === 'USC Student') {
+              else if (item.author === ANONYMOUS_USER_NAME) {
                 Alert.alert('This user wishes to remain anonymous.')
               }
             }}>
