@@ -70,10 +70,11 @@ if (Platform.OS === 'ios') {
 
 
 export function AlumniPostsScreen({navigation}) {
-  POST_COLLECTION_NAME = 'AlumniPosts'
-  POST_STORAGE_NAME = '/AlumniPosts/'
-  ANONYMOUS_USER_NAME = 'USC Alum'
-  RESET_PATH = 'Alumni'
+  const POST_COLLECTION_NAME = 'AlumniPosts'
+  const POST_STORAGE_NAME = '/AlumniPosts/'
+  const ANONYMOUS_USER_NAME = 'USC Alum'
+  const RESET_PATH = 'Alumni'
+  const DISPLAY_TEXT = 'Alumni Post Here!'
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -983,7 +984,7 @@ export function AlumniPostsScreen({navigation}) {
         alignSelf: 'center',
         marginVertical: '75%',
       }}>
-      Kind of empty in here....
+      {DISPLAY_TEXT}
       </Text>}
       <Modal
         animationType="slide"

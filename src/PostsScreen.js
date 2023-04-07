@@ -70,10 +70,11 @@ if (Platform.OS === 'ios') {
 
 export function PostsScreen({navigation}) {
 
-  POST_COLLECTION_NAME = 'Posts'
-  POST_STORAGE_NAME = '/Posts/'
-  ANONYMOUS_USER_NAME = 'USC Student'
-  RESET_PATH = 'Home'
+  const POST_COLLECTION_NAME = 'Posts'
+  const POST_STORAGE_NAME = '/Posts/'
+  const ANONYMOUS_USER_NAME = 'USC Student'
+  const RESET_PATH = 'Home'
+  const DISPLAY_TEXT = 'Kind of empty in here...'
 
 
   //Global userdata var
@@ -984,7 +985,7 @@ export function PostsScreen({navigation}) {
         alignSelf: 'center',
         marginVertical: '75%',
       }}>
-      Kind of empty in here....
+      {DISPLAY_TEXT}
       </Text>}
       <Modal
         animationType="slide"
