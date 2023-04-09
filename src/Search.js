@@ -65,21 +65,21 @@ export function Search({navigation}) {
     const renderUser = ({item}) => {
 
         return(
-        <View style={{height:100,flexDirection:'row',backgroundColor:'white'}}>
             <TouchableOpacity onPress={() => {
                 userData.setProfileView(item.key)
                 navigation.navigate('ProfileView')
-
-            }} style={{width:60,height:60,borderRadius:40,alignSelf:'center',marginLeft:'4%'}}>
+            }}
+            style={{height:100,flexDirection:'row',backgroundColor:'white'}}>
+             <View style={{width:60,height:60,borderRadius:40,alignSelf:'center',marginLeft:'4%'}}>
                 <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{width:70,height:70,borderRadius:50}} source={item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}></FastImage>
-            </TouchableOpacity>
+             </View>
             <View style={{justifyContent:'flex-start',marginLeft:20,marginTop:5,flexShrink:1}}>
                 <Text style={{marginLeft:'5%',fontSize:24,fontWeight:'bold',color:'black'}}>{item.name}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:14,fontWeight:'bold',color:'black',flexWrap:'wrap'}}>{item.major}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:14,fontWeight:'bold',color:'black'}}>{'('+item.gradYear+')'}</Text>
                 <Text style={{marginLeft:'5.5%',fontSize:10,fontWeight:'bold',fontStyle:'italic',color:'black',marginTop:'5%'}}>{item.joined ? 'Joined: '+moment(item.joined.toDate()).format("MMM Do YYYY, h:mm:ss a").toString(): null}</Text>
             </View>
-        </View>)
+        </TouchableOpacity>)
 
     };
     return (
