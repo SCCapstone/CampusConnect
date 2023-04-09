@@ -295,7 +295,7 @@ export function CalendarPage({navigation}) {
                       
                                 {Platform.OS === 'android' &&  
                                 <View style={{justifyContent:'center'}}>
-                                <Button onPress={() => {showTimePicker2()}} title='Start Time' titleStyle={{fontSize:10}} buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'70%',alignSelf:'center',margin:10}}></Button>
+                                <Button onPress={() => {showTimePicker2()}} title='End Time' titleStyle={{fontSize:10}} buttonStyle={{backgroundColor:'#a8a1a6',height:50,width:'70%',alignSelf:'center',margin:10}}></Button>
                                 {endTime && Platform.OS !== 'ios' ? <Text style={{color:'black',textAlign:'center',alignSelf:'center'}}>{moment(endTime.nativeEvent.timestamp).format("hh:mm A")}</Text> : null}
                                 
                             </View>}

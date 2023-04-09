@@ -18,6 +18,7 @@ export async function ScrapeEventData() {
 
 const LoadEvents = async() => {
     const defaultItemCount = 10;
+   
     events = new Array();
     const response = await fetch(url);   // fetch page
     const htmlString = await response.text();  // get response text
@@ -64,9 +65,13 @@ const LoadEvents = async() => {
       //timeArray.push($(el).children("span").text().split("\n      ")[1]);
     })
 
+    const numEvents = Math.min(
+      titleList.length,
+    )
+    const maxEvents = Math.min(10, numEvents);
 //Iterate over each event and follow the link embedded in the title, then scrape the description found on that URL.
     promises = [];
-    for (let i = 0; i < defaultItemCount; i++) {
+    for (let i = 0; i < maxEvents; i++) {
       const eventLink = $(titleList[i]).children("a").attr("href");
       promise = axios.get(eventLink).then((eventHtml) => {
         const event$ = cheerio.load(eventHtml.data);
@@ -77,10 +82,9 @@ const LoadEvents = async() => {
     }
 
     const attributes = 5;
-    const results = 10;
-    let arr = Array(results).fill().map(() => Array(attributes));
+    let arr = Array(maxEvents).fill().map(() => Array(attributes));
     await Promise.all(promises).then(() => {
-      for (let i = 0; i < defaultItemCount; i++) {
+      for (let i = 0; i < maxEvents; i++) {
         arr[i][0] = titleArray[i];
         arr[i][1] = locationArray[i];
         arr[i][2] = dateArray[i];
