@@ -189,7 +189,7 @@ export function LoginScreen({navigation}) {
           autoCapitalize={'none'}
           autoComplete={'email'}
           placeholderTextColor="#000000"
-          onChangeText={email => setEmail(email)}
+          onChangeText={(email) => setEmail(email.trim())}
         />
       </View>
 
@@ -201,7 +201,7 @@ export function LoginScreen({navigation}) {
           autoComplete={'password'}
           placeholderTextColor="#000000"
           secureTextEntry={true}
-          onChangeText={password => setPassword(password)}
+          onChangeText={(password) => setPassword(password.trim())}
         />
       </View>
 
