@@ -18,7 +18,6 @@ export async function ScrapeEventData() {
 
 const LoadEvents = async() => {
     const defaultItemCount = 10;
-   
     events = new Array();
     const response = await fetch(url);   // fetch page
     const htmlString = await response.text();  // get response text
@@ -27,7 +26,7 @@ const LoadEvents = async() => {
     
     //listItems = $(".schedule-list__category");
     titleList = $(".eds-event-card-content__primary-content");
-    locationList = $(".card-text--truncated__one");
+    locationList = $("td.twLocation");
     scheduleList = $(".eds-event-card-content__primary-content");
     descriptionList = $(".event-details__main-inner");
     imageList = $("aside.eds-event-card-content__image-container");
@@ -41,6 +40,7 @@ const LoadEvents = async() => {
 
     titleList.each((i, el) => {
       const title = $(el).children("a").text().trim();
+      console.log(title)
       const halfway = Math.floor(title.length / 2);
       const firstHalf = title.slice(0, halfway);
       titleArray.push(firstHalf);
@@ -56,7 +56,7 @@ const LoadEvents = async() => {
     })
 
     locationList.each((i, el) => {
-      locationArray.push($(el).text());
+      locationArray.push($(el).children("span").text());
     })
 
     scheduleList.each((i, el) => {
@@ -65,13 +65,9 @@ const LoadEvents = async() => {
       //timeArray.push($(el).children("span").text().split("\n      ")[1]);
     })
 
-    const numEvents = Math.min(
-      titleList.length,
-    )
-    const maxEvents = Math.min(10, numEvents);
 //Iterate over each event and follow the link embedded in the title, then scrape the description found on that URL.
     promises = [];
-    for (let i = 0; i < maxEvents; i++) {
+    for (let i = 0; i < defaultItemCount; i++) {
       const eventLink = $(titleList[i]).children("a").attr("href");
       promise = axios.get(eventLink).then((eventHtml) => {
         const event$ = cheerio.load(eventHtml.data);
@@ -82,9 +78,10 @@ const LoadEvents = async() => {
     }
 
     const attributes = 5;
-    let arr = Array(maxEvents).fill().map(() => Array(attributes));
+    const results = 10;
+    let arr = Array(results).fill().map(() => Array(attributes));
     await Promise.all(promises).then(() => {
-      for (let i = 0; i < maxEvents; i++) {
+      for (let i = 0; i < defaultItemCount; i++) {
         arr[i][0] = titleArray[i];
         arr[i][1] = locationArray[i];
         arr[i][2] = dateArray[i];
@@ -96,7 +93,7 @@ const LoadEvents = async() => {
     }).catch((error) => {
       console.log(error);
     });
-
     return arr
     
+   
 }
