@@ -26,7 +26,7 @@ const LoadEvents = async() => {
     
     //listItems = $(".schedule-list__category");
     titleList = $(".eds-event-card-content__primary-content");
-    locationList = $("td.twLocation");
+    locationList = $(".card-text--truncated__one");
     scheduleList = $(".eds-event-card-content__primary-content");
     descriptionList = $(".event-details__main-inner");
     imageList = $("aside.eds-event-card-content__image-container");
@@ -56,7 +56,7 @@ const LoadEvents = async() => {
     })
 
     locationList.each((i, el) => {
-      locationArray.push($(el).children("span").text());
+      locationArray.push($(el).text());
     })
 
     scheduleList.each((i, el) => {
