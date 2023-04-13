@@ -321,7 +321,7 @@ const RegisterError = () => {
               <DropDownPicker
                 testID='class'
                 style={styles.inputStyle}
-                placeholder="Select Class"
+                placeholder="Select Class (Required)"
                 open={open2}
                 onOpen={onYearOpen}
                 value={gradDate}
@@ -336,7 +336,7 @@ const RegisterError = () => {
               <DropDownPicker
                 testID='major'
                 style={styles.inputStyle}
-                placeholder="Select Major"
+                placeholder="Select Major (Required)"
                 open={open}
                 onOpen={onMajorOpen}
                 value={major}
