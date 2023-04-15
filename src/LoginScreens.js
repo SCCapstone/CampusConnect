@@ -140,7 +140,7 @@ export function WelcomeScreen({navigation}) {
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>
-          Copywright Ⓒ2022 DemBoyz, All rights reserved.
+          Copywright Ⓒ2023 DemBoyz, All rights reserved.
         </Text>
       </View>
     </LinearGradient>
@@ -189,7 +189,7 @@ export function LoginScreen({navigation}) {
           autoCapitalize={'none'}
           autoComplete={'email'}
           placeholderTextColor="#000000"
-          onChangeText={email => setEmail(email)}
+          onChangeText={(email) => setEmail(email.trim())}
         />
       </View>
 
@@ -201,11 +201,11 @@ export function LoginScreen({navigation}) {
           autoComplete={'password'}
           placeholderTextColor="#000000"
           secureTextEntry={true}
-          onChangeText={password => setPassword(password)}
+          onChangeText={(password) => setPassword(password.trim())}
         />
       </View>
 
-      <TouchableOpacity onPress={() => {auth().sendPasswordResetEmail(email),Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
+      <TouchableOpacity onPress={() => {if(email){auth().sendPasswordResetEmail(email)};Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
@@ -222,7 +222,7 @@ export function LoginScreen({navigation}) {
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>
-          Copywright Ⓒ2022 DemBoyz, All rights reserved.
+          Copywright Ⓒ2023 DemBoyz, All rights reserved.
         </Text>
       </View>
     </LinearGradient>
@@ -338,7 +338,7 @@ export function RegisterScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity onPress={() => {auth().sendPasswordResetEmail(email),Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
+      <TouchableOpacity onPress={() => {if(email){auth().sendPasswordResetEmail(email)};Alert.alert('Reset sent','A password reset link has been sent to "' + email + '"')}} testID='forgotpassword'>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -349,7 +349,7 @@ export function RegisterScreen({navigation}) {
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>
-          Copywright Ⓒ2022 DemBoyz, All rights reserved.
+          Copywright Ⓒ2023 DemBoyz, All rights reserved.
         </Text>
       </View>
     </LinearGradient>

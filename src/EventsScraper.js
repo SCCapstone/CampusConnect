@@ -40,6 +40,7 @@ const LoadEvents = async() => {
 
     titleList.each((i, el) => {
       const title = $(el).children("a").text().trim();
+      //console.log(title)
       const halfway = Math.floor(title.length / 2);
       const firstHalf = title.slice(0, halfway);
       titleArray.push(firstHalf);
