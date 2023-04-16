@@ -1,7 +1,7 @@
 // src/App.js
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -14,7 +14,7 @@ function App() {
       <div className="App">
         <NavBar />
         <Routes>
-          <Route index path='/CampusConnect' element={<Home />}/>
+          <Route index element={<Home />}/>
           <Route path="/about" element={<About />} />
           <Route path="/repo" element={<Repo />} />
         </Routes>
