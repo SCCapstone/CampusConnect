@@ -14,9 +14,9 @@ function App() {
       <div className="App">
         <NavBar />
         <Routes>
-          <Route path='/CampusConnect' element={<Home />}/>
-          <Route path="/CampusConnect/about" element={<About />} />
-          <Route path="/CampusConnect/repo" element={<Repo />} />
+          <Route index path='/CampusConnect' element={<Home />}/>
+          <Route path="/about" element={<About />} />
+          <Route path="/repo" element={<Repo />} />
         </Routes>
       </div>
     </Router>

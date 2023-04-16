@@ -10,7 +10,7 @@ const Repo = () => {
       <h3 className={styles.heading2}>
         <a
           className={styles.github_btn}
-          href="https://github.com/SCCapstone/DemBoyz"
+          href="https://github.com/SCCapstone/CampusConnect"
           target="_blank"
           rel="noopener noreferrer"
         >
