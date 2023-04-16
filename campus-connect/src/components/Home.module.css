@@ -1,0 +1,31 @@
+/* src/components/Home.module.css */
+
+.heading {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .heading2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  
+  .video_thumbnail {
+    cursor: pointer;
+    width: 100%;
+    max-width: 640px;
+    border: 3px solid #ffffff;
+  }
+  
+  .image_row {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+  
+  .image {
+    width: 240px;
+    margin: 0.2rem;
+  }
+  

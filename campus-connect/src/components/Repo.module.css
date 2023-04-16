@@ -1,0 +1,36 @@
+/* src/components/Repo.module.css */
+
+.heading2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+.repo_container {
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .github_btn {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #24292e;
+    color: #ffffff;
+    border: 1px solid rgba(27, 31, 35, 0.2);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+    padding: 6px 12px;
+  }
+  
+  .github_btn:hover {
+    background-color: #1e2327;
+    border-color: rgba(27, 31, 35, 0.5);
+  }
+  
+  .github_btn svg {
+    fill: #ffffff;
+    vertical-align: text-top;
+    margin-right: 8px;
+  }
+  
