@@ -29,7 +29,23 @@ const Repo = () => {
           View on GitHub
         </a>
       </h3>
+      <h1 style={{marginTop:200}}>And play some flappy bird!</h1>
+      <div className={styles.outerContainer}>
+        <div className={styles.embedContainer}>
+            <iframe
+            title="Flappy Bird"
+            sandbox = "allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
+            src="https://flappybird.io"
+            scrolling="no"
+            frameBorder="0"
+            className={styles.flappyBird}
+            ></iframe>
+        </div>
+      </div>
     </div>
+    
+    
+    
   );
 };
 

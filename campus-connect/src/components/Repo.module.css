@@ -33,4 +33,26 @@
     vertical-align: text-top;
     margin-right: 8px;
   }
+  .outerContainer {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .embedContainer {
+    display: flex;
+    justify-content: center;
+    width: 500px;
+    height: 750px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .flappyBird {
+    position: relative;
+    top: -220px;
+    border: 1px solid #ccc;
+  }
   
