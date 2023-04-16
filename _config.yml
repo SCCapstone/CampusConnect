@@ -4,7 +4,7 @@ remote_theme: jekyll-theme-modern
 plugins:
   - jekyll-remote-theme # add this line to the plugins list if you already have one
 show_downloads: true
-theme: jekyll-theme-modern
+heme: jekyll-theme-midnight
 
 colors:
   primary: "#73000a" # Garnet
