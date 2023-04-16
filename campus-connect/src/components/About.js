@@ -33,8 +33,8 @@ const About = () => {
       {
         name: 'Neekon Sarmadi',
         email: 'nsarmadi@email.sc.edu',
-        imageUrl: 'https://example.com/jane-smith.jpg',
-        description: 'John is a Computer Engineering major and the UX/UI designer of Campus Connect.',
+        imageUrl: 'https://media.licdn.com/dms/image/C5603AQFxv4O42T2nUg/profile-displayphoto-shrink_400_400/0/1639803574919?e=1687392000&v=beta&t=op8MMJDJHh7_dykEprrBnqu-M6b-PqvGRk_P7U2g3DY',
+        description: 'Neekon is a Computer Information Systems major and masters student at the University of South Carolina. Neekon is one of the developers of Campus Connect.',
       },
   ];
 
