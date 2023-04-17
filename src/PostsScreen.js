@@ -69,8 +69,9 @@ if (Platform.OS === 'ios') {
   commentStyles = androidCommentStyles
 }
 
-export function PostsScreen({navigation}) {
+export function PostsScreen({navigation, route}) {
 
+  const {sortingMode} = route.params;
   const POST_COLLECTION_NAME = 'Posts'
   const POST_STORAGE_NAME = '/Posts/'
   const ANONYMOUS_USER_NAME = 'USC Student'
@@ -94,10 +95,9 @@ export function PostsScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible,setEditModalVisile] = useState(false)
   const [replyModalVisible, setReplyModalVisible] = useState(false);
-  const [freeze, setFreeze] = useState(false);
   const [postText, setPostText] = useState('');
   const [postIsAnonymous,setPostIsAnonymous] = useState(false);
-  const [sortMode, setSortMode] = useState('Best')
+  const [sortMode, setSortMode] = useState(sortingMode);
   const [postCount, setPostCount] = useState(6)
   const [search, setSearch] = useState("");
   const [image, setImage] = React.useState('');
@@ -109,6 +109,8 @@ export function PostsScreen({navigation}) {
   const [postReplies, setPostReplies] = useState([])
   const [repliesLoading,setRepliesLoading] = useState(false)
   const [refresh, setRefreshList] = useState(false)
+  const [floatingActionVisible, setFloatingActionVisible] = useState(true)
+  const [reloadList, setReloadList] = useState(true)
   var transactionStarted = false;
   var url = '';
 
@@ -297,10 +299,7 @@ export function PostsScreen({navigation}) {
           edited:true
           })
           .then(() => {
-            navigation.reset({
-              index: 0,
-              routes: [{name: RESET_PATH}],
-            });
+          setReloadList(!reloadList)
           })
           .catch(error => {
             console.log(error.code);
@@ -339,10 +338,7 @@ export function PostsScreen({navigation}) {
           })
           .then(() => {
             closeModal();
-            navigation.reset({
-              index: 0,
-              routes: [{name: RESET_PATH}],
-            });
+            setReloadList(!reloadList)
 
           })
           .catch(error => {
@@ -372,10 +368,7 @@ export function PostsScreen({navigation}) {
         })
         .then(() => {
           closeModal();
-          navigation.reset({
-            index: 0,
-            routes: [{name: RESET_PATH}],
-          });
+          setReloadList(!reloadList)
 
 
         })
@@ -496,7 +489,6 @@ export function PostsScreen({navigation}) {
         Promise.all(promises).then(() => {
           setPosts(posts.filter(Boolean)); // Remove any empty slots from the array
           setImages(images);
-          //setRefreshList(!refresh);
           setLoading(false);
         });
     });
@@ -708,7 +700,6 @@ export function PostsScreen({navigation}) {
       }}
       onSwipeableOpen={(direction) => {
         if(direction ==='right'){
-          setFreeze(true)
           setReplyItem(item)
           setReplyModalVisible(true)
           getReplies(item);
@@ -752,7 +743,6 @@ export function PostsScreen({navigation}) {
     >
         <View style={styles.postContainer}>
           <Pressable delayLongPress={150} onLongPress={() => {
-            setFreeze(true)
             setReplyItem(item)
             setReplyModalVisible(true)
             setPostReplies([])
@@ -766,17 +756,15 @@ export function PostsScreen({navigation}) {
                   buttonTextAfterSelection={() => {return '• • •'}}
                   onSelect={(option) => {
                     if(option === 'Reply') {
-                      setFreeze(true)
                       setReplyItem(item)
                       setReplyModalVisible(true)
                       getReplies(item);
                     }
                     else if(option === 'Edit') {
-                      setFreeze(true)
                       setPost(item.key);
                       setPostText(item.body)
-                      //this.floatingAction.animateButton()
                       setModalVisible(true);
+                      setFloatingActionVisible(false);
                     }
                     else if (option === 'Delete') {
                       DeletePostAlert({item});
@@ -824,17 +812,15 @@ export function PostsScreen({navigation}) {
                   buttonTextAfterSelection={() => {return '• • •'}}
                   onSelect={(option) => {
                     if(option === 'Reply') {
-                      setFreeze(true)
                       setReplyItem(item)
                       setReplyModalVisible(true)
                       getReplies(item);
                     }
                     else if(option === 'Edit') {
-                      setFreeze(true)
                       setPost(item.key);
                       setPostText(item.body)
-                      //this.floatingAction.animateButton()
                       setModalVisible(true);
+                      setFloatingActionVisible(false)
                     }
                     else if (option === 'Delete') {
                       DeletePostAlert({item});
@@ -860,11 +846,11 @@ export function PostsScreen({navigation}) {
               ) : null}
             </View>
             <View style={styles.dateAndReplyBox}>
-              <Text style={styles.date}>
+            {item.date ? <Text style={styles.date}>
                 {moment(new Date(item.date.toDate())).format(
                   'MMMM Do YYYY, h:mm:ss a',
                 )}
-              </Text>
+              </Text> : null}
               <View style={styles.replyCountBox}>
                 <Text style={styles.replies}>Replies: </Text>
                 <Text style={styles.replies}>{item.replyCount}</Text>
@@ -886,9 +872,10 @@ export function PostsScreen({navigation}) {
     setImage('')
     url = ''
     setPostIsAnonymous(false)
+    setFloatingActionVisible(true)
     setModalVisible(false)
     setPostText('');
-    setFreeze(false)
+
   };
 
   const renderPost = ({item, index}) => <Post item={item} index={index} />;
@@ -937,7 +924,7 @@ export function PostsScreen({navigation}) {
                 userData.setProfileView(item.user.replace('/Users/',''))
                 navigation.navigate('ProfileView')
                 setReplyModalVisible(false)
-                setFreeze(false)
+                setReply('')
                 setPostReplies([])
               }
               else if (item.author === ANONYMOUS_USER_NAME) {
@@ -996,10 +983,13 @@ export function PostsScreen({navigation}) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          this.floatingAction
+          this.floatingAction.animateButton()
+          setFloatingActionVisible(true)
+          setModalVisible(false)
         }}>
-        <SafeAreaView style={{flex:1,justifyContent:'center',alignContent:'center'}}>
-          <KeyboardAvoidingView style={{justifyContent:'center'}} keyboardVerticalOffset={offsetHeight} behavior="padding">
+        <SafeAreaView style={{flex: 1,backgroundColor: "rgba(0, 0, 0, 0.5)", // This will add the tint
+        justifyContent: "center",}}>
+          <KeyboardAvoidingView  style={{justifyContent:'center'}} keyboardVerticalOffset={offsetHeight} behavior="padding">
           <View style={styles.postView}>
               <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
@@ -1077,7 +1067,7 @@ export function PostsScreen({navigation}) {
                 buttonStyle={{backgroundColor:'white',alignSelf:'flex-start',marginBottom:20,marginLeft:10}}
                 size='lg'
                 onPress={() =>{setReplyModalVisible(false);setPostReplies([])
-                setReplyItem(null);setFreeze(false);}}
+                setReplyItem(null);setReply('')}}
                 titleStyle={{fontSize:15,fontWeight:'bold',color:'black'}}
                 title={'Close'}
               />
@@ -1138,6 +1128,7 @@ export function PostsScreen({navigation}) {
         // }}
         //  onEndReachedThreshold={.9}
           data={posts}
+          extraData={reloadList}
           ref={list}
           renderItem={renderPost}
           keyExtractor={item => item.key}
@@ -1148,12 +1139,14 @@ export function PostsScreen({navigation}) {
         />
         <FloatingAction
         color="#73000a"
+        overlayColor='rgba(0,0,0,0)'
+        visible={floatingActionVisible}
         ref={ref => {
           this.floatingAction = ref;
         }}
         onPressMain={() => {
-          setFreeze(true)
           setModalVisible(true);
+          setFloatingActionVisible(false);
         }}
 
       />

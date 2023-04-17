@@ -128,6 +128,10 @@ export function HomeScreen({navigation}) {
         <Drawer.Screen
           name="Home"
           component={PostsScreen}
+          initialParams={{
+            sortingMode: 'Best',
+            // Add any other initial params as needed
+          }}
           options={({ navigation, route }) => ({
             headerTitle: (props) => <LogoTitle {...props} />,
             // Add a placeholder button without the `onPress` to avoid flicker
@@ -162,6 +166,10 @@ export function HomeScreen({navigation}) {
         <Drawer.Screen
           name="Alumni"
           component={AlumniPostsScreen}
+          initialParams={{
+            sortingMode: 'Best',
+            // Add any other initial params as needed
+          }}
           options={{
             headerTitle: 'Campus Connect: Alumni',
           }}/>
