@@ -16,19 +16,19 @@ const About = () => {
       name: 'Timothy Kranz',
       email: 'tkranz@email.sc.edu',
       imageUrl: 'https://img.youtube.com/vi/L4aMiWxlYxk/hqdefault.jpg',
-      description: 'John is a Computer Engineering major and the UX/UI designer of Campus Connect.',
+      description: 'Timothy is a Computer Science major and the UX/UI designer of Campus Connect.',
     },
     {
         name: 'Coby Arambula',
         email: 'cobya@email.sc.edu',
         imageUrl: 'https://example.com/jane-smith.jpg',
-        description: 'John is a Computer Engineering major and the UX/UI designer of Campus Connect.',
+        description: 'Coby is a Computer Engineering major and the UX/UI designer of Campus Connect.',
       },
       {
         name: 'Chase Allison',
         email: 'challison@email.sc.edu',
         imageUrl: 'https://example.com/jane-smith.jpg',
-        description: 'John is a Computer Engineering major and the UX/UI designer of Campus Connect.',
+        description: 'Chase is a Computer Engineering major and the UX/UI designer of Campus Connect.',
       },
       {
         name: 'Neekon Sarmadi',
