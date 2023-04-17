@@ -161,7 +161,7 @@ export function ChatsScreen(props) {
     userSearch 
     ? response = await chatClient.queryUsers({ name: { $autocomplete: userSearch },id: {$ne:chatClient.user.id}},[{last_active:-1}],{limit:searchLimit})
     : response = await chatClient.queryUsers({role:'user' ,id: {$ne:chatClient.user.id}},[{last_active:-1}],{limit:searchLimit}) //Displays all users that are not yourself. Displaying users that are online is not working yet
-      setData(response.users)
+      setData(response.users.filter(user => user.name !== null))
     }
 
   //searches groups when selected type is 1

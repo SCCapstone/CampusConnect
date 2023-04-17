@@ -18,7 +18,6 @@ import { HeaderBackButton } from "@react-navigation/elements";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { DMScreen } from './DMScreen.js';
 import {ChatsScreen} from './ChatsScreen.js'
-import { ChatSearch} from './ChatSearch.js';
 import { ThreadScreen } from './ThreadScreen.js';
 import { ChatProvider } from "./ChatContext";
 
@@ -181,7 +180,6 @@ export const ChatNavigator = () => {
           <Stack.Screen name="ChatsHome" component={ChatsScreen} options={{headerShown:true, headerLeft: () => (
         <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.goBack()} />
       ),}}/>
-          <Stack.Screen name="ChatSearch" component={ChatSearch} options={{headerShown: true}}/>
           <Stack.Screen name="CreateGroup" component={CreateGroup} options={{headerShown: true}}/>
           <Stack.Screen name="DMScreen" 
           
