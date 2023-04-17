@@ -9,7 +9,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div style={{textAlign: 'center'}}>
       <h1>Campus Connect</h1>
       <h3 className={styles.heading2}>Check out a demo of our app below!</h3>
       <img
