@@ -1059,6 +1059,12 @@ export function PostsScreen({navigation, route}) {
       <Modal
         animationType="slide"
         transparent={true}
+        onRequestClose={() => {
+          setReplyModalVisible(false)
+          setPostReplies([])
+          setReplyItem(null)
+          setReply('')
+        }}
         visible={replyModalVisible}>
         
           <SafeAreaView style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>
