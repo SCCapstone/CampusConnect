@@ -69,7 +69,7 @@ export function Search({navigation}) {
                 userData.setProfileView(item.key)
                 navigation.navigate('ProfileView')
             }}
-            style={{height:100,flexDirection:'row',backgroundColor:'white'}}>
+            style={{flex:1,flexDirection:'row',backgroundColor:'white'}}>
              <View style={{width:60,height:60,borderRadius:40,alignSelf:'center',marginLeft:'4%'}}>
                 <FastImage defaultSource={require('./assets/blank2.jpeg')} style={{width:70,height:70,borderRadius:50}} source={item.pfp ? {uri: item.pfp} : require('./assets/blank2.jpeg')}></FastImage>
              </View>
