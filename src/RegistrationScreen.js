@@ -103,7 +103,7 @@ const RegisterError = () => {
     const bioLengthValid = bio.length <= 150;
     const firstNameUp = firstName.replace(/\s/g, '');
     const lastNameUp = lastName.replace(/\s/g, '');
-    const nameValid = ((firstNameUp.length + lastNameUp.length) < 25)
+    const nameValid = ((firstNameUp.length + lastNameUp.length) < 30)
 
     var emailVerified = false;
     /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
