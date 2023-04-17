@@ -12,6 +12,7 @@ import {
   Pressable,
   TouchableOpacity,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 
 import clubsData from './clubs.json';
@@ -35,7 +36,7 @@ export function ClubsScreen({ navigation }) {
 
   const Club = ({ item }) => (
     <View style={styles.clubContainer}>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity onPress={() => Linking.openURL(item.link)}>
         <View style={styles.clubContentContainer}>
           <Image source={{ uri: item.imgSrc }} style={styles.clubImage} />
           <View style={styles.clubTextContainer}>
@@ -48,8 +49,12 @@ export function ClubsScreen({ navigation }) {
   );
   const renderClub = ({ item }) => <Club item={item} />;
   const styles = StyleSheet.create({
-    clubContainer: {
+    container: {
+      flex: 1,
       backgroundColor: '#73000a',
+    },
+    clubContainer: {
+      backgroundColor: 'white',
       borderRadius: 10,
       marginVertical: 10,
       marginHorizontal: 20,
@@ -67,19 +72,19 @@ export function ClubsScreen({ navigation }) {
     },
     clubTextContainer: {
       flex: 1,
-      backgroundColor: '#73000a',
+      backgroundColor: 'white',
       paddingVertical: 10,
       paddingHorizontal: 20,
       borderRadius: 10,
     },
     clubTitle: {
-      color: 'white',
+      color: 'black',
       fontSize: 18,
       fontWeight: 'bold',
       marginBottom: 5,
     },
     clubDescription: {
-      color: 'white',
+      color: 'black',
       fontSize: 14,
     },
   });

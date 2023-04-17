@@ -42,6 +42,7 @@
     "@types/react-dom": "^18.0.9",
     "cheerio": "^1.0.0-rc.12",
     "moment": "^2.29.4",
+    "puppeteer": "^19.9.0",
     "react": "18.2.0",
     "react-freeze": "^1.0.3",
     "react-native": "0.70.5",
