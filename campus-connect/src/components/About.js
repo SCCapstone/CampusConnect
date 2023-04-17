@@ -40,12 +40,12 @@ const About = () => {
 
   return (
     <div>
-      <h1>About Campus Connect</h1>
-      <p>
+      <h1 style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>About Campus Connect</h1>
+      <p style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>
         Campus Connect is a social media app designed to help students and faculty
         communicate and collaborate within their campus community.
       </p>
-      <h2>Meet the Team</h2>
+      <h2 style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>Meet the Team</h2>
       <div className={styles.team_container}>
         {teamMembers.map((member, index) => (
           <div key={index} className={styles.team_member}>

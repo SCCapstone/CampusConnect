@@ -9,7 +9,7 @@ const Home = () => {
   };
 
   return (
-    <div style={{textAlign: 'center'}}>
+    <div style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>
       <h1>Campus Connect</h1>
       <h3 className={styles.heading2}>Check out a demo of our app below!</h3>
       <img
@@ -35,7 +35,7 @@ const Home = () => {
         <img className={styles.image} src="https://user-images.githubusercontent.com/13265359/219556068-76f8905e-27b9-4ca1-b76f-5d5f4893739e.png" alt="Screenshot 9" />
       </div>
       <h3 className={styles.heading}>Contact us!</h3>
-      <p>If you have any questions please contact us at demboyz.sc@gmail.com</p>
+      <p>If you have any questions please contact us at <a href="mailto:demboyz.sc@gmail.com">demboyz.sc@gmail.com</a></p>
       <br/><br/>
     </div>
   );
