@@ -101,7 +101,9 @@ const RegisterError = () => {
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
-    const nameValid = (firstName.length + lastName.length) < 25
+    const firstNameUp = firstName.replace(/\s/g, '');
+    const lastNameUp = lastName.replace(/\s/g, '');
+    const nameValid = ((firstNameUp.length + lastNameUp.length) < 25)
 
     var emailVerified = false;
     /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
@@ -125,13 +127,13 @@ const RegisterError = () => {
           .collection('Users')
           .doc(auth().currentUser.uid)
           .update({
-            name: firstName.trim() + ' ' + lastName.trim(),
+            name: firstNameUp.trim() + ' ' + lastNameUp.trim(),
             major: major,
             firstLogin: false,
             gradYear: gradDate,
             bio: bio,
             pfp: url,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
             joined: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
@@ -152,12 +154,12 @@ const RegisterError = () => {
           .collection('Users')
           .doc(auth().currentUser.uid)
           .update({
-            name: firstName.trim() + ' ' + lastName.trim(),
+            name: firstNameUp.trim() + ' ' + lastNameUp.trim(),
             major: major,
             firstLogin: false,
             gradYear: gradDate,
             pfp: url,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
             joined: firestore.FieldValue.serverTimestamp()
 
           })
@@ -178,12 +180,12 @@ const RegisterError = () => {
           .collection('Users')
           .doc(auth().currentUser.uid)
           .update({
-            name: firstName.trim() + ' ' + lastName.trim(),
+            name: firstNameUp.trim() + ' ' + lastNameUp.trim(),
             major: major,
             firstLogin: false,
             gradYear: gradDate,
             bio: bio,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
             joined: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
@@ -202,11 +204,11 @@ const RegisterError = () => {
           .collection('Users')
           .doc(auth().currentUser.uid)
           .update({
-            name: firstName.trim() + ' ' + lastName.trim(),
+            name: firstNameUp.trim() + ' ' + lastNameUp.trim(),
             major: major,
             firstLogin: false,
             gradYear: gradDate,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
+            searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
             joined: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
