@@ -456,6 +456,10 @@ export function ChatsScreen(props) {
             <Modal
               animationType="slide"
               transparent={true}
+              onRequestClose={() => {
+                setSearchModalVisible(false);
+                this.floatingAction.animateButton();
+              }}
               visible={searchModalVisible}>
             <View style={{backgroundColor:'white',flex:1,justifyContent:'center',marginTop:headerHeight-3}}>
             <Button 

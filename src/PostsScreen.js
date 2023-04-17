@@ -891,10 +891,10 @@ export function PostsScreen({navigation, route}) {
       }}
       overshootRight={true}
       leftThreshold={50}
-      rightThreshold={75}
+      rightThreshold={50}
       onSwipeableOpen={(direction) => {
       }}
-      friction={2}
+      friction={1.5}
       renderLeftActions={() => (
         <View style={{justifyContent:'center',alignItems:'center',marginLeft:15}}>
           <TouchableOpacity onPress={async () => {await UpvotePost({item}).then(() =>{getReplies(replyItem)})}}
