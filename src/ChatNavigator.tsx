@@ -50,6 +50,8 @@ const navigationContainerRef = React.createRef<NavigationContainerRef>();
 import androidscreenOptions from './styles/android/ChatNavigatorOptions';
 import iosscreenOptions from './styles/ios/ChatNavigatorOptions';
 
+import { useWindowDimensions } from 'react-native';
+
 var screenOptions;
 
 if (Platform.OS === 'ios') {
@@ -71,6 +73,14 @@ export const ChatNavigator = () => {
   const chatClient = StreamChat.getInstance(chatApiKey);
 
   //const [channelId,setInitialChannelId] = useState('');
+
+  function ChatTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize, color:'white'}}>Campus Connect: Chats</Text>
+    );
+  }
 
   useEffect(() => {
     if(clientIsReady){
@@ -177,9 +187,15 @@ export const ChatNavigator = () => {
     <ChatProvider>
       <Chat client={chatClient}>
         <Stack.Navigator id='ChatNavigator' screenOptions={screenOptions}>
-          <Stack.Screen name="ChatsHome" component={ChatsScreen} options={{headerShown:true, headerLeft: () => (
-        <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.goBack()} />
-      ),}}/>
+          <Stack.Screen name="ChatsHome" component={ChatsScreen} 
+      options={({ navigation, route }) => ({
+        headerTitle: (props) => <ChatTitle {...props} />,
+        // Add a placeholder button without the `onPress` to avoid flicker
+        headerLeft: () => (
+          <HeaderBackButton tintColor='white' style={{marginLeft:0}} onPress={() => navigation.goBack()} />)
+      })}
+
+/>
           <Stack.Screen name="CreateGroup" component={CreateGroup} options={{headerShown: true}}/>
           <Stack.Screen name="DMScreen" 
           

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, View} from 'react-native';
+import {Button, View,Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CommonActions} from '@react-navigation/native';
 import {useEffect, useContext, useState} from 'react';
@@ -13,6 +13,7 @@ import {ChatNavigator} from './ChatNavigator';
 import {CreateGroup} from './CreateGroup.js';
 import {Message} from './Message.js';
 import { ChatProvider } from "./ChatContext";
+import { useWindowDimensions } from 'react-native';
 
 
 import AppContext from './AppContext';
@@ -46,6 +47,64 @@ if (Platform.OS === 'ios') {
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
+  function PostTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize, color:'white'}}>Campus Connect: Posts</Text>
+    );
+  }
+  function AlumniTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Alumni</Text>
+    );
+  }
+  function EditTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Edit Profile</Text>
+    );
+  }
+  function ClubTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Clubs</Text>
+    );
+  }
+  function SportsTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Sports</Text>
+    );
+  }
+  function EventsTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Edit</Text>
+    );
+  }
+  function ChatTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Chats</Text>
+    );
+  }
+  function SearchTitle() {
+    const windowWidth = useWindowDimensions().width;
+    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+    return (
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Search</Text>
+    );
+  }
+
+
 
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
@@ -133,35 +192,40 @@ export function HomeScreen({navigation}) {
             // Add any other initial params as needed
           }}
           options={({ navigation, route }) => ({
-            headerTitle: (props) => <LogoTitle {...props} />,
+            headerTitle: (props) => <PostTitle {...props} />,
             // Add a placeholder button without the `onPress` to avoid flicker
             headerRight: () => (
                 <SelectDropdown
                   defaultButtonText='Sort'
                 />
-            ),
-            headerTitle: 'Campus Connect: Posts'
+            )
           })}
         />
         <Drawer.Screen
           name="Events"
           component={EventsScreen}
-          options={{headerTitle: 'Campus Connect: Events'}}
+          options={({ navigation, route }) => ({
+            headerTitle: (props) => <EventsTitle {...props} />,
+          })}
         />
         <Drawer.Screen
           name="Chats"
           component={ChatNavigator}
-          options={{headerTitle: 'Campus Connect: Chats', headerShown:false}}
+          options={{headerTitle: 'Campus Connect: Chats', headerShown:false}} //needs custom solution
         />
         <Drawer.Screen
           name="Clubs"
           component={ClubsScreen}
-          options={{headerTitle: 'Campus Connect: Clubs'}}
+          options={({ navigation, route }) => ({
+            headerTitle: (props) => <ClubTitle {...props} />,
+          })}
         />
         <Drawer.Screen
           name="Sports"
           component={SportsScreen}
-          options={{headerTitle: 'Campus Connect: Sports'}}
+          options={({ navigation, route }) => ({
+            headerTitle: (props) => <SportsTitle {...props} />,
+          })}
         />
         <Drawer.Screen
           name="Alumni"
@@ -170,22 +234,30 @@ export function HomeScreen({navigation}) {
             sortingMode: 'Best',
             // Add any other initial params as needed
           }}
-          options={{
-            headerTitle: 'Campus Connect: Alumni',
-          }}/>
+          options={({ navigation, route }) => ({
+            headerTitle: (props) => <AlumniTitle {...props} />,
+            // Add a placeholder button without the `onPress` to avoid flicker
+            headerRight: () => (
+                <SelectDropdown
+                  defaultButtonText='Sort'
+                />
+            )
+          })}
+          />
         <Drawer.Screen
           name="Search"
           component={Search}
-          options={{
-            headerTitle: 'Campus Connect: Search',
-        }}/>
+          options={({ navigation, route }) => ({
+            headerTitle: (props) => <SearchTitle {...props} />,
+          })}
+        />
         <Drawer.Screen
           name="Edit Profile"
           component={EditProfileScreen}
-          options={{
-            headerTitle: 'Campus Connect: Edit Profile',
-            drawerItemStyle: {height: 0},
-          }}/>
+          options={({ navigation, route }) => ({
+            headerTitle: (props) => <EditTitle {...props} />,
+            drawerItemStyle: {display: 'none'},
+          })}/>
 
       </Drawer.Navigator>
   );
