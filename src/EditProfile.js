@@ -226,7 +226,7 @@ export function EditProfileScreen({navigation}) {
     setRegistraionSuccess(false);
     navigation.reset({
       index: 0,
-      routes: [{name: 'HomeScreen'}],
+      routes: [{name: 'LoadingScreen'}],
     });
   };
 
