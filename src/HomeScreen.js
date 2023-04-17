@@ -86,7 +86,7 @@ export function HomeScreen({navigation}) {
     const windowWidth = useWindowDimensions().width;
     const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
-      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Edit</Text>
+      <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Evemts</Text>
     );
   }
   function ChatTitle() {
