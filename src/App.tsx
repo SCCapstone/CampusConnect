@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LoginScreen, RegisterScreen, WelcomeScreen} from './LoginScreens.js';
 import {RegistrationScreen} from './RegistrationScreen.js';
+import {LoadingScreen} from './LoadingScreen.js';
 import {HomeScreen} from './HomeScreen.js';
 import {ProfileView} from './ProfileView.js'
 import {CalendarPage} from './CalendarPage'
@@ -119,6 +120,11 @@ export default function App() {
                 name="RegistrationScreen"
                 component={RegistrationScreen}
                 options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="LoadingScreen"
+                  component={LoadingScreen}
+                  options={{headerShown: false}}
                 />
                 <Stack.Screen
                   name="HomeScreen"

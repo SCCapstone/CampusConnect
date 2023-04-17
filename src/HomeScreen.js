@@ -19,18 +19,20 @@ import { useWindowDimensions } from 'react-native';
 import AppContext from './AppContext';
 
 import SelectDropdown from 'react-native-select-dropdown'
-import { useChatClient } from './useChatClient';
+
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 
 
 import { StreamChat } from 'stream-chat';
 import { chatApiKey } from '../chatConfig';
+import { useChatClient } from './useChatClient';
 
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 
 import {DrawerContent} from './DrawerContent.js';
-import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
+
 
 import androidscreenOptions from './styles/android/HomeScreenStyles';
 import iosscreenOptions from './styles/ios/HomeScreenStyles';
@@ -106,47 +108,10 @@ export function HomeScreen({navigation}) {
 
 
 
-  const userData = useContext(AppContext);
+
   const [initializing, setInitializing] = useState(true);
+  const {clientReady} = useChatClient();
   const [user, setUser] = useState();
-  const [loading,setLoading] = useState(true)
-
-  const getUserData = () => {
-    firestore()
-      .collection('Users')
-      .doc(auth().currentUser.uid)
-      .get()
-      .then(data => {
-        userData.setName(data.get('name'));
-        userData.setEmail(data.get('email'));
-        userData.setBio(data.get('bio'));
-        userData.setMajor(data.get('major'));
-        userData.setGradYear(data.get('gradYear'));
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  const getPhoto = () => {
-    storage()
-      .ref(auth().currentUser.uid) //name in storage in firebase console
-      .getDownloadURL()
-      .then(url => {
-        userData.setProfilePic(url);
-        setLoading(false)
-      })
-      .catch(e => reset());
-  };
-
-  const reset = () => {
-    setLoading(false)
-    userData.setProfilePic('');
-  };
-
-
-
-
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -154,29 +119,28 @@ export function HomeScreen({navigation}) {
 
     if (initializing) setInitializing(false);
 
-    
 
     if (!auth().currentUser) {
-      const chatClient = StreamChat.getInstance(chatApiKey);
-      chatClient.disconnectUser();
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'WelcomeScreen'}],
-      });
+      try{
+        const chatClient = StreamChat.getInstance(chatApiKey);
+        chatClient.disconnectUser();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'WelcomeScreen'}],
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
 
   }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    getUserData();
-    getPhoto();
-
-
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (initializing || loading) return null;
+  if (initializing) return null;
 
 
   return (

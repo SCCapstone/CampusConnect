@@ -16,7 +16,6 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import {useEffect, useContext} from 'react';
 import AppContext from './AppContext';
-import { useChatClient } from './useChatClient';
 import {useNavigation} from '@react-navigation/native';
 import { LinearGradient } from 'react-native-svg';
 import iosstyles from './styles/ios/DrawerContentStyles';
@@ -37,45 +36,36 @@ import { Icon } from '@rneui/themed';
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const DeleteAlert = () => {
     Alert.alert('Delete Photo', 'Do you want to delete your photo?', [
       {text: 'Yes', onPress: () => deletePhoto()},
       {text: 'No'},
     ]);
   };
-  const getPhoto = () => {
-    storage()
-      .ref('/Profile Pictures/' +auth().currentUser.uid) //name in storage in firebase console
-      .getDownloadURL()
-      .then(url => {
-        userData.setProfilePic(url);
-      })
-      .catch(e => reset());
-  };
-  const reset = () => {
-    userData.setProfilePic('');
-  };
 
   const deletePhoto = async () => {
     await storage().ref('/Profile Pictures/'+auth().currentUser.uid).delete();
     firestore().collection('Users').doc(auth().currentUser.uid).update({
       pfp: '',
+    }).then(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LoadingScreen'}],
+      });
     });
-    getPhoto();
   };
 
   const SignOut = async () => {
-
-    auth().signOut();
-    StreamChat.getInstance(chatApiKey).disconnectUser();
-
-
+    try{
+      auth().signOut();
+      StreamChat.getInstance(chatApiKey).disconnectUser();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  useEffect(() => {
-    getPhoto()
-  }, []);
+
 
   return (
 

@@ -25,6 +25,10 @@ import iosstyles from './styles/ios/EditProfileStyles';
 import androidstyles from './styles/android/EditProfileStyles';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { StreamChat } from 'stream-chat';
+import { chatApiKey } from '../chatConfig';
+import { useChatClient } from './useChatClient';
+
 var styles;
 
 if (Platform.OS === 'ios') {
@@ -76,12 +80,24 @@ export function EditProfileScreen({navigation}) {
 
   const uploadPic = async () => {
     const reference = storage().ref('/Profile Pictures/'+auth().currentUser.uid);
-    if (image) {
-      await reference.putFile(image).catch(error => {
-        FirebaseError(error.code);
-      });
-      url = await reference.getDownloadURL();
-    }
+    try {
+      if (image) {
+        await reference.putFile(image).catch(error => {
+          FirebaseError(error.code);
+        });
+        url = await reference.getDownloadURL();
+        const chatClient = StreamChat.getInstance(chatApiKey);
+        const update = { 
+          id: chatClient.user.id, 
+          set: { 
+              name: userData.name, 
+              image: url, 
+          }, 
+        } 
+        await chatClient.partialUpdateUser(update)
+
+      }
+    } catch (error) {console.log(error)}
   };
 
 

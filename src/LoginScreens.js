@@ -80,7 +80,7 @@ export function WelcomeScreen({navigation}) {
                 
                 navigation.reset({
                   index: 0,
-                  routes: [{name: 'HomeScreen'}],
+                  routes: [{name: 'LoadingScreen'}],
                 });
               }
               else {
