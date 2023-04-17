@@ -41,6 +41,8 @@
 	<string>We use your location to provide guidance on where your classes are.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app uses your photo library to upload a profile pic.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses your camera to allow you to send pictures in our chat.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
