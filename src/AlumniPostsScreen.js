@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   Pressable,
+  Dimensions,
   FlatList,
   TouchableOpacity,
   ScrollView,
@@ -68,13 +69,17 @@ if (Platform.OS === 'ios') {
   commentStyles = androidCommentStyles
 }
 
-
 export function AlumniPostsScreen({navigation}) {
+
   const POST_COLLECTION_NAME = 'AlumniPosts'
   const POST_STORAGE_NAME = '/AlumniPosts/'
   const ANONYMOUS_USER_NAME = 'USC Alum'
   const RESET_PATH = 'Alumni'
   const DISPLAY_TEXT = 'Alumni Post Here!'
+
+  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+  const scaleFactor = screenWidth < 400 ? 0.8 : 1;
+
 
   //Global userdata var
   const userData = useContext(AppContext);
@@ -712,8 +717,8 @@ export function AlumniPostsScreen({navigation}) {
       }}
       overshootRight={true}
       leftThreshold={75}
-      rightThreshold={95}
-      friction={3}
+      rightThreshold={75}
+      friction={2}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
             <TouchableOpacity onPress={() => UpvotePost({item})}>
@@ -849,7 +854,7 @@ export function AlumniPostsScreen({navigation}) {
                 <TouchableOpacity onPress={() => {OpenImage(item.key)}}>
                   <FastImage
                     source={{uri: item.extraData}}
-                    style={styles.postImage}
+                    style={{height: 200 * scaleFactor, width: '100%', borderRadius: 10 * scaleFactor,marginTop: 10 * scaleFactor,}}
                   />
                 </TouchableOpacity>
               ) : null}

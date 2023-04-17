@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   Pressable,
+  Dimensions,
   FlatList,
   TouchableOpacity,
   ScrollView,
@@ -75,6 +76,9 @@ export function PostsScreen({navigation}) {
   const ANONYMOUS_USER_NAME = 'USC Student'
   const RESET_PATH = 'Home'
   const DISPLAY_TEXT = 'Kind of empty in here...'
+
+  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+  const scaleFactor = screenWidth < 400 ? 0.8 : 1;
 
 
   //Global userdata var
@@ -713,8 +717,8 @@ export function PostsScreen({navigation}) {
       }}
       overshootRight={true}
       leftThreshold={75}
-      rightThreshold={95}
-      friction={3}
+      rightThreshold={75}
+      friction={2}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
             <TouchableOpacity onPress={() => UpvotePost({item})}>
@@ -850,7 +854,7 @@ export function PostsScreen({navigation}) {
                 <TouchableOpacity onPress={() => {OpenImage(item.key)}}>
                   <FastImage
                     source={{uri: item.extraData}}
-                    style={styles.postImage}
+                    style={{height: 200 * scaleFactor, width: '100%', borderRadius: 10 * scaleFactor,marginTop: 10 * scaleFactor,}}
                   />
                 </TouchableOpacity>
               ) : null}
