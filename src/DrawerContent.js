@@ -48,7 +48,20 @@ export function DrawerContent(props) {
     await storage().ref('/Profile Pictures/'+auth().currentUser.uid).delete();
     firestore().collection('Users').doc(auth().currentUser.uid).update({
       pfp: '',
-    }).then(() => {
+    }).then(async () => {
+      try{
+        const chatClient = StreamChat.getInstance(chatApiKey);
+        const update = { 
+          id: chatClient.user.id, 
+          set: { 
+              name: userData.name, 
+              image: '', 
+          }, 
+        } 
+        await chatClient.partialUpdateUser(update);
+      } catch (e) {
+        console.log(e);
+      }
       navigation.reset({
         index: 0,
         routes: [{name: 'LoadingScreen'}],
