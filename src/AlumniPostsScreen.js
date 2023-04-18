@@ -709,7 +709,7 @@ export function AlumniPostsScreen({navigation, route}) {
       overshootRight={true}
       leftThreshold={75}
       rightThreshold={75}
-      friction={2}
+      friction={1.5}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
             <TouchableOpacity onPress={() => UpvotePost({item})}>
@@ -1059,6 +1059,12 @@ export function AlumniPostsScreen({navigation, route}) {
       <Modal
         animationType="slide"
         transparent={true}
+        onRequestClose={() => {
+          setReplyModalVisible(false)
+          setPostReplies([])
+          setReplyItem(null)
+          setReply('')
+        }}
         visible={replyModalVisible}>
         
           <SafeAreaView style={{backgroundColor:'white',flex:1,justifyContent:'center'}}>

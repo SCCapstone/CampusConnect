@@ -709,7 +709,7 @@ export function PostsScreen({navigation, route}) {
       overshootRight={true}
       leftThreshold={75}
       rightThreshold={75}
-      friction={2}
+      friction={1.5}
       renderLeftActions={() => (
         <View style={styles.upvoteBox}>
             <TouchableOpacity onPress={() => UpvotePost({item})}>
