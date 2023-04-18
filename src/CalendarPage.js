@@ -188,6 +188,12 @@ export function CalendarPage({navigation}) {
 
     const saveClasses = async () => {
         var tempClass = {name:'',professorName:'',location:'',roomNumber:'',time:'',coordinates:{},startTime:{},endTime:{}}
+        console.log(startTime + ' ' + endTime)
+        if (endTime.nativeEvent.timestamp - startTime.nativeEvent.timestamp < 1) {
+            //Start Time is before end time
+            Alert.alert('Whoops!','Start time must be before end time')
+            return
+        }
         if(professorName.trim() && className.trim() && roomNumber.trim() && selectedClassLocation && startTime && endTime) {
             startTimeString = moment(startTime.nativeEvent.timestamp).format("hh:mm A")
             endTimeString = moment(endTime.nativeEvent.timestamp).format("hh:mm A")
