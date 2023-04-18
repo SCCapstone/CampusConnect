@@ -57,6 +57,7 @@ export default StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontSize: 12,
+    width: '100%',
   },
 
   forgot_button: {

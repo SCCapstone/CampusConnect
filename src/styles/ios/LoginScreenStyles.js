@@ -54,11 +54,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   TextInput: {
     color: 'black',
     textAlign: 'center',
     fontSize: 12,
+    width: '100%',
   },
 
   forgot_button: {
