@@ -241,7 +241,7 @@ export function RegisterScreen({navigation}) {
       email &&
       password &&
       password === password2 &&
-      email.split('@').length > 1 &&
+      email.split('@').length == 2 &&
       email.split('@')[1].includes('sc.edu') &&
       email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu') {
       auth()
