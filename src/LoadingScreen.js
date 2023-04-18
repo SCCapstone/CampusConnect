@@ -28,12 +28,10 @@ export function LoadingScreen ({navigation}) {
     };
   
     const getPhoto = async () => {
-        console.log('askjdhaskdjh')
       return await storage()
         .ref('/Profile Pictures/'+auth().currentUser.uid) //name in storage in firebase console
         .getDownloadURL()
         .then(url => {
-            console.log('sdfsdjfhsjdfhskjdfhsdjk')
           userData.setProfilePic(url);
         })
         .catch(e => {userData.setProfilePic('')});
