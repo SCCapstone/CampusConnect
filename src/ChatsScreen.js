@@ -54,6 +54,12 @@ import { BackgroundImage , Button, Icon, Input} from "@rneui/base";
 import moment from "moment";
 import { FAB } from '@rneui/themed';
 
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 
 var styles;
 
@@ -216,9 +222,22 @@ export function ChatsScreen(props) {
       const [muteStatus, setMuteStatus] = useState(channel.muteStatus().muted)
       //const { channels, reloadList } = useContext(ChannelsContext);
       const backgroundColor = unread ? '#c6edff' : '#fff';
+      const isCreator = channel.data.created_by.id === chatClient.user.id
+      const isTeam = channel.type === 'team'
 
-      const channelOptions = ["View Profile","Mute", "Block"]
-      const channelOptions2 = ["View Profile","Unmute", "Block"]
+
+      var tempOptions =[]
+      const standardUnmuted = ["View Profile","Mute", "Block"]
+      const standardMuted = ["View Profile","Unmute", "Block"]
+      const teamCreatorUnmuted = ["View Profile","Mute", "Block","Delete Group"]
+      const teamCreatorMuted = ["View Profile","Unmute", "Block","Delete Group"]
+
+      tempOptions = isTeam && isCreator
+      ? (muteStatus ? teamCreatorMuted : teamCreatorUnmuted)
+      : (muteStatus ? standardMuted : standardUnmuted);
+
+
+
       
       return (
         <Swipeable
@@ -246,7 +265,13 @@ export function ChatsScreen(props) {
             rowTextStyle={{fontSize:10}}
             buttonTextStyle={{backgroundColor:'transparent'}}
             buttonTextAfterSelection={() =>{return "• • •"}}
-            data={muteStatus? channelOptions2 : channelOptions}
+            renderCustomizedRowChild={(item, index) => (
+              <Text style={{ fontSize: 11,color:'black',textAlign:'center',fontWeight:'bold'}} numberOfLines={0}>
+                {item}
+              </Text>
+            )}
+            buttonStyle={{ width: 70, height: 70, backgroundColor: 'transparent' }}
+            data={tempOptions}
             onSelect={async (selection) => {
               if (selection === 'Mute'){
                 await channel.mute()
@@ -271,6 +296,28 @@ export function ChatsScreen(props) {
               }
               else if (selection === 'Block'){
                 Alert.alert('Message','Sorry, this feature hasn\'t been implemented yet. Try muting and then deleting the chat.')
+              }
+              else if (selection === 'Delete Group'){
+                //Alert the user to confirm deletion
+                Alert.alert(
+                  'Confirm Deletion',
+                  'Are you sure you want to delete this group? It will be deleted for everyone in the group.',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Deletion cancelled'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: async () => {
+                        await channel.delete();
+                        searchGroups();
+                      },
+                    },
+                  ],
+                  { cancelable: true }
+                );
               }
             }}
             buttonStyle={{width:70,height:70,backgroundColor:'transparent'}}>

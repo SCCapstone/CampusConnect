@@ -390,7 +390,11 @@ export function AlumniPostsScreen({navigation, route}) {
         defaultButtonText='Sort'
         data={sortingOptions}
         buttonStyle={{width:110,height:20,backgroundColor:'#73000a'}}
-        rowTextStyle={{fontSize:11}}
+        renderCustomizedRowChild={(item, index) => (
+          <Text style={{ fontSize: 11,color:'black',textAlign:'center',fontWeight:'bold'}} numberOfLines={0}>
+            {item}
+          </Text>
+        )}
         buttonTextAfterSelection={(selectedItem,index) => {
           return selectedItem
         }}
@@ -403,6 +407,9 @@ export function AlumniPostsScreen({navigation, route}) {
       />
       ),
     });
+  }, [navigation]);
+
+  useEffect(() => {
 
     var postsRef = firestore().collection(POST_COLLECTION_NAME)
     var query; 
