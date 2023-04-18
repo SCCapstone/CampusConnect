@@ -46,11 +46,12 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   screenOptions = androidscreenOptions;
 }
-const windowWidth = useWindowDimensions().width;
-const fontSize = windowWidth < 400 ? 12 : 18; // Adjust the font size based on the screen width
+
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
+  const windowWidth = useWindowDimensions().width;
+  const fontSize = windowWidth < 410 ? 13 : 18; // Adjust the font size based on the screen width
   function PostTitle() {
     return (
       <Text style={{fontSize: fontSize, color:'white'}}>Campus Connect: Posts</Text>

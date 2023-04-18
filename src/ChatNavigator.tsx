@@ -76,7 +76,7 @@ export const ChatNavigator = () => {
 
   function ChatTitle() {
     const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 12 : 18; // Adjust the font size based on the screen width
+    const fontSize = windowWidth < 410 ? 13 : 18; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize, color:'white'}}>Campus Connect: Chats</Text>
     );
