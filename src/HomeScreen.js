@@ -46,61 +46,48 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   screenOptions = androidscreenOptions;
 }
+const windowWidth = useWindowDimensions().width;
+const fontSize = windowWidth < 400 ? 12 : 18; // Adjust the font size based on the screen width
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
   function PostTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize, color:'white'}}>Campus Connect: Posts</Text>
     );
   }
   function AlumniTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
+
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Alumni</Text>
     );
   }
   function EditTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Edit Profile</Text>
     );
   }
   function ClubTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Clubs</Text>
     );
   }
   function SportsTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Sports</Text>
     );
   }
   function EventsTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Events</Text>
     );
   }
   function ChatTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Chats</Text>
     );
   }
   function SearchTitle() {
-    const windowWidth = useWindowDimensions().width;
-    const fontSize = windowWidth < 400 ? 15 : 20; // Adjust the font size based on the screen width
     return (
       <Text style={{fontSize: fontSize,color:'white'}}>Campus Connect: Search</Text>
     );
