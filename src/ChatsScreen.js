@@ -15,11 +15,7 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 
-import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
-]);
 
 import {
     ChannelList,
@@ -302,57 +298,56 @@ export function ChatsScreen(props) {
       )
     }
 
-    const CustomAvatar = ({channel}) => {
-        const is2PersonChat = (channel.data.member_count == 2 && channel.type === 'messaging')
-        var member;
-        const [isOnline, setIsOnline] = useState(false)
-        const [loading, setLoading] = useState(true)
-        const [image,setImage] = useState('')
-        useEffect(() =>{
-          getPhotos = async () =>{
-            if (is2PersonChat) {
-              member = await channel.queryMembers({id: {$ne:chatClient.user.id}},'','')
-              setIsOnline(member.members[0].user.online)
-              if(!member.members[0].user.image) {
-                setImage(await storage().ref('Profile Pictures/'+member.members[0].user_id).getDownloadURL().catch(() =>{}))
-                setLoading(false)
-              }
-              else{
-                setImage(member.members[0].user.image)
-                setLoading(false)
-              }
-            }
-            else {
-              setImage(channel.data.image)
-              setLoading(false)
-            }
-            
+    const CustomAvatar = ({ channel }) => {
+      const is2PersonChat = channel.data.member_count == 2 && channel.type === 'messaging';
+      const [isOnline, setIsOnline] = useState(false);
+      const [loading, setLoading] = useState(true);
+      const [image, setImage] = useState('');
+    
+      useEffect(() => {
+        const getPhotos = async () => {
+          let member;
+          if (is2PersonChat) {
+            member = await channel.queryMembers({ id: { $ne: chatClient.user.id } }, '', '');
+            setImage(member.members[0].user.image);
+          } else {
+            setImage(channel.data.image);
           }
-
-          getPhotos();
-          
-        },[]);
-
-      if(loading) {
-        return(
-        <View style={{width:60,height:60, justifyContent:'center', alignContent:'center'}}>
-          <WaveIndicator count={15} color="rgb(115,0,10)" size={32} waveFactor={.5}>
-
-          </WaveIndicator>
-        </View>
-        )
-      }
-       return (
-          <View style={{}}>
-            {Platform.OS === 'ios' ? 
-              <ImageBackground defaultSource={require('./assets/blank2.jpeg')} style={{width:60,height:60}} imageStyle={{borderRadius:120}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
-                {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-              </ImageBackground> : <ImageBackground style={{width:60,height:60}} imageStyle={{borderRadius:120}} source={image ?{uri:image}:require('./assets/blank2.jpeg')}>
-                {isOnline ? <Icon containerStyle={{position:'absolute',right:2}} size={15} solid={true} type="fontawesome" name="circle" color='green'/> : null}
-              </ImageBackground>}
+          setLoading(false);
+        };
+    
+        getPhotos();
+      }, []);
+    
+      if (loading) {
+        return (
+          <View style={{ width: 60, height: 60, justifyContent: 'center', alignItems: 'center' }}>
           </View>
-        )
+        );
       }
+    
+      return (
+        <View style={{}}>
+          <ImageBackground
+            defaultSource={require('./assets/blank2.jpeg')}
+            style={{ width: 60, height: 60 }}
+            imageStyle={{ borderRadius: 120 }}
+            source={image ? { uri: image } : require('./assets/blank2.jpeg')}
+          >
+            {isOnline ? (
+              <Icon
+                containerStyle={{ position: 'absolute', right: 2 }}
+                size={15}
+                solid={true}
+                type="fontawesome"
+                name="circle"
+                color="green"
+              />
+            ) : null}
+          </ImageBackground>
+        </View>
+      );
+    };
 
         //Make this users instead
   //shows list of chats

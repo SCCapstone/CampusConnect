@@ -54,7 +54,6 @@ export function WelcomeScreen({navigation}) {
 
       if (auth().currentUser) {
         if(!transactionStarted){
-          console.log('login detexted')
           transactionStarted = true;
           firestore()
             .collection('Users')
