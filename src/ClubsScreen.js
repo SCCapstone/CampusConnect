@@ -29,8 +29,14 @@ export function ClubsScreen({navigation}) {
   const handleSearch = text => {
     setSearchText(text);
 
-    // Filter the data based on the prefix substring search
-    const filtered = DATA.filter(club => club.title.toLowerCase().includes(text.toLowerCase()));
+    // Searches based on title and description
+    const filtered = DATA.filter(club => {
+      const searchText = text.toLowerCase();
+      const titleMatch = club.title.toLowerCase().includes(searchText);
+      const descriptionMatch = club.description.toLowerCase().includes(searchText);
+      
+      return titleMatch || descriptionMatch;
+    });
     setFilteredData(filtered);
   };
 
