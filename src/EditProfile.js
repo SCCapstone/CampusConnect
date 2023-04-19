@@ -1,23 +1,14 @@
 import * as React from 'react';
 import {useState, useContext} from 'react';
-import {View, Image, Text, TouchableOpacity,Linking,ImageBackground} from 'react-native';
-import auth, { firebase } from '@react-native-firebase/auth';
+import {View, Image, Text, TouchableOpacity, Linking, ImageBackground} from 'react-native';
+import auth, {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {majors,classes} from './consts/majors'
+import {majors, classes} from './consts/majors';
 
-
-import {
-  SafeAreaView,
-  TextInput,
-  KeyboardAvoidingView,
-  Alert,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
-
+import {SafeAreaView, TextInput, KeyboardAvoidingView, Alert, ScrollView, ActivityIndicator} from 'react-native';
 
 import AppContext from './AppContext';
 
@@ -25,9 +16,9 @@ import iosstyles from './styles/ios/EditProfileStyles';
 import androidstyles from './styles/android/EditProfileStyles';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { StreamChat } from 'stream-chat';
-import { chatApiKey } from '../chatConfig';
-import { useChatClient } from './useChatClient';
+import {StreamChat} from 'stream-chat';
+import {chatApiKey} from '../chatConfig';
+import {useChatClient} from './useChatClient';
 
 var styles;
 
@@ -53,7 +44,6 @@ export function EditProfileScreen({navigation}) {
 
   const [major, setMajor] = useState(userData.major);
 
-
   const onMajorOpen = React.useCallback(() => {
     setOpen2(false);
   }, []);
@@ -62,14 +52,12 @@ export function EditProfileScreen({navigation}) {
     setOpen(false);
   }, []);
 
-
-
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
       width: 300,
       height: 300,
       mediaType: 'photo',
-      cropping: true
+      cropping: true,
     })
       .then(image => {
         console.log(image);
@@ -79,7 +67,7 @@ export function EditProfileScreen({navigation}) {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref('/Profile Pictures/'+auth().currentUser.uid);
+    const reference = storage().ref('/Profile Pictures/' + auth().currentUser.uid);
     try {
       if (image) {
         await reference.putFile(image).catch(error => {
@@ -87,38 +75,28 @@ export function EditProfileScreen({navigation}) {
         });
         url = await reference.getDownloadURL();
         const chatClient = StreamChat.getInstance(chatApiKey);
-        const update = { 
-          id: chatClient.user.id, 
-          set: { 
-              name: userData.name, 
-              image: url, 
-          }, 
-        } 
-        await chatClient.partialUpdateUser(update)
-
+        const update = {
+          id: chatClient.user.id,
+          set: {
+            name: userData.name,
+            image: url,
+          },
+        };
+        await chatClient.partialUpdateUser(update);
       }
-    } catch (error) {console.log(error)}
+    } catch (error) {
+      console.log(error);
+    }
   };
-
 
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
 
-
-
     var emailVerified = true;
 
-    if(emailVerified){
-      if (
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bio &&
-        bioLengthValid &&
-        image
-      ) {
+    if (emailVerified) {
+      if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
 
         firestore()
@@ -131,21 +109,13 @@ export function EditProfileScreen({navigation}) {
             gradYear: gradDate,
             bio: bio,
             pfp: url,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
           })
           .then(() => {
             setRegistraionSuccess(true);
           });
-      } else if (
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bioLengthValid &&
-        image
-      ) {
+      } else if (firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid && image) {
         await uploadPic();
-
 
         firestore()
           .collection('Users')
@@ -156,20 +126,12 @@ export function EditProfileScreen({navigation}) {
             firstLogin: false,
             gradYear: gradDate,
             pfp: url,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
           })
           .then(() => {
             setRegistraionSuccess(true);
           });
-      } else if (
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bio &&
-        bioLengthValid
-      ) {
-
+      } else if (firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid) {
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -179,19 +141,12 @@ export function EditProfileScreen({navigation}) {
             firstLogin: false,
             gradYear: gradDate,
             bio: bio,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
           })
           .then(() => {
             setRegistraionSuccess(true);
           });
-      } else if (
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bioLengthValid
-      ) {
-
+      } else if (firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid) {
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -200,7 +155,7 @@ export function EditProfileScreen({navigation}) {
             major: major,
             firstLogin: false,
             gradYear: gradDate,
-            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase()
+            searchName: firstName.trim().toUpperCase() + ' ' + lastName.trim().toUpperCase(),
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -208,8 +163,7 @@ export function EditProfileScreen({navigation}) {
       } else {
         RegisterError();
       }
-    }
-    else {
+    } else {
       EmailAlert();
     }
     setLoading(false);
@@ -263,71 +217,71 @@ export function EditProfileScreen({navigation}) {
   }
 
   return (
-    <LinearGradient
-    colors={['#73000a', '#73000a' ,'white']}
-    style={styles.container}
-  >
-        <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
-            {userData.pfp? <Image style={styles.blankImageStyle} source={{uri: userData.pfp}}></Image> :<ImageBackground
-              source={require('./assets/blank2.jpeg')}
-              imageStyle={styles.blankImageStyle}
-              style={styles.blankImageBackgroundStyle}>
-              <Text style={styles.imageTextStyle}>                 
-              {image
-              ? 'Pic Loaded ✅'
-              : 'Select an image from your library'}</Text>
-            </ImageBackground>}
-          </TouchableOpacity>
-          <Text style={styles.textStyle}>{firstName} {lastName}</Text>
-          <KeyboardAvoidingView enabled>
-            <View style={styles.SectionStyle}>
-              <DropDownPicker
-                style={styles.inputStyle}
-                placeholder="Select Class"
-                open={open2}
-                onOpen={onYearOpen}
-                value={gradDate}
-                items={classes}
-                dropDownDirection="TOP"
-                setOpen={setOpen2}
-                setValue={setGradDate}
-                listMode="SCROLLVIEW"
-              />
-            </View>
-            <View style={styles.SectionStyle}>
-              <DropDownPicker
-                style={styles.inputStyle}
-                placeholder="Select Major (Required)"
-                open={open}
-                onOpen={onMajorOpen}
-                value={major}
-                items={majors}
-                dropDownDirection="TOP"
-                setOpen={setOpen}
-                setValue={setMajor}
-                listMode="MODAL" 
-              />
-            </View>
-            <View style={styles.bioSectionStyle}>
-              <TextInput
-                style={styles.bioStyle}
-                onChangeText={bio => setBio(bio)}
-                placeholder="Enter a short Bio (optional) (150 characters max)"
-                defaultValue={userData.bio}
-                placeholderTextColor="gray"
-                blurOnSubmit={false}
-              />
-            </View>
-            <TouchableOpacity
-              style={styles.buttonUpdateStyle}
-              onPress={writeUserData}>
-              <Text style={styles.buttonTextStyle}>{!image ? 'UPDATE' : 'Press to update ✅'}</Text>
-            </TouchableOpacity>
-          </KeyboardAvoidingView>
-          <View style={styles.bottomContainer}>
-            <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
-          </View>
-      </LinearGradient>
+    <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.container}>
+      <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
+        {image ? (
+          <Image style={styles.blankImageStyle} source={{uri: image}} />
+        ) : userData.pfp ? (
+          <Image style={styles.blankImageStyle} source={{uri: userData.pfp}} />
+        ) : (
+          <ImageBackground
+            source={require('./assets/blank2.jpeg')}
+            imageStyle={styles.blankImageStyle}
+            style={styles.blankImageBackgroundStyle}>
+            <Text style={styles.imageTextStyle}>Select an image from your library</Text>
+          </ImageBackground>
+        )}
+      </TouchableOpacity>
+      <Text style={styles.textStyle}>
+        {firstName} {lastName}
+      </Text>
+      <KeyboardAvoidingView enabled>
+        <View style={styles.SectionStyle}>
+          <DropDownPicker
+            style={styles.inputStyle}
+            placeholder="Select Class"
+            open={open2}
+            onOpen={onYearOpen}
+            value={gradDate}
+            items={classes}
+            dropDownDirection="TOP"
+            setOpen={setOpen2}
+            setValue={setGradDate}
+            listMode="SCROLLVIEW"
+          />
+        </View>
+        <View style={styles.SectionStyle}>
+          <DropDownPicker
+            style={styles.inputStyle}
+            placeholder="Select Major (Required)"
+            open={open}
+            onOpen={onMajorOpen}
+            value={major}
+            items={majors}
+            dropDownDirection="TOP"
+            setOpen={setOpen}
+            setValue={setMajor}
+            listMode="MODAL"
+          />
+        </View>
+        <View style={styles.bioSectionStyle}>
+          <TextInput
+            style={styles.bioStyle}
+            onChangeText={bio => setBio(bio)}
+            placeholder="Enter a short Bio (optional) (150 characters max)"
+            defaultValue={userData.bio}
+            placeholderTextColor="gray"
+            blurOnSubmit={false}
+          />
+        </View>
+        <TouchableOpacity style={styles.buttonUpdateStyle} onPress={writeUserData}>
+          <Text style={styles.buttonTextStyle}>{!image ? 'UPDATE' : 'Press to update ✅'}</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+      <View style={styles.bottomContainer}>
+        <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+      </View>
+    </LinearGradient>
   );
 }
 
@@ -335,10 +289,7 @@ const FirebaseError = error => {
   Alert.alert('Error', error, [{text: 'OK'}]);
 };
 const RegisterError = () => {
-  Alert.alert(
-    'Error',
-    'Make sure all required fields are filled out and that the bio is less than 151 characters',
-    [{text: 'OK'}],
-  );
+  Alert.alert('Error', 'Make sure all required fields are filled out and that the bio is less than 151 characters', [
+    {text: 'OK'},
+  ]);
 };
-

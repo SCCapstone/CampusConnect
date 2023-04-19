@@ -3,4 +3,4 @@ export default screenOptions = {
   headerStyle: {backgroundColor: '#73000a'},
   headerColor: '#73000a',
   title: 'Campus Connect: Chats',
-  };
+};

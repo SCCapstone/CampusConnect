@@ -1,23 +1,15 @@
 import * as React from 'react';
 import {useState, useContext} from 'react';
-import {View, Image,Bac, Text, TouchableOpacity,Linking,ImageBackground} from 'react-native';
-import auth, { firebase } from '@react-native-firebase/auth';
+import {View, Image, Bac, Text, TouchableOpacity, Linking, ImageBackground} from 'react-native';
+import auth, {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import LinearGradient from 'react-native-linear-gradient';
-import {majors,classes} from './consts/majors'
+import {majors, classes} from './consts/majors';
 
-
-import {
-  SafeAreaView,
-  TextInput,
-  KeyboardAvoidingView,
-  Alert,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+import {SafeAreaView, TextInput, KeyboardAvoidingView, Alert, ScrollView, ActivityIndicator} from 'react-native';
 
 //import Parse from 'parse/react-native';
 import AppContext from './AppContext';
@@ -50,7 +42,6 @@ export function RegistrationScreen({navigation}) {
 
   const [major, setMajor] = useState(userData.major);
 
-
   const onMajorOpen = React.useCallback(() => {
     setOpen2(false);
   }, []);
@@ -59,28 +50,30 @@ export function RegistrationScreen({navigation}) {
     setOpen(false);
   }, []);
 
-
-const FirebaseError = error => {
-  Alert.alert('Error', error, [{text: 'OK'}]);
-};
-const EmailAlert = error => {
-  Alert.alert('Email Not Verified', 'You have not verified your email. Click the link sent to your USC email first.', [{text: 'OK'}]);
-};
-const RegisterError = () => {
-  Alert.alert(
-    'Error',
-    'Make sure all required fields are filled out, the bio is 150 characters or less, and your name is less than 25 characters',
-    [{text: 'OK'}],
-  );
-};
-
+  const FirebaseError = error => {
+    Alert.alert('Error', error, [{text: 'OK'}]);
+  };
+  const EmailAlert = error => {
+    Alert.alert(
+      'Email Not Verified',
+      'You have not verified your email. Click the link sent to your USC email first.',
+      [{text: 'OK'}],
+    );
+  };
+  const RegisterError = () => {
+    Alert.alert(
+      'Error',
+      'Make sure all required fields are filled out, the bio is 150 characters or less, and your name is less than 25 characters',
+      [{text: 'OK'}],
+    );
+  };
 
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
       width: 300,
       height: 300,
       mediaType: 'photo',
-      cropping: true
+      cropping: true,
     })
       .then(image => {
         setImage(image.path);
@@ -89,7 +82,7 @@ const RegisterError = () => {
   };
 
   const uploadPic = async () => {
-    const reference = storage().ref('/Profile Pictures/' +auth().currentUser.uid);
+    const reference = storage().ref('/Profile Pictures/' + auth().currentUser.uid);
     if (image) {
       await reference.putFile(image).catch(error => {
         FirebaseError(error.code);
@@ -103,24 +96,15 @@ const RegisterError = () => {
     const bioLengthValid = bio.length <= 150;
     const firstNameUp = firstName.replace(/\s/g, '');
     const lastNameUp = lastName.replace(/\s/g, '');
-    const nameValid = ((firstNameUp.length + lastNameUp.length) < 30)
+    const nameValid = firstNameUp.length + lastNameUp.length < 30;
 
     var emailVerified = false;
     /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
       emailVerified = true;
     }).catch((error) => {console.log(error)})*/
-    if(true){
+    if (true) {
       //Parse.User.logOut();
-      if (
-        nameValid &&
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bio &&
-        bioLengthValid &&
-        image
-      ) {
+      if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
 
         firestore()
@@ -134,20 +118,12 @@ const RegisterError = () => {
             bio: bio,
             pfp: url,
             searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
-            joined: firestore.FieldValue.serverTimestamp()
+            joined: firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
             setRegistraionSuccess(true);
           });
-      } else if (
-        nameValid &&
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bioLengthValid &&
-        image
-      ) {
+      } else if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid && image) {
         await uploadPic();
 
         firestore()
@@ -160,22 +136,12 @@ const RegisterError = () => {
             gradYear: gradDate,
             pfp: url,
             searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
-            joined: firestore.FieldValue.serverTimestamp()
-
+            joined: firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
             setRegistraionSuccess(true);
           });
-      } else if (
-        nameValid &&
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bio &&
-        bioLengthValid
-      ) {
-
+      } else if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid) {
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -186,20 +152,12 @@ const RegisterError = () => {
             gradYear: gradDate,
             bio: bio,
             searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
-            joined: firestore.FieldValue.serverTimestamp()
+            joined: firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
             setRegistraionSuccess(true);
           });
-      } else if (
-        nameValid &&
-        firstName.trim() &&
-        lastName.trim() &&
-        major &&
-        gradDate &&
-        bioLengthValid
-      ) {
-
+      } else if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bioLengthValid) {
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -209,7 +167,7 @@ const RegisterError = () => {
             firstLogin: false,
             gradYear: gradDate,
             searchName: firstNameUp.trim().toUpperCase() + ' ' + lastNameUp.trim().toUpperCase(),
-            joined: firestore.FieldValue.serverTimestamp()
+            joined: firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
             setRegistraionSuccess(true);
@@ -217,8 +175,7 @@ const RegisterError = () => {
       } else {
         RegisterError();
       }
-    }
-    else {
+    } else {
       EmailAlert();
     }
     setLoading(false);
@@ -241,9 +198,7 @@ const RegisterError = () => {
 
   if (registraionSuccess) {
     return (
-      <LinearGradient
-      colors={['white', 'white' ,'#73000a']}
-      style={styles.gradient}>
+      <LinearGradient colors={['white', 'white', '#73000a']} style={styles.gradient}>
         <Image
           source={require('./assets/checkmark.png')}
           style={{
@@ -253,7 +208,7 @@ const RegisterError = () => {
           }}
         />
         <Text style={styles.textStyle}>Registration Successful</Text>
-        <TouchableOpacity testID='finishbtn' style={styles.buttonStyle2} onPress={() => reset()}>
+        <TouchableOpacity testID="finishbtn" style={styles.buttonStyle2} onPress={() => reset()}>
           <Text style={styles.buttonTextStyle}>Finish</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -269,11 +224,7 @@ const RegisterError = () => {
   }
 
   return (
-    <LinearGradient
-      colors={['#73000a', '#73000a' ,'white']}
-      style={styles.gradient}
-      testID='regview'
-    >      
+    <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient} testID="regview">
       <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
           <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
@@ -281,24 +232,17 @@ const RegisterError = () => {
               source={require('./assets/blank2.jpeg')}
               imageStyle={styles.blankImageStyle}
               style={styles.blankImageBackgroundStyle}>
-              <Text style={styles.imageTextStyle}>                 
-              {image
-              ? 'Pic Loaded ✅'
-              : 'Add photo here'}</Text>
+              <Text style={styles.imageTextStyle}>{image ? 'Pic Loaded ✅' : 'Add photo here'}</Text>
             </ImageBackground>
           </TouchableOpacity>
           <Text style={styles.textStyle}>Now we just need some info</Text>
           <KeyboardAvoidingView enabled>
             <View style={styles.SectionStyle}>
               <TextInput
-                testID='firstname'
+                testID="firstname"
                 style={styles.inputStyle}
                 onChangeText={FirstName => setFirstName(FirstName)}
-                defaultValue={
-                  userData.name.split(' ').length > 0
-                    ? userData.name.split(' ')[0]
-                    : null
-                }
+                defaultValue={userData.name.split(' ').length > 0 ? userData.name.split(' ')[0] : null}
                 placeholder="Enter first name (Required)"
                 placeholderTextColor="gray"
                 blurOnSubmit={false}
@@ -306,14 +250,10 @@ const RegisterError = () => {
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
-                testID='lastname'
+                testID="lastname"
                 style={styles.inputStyle}
                 onChangeText={LastName => setLastName(LastName)}
-                defaultValue={
-                  userData.name.split(' ').length > 1
-                    ? userData.name.split(' ')[1]
-                    : null
-                }
+                defaultValue={userData.name.split(' ').length > 1 ? userData.name.split(' ')[1] : null}
                 placeholder="Enter last name (Required)"
                 placeholderTextColor="gray"
                 blurOnSubmit={false}
@@ -321,7 +261,7 @@ const RegisterError = () => {
             </View>
             <View style={styles.SectionStyle}>
               <DropDownPicker
-                testID='class'
+                testID="class"
                 style={styles.inputStyle}
                 placeholder="Select Class (Required)"
                 open={open2}
@@ -336,7 +276,7 @@ const RegisterError = () => {
             </View>
             <View style={styles.SectionStyle}>
               <DropDownPicker
-                testID='major'
+                testID="major"
                 style={styles.inputStyle}
                 placeholder="Select Major (Required)"
                 open={open}
@@ -359,24 +299,18 @@ const RegisterError = () => {
                 blurOnSubmit={false}
               />
             </View>
-            <TouchableOpacity
-              testID='registerbtn'
-              style={styles.buttonStyle}
-              onPress={writeUserData}>
+            <TouchableOpacity testID="registerbtn" style={styles.buttonStyle} onPress={writeUserData}>
               <Text style={styles.buttonTextStyle}>REGISTER</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
 
           {/*<Text style={styles.emailText}>NOTE: Your spam filter may be blocking our emails. Please login to your USC email and click the link below to release the email from the Campus Connect Team</Text>*/}
-          <Text style={styles.linkText}
-          onPress={() => Linking.openURL('https://security.microsoft.com/quarantine')}>
-          Microsoft Quarantine
+          <Text style={styles.linkText} onPress={() => Linking.openURL('https://security.microsoft.com/quarantine')}>
+            Microsoft Quarantine
           </Text>
-          <TouchableOpacity
-              onPress={() => NeedHelpError()}
-              style={styles.helpBtn}>
-              <Text style={styles.loginText}>Need help?</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={() => NeedHelpError()} style={styles.helpBtn}>
+            <Text style={styles.loginText}>Need help?</Text>
+          </TouchableOpacity>
           <View style={styles.bottomContainer}>
             <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
           </View>
@@ -387,10 +321,5 @@ const RegisterError = () => {
 }
 
 const NeedHelpError = () => {
-  Alert.alert(
-    'Need Help?',
-    'Please contact support at \n\ndemboyz.sc@gmail.com for help.',
-    [{text: 'OK'}],
-  );
+  Alert.alert('Need Help?', 'Please contact support at \n\ndemboyz.sc@gmail.com for help.', [{text: 'OK'}]);
 };
-

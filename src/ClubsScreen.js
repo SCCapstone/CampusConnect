@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Platform,
   Alert,
@@ -15,27 +15,22 @@ import {
   Linking,
 } from 'react-native';
 
-
-
 import clubsData from './filteredClubs.json';
 import iosstyles from './styles/ios/EventsScreenStyles.js';
 import androidstyles from './styles/android/EventsScreenStyles.js';
 
+import {SearchBar, Button, ListItem, Avatar, Input} from '@rneui/themed';
 
-
-import { SearchBar, Button, ListItem, Avatar ,Input} from '@rneui/themed';
-
-
-export function ClubsScreen({ navigation }) {
+export function ClubsScreen({navigation}) {
   const [DATA, setDATA] = useState(clubsData);
   const [filteredData, setFilteredData] = useState(clubsData);
   const [searchText, setSearchText] = useState('');
 
-  const handleSearch = (text) => {
+  const handleSearch = text => {
     setSearchText(text);
-  
+
     // Filter the data based on the prefix substring search
-    const filtered = DATA.filter((club) => club.title.toLowerCase().includes(text.toLowerCase()));
+    const filtered = DATA.filter(club => club.title.toLowerCase().includes(text.toLowerCase()));
     setFilteredData(filtered);
   };
 
@@ -43,12 +38,11 @@ export function ClubsScreen({ navigation }) {
     setDATA(clubsData);
   }, []);
 
-
-  const Club = ({ item }) => (
+  const Club = ({item}) => (
     <View style={styles.clubContainer}>
       <TouchableOpacity onPress={() => Linking.openURL(item.link)}>
         <View style={styles.clubContentContainer}>
-          <Image source={{ uri: item.imgSrc }} style={styles.clubImage} />
+          <Image source={{uri: item.imgSrc}} style={styles.clubImage} />
           <View style={styles.clubTextContainer}>
             <Text style={styles.clubTitle}>{item.title}</Text>
             <Text style={styles.clubDescription}>{item.description}</Text>
@@ -57,23 +51,18 @@ export function ClubsScreen({ navigation }) {
       </TouchableOpacity>
     </View>
   );
-  const renderClub = ({ item }) => <Club item={item} />;
-
+  const renderClub = ({item}) => <Club item={item} />;
 
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar
         placeholder="Search clubs"
-        containerStyle={{backgroundColor:'#73000a'}} 
-        inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
+        containerStyle={{backgroundColor: '#73000a'}}
+        inputContainerStyle={{borderRadius: 20, backgroundColor: '#FFF'}}
         onChangeText={handleSearch}
         value={searchText}
       />
-      <FlatList
-        data={filteredData}
-        renderItem={renderClub}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <FlatList data={filteredData} renderItem={renderClub} keyExtractor={(item, index) => index.toString()} />
     </SafeAreaView>
   );
 }

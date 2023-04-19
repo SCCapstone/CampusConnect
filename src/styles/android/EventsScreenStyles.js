@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  
   eventContainer: {
     flexDirection: 'row',
     flex: 1,
@@ -43,6 +42,6 @@ export default StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    borderRadius:10,
+    borderRadius: 10,
   },
 });
