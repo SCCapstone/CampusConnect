@@ -175,7 +175,7 @@ export default StyleSheet.create({
     height: 40,
   },
   placeholderText: {fontSize: 30, alignSelf: 'center', color: 'black', marginBottom: 250},
-  placeholderView: {justifyContent: 'center'},
+  placeholderView: {justifyContent: 'center',flex: 1, alignItems: 'center'},
 
   leftSwipeableButton: {
     paddingLeft: 16,
