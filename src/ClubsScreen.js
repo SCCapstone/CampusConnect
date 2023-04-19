@@ -15,24 +15,34 @@ import {
   Linking,
 } from 'react-native';
 
-import clubsData from './clubs.json';
+
+
+import clubsData from './filteredClubs.json';
 import iosstyles from './styles/ios/EventsScreenStyles.js';
 import androidstyles from './styles/android/EventsScreenStyles.js';
 
-var styles;
 
-if (Platform.OS === 'ios') {
-  styles = iosstyles;
-} else if (Platform.OS === 'android') {
-  styles = androidstyles;
-}
+
+import { SearchBar, Button, ListItem, Avatar ,Input} from '@rneui/themed';
+
 
 export function ClubsScreen({ navigation }) {
-  const [DATA, setDATA] = useState(null);
+  const [DATA, setDATA] = useState(clubsData);
+  const [filteredData, setFilteredData] = useState(clubsData);
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+  
+    // Filter the data based on the prefix substring search
+    const filtered = DATA.filter((club) => club.title.toLowerCase().includes(text.toLowerCase()));
+    setFilteredData(filtered);
+  };
 
   useEffect(() => {
     setDATA(clubsData);
   }, []);
+
 
   const Club = ({ item }) => (
     <View style={styles.clubContainer}>
@@ -48,54 +58,62 @@ export function ClubsScreen({ navigation }) {
     </View>
   );
   const renderClub = ({ item }) => <Club item={item} />;
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#73000a',
-    },
-    clubContainer: {
-      backgroundColor: 'white',
-      borderRadius: 10,
-      marginVertical: 10,
-      marginHorizontal: 20,
-      overflow: 'hidden',
-    },
-    clubContentContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    clubImage: {
-      width: 100,
-      height: 100,
-      borderRadius: 10,
-      margin: 10,
-    },
-    clubTextContainer: {
-      flex: 1,
-      backgroundColor: 'white',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 10,
-    },
-    clubTitle: {
-      color: 'black',
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 5,
-    },
-    clubDescription: {
-      color: 'black',
-      fontSize: 14,
-    },
-  });
+
 
   return (
     <SafeAreaView style={styles.container}>
+      <SearchBar
+        placeholder="Search clubs"
+        containerStyle={{backgroundColor:'#73000a'}} 
+        inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} 
+        onChangeText={handleSearch}
+        value={searchText}
+      />
       <FlatList
-        data={DATA}
+        data={filteredData}
         renderItem={renderClub}
         keyExtractor={(item, index) => index.toString()}
       />
     </SafeAreaView>
   );
 }
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#73000a',
+  },
+  clubContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    overflow: 'hidden',
+  },
+  clubContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  clubImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin: 10,
+  },
+  clubTextContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  clubTitle: {
+    color: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  clubDescription: {
+    color: 'black',
+    fontSize: 14,
+  },
+});
