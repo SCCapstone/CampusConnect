@@ -50,7 +50,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     margin: 8,
-    height: 36,
+    height: 40,
     justifyContent: 'center',
   },
   searchActionButton: {
