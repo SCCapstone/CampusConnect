@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import uuid from 'react-native-uuid';
+import moment from 'moment';
 
 import axios from 'axios';
 const cheerio = require("react-native-cheerio");
@@ -15,85 +16,56 @@ export async function ScrapeEventData() {
   }
 }
 
-
+const formatString = "ddd, MMM D, h:mm A";
 const LoadEvents = async() => {
-    const defaultItemCount = 10;
-    events = new Array();
-    const response = await fetch(url);   // fetch page
-    const htmlString = await response.text();  // get response text
-    const $ = cheerio.load(htmlString); // parse HTML string
-    //console.log(htmlString)
-    
-    //listItems = $(".schedule-list__category");
-    titleList = $(".eds-event-card-content__primary-content");
-    locationList = $("td.twLocation");
-    scheduleList = $(".eds-event-card-content__primary-content");
-    descriptionList = $(".event-details__main-inner");
-    imageList = $("aside.eds-event-card-content__image-container");
-    
-    descriptionArray = new Array();
-    titleArray = new Array();
-    locationArray = new Array();
-    dateArray = new Array();
-    timeArray = new Array();
-    imageArray = new Array();
+  const currentDate = new Date();
+  const events = [];
+  const response = await fetch(url);
+  const htmlString = await response.text();
+  const $ = cheerio.load(htmlString);
 
-    titleList.each((i, el) => {
-      const title = $(el).children("a").text().trim();
-      //console.log(title)
-      const halfway = Math.floor(title.length / 2);
-      const firstHalf = title.slice(0, halfway);
-      titleArray.push(firstHalf);
-    })
-    
-    imageList.each((i, el) => {
-      img = ($(el).find("img").attr("src"));
-      if (img === undefined) {
-        imageArray.push(DEFAULTEVENTLOGO);
-      } else {
-        imageArray.push(img);
-      }
-    })
+  const promises = [];
+  $("article.eds-event-card-content").each((index, element) => {
+    const title = $(element).find(".eds-event-card-content__title").text().trim();
+    const halfway = Math.floor(title.length / 2);
+    const firstHalf = title.slice(0, halfway);
+    const date = $(element).find(".eds-event-card-content__sub-title").text().trim();
+    const location = $(element).find("[data-subcontent-key='location']").text().trim();
+    const price = $(element).find(".eds-event-card-content__sub:nth-child(2)").text().trim();
+    const link = $(element).find(".eds-event-card-content__action-link").attr("href");
+    const imageUrl = $(element).find(".eds-event-card-content__image").attr("src");
+    const eventDate = moment(date, "ddd, MMM D, h:mm A").toDate();
 
-    locationList.each((i, el) => {
-      locationArray.push($(el).children("span").text());
-    })
+    if (title === "" || title === undefined || title === null) {
+    } else if (currentDate < eventDate) {
+      const promise = fetch(link)
+        .then((response) => response.text())
+        .then((eventHtml) => {
+          const event$ = cheerio.load(eventHtml);
+          const description = event$(".event-details__main-inner").children("p").text();
 
-    scheduleList.each((i, el) => {
-      dateArray.push($(el).text().split("\n      ")[0]);
-      $('a').empty();
-      //timeArray.push($(el).children("span").text().split("\n      ")[1]);
-    })
+          // Check if the same event already exists in the events array
+          const isDuplicate = events.some(
+            (event) => event.title === firstHalf && event.date === date
+          );
+          if (!isDuplicate) {
+            events.push({
+              title: firstHalf,
+              date,
+              location,
+              price,
+              link,
+              imageUrl,
+              description,
+            });
+          }
+        });
 
-//Iterate over each event and follow the link embedded in the title, then scrape the description found on that URL.
-    promises = [];
-    for (let i = 0; i < defaultItemCount; i++) {
-      const eventLink = $(titleList[i]).children("a").attr("href");
-      promise = axios.get(eventLink).then((eventHtml) => {
-        const event$ = cheerio.load(eventHtml.data);
-        const description = event$(".event-details__main-inner").children('p').text();
-        descriptionArray.push(description);
-      });
       promises.push(promise);
     }
+  });
 
-    const attributes = 5;
-    const results = 10;
-    let arr = Array(results).fill().map(() => Array(attributes));
-    await Promise.all(promises).then(() => {
-      for (let i = 0; i < defaultItemCount; i++) {
-        arr[i][0] = titleArray[i];
-        arr[i][1] = locationArray[i];
-        arr[i][2] = dateArray[i];
-        arr[i][3] = timeArray[i];
-        arr[i][4] = uuid.v4();
-        arr[i][5] = imageArray[i];
-        arr[i][6] = descriptionArray[i];
-      }
-    }).catch((error) => {
-      console.log(error);
-    });
-    return arr
-    
+  await Promise.all(promises);
+  return events;
    
 }
