@@ -27,7 +27,7 @@ const LoadEvents = async () => {
   const promises = [];
   const uniqueEventIdentifiers = new Set();
 
-  titleList = $(".article.eds-event-card-contentt");
+  titleList = $(".article.eds-event-card-content");
 
   events = new Array(titleList.length);
 
