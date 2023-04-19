@@ -41,6 +41,7 @@ export function CreateGroup(props) {
       width: 300,
       height: 300,
       mediaType: 'photo',
+      cropping: true,
     })
       .then(image => {
         console.log(image);
