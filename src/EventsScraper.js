@@ -57,6 +57,7 @@ const LoadEvents = async() => {
               link,
               imageUrl,
               description,
+              eventDate
             });
           }
         });
@@ -66,6 +67,6 @@ const LoadEvents = async() => {
   });
 
   await Promise.all(promises);
-  return events;
+  return events.sort((a, b) => a.eventDate - b.eventDate); // Sorts events array in ascending order based on eventDate
    
 }
