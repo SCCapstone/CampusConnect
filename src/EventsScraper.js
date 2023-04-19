@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState} from 'react';
 import uuid from 'react-native-uuid';
-import moment from 'moment';
+import moment, { invalid } from 'moment';
 
 import axios from 'axios';
 const cheerio = require('react-native-cheerio');
@@ -35,9 +35,8 @@ const LoadEvents = async () => {
     const link = $(element).find('.eds-event-card-content__action-link').attr('href');
     const imageUrl = $(element).find('.eds-event-card-content__image').attr('src');
     const eventDate = moment(date, 'ddd, MMM D, h:mm A').toDate();
-
     if (title === '' || title === undefined || title === null) {
-    } else if (currentDate < eventDate) {
+    } else if (currentDate < eventDate || eventDate.toUTCString() === 'Invalid Date') {
       const promise = fetch(link)
         .then(response => response.text())
         .then(eventHtml => {
@@ -65,5 +64,15 @@ const LoadEvents = async () => {
   });
 
   await Promise.all(promises);
-  return events.sort((a, b) => a.eventDate - b.eventDate); // Sorts events array in ascending order based on eventDate
+
+  return events.sort((a, b) => {
+    if (isNaN(a.eventDate) && !isNaN(b.eventDate)) {
+      return -1;
+    }
+    if (isNaN(a.eventDate) && !isNaN(b.eventDate)) {
+      return 1;
+    }
+    return a.eventDate - b.eventDate;
+  });
+
 };
