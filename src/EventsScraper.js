@@ -70,17 +70,6 @@ const LoadEvents = async () => {
   });
 
   await Promise.all(promises);
-
-  /*return events.sort((a, b) => {
-    if (isNaN(a.eventDate) && !isNaN(b.eventDate)) {
-      return -1;
-    }
-    if (isNaN(a.eventDate) && !isNaN(b.eventDate)) {
-      return 1;
-    }
-    return a.eventDate - b.eventDate;
-  });*/
-  console.log(events)
   return events.filter(Boolean);
 
 };
