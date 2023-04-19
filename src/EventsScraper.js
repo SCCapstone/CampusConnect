@@ -25,6 +25,8 @@ const LoadEvents = async () => {
   const $ = cheerio.load(htmlString);
 
   const promises = [];
+  const uniqueEventIdentifiers = new Set();
+
   $('article.eds-event-card-content').each((index, element) => {
     const title = $(element).find('.eds-event-card-content__title').text().trim();
     const halfway = Math.floor(title.length / 2);
@@ -35,28 +37,28 @@ const LoadEvents = async () => {
     const link = $(element).find('.eds-event-card-content__action-link').attr('href');
     const imageUrl = $(element).find('.eds-event-card-content__image').attr('src');
     const eventDate = moment(date, 'ddd, MMM D, h:mm A').toDate();
-    if (title === '' || title === undefined || title === null) {
-    } else if (currentDate < eventDate || eventDate.toUTCString() === 'Invalid Date') {
+
+    const eventIdentifier = firstHalf + '|' + date;
+
+    if (title && (currentDate < eventDate || eventDate.toUTCString() === 'Invalid Date') && !uniqueEventIdentifiers.has(eventIdentifier)) {
+      uniqueEventIdentifiers.add(eventIdentifier);
+
       const promise = fetch(link)
         .then(response => response.text())
         .then(eventHtml => {
           const event$ = cheerio.load(eventHtml);
           const description = event$('.event-details__main-inner').children('p').text();
 
-          // Check if the same event already exists in the events array
-          const isDuplicate = events.some(event => event.title === firstHalf && event.date === date);
-          if (!isDuplicate) {
-            events.push({
-              title: firstHalf,
-              date,
-              location,
-              price,
-              link,
-              imageUrl,
-              description,
-              eventDate,
-            });
-          }
+          events.push({
+            title: firstHalf,
+            date,
+            location,
+            price,
+            link,
+            imageUrl,
+            description,
+            eventDate,
+          });
         });
 
       promises.push(promise);
