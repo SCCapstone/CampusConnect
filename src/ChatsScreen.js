@@ -304,16 +304,16 @@ export function ChatsScreen(props) {
                   'Are you sure you want to delete this group? It will be deleted for everyone in the group.',
                   [
                     {
-                      text: 'Cancel',
-                      onPress: () => console.log('Deletion cancelled'),
-                      style: 'cancel',
-                    },
-                    {
                       text: 'OK',
                       onPress: async () => {
                         await channel.delete();
                         searchGroups();
                       },
+                    },
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Deletion cancelled'),
+                      style: 'cancel',
                     },
                   ],
                   { cancelable: true }
@@ -375,9 +375,9 @@ export function ChatsScreen(props) {
     
       return (
         <View style={{}}>
-          <ImageBackground
+          <FastImage
             defaultSource={require('./assets/blank2.jpeg')}
-            style={{ width: 60, height: 60 }}
+            style={{ width: 60, height: 60 ,borderRadius: 60}}
             imageStyle={{ borderRadius: 120 }}
             source={image ? { uri: image } : require('./assets/blank2.jpeg')}
           >
@@ -391,7 +391,7 @@ export function ChatsScreen(props) {
                 color="green"
               />
             ) : null}
-          </ImageBackground>
+          </FastImage>
         </View>
       );
     };
