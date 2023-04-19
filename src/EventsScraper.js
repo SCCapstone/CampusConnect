@@ -19,13 +19,17 @@ export async function ScrapeEventData() {
 const formatString = 'ddd, MMM D, h:mm A';
 const LoadEvents = async () => {
   const currentDate = new Date();
-  const events = [];
+
   const response = await fetch(url);
   const htmlString = await response.text();
   const $ = cheerio.load(htmlString);
 
   const promises = [];
   const uniqueEventIdentifiers = new Set();
+
+  titleList = $(".article.eds-event-card-contentt");
+
+  events = new Array(titleList.length);
 
   $('article.eds-event-card-content').each((index, element) => {
     const title = $(element).find('.eds-event-card-content__title').text().trim();
@@ -49,7 +53,7 @@ const LoadEvents = async () => {
           const event$ = cheerio.load(eventHtml);
           const description = event$('.event-details__main-inner').children('p').text();
 
-          events.push({
+          events[index] = ({
             title: firstHalf,
             date,
             location,
@@ -67,7 +71,7 @@ const LoadEvents = async () => {
 
   await Promise.all(promises);
 
-  return events.sort((a, b) => {
+  /*return events.sort((a, b) => {
     if (isNaN(a.eventDate) && !isNaN(b.eventDate)) {
       return -1;
     }
@@ -75,6 +79,8 @@ const LoadEvents = async () => {
       return 1;
     }
     return a.eventDate - b.eventDate;
-  });
+  });*/
+  console.log(events)
+  return events.filter(Boolean);
 
 };
