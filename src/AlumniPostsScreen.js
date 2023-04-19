@@ -1161,6 +1161,7 @@ export function AlumniPostsScreen({navigation, route}) {
         animationType="slide"
         transparent={true}
         onRequestClose={() => {
+          //Put this code into a handler in the future, it is the same as the close button on press
           setReplyModalVisible(false);
           setPostReplies([]);
           setReplyItem(null);
@@ -1186,7 +1187,7 @@ export function AlumniPostsScreen({navigation, route}) {
               titleStyle={{fontSize: 15, fontWeight: 'bold', color: 'black'}}
               title={'Close'}
             />
-            <BouncyCheckbox
+            {replyItem && replyItem.author === ANONYMOUS_USER_NAME? <BouncyCheckbox
               size={20}
               fillColor="#73000a"
               disableBuiltInState={true}
@@ -1200,7 +1201,7 @@ export function AlumniPostsScreen({navigation, route}) {
               onPress={() => {
                 setPostIsAnonymous(!postIsAnonymous);
               }}
-            />
+            /> : null}
           </View>
           {!repliesLoading ? (
             <View style={{flex: 1}}>
