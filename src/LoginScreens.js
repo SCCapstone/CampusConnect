@@ -131,7 +131,6 @@ export function LoginScreen({navigation}) {
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           console.log('User account signed in!');
-          LoginAlert({email});
         })
         .catch(error => {
           FirebaseError(error.code);

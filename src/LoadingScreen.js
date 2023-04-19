@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Image, StyleSheet,Animated, Easing} from 'react-native';
 import AppContext from './AppContext';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
@@ -8,6 +8,20 @@ import storage from '@react-native-firebase/storage';
 
 export function LoadingScreen({navigation}) {
   const userData = useContext(AppContext);
+  const [spinAnim] = useState(new Animated.Value(0));
+  const startAnimation = () => {
+    spinAnim.setValue(0);
+    Animated.timing(spinAnim, {
+      toValue: 1,
+      duration: 2000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => startAnimation());
+  };
+  const spin = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   const getUserData = async () => {
     await firestore()
@@ -39,6 +53,7 @@ export function LoadingScreen({navigation}) {
   };
 
   useEffect(() => {
+    startAnimation();
     promises = [];
 
     promises.push(getUserData());
@@ -52,7 +67,10 @@ export function LoadingScreen({navigation}) {
   }, []);
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={require('./assets/logo.png')} />
+       <Animated.Image
+        style={{ ...styles.logo, transform: [{ rotate: spin }] }}
+        source={require('./assets/logo.png')}
+      />
     </View>
   );
 }
