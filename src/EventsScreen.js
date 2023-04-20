@@ -170,7 +170,7 @@ export function EventsScreen({navigation}) {
                   color: '#000000',
                   textDecorationLine: 'underline',
                 }}>
-                {selectedEvent[1]}
+                {selectedEvent.location}
               </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <Text
