@@ -581,7 +581,11 @@ export function ChatsScreen(props) {
           />
           {!userSearch && data.length < 1 ? (
             <View style={styles.placeholderView}>
-              <Text style={styles.placeholderText}>Guess no one's online...</Text>
+              <Text style={styles.placeholderText}>
+                {selectedType === '0'
+                  ? 'Guess no one\'s online...'
+                  : 'Guess there are no groups yet...'}
+              </Text>
             </View>
           ) : (
             <View style={{flex: 1, height: '100%'}}>
