@@ -43,11 +43,25 @@ export default StyleSheet.create({
         fontWeight: "bold",
         color: "black",
       },
+      sortButton: {
+        backgroundColor: '#73000a',
+        width: 110,
+        textAlign: 'left',
+      },
+      sortButtonText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
+      },
+      dropdownText: {
+        fontSize: 12,
+        textAlign: 'center',
+        color: 'black',
+      },
       flexboxContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        //alignItems: 'center',
         marginVertical: 5,
         borderRadius: 8,
         marginHorizontal: 16,
@@ -98,12 +112,10 @@ export default StyleSheet.create({
       },
       locationText: {
         textAlign: 'center',
-        fontSize: 15,
         color: 'black',
       },
       homeStatusText: {
         textAlign: 'center',
-        fontSize: 15,
         color: 'black',
         textTransform: 'capitalize',
       },
