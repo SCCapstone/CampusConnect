@@ -21,8 +21,8 @@ const About = () => {
     {
         name: 'Coby Arambula',
         email: 'cobya@email.sc.edu',
-        imageUrl: 'https://example.com/jane-smith.jpg',
-        description: 'Coby is a Computer Engineering major and the UX/UI designer of Campus Connect.',
+        imageUrl: 'https://media.licdn.com/dms/image/C5603AQF17HAgtF0iXQ/profile-displayphoto-shrink_800_800/0/1644969406412?e=1687392000&v=beta&t=q9We290mZc7zol57JJzFYdD3VVq2JZnh3USXk24xoio',
+        description: 'Coby is a Computer Science student at the University of South Carolina and an API developer for Campus Connect.',
       },
       {
         name: 'Chase Allison',
