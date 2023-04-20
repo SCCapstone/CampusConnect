@@ -13,11 +13,7 @@ export function ScrapeSportData(HTMLString, count, isSort) {
     return LoadSportEvents(HTMLString, count, isSort)
   }
   catch (error) {
-    console.log("Load error")
-    return LoadSportEvents(HTMLString, count);
-  } catch (error) {
-    console.log('Load error');
-  }
+    console.log("Load error")}
 }
 const LoadSportEvents = (HTMLString, eventCount, isSort) => {
   sportArray = new Array()
