@@ -22,7 +22,7 @@ export default StyleSheet.create({
     height: '86%',
   },
   gradient: {
-    flex:1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -57,6 +57,7 @@ export default StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontSize: 12,
+    width: '100%',
   },
 
   forgot_button: {

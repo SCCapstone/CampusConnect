@@ -1,133 +1,114 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  Platform,
+  Alert,
+  SafeAreaView,
   View,
   FlatList,
-  Text,
   StyleSheet,
-  SafeAreaView,
+  Text,
   StatusBar,
   Image,
+  Pressable,
   TouchableOpacity,
-  Alert,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
-import { SearchBar } from '@rneui/themed';
+
+import clubsData from './filteredClubs.json';
+import iosstyles from './styles/ios/EventsScreenStyles.js';
+import androidstyles from './styles/android/EventsScreenStyles.js';
+
+import {SearchBar, Button, ListItem, Avatar, Input} from '@rneui/themed';
 
 export function ClubsScreen({navigation}) {
+  const [DATA, setDATA] = useState(clubsData);
+  const [filteredData, setFilteredData] = useState(clubsData);
+  const [searchText, setSearchText] = useState('');
 
-  const [search, setSearch] = useState("");
+  const handleSearch = text => {
+    setSearchText(text);
 
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'Carolina Mountaineering and White Water Club',
-      img: 'https://se-images.campuslabs.com/clink/images/851a1e25-5995-4b5a-80be-93ba9f37aa0f1d0ef086-745e-4ab0-9533-db175728451e.jpg?preset=med-sq',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Intramural Ultimate Frisbee',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Frisbee_090719.jpg',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Gamecock Barbell Club',
-      img: 'https://se-images.campuslabs.com/clink/images/1d10a454-1496-4d77-b37b-32543c08af56b610ef6e-e88e-4919-8c65-8bf325b20374.jpg?preset=med-sq/transform/cc484be3-24c2-4315--71f252d70349/',
-    },
-  ];
-
-  const actions = [
-    {
-        text: "Create Group",
-        name: "bt_Create",
-        icon: source={uri: 'https://cdn-icons-png.flaticon.com/512/60/60732.png'},
-        position: 2,
-        color: '#73000a',
-    },
-    {
-        text: "Search Group",
-        name: "bt_search",
-        icon: source={uri:'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/search-512.png'},
-        position: 1,
-        color: '#73000a',
-    }
-];
-
-  const CreateAlert = () => {
-    Alert.alert('This will take you to this button\'s group page');
-  }
-
-  const Item = ({item, onPress}) => (
-    <TouchableOpacity onPress={onPress} style={styles.item}>
-      <Image style={styles.groupImg} source={{uri: item.img}} />
-      <Text style={styles.title}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
-  const [selectedId, setSelectedId] = useState(null);
-  const renderItem = ({item}) => {
-    return <Item item={item} onPress={() => CreateAlert()} />;
+    // Searches based on title and description
+    const filtered = DATA.filter(club => {
+      const searchText = text.toLowerCase();
+      const titleMatch = club.title.toLowerCase().includes(searchText);
+      const descriptionMatch = club.description.toLowerCase().includes(searchText);
+      
+      return titleMatch || descriptionMatch;
+    });
+    setFilteredData(filtered);
   };
 
-return (
-        <SafeAreaView style={styles.container}>
-          <SearchBar containerStyle={{backgroundColor:'#73000a'}} inputContainerStyle={{borderRadius:20,backgroundColor:'#FFF'}} onChangeText={setSearch} placeholder='Enter a name to search' value={search}>
-          </SearchBar>
-            <FlatList
-            data={DATA}
-            renderItem={renderItem}
-            >
-            </FlatList>
-        </SafeAreaView>
-    );
-}
+  useEffect(() => {
+    setDATA(clubsData);
+  }, []);
 
-const styles = StyleSheet.create({
+  const Club = ({item}) => (
+    <View style={styles.clubContainer}>
+      <TouchableOpacity onPress={() => Linking.openURL(item.link)}>
+        <View style={styles.clubContentContainer}>
+          <Image source={{uri: item.imgSrc}} style={styles.clubImage} />
+          <View style={styles.clubTextContainer}>
+            <Text style={styles.clubTitle}>{item.title}</Text>
+            <Text style={styles.clubDescription}>{item.description}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+  const renderClub = ({item}) => <Club item={item} />;
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <SearchBar
+        placeholder="Search clubs"
+        containerStyle={{backgroundColor: '#73000a'}}
+        inputContainerStyle={{borderRadius: 20, backgroundColor: '#FFF'}}
+        onChangeText={handleSearch}
+        value={searchText}
+      />
+      <FlatList data={filteredData} renderItem={renderClub} keyExtractor={(item, index) => index.toString()} />
+    </SafeAreaView>
+  );
+}
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#73000a',
   },
-  item: {
-    flexDirection: "row",
-    borderRadius:20,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    backgroundColor: '#a8a1a6',
+  clubContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    overflow: 'hidden',
   },
-  title: {
-    flex: 2,
-    fontSize: 28,
+  clubContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  clubImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin: 10,
+  },
+  clubTextContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  clubTitle: {
     color: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
-  groupImg: {
-      marginTop: 10,
-      marginRight: 20,
-      width: 50,
-      height: 50,
-      borderRadius:20,
-      resizeMode:'cover'
+  clubDescription: {
+    color: 'black',
+    fontSize: 14,
   },
-  button: {
-      width: 400,
-      alignItems: 'center',
-      color: '#73000',
-    },
-  buttonText: {
-      textAlign: 'center',
-      padding: 20,
-      color: 'black',
-  },
-  buttonIcon: {
-      width: 1,
-      height: 1,
-  },
-  addButton: {
-      width: 100,
-      height: 100,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 10,
-      borderRadius: 100,
-      color: '#73000a',     
-  }
-
 });

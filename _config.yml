@@ -1,7 +1,16 @@
 title: Campus Connect
 description: A social media application developed by UofSC students, for UofSC students!
-remote_theme: pages-themes/midnight@v0.2.0
+remote_theme: jekyll-theme-modern
 plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
+  - jekyll-remote-theme # add this line to the plugins list if you already have one
 show_downloads: true
-theme: jekyll-theme-midnight
+heme: jekyll-theme-midnight
+
+colors:
+  primary: "#73000a" # Garnet
+  accent: "#000000" # Black
+
+fonts:
+  primary: "Roboto"
+  secondary: "Lato"
+

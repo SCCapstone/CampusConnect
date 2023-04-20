@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 
-
 export default StyleSheet.create({
   chatContain: {
     backgroundColor: 'white',
@@ -9,7 +8,7 @@ export default StyleSheet.create({
   },
   chatInput: {
     borderColor: 'black',
-    color:'black',
+    color: 'black',
     borderRadius: 8,
     borderWidth: 1,
     fontSize: 16,
@@ -40,7 +39,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
- viewBioText: {
+  viewBioText: {
     fontSize: 18,
     marginTop: 20,
     fontWeight: '400',
@@ -51,15 +50,15 @@ export default StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     margin: 8,
-    height:36,
-    justifyContent:'center'
+    height: 40,
+    justifyContent: 'center',
   },
   searchActionButton: {
     backgroundColor: 'white',
     borderColor: 'black',
     flex: 1,
     fontSize: 16,
-    width:190,
+    width: 190,
     padding: 8,
   },
   searchLeftActionButton: {
@@ -102,8 +101,8 @@ export default StyleSheet.create({
   },
   chatListItemLabel: {
     fontSize: 22,
-    fontWeight:'bold',
-    marginLeft:'10%',
+    fontWeight: 'bold',
+    marginLeft: '10%',
     color: 'black',
   },
   groupContainer: {
@@ -114,7 +113,7 @@ export default StyleSheet.create({
   },
   groupInput: {
     borderColor: 'black',
-    color:'black',
+    color: 'black',
     borderRadius: 8,
     borderWidth: 1,
     fontSize: 16,
@@ -175,9 +174,8 @@ export default StyleSheet.create({
     width: 50,
     height: 40,
   },
-  placeholderText: 
-    {fontSize:30, alignSelf:'center',color:'black',marginBottom:250},
-  placeholderView:{justifyContent:'center'},
+  placeholderText: {fontSize: 30, alignSelf: 'center', color: 'black', marginBottom: 250},
+  placeholderView: {justifyContent: 'center',flex: 1, alignItems: 'center'},
 
   leftSwipeableButton: {
     paddingLeft: 16,
@@ -193,6 +191,4 @@ export default StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  
-
 });

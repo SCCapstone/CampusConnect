@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   pfpStyle: {height: 80, width: 80, borderRadius: 40},
-  imageBackgroundView: {resizeMode:'contain' },
+  imageBackgroundView: {resizeMode: 'contain'},
   pressableImageView: {
     height: 80,
     width: 80,
@@ -24,7 +24,7 @@ export default StyleSheet.create({
     margin: 7,
   },
   gradient: {
-    flex: 1
+    flex: 1,
   },
   userWelcomeBox: {
     marginHorizontal: 20,
@@ -66,8 +66,13 @@ export default StyleSheet.create({
     paddingTop: 10,
     color: 'white',
   },
-  touchableSignout: {paddingVertical: 15,justifyContent:'flex-start'},
-  touchableEditProfile: {paddingVertical: 15,justifyContent:'flex-end',marginRight:'5%',flex:1},
+  touchableSignout: {paddingVertical: 15, justifyContent: 'flex-start'},
+  touchableEditProfile: {
+    paddingVertical: 15,
+    justifyContent: 'flex-end',
+    marginRight: '5%',
+    flex: 1,
+  },
   signOutText: {
     fontSize: 15,
     marginLeft: 20,
@@ -79,7 +84,7 @@ export default StyleSheet.create({
     marginLeft: 20,
     fontWeight: 'bold',
     color: 'white',
-    alignSelf:'flex-end'
+    alignSelf: 'flex-end',
   },
   backButtonContainer: {
     backgroundColor: 'white',

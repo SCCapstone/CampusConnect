@@ -100,8 +100,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
     padding: 20,
-    marginBottom:10
-
+    marginBottom: 10,
   },
   textGroupStyle: {
     color: 'black',
@@ -113,12 +112,12 @@ export default StyleSheet.create({
   bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems:'flex-end',
-    alignItems:'flex-end'
+    alignItems: 'flex-end',
+    alignItems: 'flex-end',
   },
 
   copyWrightText: {
-    marginTop:20,
+    marginTop: 20,
     color: 'black',
     fontWeight: 'bold',
     fontSize: 12,
@@ -199,14 +198,14 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   emailText: {
-    marginTop:15,
+    marginTop: 15,
     textAlign: 'center',
     color: 'white',
     fontSize: 14,
     fontWeight: '',
   },
   linkText: {
-    marginTop:30,
+    marginTop: 30,
     textAlign: 'center',
     color: 'white',
     fontSize: 16,
@@ -224,31 +223,30 @@ export default StyleSheet.create({
   loginText: {
     placeholderTextColor: '000000',
     color: 'white',
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
   imageBackgroungView: {
-    alignItems:'center',
-    justifyContent:'center'
-
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   blankImageBackgroundStyle: {
     height: 100,
     width: 100,
-    marginTop:40,
-    justifyContent:'center',
-    alignItems:'center',
-    alignContent:'center'
+    marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
   blankImageStyle: {
-    borderRadius:50,
-    marginTop:0,
+    borderRadius: 50,
+    marginTop: 0,
     height: 100,
     width: 100,
   },
   imageTextStyle: {
-    textAlign:'center',
-    color:'black',
-    fontWeight:'bold',
-    fontSize:12
-  }
+    textAlign: 'center',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
 });

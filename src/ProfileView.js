@@ -22,7 +22,7 @@ import auth from '@react-native-firebase/auth';
 
 import {StreamChat} from 'stream-chat';
 import {chatApiKey} from '../chatConfig';
-import { useChatClient } from './useChatClient';
+import {useChatClient} from './useChatClient';
 
 import androidstyles from './styles/android/ChatStyles';
 import iosstyles from './styles/ios/ChatStyles';
@@ -79,11 +79,7 @@ export function ProfileView({navigation}) {
   }, [profileData]); //I guess this tells react to update when these variables change?
 
   if (loading) {
-    return (
-      <ActivityIndicator
-        style={{flex: 1}}
-        color={'#73000a'}></ActivityIndicator>
-    );
+    return <ActivityIndicator style={{flex: 1}} color={'#73000a'}></ActivityIndicator>;
   }
 
   return (
@@ -95,11 +91,7 @@ export function ProfileView({navigation}) {
         <FastImage
           defaultSource={require('./assets/blank2.jpeg')}
           style={styles.viewProfileImg}
-          source={
-            profileData.pfp
-              ? {uri: profileData.pfp}
-              : require('./assets/blank2.jpeg')
-          }
+          source={profileData.pfp ? {uri: profileData.pfp} : require('./assets/blank2.jpeg')}
         />
       </ImageBackground>
       <Text style={styles.viewNameText}>{profileData.name}</Text>
@@ -111,7 +103,7 @@ export function ProfileView({navigation}) {
         {!(auth().currentUser.uid === userData.profileView) ? (
           <Button
             onPress={async () => {
-              if(clientIsReady){
+              if (clientIsReady) {
                 const channel = chatClient.channel('messaging', {
                   members: [chatClient.user.id, userData.profileView],
                 });
@@ -122,9 +114,8 @@ export function ProfileView({navigation}) {
                   initial: false,
                   params: {channel: channel},
                 });
-              }
-              else {
-                Alert.alert('Whoops','There was an issue with the chat service. Please try again later.');
+              } else {
+                Alert.alert('Whoops', 'There was an issue with the chat service. Please try again later.');
               }
             }}
             size="lg"

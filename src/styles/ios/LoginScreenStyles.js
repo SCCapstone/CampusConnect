@@ -11,13 +11,13 @@ export default StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'center',
     borderRadius: 5,
-    marginTop:35,
-    marginLeft:20,
+    marginTop: 35,
+    marginLeft: 20,
     height: '6%',
     width: '10%',
   },
   gradient: {
-    flex:1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -54,11 +54,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   TextInput: {
     color: 'black',
     textAlign: 'center',
     fontSize: 12,
+    width: '100%',
   },
 
   forgot_button: {
@@ -110,17 +110,17 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 10,
   },
-    helpBtn: {
-     width: '40%',
-     borderRadius: 4,
-     height: 30,
-     alignItems: 'center',
-     justifyContent: 'center',
-     marginTop: 80,
-     backgroundColor: '#73000a',
-   },
-   loginText: {
-     placeholderTextColor: '000000',
-     color: 'white',
-   },
+  helpBtn: {
+    width: '40%',
+    borderRadius: 4,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 80,
+    backgroundColor: '#73000a',
+  },
+  loginText: {
+    placeholderTextColor: '000000',
+    color: 'white',
+  },
 });
