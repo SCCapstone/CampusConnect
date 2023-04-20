@@ -57,6 +57,7 @@ export default StyleSheet.create({
         fontSize: 12,
         textAlign: 'center',
         color: 'black',
+        fontWeight: 'bold',
       },
       flexboxContainer: {
         flex: 1,
