@@ -37,6 +37,7 @@ const LoadEvents = async () => {
     const firstHalf = title.slice(0, halfway);
     const date = $(element).find('.eds-event-card-content__sub-title').text().trim();
     const location = $(element).find('.card-text--truncated__one').text().trim();
+    //const location = $(element).find("[data-subcontent-key='location']").text().trim();
     const price = $(element).find('.eds-event-card-content__sub:nth-child(2)').text().trim();
     const link = $(element).find('.eds-event-card-content__action-link').attr('href');
     const imageUrl = $(element).find('.eds-event-card-content__image').attr('src');
