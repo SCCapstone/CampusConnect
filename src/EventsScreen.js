@@ -172,16 +172,20 @@ export function EventsScreen({navigation}) {
                 }}>
                 {selectedEvent.location}
               </Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <TouchableOpacity style={{backgroundColor: '#a8a1a6',
+                    borderRadius: 8,
+                    marginTop: 16,
+                    justifyContent: 'center',
+                    alignContent: 'center', 
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    width:60,
+                    marginRight: '85%'}} onPress={() => setModalVisible(false)}>
                 <Text
                   style={{
-                    backgroundColor: '#a8a1a6',
-                    borderRadius: 8,
                     fontSize: 18,
                     fontWeight: 'bold',
                     color: '#000000',
-                    marginTop: 16,
-                    marginRight: '85%',
                   }}>
                   Close
                 </Text>
