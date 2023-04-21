@@ -25,8 +25,11 @@ const LoadSportEvents = (HTMLString, eventCount, isSort) => {
   homeStatusArray = new Array()
  
   if (isSort) {
-    for (let i = 0; i < eventCount; i++) {
-      //if (HTMLString[i].is_upcoming_event) {
+    now = new Date(); //The present date
+    now.setTime(now.getTime() - (24*60*60*1000)) //This subtracts 24 hours so that events in the current day will always show, since they are set to midnight
+    for (let i = 0; i < HTMLString.length; i++) {
+        eventDate = new Date(HTMLString[i].event_date)
+        if (eventDate.getTime() >= now.getTime()) {
         sportArray.push(HTMLString[i].sport.name)
         opponentArray.push(HTMLString[i].opponent_school_name)
         dateArray.push(HTMLString[i].event_date)
@@ -34,7 +37,7 @@ const LoadSportEvents = (HTMLString, eventCount, isSort) => {
         imageArray.push(HTMLString[i].opponent_logo)
         locationArray.push(HTMLString[i].location)
         homeStatusArray.push(HTMLString[i].event_status)
-     // }
+      }
     }
   } else {
     const $ = cheerio.load(HTMLString) // parse HTML string

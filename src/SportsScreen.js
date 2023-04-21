@@ -118,10 +118,11 @@ useEffect(() => {
     if (isSort) {
       setHasMore(false)
       let eventCount = 0
-      const now = new Date(); //The present date
+      now = new Date(); //The present date
+      now.setTime(now.getTime() - (24*60*60*1000)) //This subtracts 24 hours so that events in the current day will always show, since they are set to midnight
       for (let i = 0; i < res.data.data.length; i++) { // Only count upcoming events
         eventDate = new Date(res.data.data[i].event_date)
-        if (eventDate.getTime() > now.getTime()) // second check needed due to mistakes found in API data
+        if (eventDate.getTime() >= now.getTime()) // second check needed due to mistakes found in API data
             eventCount++
       } 
       if (eventCount != 0)
@@ -139,7 +140,7 @@ useEffect(() => {
 
 function reloadPage() {
   setLoading(true)
-  pageNumber = 0
+  setPageNumber(0)
   setReloadToken(Math.random())
 }
 
