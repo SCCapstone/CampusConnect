@@ -27,7 +27,7 @@ const About = () => {
       {
         name: 'Chase Allison',
         email: 'challison@email.sc.edu',
-        imageUrl: 'https://example.com/jane-smith.jpg',
+        imageUrl: 'https://thumbs.dreamstime.com/b/red-crested-fighting-cock-gamecock-village-scene-red-crested-fighting-cock-195838017.jpg',
         description: 'Chase is a Computer Engineering major and the UX/UI designer of Campus Connect.',
       },
       {
