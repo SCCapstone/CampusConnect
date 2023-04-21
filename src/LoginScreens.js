@@ -95,7 +95,7 @@ export function WelcomeScreen({navigation}) {
 
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
-      <Image style={styles.imageLarge} source={require('./assets/logo.png')} />
+      <Image style={styles.imageLarge} source={require('./assets/cool.png')} />
       <Text testID="title" style={styles.title}>
         Campus Connect
       </Text>
@@ -111,7 +111,7 @@ export function WelcomeScreen({navigation}) {
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => NeedHelpError()} style={styles.helpBtn}>
-        <Text style={styles.loginText}>Need help?</Text>
+        <Text style={styles.altText}>Need help?</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>Copywright Ⓒ2023 DemBoyz, All rights reserved.</Text>
@@ -143,7 +143,7 @@ export function LoginScreen({navigation}) {
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
-      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
+      <Image style={styles.imageSmall} source={require('./assets/cool.png')} />
       <Text style={styles.title}>Campus Connect</Text>
 
       <View style={styles.inputView}>
@@ -182,12 +182,12 @@ export function LoginScreen({navigation}) {
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')} style={styles.loginBtn}>
-        <Text style={styles.loginText}>REGISTER</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')} style={styles.altBtn}>
+        <Text style={styles.altText}>REGISTER</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => login(email, password)} style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
+      <TouchableOpacity onPress={() => login(email, password)} style={styles.altBtn}>
+        <Text style={styles.altText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>Copywright Ⓒ2023 DemBoyz, All rights reserved.</Text>
@@ -256,7 +256,7 @@ export function RegisterScreen({navigation}) {
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
-      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
+      <Image style={styles.imageSmall} source={require('./assets/cool.png')} />
       <Text style={styles.title}>Campus Connect</Text>
       <View style={styles.inputView}>
         <TextInput
@@ -308,8 +308,8 @@ export function RegisterScreen({navigation}) {
         testID="forgotpassword">
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity testID="registerbtn" onPress={() => register(email, password)} style={styles.loginBtn}>
-        <Text style={styles.loginText}>REGISTER</Text>
+      <TouchableOpacity testID="registerbtn" onPress={() => register(email, password)} style={styles.altBtn}>
+        <Text style={styles.altText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>
         <Text style={styles.copyWrightText}>Copywright Ⓒ2023 DemBoyz, All rights reserved.</Text>

@@ -71,11 +71,10 @@ export default StyleSheet.create({
     fontSize: 48,
     paddingBottom: 25,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
   },
 
   button: {
-    backgroundColor: 'white',
     height: 40,
     width: '80%',
   },
@@ -87,12 +86,12 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    backgroundColor: 'black',
+    backgroundColor: 'white',
   },
   loginText: {
-    placeholderTextColor: '000000',
-    color: 'white',
+    color: 'black',
   },
+
   helpBtn: {
     width: '40%',
     borderRadius: 4,
@@ -100,17 +99,23 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 80,
-    backgroundColor: '#73000a',
+    backgroundColor: 'black',
   },
-  loginText: {
-    placeholderTextColor: '000000',
+  altText:{
     color: 'white',
   },
-
   loginSuccess: {
     margin: 0,
   },
-
+  altBtn: {
+    width: '70%',
+    borderRadius: 4,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    backgroundColor: 'black',
+  },
   bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
