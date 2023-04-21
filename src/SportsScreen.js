@@ -52,9 +52,12 @@ const renderHeader = (navigation) => {
       defaultButtonText='Sort'
       data={sportOptions}
       onSelect={(selectedItem, index) => {
-        setSortSelection(selectedItem)
-        setPageNumber(0)
-        setDATA([])
+        if (sortSelection != selectedItem) {
+          setLoading(true)
+          setSortSelection(selectedItem)
+          setPageNumber(0)
+          setDATA([])
+        }
       }}
     />)
   })

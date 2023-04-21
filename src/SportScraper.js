@@ -34,7 +34,10 @@ const LoadSportEvents = (HTMLString, eventCount, isSort) => {
         opponentArray.push(HTMLString[i].opponent_school_name)
         dateArray.push(HTMLString[i].event_date)
         timeArray.push(HTMLString[i].event_time)
-        imageArray.push(HTMLString[i].opponent_logo)
+        if (HTMLString[i].opponent_logo == null)
+          imageArray.push(DEFAULTSECLOGO)
+        else
+          imageArray.push(HTMLString[i].opponent_logo)
         locationArray.push(HTMLString[i].location)
         homeStatusArray.push(HTMLString[i].event_status)
       }
