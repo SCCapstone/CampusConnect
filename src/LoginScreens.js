@@ -153,10 +153,11 @@ export function LoginScreen({navigation}) {
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
-      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
       <Container
       keyboardVerticalOffset={120}
       behavior="padding" style= {containerStyle}>
+      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
+
         <Text style={styles.title}>Campus Connect</Text>
         <View style={styles.inputView}>
           <TextInput
@@ -182,7 +183,7 @@ export function LoginScreen({navigation}) {
             onChangeText={password => setPassword(password.trim())}
           />
         </View>
-      </Container>
+        </Container>
 
       <TouchableOpacity
         onPress={() => {
@@ -194,6 +195,7 @@ export function LoginScreen({navigation}) {
         testID="forgotpassword">
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
+
 
       <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')} style={styles.altBtn}>
         <Text style={styles.altText}>REGISTER</Text>
@@ -269,10 +271,11 @@ export function RegisterScreen({navigation}) {
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
-      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
       <Container
       keyboardVerticalOffset={100}
       behavior="padding" style= {containerStyle}>
+      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
+
         <Text style={styles.title}>Campus Connect</Text>
         <View style={styles.inputView}>
           <TextInput
