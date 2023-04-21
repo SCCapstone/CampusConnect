@@ -1,7 +1,7 @@
 //This code was modeled from this page https://code.tutsplus.com/tutorials/common-react-native-app-layouts-login-page--cms-27639
 //Everything else in this app is original.
 
-import {Modal, StatusBar, SafeAreaView, Platform} from 'react-native';
+import {Modal, StatusBar, SafeAreaView, Platform, KeyboardAvoidingView} from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert} from 'react-native';
@@ -25,6 +25,20 @@ if (Platform.OS === 'ios') {
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import AppContext from './AppContext';
+
+const Container = Platform.select({
+  ios: KeyboardAvoidingView,
+  android: View,
+});
+const containerStyle = Platform.select({
+  ios: {
+    width:'100%',justifyContent:'center',alignItems:'center',flex:1
+  },
+  android: {
+    width:'100%',justifyContent:'center',alignItems:'center'
+  },
+});
+
 
 export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
@@ -144,31 +158,35 @@ export function LoginScreen({navigation}) {
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
       <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
-      <Text style={styles.title}>Campus Connect</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="USC Email"
-          textContentType="username"
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          autoComplete={'email'}
-          placeholderTextColor="#000000"
-          onChangeText={email => setEmail(email.trim())}
-        />
-      </View>
+      <Container
+      keyboardVerticalOffset={120}
+      behavior="padding" style= {containerStyle}>
+        <Text style={styles.title}>Campus Connect</Text>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="USC Email"
+            textContentType="username"
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            autoComplete={'email'}
+            placeholderTextColor="#000000"
+            onChangeText={email => setEmail(email.trim())}
+          />
+        </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          textContentType={'password'}
-          autoComplete={'password'}
-          placeholderTextColor="#000000"
-          secureTextEntry={true}
-          onChangeText={password => setPassword(password.trim())}
-        />
-      </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            textContentType={'password'}
+            autoComplete={'password'}
+            placeholderTextColor="#000000"
+            secureTextEntry={true}
+            onChangeText={password => setPassword(password.trim())}
+          />
+        </View>
+      </Container>
 
       <TouchableOpacity
         onPress={() => {
@@ -256,46 +274,50 @@ export function RegisterScreen({navigation}) {
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
       <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
-      <Text style={styles.title}>Campus Connect</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          testID="emailinput"
-          style={styles.TextInput}
-          placeholder="USC Email"
-          textContentType="username"
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          autoComplete={'email'}
-          placeholderTextColor="#000000"
-          onChangeText={email => setEmail(email)}
-        />
-      </View>
+      <Container
+      keyboardVerticalOffset={100}
+      behavior="padding" style= {containerStyle}>
+        <Text style={styles.title}>Campus Connect</Text>
+        <View style={styles.inputView}>
+          <TextInput
+            testID="emailinput"
+            style={styles.TextInput}
+            placeholder="USC Email"
+            textContentType="username"
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            autoComplete={'email'}
+            placeholderTextColor="#000000"
+            onChangeText={email => setEmail(email)}
+          />
+        </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          testID="passinput"
-          style={styles.TextInput}
-          placeholder="Password"
-          textContentType={'newPassword'}
-          autoComplete={'password-new'}
-          placeholderTextColor="#000000"
-          secureTextEntry={true}
-          onChangeText={password => setPassword(password)}
-        />
-      </View>
+        <View style={styles.inputView}>
+          <TextInput
+            testID="passinput"
+            style={styles.TextInput}
+            placeholder="Password"
+            textContentType={'newPassword'}
+            autoComplete={'password-new'}
+            placeholderTextColor="#000000"
+            secureTextEntry={true}
+            onChangeText={password => setPassword(password)}
+          />
+        </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          testID="passinput2"
-          style={styles.TextInput}
-          placeholder="Confirm Password"
-          textContentType={'newPassword'}
-          autoComplete={'password-new'}
-          placeholderTextColor="#000000"
-          secureTextEntry={true}
-          onChangeText={password2 => setPassword2(password2)}
-        />
-      </View>
+        <View style={styles.inputView}>
+          <TextInput
+            testID="passinput2"
+            style={styles.TextInput}
+            placeholder="Confirm Password"
+            textContentType={'newPassword'}
+            autoComplete={'password-new'}
+            placeholderTextColor="#000000"
+            secureTextEntry={true}
+            onChangeText={password2 => setPassword2(password2)}
+          />
+        </View>
+      </Container>
 
       <TouchableOpacity
         onPress={() => {

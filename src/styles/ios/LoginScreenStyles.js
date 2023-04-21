@@ -16,7 +16,6 @@ export default StyleSheet.create({
     height: '6%',
     width: '10%',
   },
-
   backButtonImage: {
     resizeMode: 'stretch',
     marginTop: '15%',
@@ -64,7 +63,7 @@ export default StyleSheet.create({
 
   forgot_button: {
     height: 20,
-    marginBottom: 10,
+    marginTop:40,
     color: 'black',
     fontWeight: 'bold',
   },
