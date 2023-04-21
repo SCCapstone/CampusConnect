@@ -17,7 +17,7 @@ import {OverlayProvider} from 'stream-chat-react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-//import Parse from 'parse/react-native';
+import Parse from 'parse/react-native';
 import type {DeepPartial, Theme} from 'stream-chat-react-native';
 import {TouchableOpacity, Text} from 'react-native';
 import {enableLatestRenderer} from 'react-native-maps';
@@ -59,9 +59,9 @@ export default function App() {
   };
 
   //initialitize parse for handling user verification
-  //Parse.setAsyncStorage(AsyncStorage);
-  //Parse.initialize('PRySkWPWEvW5AtgEPe0E9SZsvdG4zD7UUFh5eupR','Jh3wogXir5FhuLjBlGHl74amYu7VwbOG17n2McqU');
-  //Parse.serverURL = 'https://parseapi.back4app.com/';
+  Parse.setAsyncStorage(AsyncStorage);
+  Parse.initialize('PRySkWPWEvW5AtgEPe0E9SZsvdG4zD7UUFh5eupR','Jh3wogXir5FhuLjBlGHl74amYu7VwbOG17n2McqU');
+  Parse.serverURL = 'https://parseapi.back4app.com/';
   //gloval user variable
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState('');

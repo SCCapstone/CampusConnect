@@ -5,7 +5,7 @@ import {Modal, StatusBar, SafeAreaView, Platform} from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert} from 'react-native';
-//import Parse from 'parse/react-native';
+import Parse from 'parse/react-native';
 import {useChatClient} from './useChatClient';
 
 import auth from '@react-native-firebase/auth';
@@ -225,13 +225,13 @@ export function RegisterScreen({navigation}) {
 
   const createUserData = async () => {
     //Doing email verification with parse
-    /*await Parse.User.signUp(email, 'password', {
+    await Parse.User.signUp(email, 'password', {
       email: email,
     }).then(async (createdUser) => {
       EmailAlert();
     })
 
-    await Parse.User.logOut();*/
+    await Parse.User.logOut();
 
     firestore()
       .collection('Users')
@@ -341,7 +341,7 @@ const FirebaseError = error => {
   Alert.alert('Error', error, [{text: 'OK'}]);
 };
 const EmailAlert = () => {
-  Alert.alert('Email Sent', "Email verifications are disabled for the time being. Don't be a *******", [{text: 'OK'}]);
+  Alert.alert('Email Sent', "An email verificaion was sent to your USC email. You may have to look in your quarantine to release it. You will not be able to advance past this screen without verifying your email.", [{text: 'OK'}]);
 };
 
 const LoginError = () => {

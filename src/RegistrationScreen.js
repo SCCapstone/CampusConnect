@@ -11,7 +11,7 @@ import {majors, classes} from './consts/majors';
 
 import {SafeAreaView, TextInput, KeyboardAvoidingView, Alert, ScrollView, ActivityIndicator} from 'react-native';
 
-//import Parse from 'parse/react-native';
+import Parse from 'parse/react-native';
 import AppContext from './AppContext';
 
 import iosstyles from './styles/ios/RegistrationScreenStyles';
@@ -99,11 +99,11 @@ export function RegistrationScreen({navigation}) {
     const nameValid = firstNameUp.length + lastNameUp.length < 30;
 
     var emailVerified = false;
-    /*await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
+    await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
       emailVerified = true;
-    }).catch((error) => {console.log(error)})*/
-    if (true) {
-      //Parse.User.logOut();
+    }).catch((error) => {console.log(error)})
+    if (emailVerified) {
+      Parse.User.logOut();
       if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
 
