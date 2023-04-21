@@ -95,7 +95,7 @@ export function WelcomeScreen({navigation}) {
 
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
-      <Image style={styles.imageLarge} source={require('./assets/cool.png')} />
+      <Image style={styles.imageLarge} source={require('./assets/logo.png')} />
       <Text testID="title" style={styles.title}>
         Campus Connect
       </Text>
@@ -143,9 +143,8 @@ export function LoginScreen({navigation}) {
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
-      <Image style={styles.imageSmall} source={require('./assets/cool.png')} />
+      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
       <Text style={styles.title}>Campus Connect</Text>
-
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
@@ -256,7 +255,7 @@ export function RegisterScreen({navigation}) {
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient}>
       <BackButton />
-      <Image style={styles.imageSmall} source={require('./assets/cool.png')} />
+      <Image style={styles.imageSmall} source={require('./assets/logo.png')} />
       <Text style={styles.title}>Campus Connect</Text>
       <View style={styles.inputView}>
         <TextInput

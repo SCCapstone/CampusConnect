@@ -1077,9 +1077,8 @@ export function PostsScreen({navigation, route}) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          this.floatingAction.animateButton();
-          setFloatingActionVisible(true);
-          setModalVisible(false);
+          //this.floatingAction.animateButton();
+          closeModal();
         }}>
         <SafeAreaView
           style={{
@@ -1152,7 +1151,7 @@ export function PostsScreen({navigation, route}) {
                     title={image ? 'Image Loaded ✅' : 'Upload a picture'}
                   />
                 </View>
-              ) : null}
+              ) : <View style={styles.placeholder}></View>}
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>

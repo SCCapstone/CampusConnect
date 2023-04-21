@@ -11,23 +11,23 @@ export default StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'center',
     borderRadius: 5,
-    marginTop: 35,
-    marginLeft: 20,
+    marginTop: '10%',
+    marginLeft: '5%',
     height: '6%',
     width: '10%',
   },
-  gradient: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   backButtonImage: {
     resizeMode: 'stretch',
     marginTop: '15%',
     width: '100%',
     height: '86%',
   },
-
+  gradient: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   imageLarge: {
     marginBottom: 0,
     marginTop: 0,
@@ -54,6 +54,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   TextInput: {
     color: 'black',
     textAlign: 'center',
@@ -71,13 +72,11 @@ export default StyleSheet.create({
   title: {
     fontSize: 48,
     paddingBottom: 25,
-    fontFamily: 'ArialRoundedMTBold',
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
   },
 
   button: {
-    backgroundColor: 'white',
     height: 40,
     width: '80%',
   },
@@ -89,17 +88,36 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    backgroundColor: 'black',
+    backgroundColor: 'white',
   },
   loginText: {
-    placeholderTextColor: '000000',
-    color: 'white',
+    color: 'black',
   },
 
+  helpBtn: {
+    width: '40%',
+    borderRadius: 4,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 80,
+    backgroundColor: 'black',
+  },
+  altText:{
+    color: 'white',
+  },
   loginSuccess: {
     margin: 0,
   },
-
+  altBtn: {
+    width: '70%',
+    borderRadius: 4,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    backgroundColor: 'black',
+  },
   bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -109,18 +127,5 @@ export default StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize: 10,
-  },
-  helpBtn: {
-    width: '40%',
-    borderRadius: 4,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 80,
-    backgroundColor: '#73000a',
-  },
-  loginText: {
-    placeholderTextColor: '000000',
-    color: 'white',
   },
 });
