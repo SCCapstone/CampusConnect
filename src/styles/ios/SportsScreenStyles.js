@@ -47,6 +47,7 @@ export default StyleSheet.create({
         backgroundColor: '#73000a',
         width: 110,
         textAlign: 'left',
+        height: 35,
       },
       sortButtonText: {
         color: 'white',

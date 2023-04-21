@@ -26,7 +26,7 @@ const LoadSportEvents = (HTMLString, eventCount, isSort) => {
  
   if (isSort) {
     for (let i = 0; i < eventCount; i++) {
-      if (HTMLString[i].is_upcoming_event) {
+      //if (HTMLString[i].is_upcoming_event) {
         sportArray.push(HTMLString[i].sport.name)
         opponentArray.push(HTMLString[i].opponent_school_name)
         dateArray.push(HTMLString[i].event_date)
@@ -34,7 +34,7 @@ const LoadSportEvents = (HTMLString, eventCount, isSort) => {
         imageArray.push(HTMLString[i].opponent_logo)
         locationArray.push(HTMLString[i].location)
         homeStatusArray.push(HTMLString[i].event_status)
-      }
+     // }
     }
   } else {
     const $ = cheerio.load(HTMLString) // parse HTML string

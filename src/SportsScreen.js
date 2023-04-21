@@ -118,8 +118,10 @@ useEffect(() => {
     if (isSort) {
       setHasMore(false)
       let eventCount = 0
+      const now = new Date(); //The present date
       for (let i = 0; i < res.data.data.length; i++) { // Only count upcoming events
-        if (res.data.data[i].is_upcoming_event && (res.data.data[i].season.name == "2023" || res.data.data[i].season.name == "2022-23")) // second check needed due to mistakes found in API data
+        eventDate = new Date(res.data.data[i].event_date)
+        if (eventDate.getTime() > now.getTime()) // second check needed due to mistakes found in API data
             eventCount++
       } 
       if (eventCount != 0)
