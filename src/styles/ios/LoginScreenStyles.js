@@ -49,7 +49,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     width: '80%',
     height: 45,
-    marginBottom: 20,
+    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -118,7 +118,7 @@ export default StyleSheet.create({
     backgroundColor: 'black',
   },
   bottomContainer: {
-    flex: 1,
+    height: '10%',
     justifyContent: 'flex-end',
   },
 
