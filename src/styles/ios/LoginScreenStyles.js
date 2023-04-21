@@ -63,7 +63,7 @@ export default StyleSheet.create({
 
   forgot_button: {
     height: 20,
-    marginTop:40,
+    margin:40,
     color: 'black',
     fontWeight: 'bold',
   },
@@ -114,7 +114,7 @@ export default StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    margin: 5,
     backgroundColor: 'black',
   },
   bottomContainer: {
