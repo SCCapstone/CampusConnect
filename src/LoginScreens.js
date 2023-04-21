@@ -44,7 +44,6 @@ export function WelcomeScreen({navigation}) {
   const userData = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-  var transactionStarted = false;
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -54,8 +53,6 @@ export function WelcomeScreen({navigation}) {
     if (initializing) setInitializing(false);
 
     if (auth().currentUser) {
-      if (!transactionStarted) {
-        transactionStarted = true;
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -91,7 +88,6 @@ export function WelcomeScreen({navigation}) {
             FirebaseError(error.code);
           });
       }
-    }
   }
 
   useEffect(() => {

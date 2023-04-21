@@ -50,7 +50,7 @@ export const locations = {
   humanities_classroom: {latitude: 33.998788312230744, longitude: -81.02479599232582},
   close_hipp: {latitude: 34.00035472994745, longitude: -81.02327910049301},
   barnwell: {latitude: 33.99971026460354, longitude: -81.02640109903214},
-  desaussure: {latitide: 33.998916071600505, longitude: -81.02825561539406},
+  desaussure: {latitude: 33.998916071600505, longitude: -81.02825561539406},
   mckissick: {latitude: 33.99866173318553, longitude: -81.0268930223729},
   wardlaw: {latitude: 33.99662508862622, longitude: -81.03078561794987},
   school_of_journalism_and_mass_communications: {
