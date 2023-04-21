@@ -266,4 +266,8 @@ export default StyleSheet.create({
     height: 25,
     backgroundColor: 'transparent',
   },
+  placeholder:{
+    width: 385,
+    height:10, // Set the height according to the height of bottomPostButtonsContainer's child components
+  }
 });
