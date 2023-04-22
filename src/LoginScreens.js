@@ -117,7 +117,7 @@ export function WelcomeScreen({navigation}) {
         <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')} style={styles.loginBtn}>
+      <TouchableOpacity testID='login_btn' onPress={() => navigation.navigate('LoginScreen')} style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => NeedHelpError()} style={styles.helpBtn}>
@@ -161,6 +161,7 @@ export function LoginScreen({navigation}) {
         <Text style={styles.title}>Campus Connect</Text>
         <View style={styles.inputView}>
           <TextInput
+            testID='emailInput'
             style={styles.TextInput}
             placeholder="USC Email"
             textContentType="username"
@@ -174,6 +175,7 @@ export function LoginScreen({navigation}) {
 
         <View style={styles.inputView}>
           <TextInput
+            testID='passInput'
             style={styles.TextInput}
             placeholder="Password"
             textContentType={'password'}
@@ -201,7 +203,7 @@ export function LoginScreen({navigation}) {
         <Text style={styles.altText}>REGISTER</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => login(email, password)} style={styles.altBtn}>
+      <TouchableOpacity testID='login_btn' onPress={() => login(email, password)} style={styles.altBtn}>
         <Text style={styles.altText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.bottomContainer}>

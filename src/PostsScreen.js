@@ -1055,6 +1055,7 @@ export function PostsScreen({navigation, route}) {
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar
+        testID='searchBar'
         containerStyle={{backgroundColor: '#73000a'}}
         inputContainerStyle={{borderRadius: 20, backgroundColor: '#FFF'}}
         onChangeText={setSearch}

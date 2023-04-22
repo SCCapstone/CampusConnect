@@ -312,7 +312,7 @@ export function RegistrationScreen({navigation}) {
             <Text style={styles.loginText}>Need help?</Text>
           </TouchableOpacity>
           <View style={styles.bottomContainer}>
-            <Text style={styles.copyWrightText}>Copywright Ⓒ2022 DemBoyz</Text>
+            <Text style={styles.copyWrightText}>Copywright Ⓒ2023 DemBoyz</Text>
           </View>
         </View>
       </ScrollView>
