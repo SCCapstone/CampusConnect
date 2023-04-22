@@ -121,11 +121,10 @@ useEffect(() => {
     if (isSort) {
       setHasMore(false)
       let eventCount = 0
-      now = new Date(); // This is the current time
-      now.setTime(new Date().setHours(0, 0, 0, 0));
+      now = new Date(); //The present date
+      now.setTime(now.getTime() - (28*60*60*1000)) //This subtracts 28 hours so that events in the current day will always show, since they are set to midnight
       for (let i = 0; i < res.data.data.length; i++) { // Only count upcoming events
         eventDate = new Date(res.data.data[i].event_date)
-        eventDate.setTime(new Date().setHours(0, 0, 0, 0));
         if (eventDate.getTime() >= now.getTime()) // second check needed due to mistakes found in API data
             eventCount++
       } 
