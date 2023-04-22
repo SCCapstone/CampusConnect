@@ -25,10 +25,11 @@ const LoadSportEvents = (HTMLString, eventCount, isSort) => {
   homeStatusArray = new Array()
  
   if (isSort) {
-    now = new Date(); //The present date
-    now.setTime(now.getTime() - (24*60*60*1000)) //This subtracts 24 hours so that events in the current day will always show, since they are set to midnight
+    now = new Date(); // This is the current time
+    now.setTime(new Date().setHours(0, 0, 0, 0));
     for (let i = 0; i < HTMLString.length; i++) {
-        eventDate = new Date(HTMLString[i].event_date)
+      eventDate = new Date(HTMLString[i].event_date)
+      eventDate.setTime(new Date().setHours(0, 0, 0, 0));
         if (eventDate.getTime() >= now.getTime()) {
         sportArray.push(HTMLString[i].sport.name)
         opponentArray.push(HTMLString[i].opponent_school_name)
