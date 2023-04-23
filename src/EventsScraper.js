@@ -71,6 +71,15 @@ const LoadEvents = async () => {
   });
 
   await Promise.all(promises);
+  events.unshift({
+    title: 'U of SC Campus Recreation Presents: The Kid Laroi',
+    date: 'Friday, Aug 8, 7:00PM',
+    location: 'Colonial Life Arena',
+    price: 'USC Alumni Association',
+    imageUrl: 'https://www.bleed4you.com/images/tour_square-rev.jpg',
+    description: 'Come join us at Colonial Life Arena for a free student concert with The Kid Laroi!',
+  }
+  );
   return events.filter(Boolean);
 
 };
