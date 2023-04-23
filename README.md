@@ -17,24 +17,30 @@ We recommend a beefy desktop computer for Android Development and an M1 Mac for 
 All the source files for the project are in the "src" folder
 
 # Pictures
-<p float="left">
-<img width="200" alt="Screenshot 2023-04-23 at 1 59 27 PM" src="https://user-images.githubusercontent.com/13265359/233856773-75f9787c-0016-4380-b786-3f35246bde9a.png">
-<img width="200" alt="Screenshot 2023-04-23 at 1 57 33 PM" src="https://user-images.githubusercontent.com/13265359/233856731-313acf20-c518-4829-b699-bb882ba8fb19.png">
-<img width="194" alt="Screenshot_2023-03-25_150521asdasdasdasdasdasdasdasdasdasd_50" src="https://user-images.githubusercontent.com/13265359/227736574-e89381bf-e18e-47c2-8770-09b861c402b2.png">
-<img width="193" alt="Screenshot_20230217_120645_50" src="https://user-images.githubusercontent.com/13265359/219555237-69f2c3e0-2734-4add-91b2-b269de5bcf28.png">
-<img width="194" alt="Screenshot_20230217_120709_50" src="https://user-images.githubusercontent.com/13265359/219555239-135df328-1383-4cd1-89c7-3539f0d72c8a.png">
-<img width="193" alt="Screenshot_2023-02-26_184122_5sdsdsdsds" src="https://user-images.githubusercontent.com/13265359/221444567-f4b08674-8638-479c-9c73-7e0da7104ff3.png">
-<img width="193" alt="Screenshot_2023-02-26_184122_5sdsdsdsds" src="https://user-images.githubusercontent.com/13265359/221444775-4f74bec0-9c11-4674-85c9-b9c69db96066.png">
-<img width="194" alt="Screenshot_20230217_120957_50" src="https://user-images.githubusercontent.com/13265359/219555244-16127b83-a5ca-4d8f-800f-bd61513c521d.png">
-<img width="192" alt="Screenshot_20230217_121638_50" src="https://user-images.githubusercontent.com/13265359/219555509-0b5c117d-8337-4c37-8d38-dc762c80dca6.png">
-<img width="195" alt="Screenshot_20230217_122011_50" src="https://user-images.githubusercontent.com/13265359/219556068-76f8905e-27b9-4ca1-b76f-5d5f4893739e.png">
-<img width="197" alt="Screenshot_20230217_011628_50" src="https://user-images.githubusercontent.com/13265359/219564357-e4415aee-e316-46bb-84d9-504e7a8a78bf.png">
-<img width="194" alt="Screenshot_20230217_120634_50" src="https://user-images.githubusercontent.com/13265359/219555234-ce4f516d-0cf4-42c6-9a9b-087842b91018.png">
+<table>
+  <tr>
+    <td><img width="200" alt="Screenshot 2023-04-23 at 1 59 27 PM" src="https://user-images.githubusercontent.com/13265359/233856773-75f9787c-0016-4380-b786-3f35246bde9a.png"></td>
+    <td><img width="200" alt="Screenshot 2023-04-23 at 1 57 33 PM" src="https://user-images.githubusercontent.com/13265359/233856731-313acf20-c518-4829-b699-bb882ba8fb19.png"></td>
+    <td><img width="190" alt="Screenshot_2023-03-25_150521asdasdasdasdasdasdasdasdasdasd_50" src="https://user-images.githubusercontent.com/13265359/227736574-e89381bf-e18e-47c2-8770-09b861c402b2.png"></td>
+    <td><img width="210" alt="Screenshot 2023-04-23 at 2 02 20 PM" src="https://user-images.githubusercontent.com/13265359/233856890-c608dbd3-05a2-41ee-a380-728ecc996de2.png"></td>
+  </tr>
+  <tr>
+    <td><img width="193" alt="Screenshot_2023-02-26_184122_5sdsdsdsds" src="https://user-images.githubusercontent.com/13265359/221444775-4f74bec0-9c11-4674-85c9-b9c69db96066.png"></td>
+    <td><img width="201" alt="Screenshot 2023-04-23 at 2 07 52 PM" src="https://user-images.githubusercontent.com/13265359/233857141-521d3805-643f-484b-8c31-d46f3659cbf0.png"></td>
+    <td><img width="192" alt="Screenshot_20230217_121638_50" src="https://user-images.githubusercontent.com/13265359/219555509-0b5c117d-8337-4c37-8d38-dc762c80dca6.png"></td>
+    <td><img width="195" alt="Screenshot_20230217_122011_50" src="https://user-images.githubusercontent.com/13265359/219556068-76f8905e-27b9-4ca1-b76f-5d5f4893739e.png"></td>
+  </tr>
+  <tr>
+    <td><img width="200" alt="Screenshot 2023-04-23 at 2 00 50 PM" src="https://user-images.githubusercontent.com/13265359/233856837-1c4e0a6b-3c51-4aff-8711-398a6fb0f576.png"></td>
+    <td colspan="3"></td>
+  </tr>
+</table>
+
+And Much More!
 
 
 And Much More!
 
-</p>
 
 
 # Deployment
