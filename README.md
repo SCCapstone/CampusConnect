@@ -32,11 +32,10 @@ All the source files for the project are in the "src" folder
   </tr>
   <tr>
     <td><img width="200" alt="Screenshot 2023-04-23 at 2 00 50 PM" src="https://user-images.githubusercontent.com/13265359/233856837-1c4e0a6b-3c51-4aff-8711-398a6fb0f576.png"></td>
+    <td><img width="197" alt="Screenshot_20230217_011628_50" src="https://user-images.githubusercontent.com/13265359/219564357-e4415aee-e316-46bb-84d9-504e7a8a78bf.png"></td>
     <td colspan="3"></td>
   </tr>
 </table>
-
-And Much More!
 
 
 And Much More!
