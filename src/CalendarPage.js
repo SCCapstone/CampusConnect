@@ -17,6 +17,8 @@ import {
 import {Avatar, Icon, Input, Text} from '@rneui/themed';
 
 import {HeaderBackButton} from 'react-navigation-stack';
+import { CheckBox } from 'react-native-elements';
+
 
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
@@ -64,6 +66,25 @@ export function CalendarPage({navigation}) {
   const [value2, setValue2] = useState(new Date(1671469200000));
   const [reRender, setReRender] = useState(false);
   var transactionStarted = false;
+  const [selectedDays, setSelectedDays] = useState({
+    M: false,
+    T: false,
+    W: false,
+    Th: false,
+    F: false,
+    S: false,
+    Su: false,
+  });
+  const daysMapping = {
+    M: 1,
+    T: 2,
+    W: 3,
+    Th: 4,
+    F: 5,
+    S: 6,
+    Su: 0,
+  };
+  
 
   const [classes, setClasses] = useState({
     1: [
@@ -93,6 +114,9 @@ export function CalendarPage({navigation}) {
     moment(),
     {start: moment().startOf('isoWeek'), end: moment().startOf('isoWeek').add(7, 'day')},
   ];
+  const toggleSelectedDay = (day) => {
+    setSelectedDays({ ...selectedDays, [day]: !selectedDays[day] });
+  };
 
   const renderClasses = ({item, index}) => {
     return (
@@ -106,11 +130,11 @@ export function CalendarPage({navigation}) {
         containerStyle={{backgroundColor: 'white'}}
         rightThreshold={105}
         friction={2.5}
-        renderLeftActions={() => (
+        /*renderLeftActions={() => (
           <View style={{justifyContent: 'center', marginLeft: 15}}>
             <Icon type="entypo" name="edit" size={30} color="black"></Icon>
           </View>
-        )}
+        )}*/
         renderRightActions={() => (
           <TouchableOpacity
             onPress={() => {
@@ -222,10 +246,14 @@ export function CalendarPage({navigation}) {
       startTime: {},
       endTime: {},
     };
-    console.log(startTime + ' ' + endTime);
-    if (endTime.nativeEvent.timestamp - startTime.nativeEvent.timestamp < 1) {
+    if (endTime.nativeEvent.timestamp - startTime.nativeEvent.timestamp < 0) {
       //Start Time is before end time
       Alert.alert('Whoops!', 'Start time must be before end time');
+      return;
+    }
+      // Check if at least one day is selected
+    if (!Object.values(selectedDays).some((selected) => selected)) {
+      Alert.alert('Please select at least one day.');
       return;
     }
     if (
@@ -247,11 +275,16 @@ export function CalendarPage({navigation}) {
       tempClass.startTime = startTime.nativeEvent.timestamp;
       tempClass.endTime = endTime.nativeEvent.timestamp;
 
-      classes[key].push(tempClass);
-      classes[key].sort(function (a, b) {
-        return a.startTime - b.startTime;
+      // Save the class to all selected days
+      Object.entries(selectedDays).forEach(([day, isSelected]) => {
+        if (isSelected) {
+          const dayKey = daysMapping[day];
+          classes[dayKey].push(tempClass);
+          classes[dayKey].sort(function (a, b) {
+            return a.startTime - b.startTime;
+          });
+        }
       });
-
       try {
         await AsyncStorage.setItem('@users_classes', JSON.stringify(classes));
         setProfessorName('');
@@ -263,7 +296,16 @@ export function CalendarPage({navigation}) {
         setValue2(new Date(1671469200000));
         setSelectedClassLocation(null);
         setSelectedClassLocationName('');
-        this.floatingAction.animateButton();
+        setSelectedDays({
+          M: false,
+          T: false,
+          W: false,
+          Th: false,
+          F: false,
+          S: false,
+          Su: false,
+        })
+        //this.floatingAction.animateButton();
       } catch (e) {}
     } else {
       Alert.alert('Please fill out all the required fields.');
@@ -286,7 +328,8 @@ export function CalendarPage({navigation}) {
   return (
     <View style={{backgroundColor: '#73000a', flex: 1}}>
       <Modal transparent={true} visible={addClassVisible}>
-        <SafeAreaView style={{flex: 1, justifyContent: 'center', marginHorizontal: 10}}>
+        <SafeAreaView style={{flex:1, justifyContent:'center',backgroundColor: 'rgba(0, 0, 0, .5)'}}>
+        <View style={{flex: 1, justifyContent: 'center', marginHorizontal: 10}}>
           <View style={{backgroundColor: '#73000a', height: 50, justifyContent: 'center'}}>
             <Text
               style={{
@@ -295,24 +338,24 @@ export function CalendarPage({navigation}) {
                 fontWeight: 'bold',
                 fontSize: 25,
               }}>
-              {'Entering a class for: ' + selectedDate.format('dddd')}
+              {'Class Details'}
             </Text>
           </View>
           <View style={{backgroundColor: 'white', padding: 15}}>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>Enter The Class Name</Text>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>Class Name</Text>
             <Input
               value={className}
               placeholder="Class Name"
               defaultValue={className}
               onChangeText={setClassName}></Input>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>Enter The Professor's Name</Text>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>Professor's Name</Text>
             <Input
               placeholder="Professor's Name"
               value={professorName}
               defaultValue={professorName}
               onChangeText={setProfessorName}></Input>
             <DropDownPicker
-              placeholder="Select Class Location"
+              placeholder="Location"
               style={{marginBottom: 20}}
               open={dropDownOpen}
               value={selectedClassLocation}
@@ -331,13 +374,14 @@ export function CalendarPage({navigation}) {
               }}
               listMode="SCROLLVIEW"
             />
-            <Text style={{color: 'black', fontWeight: 'bold'}}>Enter The Room Number</Text>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>Room Number</Text>
             <Input
               placeholder="Room Number"
               value={roomNumber}
               defaultValue={roomNumber}
-              onChangeText={setRoomNumber}></Input>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>Select Start And End Times</Text>
+              onChangeText={setRoomNumber}>
+            </Input>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>Start And End Times</Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
               {Platform.OS === 'android' && (
                 <View style={{justifyContent: 'center'}}>
@@ -405,6 +449,30 @@ export function CalendarPage({navigation}) {
                 />
               )}
             </View>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>Days</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              {Object.entries(selectedDays).map(([day, isSelected]) => (
+                <View key={day} style={{ alignItems: 'center' }}>
+                  <CheckBox
+                    checked={isSelected}
+                    onPress={() => toggleSelectedDay(day)}
+                    containerStyle={{
+                      backgroundColor: 'transparent',
+                      borderWidth: 0,
+                      padding: 0,
+                      margin: 0,
+                    }}
+                    uncheckedColor="#ccc" // Change this color to your preferred one
+                  />
+                  <Text
+                    style={{ fontSize: 12 }}
+                    onPress={() => toggleSelectedDay(day)}
+                  >
+                    {day.slice(0, 2)}
+                  </Text>
+                </View>
+              ))}
+            </View>
             <View style={{flexDirection: 'row'}}>
               <Button
                 containerStyle={{
@@ -438,6 +506,7 @@ export function CalendarPage({navigation}) {
               />
             </View>
           </View>
+        </View>
         </SafeAreaView>
       </Modal>
       <Modal visible={mapVisible} transparent={true}>
@@ -528,6 +597,8 @@ export function CalendarPage({navigation}) {
           setAddClassVisible(!addClassVisible);
         }}
         color="#73000a"
+        overlayColor="rgba(0,0,0,0)"
+        visible={!addClassVisible}
         ref={ref => {
           this.floatingAction = ref;
         }}></FloatingAction>
