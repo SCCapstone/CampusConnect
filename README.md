@@ -18,7 +18,8 @@ All the source files for the project are in the "src" folder
 
 # Pictures
 <p float="left">
-<img width="189" alt="Screenshot_20230217_120551_50" src="https://user-images.githubusercontent.com/13265359/219555233-07702c84-05c2-4efd-a82a-11e2ecf69777.png">
+<img width="200" alt="Screenshot 2023-04-23 at 1 59 27 PM" src="https://user-images.githubusercontent.com/13265359/233856773-75f9787c-0016-4380-b786-3f35246bde9a.png">
+<img width="200" alt="Screenshot 2023-04-23 at 1 57 33 PM" src="https://user-images.githubusercontent.com/13265359/233856731-313acf20-c518-4829-b699-bb882ba8fb19.png">
 <img width="194" alt="Screenshot_2023-03-25_150521asdasdasdasdasdasdasdasdasdasd_50" src="https://user-images.githubusercontent.com/13265359/227736574-e89381bf-e18e-47c2-8770-09b861c402b2.png">
 <img width="193" alt="Screenshot_20230217_120645_50" src="https://user-images.githubusercontent.com/13265359/219555237-69f2c3e0-2734-4add-91b2-b269de5bcf28.png">
 <img width="194" alt="Screenshot_20230217_120709_50" src="https://user-images.githubusercontent.com/13265359/219555239-135df328-1383-4cd1-89c7-3539f0d72c8a.png">
