@@ -162,8 +162,8 @@ export const useChatClient = () => {
       }
 
       return async () => {
-        await chatClient?.disconnectUser();
-        unsubscribeTokenRefreshListenerRef.current?.();
+        //await chatClient?.disconnectUser();
+        //unsubscribeTokenRefreshListenerRef.current?.();
       };
     }
   }, []);
