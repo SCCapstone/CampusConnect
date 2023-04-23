@@ -327,7 +327,7 @@ export function CalendarPage({navigation}) {
 
   return (
     <View style={{backgroundColor: '#73000a', flex: 1}}>
-      <Modal transparent={true} visible={addClassVisible}>
+      <Modal onRequestClose={() => {this.floatingAction.animateButton()}} transparent={true} visible={addClassVisible}>
         <SafeAreaView style={{flex:1, justifyContent:'center',backgroundColor: 'rgba(0, 0, 0, .5)'}}>
         <View style={{flex: 1, justifyContent: 'center', marginHorizontal: 10}}>
           <View style={{backgroundColor: '#73000a', height: 50, justifyContent: 'center'}}>
