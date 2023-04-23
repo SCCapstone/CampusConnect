@@ -1,5 +1,5 @@
 # What is Campus Connect?
-Campus Connect is a cross-platform chat and social media app developed by USC students, for USC students. Join your friends. Talk about classes. Post your favorite links. Whatever!
+Your one-stop-shop for USC social life.
 <table>
   <tr>
     <td><img width="200" alt="Screenshot 2023-04-23 at 1 59 27 PM" src="https://user-images.githubusercontent.com/13265359/233856773-75f9787c-0016-4380-b786-3f35246bde9a.png"></td>
