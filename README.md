@@ -1,22 +1,5 @@
 # What is Campus Connect?
 Campus Connect is a cross-platform chat and social media app developed by USC students, for USC students. Join your friends. Talk about classes. Post your favorite links. Whatever!
-
-# Hardware Requirements
-This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a 4 or more core processor from the past few years. 
-
-iOS Development requires a Macintosh Computer.
-
-We recommend a beefy desktop computer for Android Development and an M1 Mac for iOS development. 
-
-# Setup and Running 
-1. Clone Repo
-2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
-3. Install Dependencies<pre><code>npm update</code></pre>
-4. Run the code<pre><code>npx react-native run-android</code></pre>
-
-All the source files for the project are in the "src" folder
-
-# Pictures
 <table>
   <tr>
     <td><img width="200" alt="Screenshot 2023-04-23 at 1 59 27 PM" src="https://user-images.githubusercontent.com/13265359/233856773-75f9787c-0016-4380-b786-3f35246bde9a.png"></td>
@@ -37,8 +20,20 @@ All the source files for the project are in the "src" folder
   </tr>
 </table>
 
+# Hardware Requirements
+This dev environment is very intensive and will require a modern computer with at least 20gb of free space, 16gb of ram, and a 4 or more core processor from the past few years. 
 
-And Much More!
+iOS Development requires a Macintosh Computer.
+
+We recommend a beefy desktop computer for Android Development and an M1 Mac for iOS development. 
+
+# Setup and Running 
+1. Clone Repo
+2. Follow instructions to setup react native cli here https://reactnative.dev/docs/environment-setup
+3. Install Dependencies<pre><code>npm update</code></pre>
+4. Run the code<pre><code>npx react-native run-android</code></pre>
+
+All the source files for the project are in the "src" folder
 
 
 
