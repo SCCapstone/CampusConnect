@@ -26,7 +26,7 @@ const About = () => {
       },
       {
         name: 'Chase Allison',
-        email: 'challison@email.sc.edu',
+        email: 'chasema@email.sc.edu',
         imageUrl: 'https://thumbs.dreamstime.com/b/red-crested-fighting-cock-gamecock-village-scene-red-crested-fighting-cock-195838017.jpg',
         description: 'Chase is a Computer Science major and responsible for the clubs page.',
       },
