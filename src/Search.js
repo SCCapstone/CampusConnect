@@ -40,7 +40,7 @@ import {channel} from 'diagnostics_channel';
 import FastImage from 'react-native-fast-image';
 import {BackgroundImage, Icon} from '@rneui/base';
 import {FAB} from '@rneui/themed';
-
+//allows current user to search for other users
 export function Search({navigation}) {
   const [userSearch, setUserSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -67,7 +67,7 @@ export function Search({navigation}) {
     });
     console.log(searchResults);
   }, [userSearch]);
-
+  //this takes the data and displays it for the search
   const renderUser = ({item}) => {
     return (
       <TouchableOpacity
@@ -131,6 +131,7 @@ export function Search({navigation}) {
       </TouchableOpacity>
     );
   };
+  //style of the search
   return (
     <View style={{flex: 1, backgroundColor: '#73000a'}}>
       <SearchBar
