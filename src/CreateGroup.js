@@ -22,7 +22,7 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
-
+//allows users to create new groupchats
 export function CreateGroup(props) {
   const [groupName, setGroupName] = React.useState('');
   const [image, setImage] = React.useState('');
@@ -31,11 +31,11 @@ export function CreateGroup(props) {
   const {setChannel} = useChatContext();
   const navigation = useNavigation();
   const chatClient = StreamChat.getInstance(chatApiKey);
-
+  //handles group name change
   const onGroupNameChanged = groupName => {
     setGroupName(() => groupName);
   };
-
+  //allows users to upload picture from their device library
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
       width: 300,
@@ -49,7 +49,7 @@ export function CreateGroup(props) {
       })
       .catch(error => {});
   };
-
+  //allows users to upload picture
   const uploadPic = async () => {
     const reference = storage().ref('/Groups/' + uuidv4());
     if (image) {
@@ -59,7 +59,7 @@ export function CreateGroup(props) {
       url = await reference.getDownloadURL();
     }
   };
-
+  //checks if group name is valid
   const isGroupValid = groupName => {
     if (validator.isEmpty(groupName)) {
       console.log('Error, invalid group name');
@@ -67,11 +67,11 @@ export function CreateGroup(props) {
     }
     return true;
   };
-
+  //shows message telling that the group has been made
   const showMessage = (title, message) => {
     Alert.alert(title, message);
   };
-
+  //merges all methods together
   const createGroup = async () => {
     if (isGroupValid(groupName) && image) {
       await uploadPic();
@@ -102,7 +102,7 @@ export function CreateGroup(props) {
       navigation.navigate('DMScreen', {channel: channel});
     }
   };
-
+  //style for creategroup
   return (
     <View style={styles.groupContainer}>
       <Text style={styles.textGroupStyle}>What would you like your group to be called</Text>

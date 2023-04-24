@@ -1,4 +1,4 @@
-// ChatContext.js
+//The context for all things chat
 
 import React, {useState} from 'react';
 

@@ -63,7 +63,7 @@ if (Platform.OS === 'ios') {
   styles = androidstyles;
   commentStyles = androidCommentStyles;
 }
-
+//same thing as the normal post screen just dedicated to alumni
 export function AlumniPostsScreen({navigation, route}) {
   const {sortingMode} = route.params;
   const POST_COLLECTION_NAME = 'AlumniPosts';

@@ -34,7 +34,7 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
-
+//displays information of selected user
 export function ProfileView({navigation}) {
   const userData = useContext(AppContext);
   const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ export function ProfileView({navigation}) {
         console.log(error);
       });
   };
-
+  //gets profile data that user wants to see
   useEffect(() => {
     if (!profileData) {
       getProfile();
@@ -81,7 +81,7 @@ export function ProfileView({navigation}) {
   if (loading) {
     return <ActivityIndicator style={{flex: 1}} color={'#73000a'}></ActivityIndicator>;
   }
-
+  //styles of profile view
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground

@@ -67,7 +67,7 @@ export function RegistrationScreen({navigation}) {
       [{text: 'OK'}],
     );
   };
-
+  //allows user to pick photo from their devices library
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
       width: 300,
@@ -80,7 +80,7 @@ export function RegistrationScreen({navigation}) {
       })
       .catch(error => {});
   };
-
+  //uploads pic from choosephotofromlibrary
   const uploadPic = async () => {
     const reference = storage().ref('/Profile Pictures/' + auth().currentUser.uid);
     if (image) {
@@ -90,7 +90,7 @@ export function RegistrationScreen({navigation}) {
       url = await reference.getDownloadURL();
     }
   };
-
+  //get users data
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
@@ -106,7 +106,7 @@ export function RegistrationScreen({navigation}) {
       Parse.User.logOut();
       if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
-
+        //users data is stored in firebase
         firestore()
           .collection('Users')
           .doc(auth().currentUser.uid)
@@ -180,7 +180,7 @@ export function RegistrationScreen({navigation}) {
     }
     setLoading(false);
   };
-
+  //resets data to ''
   const reset = () => {
     url = '';
     setFirstName('');
@@ -195,7 +195,7 @@ export function RegistrationScreen({navigation}) {
       routes: [{name: 'LoadingScreen'}],
     });
   };
-
+  //if registration is successfull then we show the user a screen that confirms this
   if (registraionSuccess) {
     return (
       <LinearGradient colors={['white', 'white', '#73000a']} style={styles.gradient}>
@@ -222,7 +222,7 @@ export function RegistrationScreen({navigation}) {
       </View>
     );
   }
-
+  //styles for the registrationscreen
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.gradient} testID="regview">
       <ScrollView nestedScrollEnabled={true}>
@@ -319,7 +319,7 @@ export function RegistrationScreen({navigation}) {
     </LinearGradient>
   );
 }
-
+//tells user to contact us if help is needed
 const NeedHelpError = () => {
   Alert.alert('Need Help?', 'Please contact support at \n\ndemboyz.sc@gmail.com for help.', [{text: 'OK'}]);
 };
