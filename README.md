@@ -11,7 +11,7 @@ Campus Connect is a cross-platform chat and social media app developed by USC st
   <tr>
     <td><img width="193" alt="Screenshot_2023-02-26_184122_5sdsdsdsds" src="https://user-images.githubusercontent.com/13265359/221444775-4f74bec0-9c11-4674-85c9-b9c69db96066.png"></td>
     <td><img width="201" alt="Screenshot 2023-04-23 at 2 07 52 PM" src="https://user-images.githubusercontent.com/13265359/233857141-521d3805-643f-484b-8c31-d46f3659cbf0.png"></td>
-    <td><img width="192" alt="Screenshot_20230217_121638_50" src="https://user-images.githubusercontent.com/13265359/219555509-0b5c117d-8337-4c37-8d38-dc762c80dca6.png"></td>
+    <td><img width="200" alt="Screenshot 2023-04-23 223611" src="https://user-images.githubusercontent.com/13265359/233887789-feaf5c5c-6bab-474a-848e-1a88fcb5f75a.png"></td>
     <td><img width="195" alt="Screenshot_20230217_122011_50" src="https://user-images.githubusercontent.com/13265359/219556068-76f8905e-27b9-4ca1-b76f-5d5f4893739e.png"></td>
   </tr>
   <tr>
