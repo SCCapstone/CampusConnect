@@ -55,22 +55,22 @@ const Home = () => {
         <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233856731-313acf20-c518-4829-b699-bb882ba8fb19.png" alt="Image 2" />
       </div>
       <div>
-        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/227736574-e89381bf-e18e-47c2-8770-09b861c402b2.png" alt="Image 3" />
+        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233886872-dd04b187-cb17-41b0-ac50-1a9aaea27453.png" alt="Image 3" />
       </div>
       <div>
         <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233856890-c608dbd3-05a2-41ee-a380-728ecc996de2.png" alt="Image 4" />
       </div>
       <div>
-        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/221444775-4f74bec0-9c11-4674-85c9-b9c69db96066.png" alt="Image 5" />
+        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233889265-6aef175e-507c-49c8-ac1d-99f662948dab.png" alt="Image 5" />
       </div>
       <div>
         <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233857141-521d3805-643f-484b-8c31-d46f3659cbf0.png" alt="Image 6" />
       </div>
       <div>
-        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/219555509-0b5c117d-8337-4c37-8d38-dc762c80dca6.png" alt="Image 7" />
+        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233887789-feaf5c5c-6bab-474a-848e-1a88fcb5f75a.png" alt="Image 7" />
       </div>
       <div>
-        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/219556068-76f8905e-27b9-4ca1-b76f-5d5f4893739e.png" alt="Image 8" />
+        <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233888633-104815a5-9018-4dbe-b927-1c884e7e98c5.png" alt="Image 8" />
       </div>
       <div>
         <img style={{width:'20%',height:'auto'}} src="https://user-images.githubusercontent.com/13265359/233856837-1c4e0a6b-3c51-4aff-8711-398a6fb0f576.png" alt="Image 9" />
