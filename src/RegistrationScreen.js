@@ -102,7 +102,7 @@ export function RegistrationScreen({navigation}) {
     await Parse.User.logIn(auth().currentUser.email,'password').then(() =>{ //This seems crazy, but it's fine, cuz the password doesn't work unless they click the email.
       emailVerified = true;
     }).catch((error) => {console.log(error)})
-    if (true) {
+    if (emailVerified) {
       Parse.User.logOut();
       if (nameValid && firstName.trim() && lastName.trim() && major && gradDate && bio && bioLengthValid && image) {
         await uploadPic();
