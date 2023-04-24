@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <div style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>
-      <h1>Campus Connect</h1>
+      <h1>Campus Connect (Open Beta)</h1>
       <p className={styles.availableOnText}>Available On</p>
       <div className={styles.appButtons}>
       <a href="https://github.com/SCCapstone/CampusConnect/releases/download/v1.0/Campus.Connect.v1.0.apk" target="_blank" rel="noopener noreferrer">
