@@ -7,7 +7,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const Home = () => {
   const openVideo = () => {
-    window.open('https://studio.youtube.com/video/FiveK8nVJv0/edit', '_blank');
+    window.open('https://youtu.be/FiveK8nVJv0', '_blank');
   };
 
   return (
