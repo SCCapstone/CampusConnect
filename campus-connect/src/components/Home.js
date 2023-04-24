@@ -14,11 +14,13 @@ const Home = () => {
     <div style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>
       <h1>Campus Connect</h1>
       <h3 className={styles.heading2}>Check out a demo of our app below!</h3>
-      <img
-        className={styles.video_thumbnail}
-        src="https://img.youtube.com/vi/FiveK8nVJv0/0.jpg"
-        alt="DEMO"
-        onClick={openVideo}
+      <iframe
+        className={styles.video_iframe}
+        src="https://www.youtube.com/embed/FiveK8nVJv0"
+        title="Campus Connect Demo"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
       />
       <h3 className={styles.heading2}>Why use Campus Connect?</h3>
       <p>
