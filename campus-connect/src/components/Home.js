@@ -4,6 +4,8 @@ import React from 'react';
 import styles from './Home.module.css';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import androidLogo from '../android.png';
+import iosLogo from '../ios.png';
 
 const Home = () => {
   const openVideo = () => {
@@ -13,6 +15,15 @@ const Home = () => {
   return (
     <div style={{textAlign: 'center', marginLeft: '50px', marginRight: '50px'}}>
       <h1>Campus Connect</h1>
+      <p className={styles.availableOnText}>Available On</p>
+      <div className={styles.appButtons}>
+      <a href="https://github.com/SCCapstone/CampusConnect/releases/download/v1.0/Campus.Connect.v1.0.apk" target="_blank" rel="noopener noreferrer">
+        <img className={styles.appButton} src={androidLogo} alt="Download on Android" />
+      </a>
+      <a href="https://testflight.apple.com/join/1mnTG5Uj" target="_blank" rel="noopener noreferrer">
+        <img className={styles.appButton} src={iosLogo} alt="Download on iOS" />
+      </a>
+    </div>
       <h3 className={styles.heading2}>Check out a demo of our app below!</h3>
       <iframe
         className={styles.video_iframe}

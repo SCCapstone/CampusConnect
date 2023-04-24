@@ -24,6 +24,26 @@
     margin-top: 20px;
     margin-bottom: 20px;
   }
+  .availableOnText {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .appButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .appButton {
+    width: 100px;
+    height: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
   
   
   .image_row {
