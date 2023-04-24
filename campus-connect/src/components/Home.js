@@ -16,7 +16,7 @@ const Home = () => {
       <h3 className={styles.heading2}>Check out a demo of our app below!</h3>
       <img
         className={styles.video_thumbnail}
-        src="https://img.youtube.com/vi/9tQWLg4E90M/0.jpg"
+        src="https://img.youtube.com/vi/FiveK8nVJv0/0.jpg"
         alt="DEMO"
         onClick={openVideo}
       />
