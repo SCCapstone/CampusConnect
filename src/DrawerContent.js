@@ -22,7 +22,7 @@ if (Platform.OS === 'ios') {
 import {StreamChat} from 'stream-chat';
 import {chatApiKey} from '../chatConfig';
 import {Icon} from '@rneui/themed';
-
+//drawer for campus connect
 export function DrawerContent(props) {
   const userData = useContext(AppContext);
 
@@ -33,7 +33,7 @@ export function DrawerContent(props) {
       {text: 'No'},
     ]);
   };
-
+  //deletes users current photo for streamchat and campus connect
   const deletePhoto = async () => {
     await storage()
       .ref('/Profile Pictures/' + auth().currentUser.uid)
@@ -64,7 +64,7 @@ export function DrawerContent(props) {
         });
       });
   };
-
+  //allows user to sign out of campus connect
   const SignOut = async () => {
     try {
       auth().signOut();
@@ -73,7 +73,7 @@ export function DrawerContent(props) {
       console.log(e);
     }
   };
-
+  //style for the drawer
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerScrollView}>

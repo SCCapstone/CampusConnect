@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
-
+//loading screen for campus connect
 export function LoadingScreen({navigation}) {
   const userData = useContext(AppContext);
   const [spinAnim] = useState(new Animated.Value(0));
@@ -22,7 +22,7 @@ export function LoadingScreen({navigation}) {
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
   });
-
+  //gets user data from firebase
   const getUserData = async () => {
     await firestore()
       .collection('Users')
@@ -39,7 +39,7 @@ export function LoadingScreen({navigation}) {
         console.log(error);
       });
   };
-
+  //gets photo from firebase
   const getPhoto = async () => {
     return await storage()
       .ref('/Profile Pictures/' + auth().currentUser.uid) //name in storage in firebase console
@@ -74,7 +74,7 @@ export function LoadingScreen({navigation}) {
     </View>
   );
 }
-
+//stylesheet for loading screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,

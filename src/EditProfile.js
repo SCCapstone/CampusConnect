@@ -27,6 +27,7 @@ if (Platform.OS === 'ios') {
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
+//edit profile screen for campus connect
 export function EditProfileScreen({navigation}) {
   const userData = useContext(AppContext);
 
@@ -51,7 +52,7 @@ export function EditProfileScreen({navigation}) {
   const onYearOpen = React.useCallback(() => {
     setOpen(false);
   }, []);
-
+  //allows user to upload photo from their devices library
   const choosePhotoFromLibrary = async () => {
     await ImagePicker.openPicker({
       width: 300,
@@ -65,7 +66,7 @@ export function EditProfileScreen({navigation}) {
       })
       .catch(error => {});
   };
-
+  //uploads pic from choosephotofromlibrary
   const uploadPic = async () => {
     const reference = storage().ref('/Profile Pictures/' + auth().currentUser.uid);
     try {
@@ -88,7 +89,7 @@ export function EditProfileScreen({navigation}) {
       console.log(error);
     }
   };
-
+  //writes users new info to firebase
   const writeUserData = async () => {
     setLoading(true);
     const bioLengthValid = bio.length <= 150;
@@ -168,7 +169,7 @@ export function EditProfileScreen({navigation}) {
     }
     setLoading(false);
   };
-
+  //sets everything to ''
   const reset = () => {
     url = '';
     setFirstName('');
@@ -215,7 +216,7 @@ export function EditProfileScreen({navigation}) {
       </View>
     );
   }
-
+  //styles for editprofile
   return (
     <LinearGradient colors={['#73000a', '#73000a', 'white']} style={styles.container}>
       <TouchableOpacity onPress={choosePhotoFromLibrary} style={styles.blankImageBackgroundStyle}>
@@ -284,10 +285,11 @@ export function EditProfileScreen({navigation}) {
     </LinearGradient>
   );
 }
-
+//tells you if there is a firebase error
 const FirebaseError = error => {
   Alert.alert('Error', error, [{text: 'OK'}]);
 };
+//tells you if their is a user error when filling out information
 const RegisterError = () => {
   Alert.alert('Error', 'Make sure all required fields are filled out and that the bio is less than 151 characters', [
     {text: 'OK'},
