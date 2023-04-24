@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/CampusConnect/static/css/main.e830eca5.css",
-    "main.js": "/CampusConnect/static/js/main.f0b07fe2.js",
+    "main.css": "/CampusConnect/static/css/main.30e51aa4.css",
+    "main.js": "/CampusConnect/static/js/main.f43b2c3b.js",
     "static/js/787.9bc686a6.chunk.js": "/CampusConnect/static/js/787.9bc686a6.chunk.js",
     "index.html": "/CampusConnect/index.html",
-    "main.e830eca5.css.map": "/CampusConnect/static/css/main.e830eca5.css.map",
-    "main.f0b07fe2.js.map": "/CampusConnect/static/js/main.f0b07fe2.js.map",
+    "main.30e51aa4.css.map": "/CampusConnect/static/css/main.30e51aa4.css.map",
+    "main.f43b2c3b.js.map": "/CampusConnect/static/js/main.f43b2c3b.js.map",
     "787.9bc686a6.chunk.js.map": "/CampusConnect/static/js/787.9bc686a6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e830eca5.css",
-    "static/js/main.f0b07fe2.js"
+    "static/css/main.30e51aa4.css",
+    "static/js/main.f43b2c3b.js"
   ]
 }
