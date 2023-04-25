@@ -90,6 +90,7 @@ export function WelcomeScreen({navigation}) {
       }
   }
 
+  //reset state on component mount
   useEffect(() => {
     userData.setName('');
     userData.setEmail('');
@@ -219,6 +220,8 @@ export function RegisterScreen({navigation}) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
+  
+  //registers a user if input is valid
   const register = () => {
     if (
       email &&
