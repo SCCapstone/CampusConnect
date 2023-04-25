@@ -1,3 +1,4 @@
+//Import required packages.
 import React, {useEffect, useState} from 'react';
 import {
   Platform,
@@ -14,6 +15,8 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
+
+//Importing ScrapeEventData function
 import {ScrapeEventData} from './EventsScraper';
 import {FloatingAction} from 'react-native-floating-action';
 
@@ -28,16 +31,20 @@ import iosstyles from './styles/ios/EventsScreenStyles';
 import androidstyles from './styles/android/EventsScreenStyles';
 var styles;
 
+//Determine which styles to use
 if (Platform.OS === 'ios') {
   styles = iosstyles; // do dark mode in here as well
 } else if (Platform.OS === 'android') {
   styles = androidstyles;
 }
+
 export function EventsScreen({navigation}) {
   const defaultItemCount = 10;
 
-  const [DATA, setDATA] = useState();
+  //State to store the data received from ScrapEventsData function
+  const [DATA, setDATA] = useState(); 
 
+  //Fetching the data from the ScrapeEventsFunction
   useEffect(() => {
     const fetchData = async () => {
       const ret = await ScrapeEventData();
@@ -46,11 +53,17 @@ export function EventsScreen({navigation}) {
     fetchData();
   }, []);
 
-  const [search, setSearch] = useState('');
 
+
+  const [search, setSearch] = useState(''); 
+
+  //State to store the visibility of the modal
   const [isModalVisible, setModalVisible] = useState(false);
+  //State to store the currently select event
   const [selectedEvent, setSelectedEvent] = useState(null);
 
+
+  //Componenet to render each individual event in the flatlist. 
   const Event = ({item}) => (
     <View
       style={{
