@@ -56,6 +56,7 @@ import androidCommentStyles from './styles/android/CommentStyles';
 var styles;
 var commentStylesl;
 
+//check platform
 if (Platform.OS === 'ios') {
   styles = iosstyles;
   commentStyles = iosCommentStyles;
@@ -64,20 +65,25 @@ if (Platform.OS === 'ios') {
   commentStyles = androidCommentStyles;
 }
 
+//renders the entire posts screen
 export function PostsScreen({navigation, route}) {
+  //not currently used
   const {sortingMode} = route.params;
+  //determines which collections to use. the alumni screen is identical to this one with different values here
   const POST_COLLECTION_NAME = 'Posts';
   const POST_STORAGE_NAME = '/Posts/';
   const ANONYMOUS_USER_NAME = 'USC Student';
   const RESET_PATH = 'Home';
   const DISPLAY_TEXT = 'Kind of empty in here...';
 
+  //dynamically render some content based off of the screen size
   const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
   const scaleFactor = screenWidth < 400 ? 0.8 : 1;
 
   //Global userdata var
   const userData = useContext(AppContext);
 
+  //variables for controlling the rendering on this screen
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [posts, setPosts] = useState([]); // Initial empty array of posts
   const [images, setImages] = useState([]); // Initial empty array of posts
@@ -107,12 +113,16 @@ export function PostsScreen({navigation, route}) {
   var transactionStarted = false;
   var url = '';
 
+  //helps to determine how far the screen should move when the keyboard is open
   const headerHeight = useHeaderHeight();
 
+  //ios and android have different ways of handling keyboard movement
   const offsetHeight = Platform.OS === 'ios' ? -25 : -1000; //keyboard view doesnt work on ios without this
   const offsetHeightPadding = Platform.OS === 'ios' ? 0 : -64;
 
   const list = useRef(FlashList);
+  
+  //options for sorting,replying, etc
   const sortingOptions = ['Best', 'Worst', 'New', 'Anonymous', 'Most Commented'];
   const postOptions = ['Reply', 'Edit', 'Delete'];
   const postOptions2 = ['Reply'];
@@ -129,7 +139,7 @@ export function PostsScreen({navigation, route}) {
     }
   };
 
-  //Apply the same bug fix with the order of the replies here
+  //called to get replies for a given post
   const getReplies = async item => {
     setRepliesLoading(true);
     const postReplies = [];
@@ -183,6 +193,7 @@ export function PostsScreen({navigation, route}) {
     });
   };
 
+  //called when the screen is manually refreshed by pulling the flatlist down
   const getPosts = () => {
     setRefresh(true);
     var postsRef = firestore().collection(POST_COLLECTION_NAME);
@@ -268,6 +279,7 @@ export function PostsScreen({navigation, route}) {
     });
   };
 
+  //updates a post's information in the firestore based of the state
   const EditPost = async () => {
     if (
       postText &&
@@ -291,6 +303,7 @@ export function PostsScreen({navigation, route}) {
     }
   };
 
+  //writes a post to the firestore if it is valid
   const CreatePost = async () => {
     if ((postText && postText.length < 1000 && postText.split(/\r\n|\r|\n/).length <= 25) || (image && !postText)) {
       setPostUploading(true);
@@ -359,6 +372,7 @@ export function PostsScreen({navigation, route}) {
     }
   };
 
+  //sets the header with the dropdown selector on component mount
   useEffect(() => {
     //Make sure to only set this once next time
     navigation.setOptions({
@@ -393,6 +407,8 @@ export function PostsScreen({navigation, route}) {
     });
   }, [navigation]);
 
+  //triggered whenever the sort mode is changed.
+  //this creates an ansynchronous listener for posts based off of the selected sort mode and whether a user has entered a search.
   useEffect(() => {
     var postsRef = firestore().collection(POST_COLLECTION_NAME);
     var query;
@@ -484,6 +500,7 @@ export function PostsScreen({navigation, route}) {
     return () => subscriber();
   }, [navigation, sortMode, postCount, search]);
 
+  //deletes a post or reply depending on what is passed
   const DeletePost = ({item}) => {
     if (item.isReply) {
       firestore().collection('Replies').doc(item.key).delete();
@@ -500,12 +517,15 @@ export function PostsScreen({navigation, route}) {
         .catch(() => {});
     } else firestore().collection(POST_COLLECTION_NAME).doc(item.key).delete();
   };
+
+  //shows the given image associated with the post that was clicked
   const OpenImage = index => {
     setImageIndex(imageMap.get(index));
     setIsVisible(true);
   };
 
-  //This code is very delicate and needs to be done right.
+  //starts a firebase transaction to upvote a post.
+  //ensures a person can only vote once on a post, and that the proper operation is performed on each upvote
   const UpvotePost = async ({item}) => {
     if (!transactionStarted) {
       transactionStarted = true;
@@ -550,6 +570,8 @@ export function PostsScreen({navigation, route}) {
     }
   };
 
+  //starts a firebase transaction to downvote a post.
+  //ensures a person can only vote once on a post, and that the proper operation is performed on each downvote
   const DownvotePost = async ({item}) => {
     if (!transactionStarted) {
       transactionStarted = true;
@@ -593,6 +615,8 @@ export function PostsScreen({navigation, route}) {
         });
     }
   };
+
+  //opens the photoselector when upload is pushed
   const choosePhotoFromLibrary = async () => {
     await launchImageLibrary({selectionLimit: 1}, result => {
       if (!result.didCancel) {
@@ -605,6 +629,7 @@ export function PostsScreen({navigation, route}) {
     });
   };
 
+  //writes a reply to the firestore for the passed in post
   const MakeReply = item => {
     if (
       reply &&
@@ -680,6 +705,7 @@ export function PostsScreen({navigation, route}) {
     }
   };
 
+  //uploads a pic to the firestore
   const uploadPic = async () => {
     const reference = storage().ref(POST_STORAGE_NAME + uuidv4());
     if (image) {
@@ -690,6 +716,7 @@ export function PostsScreen({navigation, route}) {
     }
   };
 
+  //the component that renders a post
   const Post = React.memo(({item, index}) => {
     return (
       <Swipeable
@@ -900,6 +927,7 @@ export function PostsScreen({navigation, route}) {
     );
   });
 
+  //resets the state when the modal is closed
   const closeModal = () => {
     if (!post) this.floatingAction.animateButton();
     setPostUploading(false);
@@ -912,7 +940,10 @@ export function PostsScreen({navigation, route}) {
     setPostText('');
   };
 
+  //the function passed to the flatlist to render a post
   const renderPost = ({item, index}) => <Post item={item} index={index} />;
+  
+  //defines the component to render a single reply
   const renderReplies = gestureHandlerRootHOC(({item, index}) => {
     return (
       <Swipeable
@@ -1044,6 +1075,7 @@ export function PostsScreen({navigation, route}) {
     );
   });
 
+ //activity indicator on load
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
@@ -1052,6 +1084,8 @@ export function PostsScreen({navigation, route}) {
     );
   }
 
+  //renders the entire posts screen with the given modal and list of posts.
+  //modals will cover the screen, if not the posts will render
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar
@@ -1286,6 +1320,7 @@ export function PostsScreen({navigation, route}) {
   );
 }
 
+//function to display an alert
 const PostError = () => {
   Alert.alert(
     'Post is invalid',
