@@ -88,6 +88,7 @@ export default function App() {
     setProfileView,
   };
 
+  //Initialize the app, and the stack navigator
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <AppContext.Provider value={userData}>
