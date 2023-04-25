@@ -46,6 +46,8 @@ if (Platform.OS === 'ios') {
 
 const Drawer = createDrawerNavigator();
 export function HomeScreen({navigation}) {
+  
+  //dynamically render the header based on the width of the user's screen.
   const windowWidth = useWindowDimensions().width;
   const fontSize = windowWidth < 410 ? 13 : 18; // Adjust the font size based on the screen width
   function PostTitle() {
@@ -73,6 +75,7 @@ export function HomeScreen({navigation}) {
     return <Text style={{fontSize: fontSize, color: 'white'}}>Campus Connect: Search</Text>;
   }
 
+  //state
   const [initializing, setInitializing] = useState(true);
   const {clientReady} = useChatClient();
   const [user, setUser] = useState();
@@ -97,13 +100,16 @@ export function HomeScreen({navigation}) {
     }
   }
 
+  //launch our auth listener
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 
+  //wait for the listener to spawn before showing anything
   if (initializing) return null;
 
+  //renders the drawer and intitializes all the screens with their options
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} screenOptions={screenOptions}>
       <Drawer.Screen
