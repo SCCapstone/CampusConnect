@@ -46,9 +46,11 @@ export function Search({navigation}) {
   const [searchResults, setSearchResults] = useState([]);
   const userData = useContext(AppContext);
 
+  //queries the firebase server when a search query is entered
   useEffect(() => {
     const postsRef = firestore().collection('Users');
 
+    //a way to query a user by their name using prefix search
     const query = postsRef
       .where('searchName', '>=', userSearch.toUpperCase())
       .where('searchName', '<=', userSearch.toUpperCase() + '\uf8ff')
