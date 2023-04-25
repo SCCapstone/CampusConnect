@@ -481,7 +481,7 @@ export function CalendarPage({navigation}) {
                       padding: 0,
                       margin: 0,
                     }}
-                    uncheckedColor="#ccc" // Change this color to your preferred one
+                    uncheckedColor="#ccc"
                   />
                   <Text
                     style={{ fontSize: 12 }}
