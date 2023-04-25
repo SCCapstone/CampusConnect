@@ -59,17 +59,19 @@ export const ChatNavigator = () => {
   const navigation = useNavigation();
   const {key, setKey} = useChatContext();
   const [initialChannelId, setInitialChannelId] = useState('');
-  const {clientIsReady} = useChatClient(); //dont question me
+  const {clientIsReady} = useChatClient(); //attempts to login user
   const chatClient = StreamChat.getInstance(chatApiKey);
 
   //const [channelId,setInitialChannelId] = useState('');
 
+  //renders a smaller text size on smaller screens to prevent overflow
   function ChatTitle() {
     const windowWidth = useWindowDimensions().width;
     const fontSize = windowWidth < 410 ? 13 : 18; // Adjust the font size based on the screen width
     return <Text style={{fontSize: fontSize, color: 'white'}}>Campus Connect: Chats</Text>;
   }
 
+  //check if user is logged in, and initializes notifications on component mount
   useEffect(() => {
     if (clientIsReady) {
       const unsubscribeOnNotificationOpen = messaging().onNotificationOpenedApp(remoteMessage => {
@@ -158,6 +160,7 @@ export const ChatNavigator = () => {
     }
   }, [clientIsReady]);
 
+  //if user not logged in, wait
   if (!clientIsReady) {
     return (
       <Text
