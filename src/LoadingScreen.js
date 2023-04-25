@@ -7,8 +7,12 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 //loading screen for campus connect
 export function LoadingScreen({navigation}) {
+  
+  //state
   const userData = useContext(AppContext);
   const [spinAnim] = useState(new Animated.Value(0));
+  
+  //function to start the animation
   const startAnimation = () => {
     spinAnim.setValue(0);
     Animated.timing(spinAnim, {
@@ -18,6 +22,8 @@ export function LoadingScreen({navigation}) {
       useNativeDriver: true,
     }).start(() => startAnimation());
   };
+  
+  //function to animate the logo
   const spin = spinAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
@@ -52,6 +58,7 @@ export function LoadingScreen({navigation}) {
       });
   };
 
+  //starts the information, then gets all the users information. once that it is done, the user is navigated to the posts screen
   useEffect(() => {
     startAnimation();
     promises = [];
@@ -65,6 +72,8 @@ export function LoadingScreen({navigation}) {
       });
     });
   }, []);
+  
+  //renders the spinning logo
   return (
     <View style={styles.container}>
        <Animated.Image
