@@ -43,13 +43,14 @@ const GOOGLE_MAPS_APIKEY =
   Platform.OS === 'ios' ? 'AIzaSyARf2igtbS8271pg878R9U9Pvq5iUy4zSc' : 'AIzaSyCTYqSzJ6Cu8TEaSSI6AVheBAXBKeGCqMs';
 
 export function CalendarPage({navigation}) {
+  //state
   const userData = useContext(AppContext);
   const [key, setKey] = useState(moment().day());
   const [selectedDate, setSelectedDate] = useState(moment());
   const [mapVisible, setMapVisible] = useState(false);
   const [coords, setCoords] = useState([]);
   const [origin, setOrigin] = useState({
-    latitude: 33.990890860794124,
+    latitude: 33.990890860794124, //initialize coordinates to some arbitrary place. in this case, thomas cooper library
     longitude: -81.02403298291603,
   });
   const [addClassVisible, setAddClassVisible] = useState(false);
@@ -66,6 +67,8 @@ export function CalendarPage({navigation}) {
   const [value2, setValue2] = useState(new Date(1671469200000));
   const [reRender, setReRender] = useState(false);
   var transactionStarted = false;
+  
+  //state for the date selector when creating a class
   const [selectedDays, setSelectedDays] = useState({
     M: false,
     T: false,
@@ -75,6 +78,8 @@ export function CalendarPage({navigation}) {
     S: false,
     Su: false,
   });
+  
+  //maps the string to their integer values as defined by the date library
   const daysMapping = {
     M: 1,
     T: 2,
@@ -85,7 +90,7 @@ export function CalendarPage({navigation}) {
     Su: 0,
   };
   
-
+  //the initial empty array for the user's classes
   const [classes, setClasses] = useState({
     1: [
       //Monday
@@ -110,14 +115,18 @@ export function CalendarPage({navigation}) {
     ],
   });
 
+  //defines how many days the calendar at the top should show. in this case, we will only show one week, starting at monday
   const datesWhiteList = [
     moment(),
     {start: moment().startOf('isoWeek'), end: moment().startOf('isoWeek').add(7, 'day')},
   ];
+  
+  //for the day selector, sets the objects day to true or false
   const toggleSelectedDay = (day) => {
     setSelectedDays({ ...selectedDays, [day]: !selectedDays[day] });
   };
 
+  //the component to render a user's classes. when it is clicked or pressed, it will navigate them to that class
   const renderClasses = ({item, index}) => {
     return (
       <Swipeable
@@ -168,6 +177,8 @@ export function CalendarPage({navigation}) {
       </Swipeable>
     );
   };
+
+  //ios and android require different methodologies for the time picker. this is for android
   const showTimePicker = () => {
     DateTimePickerAndroid.open({
       value: value,
@@ -184,16 +195,21 @@ export function CalendarPage({navigation}) {
       is24Hour: false,
     });
   };
+
+  //set class start time
   const setTime = (event, date) => {
     setStartTime(event);
     setValue(date);
   };
+
+  //set class end time
   const setTime2 = (event, date) => {
     setValue2(date);
     setEndTime(event);
     console.log(event);
   };
 
+  //tries to load the user's classes from storage and sets the header bar
   useEffect(() => {
     const getClasses = async () => {
       try {
@@ -216,7 +232,7 @@ export function CalendarPage({navigation}) {
       ),
     });
   }, []);
-
+  //function to get directions from the user's current location to the given destination
   const getDirections = () => {
     transactionStarted = true;
     GetLocation.getCurrentPosition({
@@ -235,6 +251,7 @@ export function CalendarPage({navigation}) {
       });
   };
 
+  //save classes to the correct days if the input is valid
   const saveClasses = async () => {
     var tempClass = {
       name: '',
@@ -312,6 +329,7 @@ export function CalendarPage({navigation}) {
     }
   };
 
+  //deletes a class if the user swipes it and presses the delete button
   const removeClass = async index => {
     classes[key].splice(index, 1);
     classes[key].sort(function (a, b) {
@@ -325,6 +343,7 @@ export function CalendarPage({navigation}) {
     } catch (e) {}
   };
 
+//renders the entire calendar screen, with modals invisible unless they are pressed
   return (
     <View style={{backgroundColor: '#73000a', flex: 1}}>
       <Modal onRequestClose={() => {this.floatingAction.animateButton()}} transparent={true} visible={addClassVisible}>
