@@ -78,7 +78,10 @@ if (Platform.OS === 'ios') {
 }
 
 export function ChatsScreen(props) {
+  //global user variables
   const userData = useContext(AppContext);
+  
+  //helps render on different platforms
   const headerHeight = useHeaderHeight();
 
   const offsetHeight = Platform.OS === 'ios' ? 70 : -300; //keyboard view doesnt work on ios without this
@@ -86,6 +89,7 @@ export function ChatsScreen(props) {
 
   ///This page shouls have all the functionality for adding a creating a DM. And searching for users.
 
+  //state variables
   const {setChannel} = useChatContext();
   const navigation = useNavigation();
   const list = useRef(FlatList);
@@ -110,6 +114,7 @@ export function ChatsScreen(props) {
       setKey((key) => key+1)
     }*/
 
+  //the filter passed to the channel list for showing just a user's dms
   const DMFilter = {
     $and: [
       {type: 'messaging'},
@@ -120,6 +125,7 @@ export function ChatsScreen(props) {
       },
     ],
   };
+    //the filter passed to the channel list for showing the groups a user is a part of
   const GroupFilter = {
     $and: [
       {type: 'team'},
@@ -130,9 +136,13 @@ export function ChatsScreen(props) {
       },
     ],
   };
+  
+  //passed to the channel list to define how to sort the messages. -1 is most recent first
   const sort = {
     last_message_at: -1,
   };
+  
+  //not sure what this does, but it does something
   const options = {
     presence: true,
     state: true,
@@ -147,6 +157,8 @@ export function ChatsScreen(props) {
   /*useEffect(() => {
       const myListener = chatClient.on('message.new',ReloadList)
     },[])*/
+  
+  //when a new type is entered, or a search query is entered, this will get a list of those users or group to display
   useEffect(() => {
     if (selectedType === 0) {
       searchUsers();
@@ -154,6 +166,8 @@ export function ChatsScreen(props) {
       searchGroups();
     }
   }, [userSearch, selectedType]); //I guess this tells react to update when these variables change?
+  
+  //changes the channel list when the type is changed. gives the option to create a group if that option is selected
   useEffect(() => {
     if (selectedType === 0) {
       setFilter(DMFilter);
@@ -226,6 +240,8 @@ export function ChatsScreen(props) {
 
   //You can customize the persons display name and extra data like major if wanted
   const CustomPreviewTitle = ({channel}) => <Text>potato</Text>;
+  
+  //a customized swipeable display item for each chat
   const CustomListItem = props => {
     const {unread} = props;
     const {channel} = props;
@@ -373,6 +389,7 @@ export function ChatsScreen(props) {
     );
   };
 
+  //a customized avatar component for the streamchat channellist
   const CustomAvatar = ({channel}) => {
     const is2PersonChat = channel.data.member_count == 2 && channel.type === 'messaging';
     const [isOnline, setIsOnline] = useState(false);
@@ -551,6 +568,7 @@ export function ChatsScreen(props) {
     );
   });
 
+  //renders the channel list and the modals if they are visible
   return (
     <View style={{flex: 1}}>
       <Modal
