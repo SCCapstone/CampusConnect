@@ -284,6 +284,7 @@ export function AlumniPostsScreen({navigation, route}) {
         })
         .then(() => {
           setReloadList(!reloadList);
+          setPostUploading(false);
         })
         .catch(error => {
           console.log(error.code);
