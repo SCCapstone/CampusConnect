@@ -296,6 +296,7 @@ export function PostsScreen({navigation, route}) {
         })
         .then(() => {
           setReloadList(!reloadList);
+          setPostUploading(false);
         })
         .catch(error => {
           console.log(error.code);
