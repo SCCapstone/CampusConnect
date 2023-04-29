@@ -228,7 +228,7 @@ export function RegisterScreen({navigation}) {
       password &&
       password === password2 &&
       email.split('@').length == 2 &&
-      email.split('@')[1].endsWith('.sc.edu')
+      (email.split('@')[1] === 'sc.edu' || email.split('@')[1].endsWith('.sc.edu'))
     ) {
       auth()
         .createUserWithEmailAndPassword(email, password)

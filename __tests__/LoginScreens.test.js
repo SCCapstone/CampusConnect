@@ -1,10 +1,10 @@
 function checkInput(email,password,password2) {
-    return Boolean(email &&
-    password &&
-    password.trim() === password2.trim() &&
-    email.split('@').length == 2 &&
-    email.split('@')[1].includes('sc.edu') &&
-    email.split('@')[1].substring(email.split('@')[1].length - 6) === 'sc.edu'
+    return Boolean(
+        email &&
+        password &&
+        password === password2 &&
+        email.split('@').length == 2 &&
+        (email.split('@')[1] === 'sc.edu' || email.split('@')[1].endsWith('.sc.edu'))
 )
 }
 
@@ -44,6 +44,12 @@ describe("CreateUserTest", () => {
     
     it("should return false for mismatched passwords",() => {
         expect(checkInput('erk3452@sc.edu','password1','password2')).toBe(false)
+    })
+    it("should return false usc",() => {
+        expect(checkInput('erk3452@usc.edu','password1','password2')).toBe(false)
+    })
+    it("should return true subdomain",() => {
+        expect(checkInput('erk3452@cec.sc.edu','password1','password1')).toBe(true)
     })
     it("should return false for empty input",() => {
         expect(checkInput('','','')).toBe(false)})
